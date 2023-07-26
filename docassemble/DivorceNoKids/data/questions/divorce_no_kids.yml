@@ -1,0 +1,989 @@
+---
+include:
+  - docassemble.AssemblyLine:assembly_line.yml
+  - docassemble.ALAnyState:any_state.yml
+---
+metadata:
+  title: >-
+    Divorce (no kids)
+  short title: >-
+    Divorce (no kids)
+  description: |-
+    This interview helps someone in Vermont ask the court for a Divorce (no kids).
+  tags:
+    - "FA-00-00-00-00"
+  authors:
+    - Mia Bonardi
+  original_form:
+    - https://www.vermontjudiciary.org/sites/default/files/documents/400-00836NoKids_1.pdf
+  allowed_courts: []
+  typical_role: "plaintiff"
+  al_weaver_version: "1.10.1"
+  generated_on: "2023-07-25"
+---
+code: |
+  # This controls the default country and list of states in address field questions
+  AL_DEFAULT_COUNTRY = "US"
+---
+code: |
+  # This controls the default state in address field questions
+  AL_DEFAULT_STATE = "VT"
+---
+code: |
+  github_repo_name =  'docassemble-DivorceNoKids'
+---
+code: |
+  interview_short_title = "Ask the court for a Divorce (no kids)"
+---
+code: |
+  al_form_type = "starts_case" 
+---
+objects:
+  - plaintiff_former: ALPeopleList.using(ask_number=True,target_number=1)
+  - users: ALPeopleList.using(ask_number=True,target_number=1)
+  - users1_attorneys: ALPeopleList.using(ask_number=True,target_number=1)
+---
+sections:
+  - review_divorce_no_kids: Review your answers
+---
+#################### Interview order #####################
+comment: |
+  Controls order and branching logic for questions specific to this form
+id: interview_order_divorce_no_kids
+code: |
+  # Set the allowed courts for this interview
+  allowed_courts = []
+  nav.set_section("review_divorce_no_kids")
+  user_role = "plaintiff"
+  user_ask_role = "plaintiff"
+  users.gather()
+  set_parts(subtitle=str(users))
+  users1_name1
+  other_parties1_name1
+  divorce
+  six_month_separation
+  set_progress(16)
+  marriage
+  filing_financial_form
+  no_earlier_actions
+  no_earlier_RFA
+  grant_for
+  set_progress(32)
+  trial_court_county1
+  docket_number
+  trial_court.address.address
+  other_parties.gather()
+  users[0].birthdate
+  set_progress(48)
+  users[0].address.address
+  users[0].email
+  other_parties[0].birthdate
+  other_parties[0].address.address
+  other_parties[0].email
+  set_progress(64)
+  signature_date
+  users1_signature1
+  interview_order_divorce_no_kids = True
+---
+###################### Main order ######################
+comment: |
+  This block includes the logic for standalone interviews.
+  Delete mandatory: True to include in another interview
+mandatory: True
+code: |
+  al_intro_screen
+  divorce_no_kids_intro
+  interview_order_divorce_no_kids
+  signature_date
+  # Store anonymous data for analytics / statistics
+  store_variables_snapshot(
+      persistent=True,
+      data={
+          "zip": showifdef("users[0].address.zip"),
+          "reached_interview_end": True,
+      },
+  )
+  divorce_no_kids_preview_question
+  basic_questions_signature_flow    
+  users1_signature1
+  divorce_no_kids_download
+---
+comment: |
+  This question is used to introduce your interview. Please customize
+id: Divorce_no_kids
+continue button field: divorce_no_kids_intro
+question: |
+  Divorce (no kids)
+subquestion: |
+  This interview will help you ask the court for a Divorce (no kids).
+  
+  Before you get started, please gather:
+  
+  1. 
+  1. 
+  1. 
+  
+  When you are finished, you will need to:
+  
+  1. 
+  1. 
+  
+  Most people take about _______ minutes to finish this interview.
+---
+id: Users info
+question: |
+  Users info
+fields:
+  - "Users1 name1": users1_name1
+    maxlength: 39
+  - "Users1 address mailing line one": users1_address_mailing_line_one
+    maxlength: 58
+  - "Users1 address mailing line two": users1_address_mailing_line_two
+    maxlength: 34
+  - "Users1 eveninng phone number": users1_eveninng_phone_number
+    maxlength: 30
+  - "Users1 daytime phone number": users1_daytime_phone_number
+    maxlength: 33
+  - "Users1 attorneys name": users1_attorneys_name
+    maxlength: 33
+  - "Users1 attorneys phone numer": users1_attorneys_phone_numer
+    maxlength: 29
+  - "Users1 name2": users1_name2
+    maxlength: 48
+  - "Plaintiff vt": plaintiff_VT
+    datatype: yesno
+  - "Date plaintiff moved to vt": date_plaintiff_moved_to_VT
+    maxlength: 27
+  - "Plaintiff des assistance": plaintiff_des_assistance
+    datatype: yesno
+  - "Plaintiff military service": plaintiff_military_service
+    datatype: yesno
+  - "Plaintiff no military service": plaintiff_no_military_service
+    datatype: yesno
+---
+id: Defendants info
+question: |
+  Defendants info
+fields:
+  - "Other parties1 name1": other_parties1_name1
+    maxlength: 39
+  - "Other parties1  mailing address line one": other_parties1__mailing_address_line_one
+    maxlength: 58
+  - "Other parties1  mailing address line two": other_parties1__mailing_address_line_two
+    maxlength: 34
+  - "Other parties1 evening phone number": other_parties1_evening_phone_number
+    maxlength: 30
+  - "Other parties1 daytime phone number": other_parties1_daytime_phone_number
+    maxlength: 33
+  - "Other parties1 attorneys name": other_parties1_attorneys_name
+    maxlength: 33
+  - "Other parties1 attorneys phone number": other_parties1_attorneys_phone_number
+    maxlength: 29
+  - "Other parties1 name2": other_parties1_name2
+    maxlength: 57
+  - "Defendant vt": defendant_VT
+    datatype: yesno
+  - "Date defendant moved to vt": date_defendant_moved_to_VT
+    maxlength: 21
+  - "Defendant des assistance": defendant_des_assistance
+    datatype: yesno
+  - "Defendant military service": defendant_military_service
+    datatype: yesno
+  - "Defendant no military service": defendant_no_military_service
+    datatype: yesno
+---
+id: What do you want from the court
+question: |
+  What do you want from the court?
+fields:
+  - "Divorce": divorce
+    datatype: yesno
+  - "Civil union dissolution": civil_union_dissolution
+    datatype: yesno
+  - "Legal separation": legal_separation
+    datatype: yesno
+  - "Divorce1": divorce1
+    datatype: yesno
+  - "Legal seeparation1": legal_seeparation1
+    datatype: yesno
+  - "Civil union dissolution1": civil_union_dissolution1
+    datatype: yesno
+---
+id: Why are you seeking x from the court
+question: |
+  Why are you seeking x from the court?
+fields:
+  - "Six month separation": six_month_separation
+    datatype: yesno
+  - "Date of separation": separation_date
+    datatype: date
+  - "Other ground divorce": other_ground_divorce
+    datatype: yesno
+  - "Other ground divorce explanation": other_ground_divorce_explanation
+    maxlength: 55
+---
+id: Marriage or civil union
+question: |
+  Marriage or civil union?
+fields:
+  - "Marriage": marriage
+    datatype: yesno
+  - "Marriage state": marriage_state
+    maxlength: 17
+  - "Marriage city": marriage_city
+    maxlength: 45
+  - "Date of marriage": marriage_date
+    datatype: date
+  - "Civil union": civil_union
+    datatype: yesno
+  - "Civil union city": civil_union_city
+    maxlength: 37
+  - "Civil union state": civil_union_state
+    maxlength: 16
+  - "Date of civil union": civil_union_date
+    datatype: date
+---
+id: With your complaint are you also filing a completed Financial form 400 00813B that lists all of the property assets and debts that my spouse and I own together or separately that are known to you
+question: |
+  With your complaint, are you also filing a completed Financial form 400-00813B that lists all of the property, assets and debts that my spouse and I own together or separately that are known to you?
+fields:
+  - "Filing financial form": filing_financial_form
+    datatype: yesno
+  - "Not filing financial form": not_filing_financial_form
+    datatype: yesno
+---
+id: Have there been aarlier actions for divorce legal separation dissolution annulment
+question: |
+  Have there been aarlier actions for divorce, legal separation, dissolution, annulment?
+fields:
+  - "No earlier actions": no_earlier_actions
+    datatype: yesno
+  - "Earlier actions": earlier_actions
+    datatype: yesno
+  - "Earlier actions where filed1": earlier_actions_where_filed1
+    maxlength: 20
+  - "Earlier actions filer1": earlier_actions_filer1
+    maxlength: 16
+  - "Earlier actions type1": earlier_actions_type1
+    maxlength: 16
+  - "Earlier actions year filed1": earlier_actions_year_filed1
+    maxlength: 9
+  - "Earlier actions where filed2": earlier_actions_where_filed2
+    maxlength: 20
+  - "Earlier actions filer2": earlier_actions_filer2
+    maxlength: 16
+  - "Earlier actions type2": earlier_actions_type2
+    maxlength: 16
+  - "Earlier actions year filed2": earlier_actions_year_filed2
+    maxlength: 9
+  - "Earlier actions where filed3": earlier_actions_where_filed3
+    maxlength: 20
+  - "Earlier actions filer3": earlier_actions_filer3
+    maxlength: 16
+  - "Earlier actions type3": earlier_actions_type3
+    maxlength: 16
+  - "Earlier actions year filed3": earlier_actions_year_filed3
+    maxlength: 9
+---
+id: Have there been any relief from abuse or protective order proceedings
+question: |
+  Have there been any relief from abuse or protective order proceedings?
+fields:
+  - "No earlier rfa": no_earlier_RFA
+    datatype: yesno
+  - "Earlier rfa": earlier_RFA
+    datatype: yesno
+  - "Earlier rfa where filed1": earlier_RFA_where_filed1
+    maxlength: 20
+  - "Earlier rfa filer1": earlier_RFA_filer1
+    maxlength: 16
+  - "Earlier rfa actions type1": earlier_RFA_actions_type1
+    maxlength: 16
+  - "Earlier rfa year filed1": earlier_RFA_year_filed1
+    maxlength: 9
+  - "Earlier rfa where filed2": earlier_RFA_where_filed2
+    maxlength: 20
+  - "Earlier rfa filer2": earlier_RFA_filer2
+    maxlength: 16
+  - "Earlier rfa actions type2": earlier_RFA_actions_type2
+    maxlength: 16
+  - "Earlier rfa year filed2": earlier_RFA_year_filed2
+    maxlength: 9
+  - "Earlier rfa where filed3": earlier_RFA_where_filed3
+    maxlength: 20
+  - "Earlier rfa filer3": earlier_RFA_filer3
+    maxlength: 16
+  - "Earlier rfa actions type3": earlier_RFA_actions_type3
+    maxlength: 16
+  - "Earlier rfa year filed3": earlier_RFA_year_filed3
+    maxlength: 9
+---
+id: What are you asking the court to grant
+question: |
+  What are you asking the court to grant?
+fields:
+  - "Grant for": grant_for
+    datatype: yesno
+  - "Divorce decree": divorce_decree
+    datatype: yesno
+  - "Legal separation decree": legal_separation_decree
+    datatype: yesno
+  - "Dissolution decree": dissolution_decree
+    datatype: yesno
+  - "Property maintenance": property_maintenance
+    datatype: yesno
+  - "Spousal maintenancee": spousal_maintenancee
+    datatype: yesno
+  - "Court costs": court_costs
+    datatype: yesno
+  - "Attorney fees": attorney_fees
+    datatype: yesno
+  - "Name change": name_change
+    datatype: yesno
+  - "Plaintiff former name": plaintiff_former_name
+    maxlength: 27
+  - "Written agreement attached": written_agreement_attached
+    datatype: yesno
+---
+id: Extra
+question: |
+  Extra
+fields:
+  - "Trial court county1": trial_court_county1
+    input type: area
+    maxlength: 138
+  - "Signature date1": signature_date1
+    maxlength: 46
+---
+id: preview divorce_no_kids
+question: |
+  Preview your form before you sign it
+subquestion: |
+  Here is a preview of the form you will sign on the next page.   
+  
+  ${ al_court_bundle.as_pdf(key='preview') }
+
+  Click the image to open it in a new tab. Click the "Edit answers" button
+  to edit your answers.
+
+  ${ action_button_html(url_action('review_divorce_no_kids'), label='Edit answers', color='info') }
+  
+  Remember to come back to this window to continue and sign your form.
+continue button field: divorce_no_kids_preview_question    
+---
+code: |
+  signature_fields = ['users[0].signature', 'users1_signature1']
+---
+question: |
+  Users1 signature1, sign below
+signature: users1_signature1
+---
+code: |
+  # This is a placeholder for the addresses that will be searched
+  # for matching address to court. Edit if court venue is based on 
+  # a different address than the user's
+  [user.address.address for user in users.complete_elements()]
+  addresses_to_search = [user.address for user in users.complete_elements()]
+---
+id: divorce no kids review screen
+event: review_divorce_no_kids
+question: |
+  Review your answers
+review:
+  - Edit: docket_number
+    button: |
+      **Docket number**:
+      ${ docket_number }
+  - Edit: trial_court
+    button: |
+      **Trial court**
+  
+      % if defined("trial_court.address.county"):
+      * address: ${ trial_court.address.block() }
+      % endif
+  - Edit: users.revisit
+    button: |
+      **Users**
+
+      % for item in users:
+        * ${ item }
+      % endfor
+  - Edit: other_parties.revisit
+    button: |
+      **Other parties**
+
+      % for item in other_parties:
+        * ${ item }
+      % endfor
+  - Edit: users1_name1
+    button: |
+      **Users1 name1**:
+      ${ users1_name1 }
+  - Edit: users1_address_mailing_line_one
+    button: |
+      **Users1 address mailing line one**:
+      ${ users1_address_mailing_line_one }
+  - Edit: users1_address_mailing_line_two
+    button: |
+      **Users1 address mailing line two**:
+      ${ users1_address_mailing_line_two }
+  - Edit: users1_eveninng_phone_number
+    button: |
+      **Users1 eveninng phone number**:
+      ${ users1_eveninng_phone_number }
+  - Edit: users1_daytime_phone_number
+    button: |
+      **Users1 daytime phone number**:
+      ${ users1_daytime_phone_number }
+  - Edit: users1_attorneys_name
+    button: |
+      **Users1 attorneys name**:
+      ${ users1_attorneys_name }
+  - Edit: users1_attorneys_phone_numer
+    button: |
+      **Users1 attorneys phone numer**:
+      ${ users1_attorneys_phone_numer }
+  - Edit: other_parties1_name1
+    button: |
+      **Other parties1 name1**:
+      ${ other_parties1_name1 }
+  - Edit: other_parties1__mailing_address_line_one
+    button: |
+      **Other parties1  mailing address line one**:
+      ${ other_parties1__mailing_address_line_one }
+  - Edit: other_parties1__mailing_address_line_two
+    button: |
+      **Other parties1  mailing address line two**:
+      ${ other_parties1__mailing_address_line_two }
+  - Edit: other_parties1_evening_phone_number
+    button: |
+      **Other parties1 evening phone number**:
+      ${ other_parties1_evening_phone_number }
+  - Edit: other_parties1_daytime_phone_number
+    button: |
+      **Other parties1 daytime phone number**:
+      ${ other_parties1_daytime_phone_number }
+  - Edit: other_parties1_attorneys_name
+    button: |
+      **Other parties1 attorneys name**:
+      ${ other_parties1_attorneys_name }
+  - Edit: other_parties1_attorneys_phone_number
+    button: |
+      **Other parties1 attorneys phone number**:
+      ${ other_parties1_attorneys_phone_number }
+  - Edit: other_parties1_name2
+    button: |
+      **Other parties1 name2**:
+      ${ other_parties1_name2 }
+  - Edit: users1_name2
+    button: |
+      **Users1 name2**:
+      ${ users1_name2 }
+  - Edit: divorce
+    button: |
+      **Divorce**:
+      ${ word(yesno(divorce)) }
+  - Edit: civil_union_dissolution
+    button: |
+      **Civil union dissolution**:
+      ${ word(yesno(civil_union_dissolution)) }
+  - Edit: legal_separation
+    button: |
+      **Legal separation**:
+      ${ word(yesno(legal_separation)) }
+  - Edit: trial_court_county1
+    button: |
+      **Trial court county1**:
+      > ${ single_paragraph(trial_court_county1) }
+  - Edit: signature_date
+    button: |
+      **Date of signature**:
+      ${ signature_date }
+  - Edit: plaintiff_VT
+    button: |
+      **Plaintiff vt**:
+      ${ word(yesno(plaintiff_VT)) }
+  - Edit: date_plaintiff_moved_to_VT
+    button: |
+      **Date plaintiff moved to vt**:
+      ${ date_plaintiff_moved_to_VT }
+  - Edit: defendant_VT
+    button: |
+      **Defendant vt**:
+      ${ word(yesno(defendant_VT)) }
+  - Edit: date_defendant_moved_to_VT
+    button: |
+      **Date defendant moved to vt**:
+      ${ date_defendant_moved_to_VT }
+  - Edit: marriage
+    button: |
+      **Marriage**:
+      ${ word(yesno(marriage)) }
+  - Edit: marriage_state
+    button: |
+      **Marriage state**:
+      ${ marriage_state }
+  - Edit: marriage_city
+    button: |
+      **Marriage city**:
+      ${ marriage_city }
+  - Edit: marriage_date
+    button: |
+      **Date of marriage**:
+      ${ marriage_date }
+  - Edit: civil_union
+    button: |
+      **Civil union**:
+      ${ word(yesno(civil_union)) }
+  - Edit: civil_union_city
+    button: |
+      **Civil union city**:
+      ${ civil_union_city }
+  - Edit: civil_union_state
+    button: |
+      **Civil union state**:
+      ${ civil_union_state }
+  - Edit: civil_union_date
+    button: |
+      **Date of civil union**:
+      ${ civil_union_date }
+  - Edit: divorce1
+    button: |
+      **Divorce1**:
+      ${ word(yesno(divorce1)) }
+  - Edit: legal_seeparation1
+    button: |
+      **Legal seeparation1**:
+      ${ word(yesno(legal_seeparation1)) }
+  - Edit: civil_union_dissolution1
+    button: |
+      **Civil union dissolution1**:
+      ${ word(yesno(civil_union_dissolution1)) }
+  - Edit: six_month_separation
+    button: |
+      **Six month separation**:
+      ${ word(yesno(six_month_separation)) }
+  - Edit: separation_date
+    button: |
+      **Date of separation**:
+      ${ separation_date }
+  - Edit: other_ground_divorce
+    button: |
+      **Other ground divorce**:
+      ${ word(yesno(other_ground_divorce)) }
+  - Edit: other_ground_divorce_explanation
+    button: |
+      **Other ground divorce explanation**:
+      ${ other_ground_divorce_explanation }
+  - Edit: filing_financial_form
+    button: |
+      **Filing financial form**:
+      ${ word(yesno(filing_financial_form)) }
+  - Edit: not_filing_financial_form
+    button: |
+      **Not filing financial form**:
+      ${ word(yesno(not_filing_financial_form)) }
+  - Edit: plaintiff_des_assistance
+    button: |
+      **Plaintiff des assistance**:
+      ${ word(yesno(plaintiff_des_assistance)) }
+  - Edit: defendant_des_assistance
+    button: |
+      **Defendant des assistance**:
+      ${ word(yesno(defendant_des_assistance)) }
+  - Edit: no_earlier_actions
+    button: |
+      **No earlier actions**:
+      ${ word(yesno(no_earlier_actions)) }
+  - Edit: earlier_actions
+    button: |
+      **Earlier actions**:
+      ${ word(yesno(earlier_actions)) }
+  - Edit: earlier_actions_where_filed1
+    button: |
+      **Earlier actions where filed1**:
+      ${ earlier_actions_where_filed1 }
+  - Edit: earlier_actions_filer1
+    button: |
+      **Earlier actions filer1**:
+      ${ earlier_actions_filer1 }
+  - Edit: earlier_actions_type1
+    button: |
+      **Earlier actions type1**:
+      ${ earlier_actions_type1 }
+  - Edit: earlier_actions_year_filed1
+    button: |
+      **Earlier actions year filed1**:
+      ${ earlier_actions_year_filed1 }
+  - Edit: earlier_actions_where_filed2
+    button: |
+      **Earlier actions where filed2**:
+      ${ earlier_actions_where_filed2 }
+  - Edit: earlier_actions_filer2
+    button: |
+      **Earlier actions filer2**:
+      ${ earlier_actions_filer2 }
+  - Edit: earlier_actions_type2
+    button: |
+      **Earlier actions type2**:
+      ${ earlier_actions_type2 }
+  - Edit: earlier_actions_year_filed2
+    button: |
+      **Earlier actions year filed2**:
+      ${ earlier_actions_year_filed2 }
+  - Edit: earlier_actions_where_filed3
+    button: |
+      **Earlier actions where filed3**:
+      ${ earlier_actions_where_filed3 }
+  - Edit: earlier_actions_filer3
+    button: |
+      **Earlier actions filer3**:
+      ${ earlier_actions_filer3 }
+  - Edit: earlier_actions_type3
+    button: |
+      **Earlier actions type3**:
+      ${ earlier_actions_type3 }
+  - Edit: earlier_actions_year_filed3
+    button: |
+      **Earlier actions year filed3**:
+      ${ earlier_actions_year_filed3 }
+  - Edit: no_earlier_RFA
+    button: |
+      **No earlier rfa**:
+      ${ word(yesno(no_earlier_RFA)) }
+  - Edit: earlier_RFA
+    button: |
+      **Earlier rfa**:
+      ${ word(yesno(earlier_RFA)) }
+  - Edit: earlier_RFA_where_filed1
+    button: |
+      **Earlier rfa where filed1**:
+      ${ earlier_RFA_where_filed1 }
+  - Edit: earlier_RFA_filer1
+    button: |
+      **Earlier rfa filer1**:
+      ${ earlier_RFA_filer1 }
+  - Edit: earlier_RFA_actions_type1
+    button: |
+      **Earlier rfa actions type1**:
+      ${ earlier_RFA_actions_type1 }
+  - Edit: earlier_RFA_year_filed1
+    button: |
+      **Earlier rfa year filed1**:
+      ${ earlier_RFA_year_filed1 }
+  - Edit: earlier_RFA_where_filed2
+    button: |
+      **Earlier rfa where filed2**:
+      ${ earlier_RFA_where_filed2 }
+  - Edit: earlier_RFA_filer2
+    button: |
+      **Earlier rfa filer2**:
+      ${ earlier_RFA_filer2 }
+  - Edit: earlier_RFA_actions_type2
+    button: |
+      **Earlier rfa actions type2**:
+      ${ earlier_RFA_actions_type2 }
+  - Edit: earlier_RFA_year_filed2
+    button: |
+      **Earlier rfa year filed2**:
+      ${ earlier_RFA_year_filed2 }
+  - Edit: earlier_RFA_where_filed3
+    button: |
+      **Earlier rfa where filed3**:
+      ${ earlier_RFA_where_filed3 }
+  - Edit: earlier_RFA_filer3
+    button: |
+      **Earlier rfa filer3**:
+      ${ earlier_RFA_filer3 }
+  - Edit: earlier_RFA_actions_type3
+    button: |
+      **Earlier rfa actions type3**:
+      ${ earlier_RFA_actions_type3 }
+  - Edit: earlier_RFA_year_filed3
+    button: |
+      **Earlier rfa year filed3**:
+      ${ earlier_RFA_year_filed3 }
+  - Edit: defendant_military_service
+    button: |
+      **Defendant military service**:
+      ${ word(yesno(defendant_military_service)) }
+  - Edit: defendant_no_military_service
+    button: |
+      **Defendant no military service**:
+      ${ word(yesno(defendant_no_military_service)) }
+  - Edit: plaintiff_military_service
+    button: |
+      **Plaintiff military service**:
+      ${ word(yesno(plaintiff_military_service)) }
+  - Edit: plaintiff_no_military_service
+    button: |
+      **Plaintiff no military service**:
+      ${ word(yesno(plaintiff_no_military_service)) }
+  - Edit: grant_for
+    button: |
+      **Grant for**:
+      ${ word(yesno(grant_for)) }
+  - Edit: divorce_decree
+    button: |
+      **Divorce decree**:
+      ${ word(yesno(divorce_decree)) }
+  - Edit: legal_separation_decree
+    button: |
+      **Legal separation decree**:
+      ${ word(yesno(legal_separation_decree)) }
+  - Edit: dissolution_decree
+    button: |
+      **Dissolution decree**:
+      ${ word(yesno(dissolution_decree)) }
+  - Edit: property_maintenance
+    button: |
+      **Property maintenance**:
+      ${ word(yesno(property_maintenance)) }
+  - Edit: spousal_maintenancee
+    button: |
+      **Spousal maintenancee**:
+      ${ word(yesno(spousal_maintenancee)) }
+  - Edit: court_costs
+    button: |
+      **Court costs**:
+      ${ word(yesno(court_costs)) }
+  - Edit: attorney_fees
+    button: |
+      **Attorney fees**:
+      ${ word(yesno(attorney_fees)) }
+  - Edit: name_change
+    button: |
+      **Name change**:
+      ${ word(yesno(name_change)) }
+  - Edit: plaintiff_former_name
+    button: |
+      **Plaintiff former name**:
+      ${ plaintiff_former_name }
+  - Edit: written_agreement_attached
+    button: |
+      **Written agreement attached**:
+      ${ word(yesno(written_agreement_attached)) }
+  - Edit: users1_signature1
+    button: |
+      **users1_signature1**:
+      ${ users1_signature1 }
+  - Edit: signature_date1
+    button: |
+      **Signature date1**:
+      ${ signature_date1 }
+---
+continue button field: users.revisit
+question: |
+  Edit users
+subquestion: |
+  ${ users.table }
+
+  ${ users.add_action() }
+---
+table: users.table
+rows: users
+columns:
+  - Name: |
+      row_item.name.full() if defined("row_item.name.first") else ""
+  - Birthdate: |
+      row_item.birthdate if defined("row_item.birthdate") else ""
+  - Address: |
+      row_item.address.block() if defined("row_item.address.state") else ""
+  - Email: |
+      row_item.email if defined("row_item.email") else ""
+  - Signature: |
+      row_item.signature if defined("row_item.signature") else ""
+edit:
+  - name.first
+  - birthdate
+  - address.state
+  - email
+  - signature
+confirm: True
+
+---
+continue button field: other_parties.revisit
+question: |
+  Edit other_parties
+subquestion: |
+  ${ other_parties.table }
+
+  ${ other_parties.add_action() }
+---
+table: other_parties.table
+rows: other_parties
+columns:
+  - Name: |
+      row_item.name.full() if defined("row_item.name.first") else ""
+  - Birthdate: |
+      row_item.birthdate if defined("row_item.birthdate") else ""
+  - Address: |
+      row_item.address.block() if defined("row_item.address.state") else ""
+  - Email: |
+      row_item.email if defined("row_item.email") else ""
+edit:
+  - name.first
+  - birthdate
+  - address.state
+  - email
+confirm: True
+
+---
+id: download divorce_no_kids
+event: divorce_no_kids_download
+question: |
+  All done
+subquestion: |
+  Thank you ${users}. Your form is ready to download and deliver.
+  
+  View, download and send your form below. Click the "Edit answers" button to fix any mistakes.
+
+  ${ action_button_html(url_action('review_divorce_no_kids'), label='Edit answers', color='info') }
+  
+  
+  ${ al_user_bundle.download_list_html() }
+  
+
+  ${ al_user_bundle.send_button_html(show_editable_checkbox=False) }
+
+progress: 100
+---
+# ALDocument objects specify the metadata for each template
+objects:
+  - divorce_no_kids_Post_interview_instructions: ALDocument.using(title="Instructions", filename="divorce_no_kids_next_steps.docx", enabled=True, has_addendum=False)
+  - divorce_no_kids_attachment: ALDocument.using(title="Divorce (no kids)", filename="divorce_no_kids", enabled=True, has_addendum=False, )
+---
+# Bundles group the ALDocuments into separate downloads, such as for court and for the user
+objects:
+  - al_user_bundle: ALDocumentBundle.using(elements=[divorce_no_kids_Post_interview_instructions, divorce_no_kids_attachment], filename="divorce_no_kids", title="All forms to download for your records", enabled=True)
+  - al_court_bundle: ALDocumentBundle.using(elements=[divorce_no_kids_attachment],  filename="divorce_no_kids", title="All forms to deliver to court", enabled=True)
+---
+# Each attachment defines a key in an ALDocument. We use `i` as the placeholder here so the same template is 
+# used for "preview" and "final" keys, and logic in the template checks the value of 
+# `i` to show or hide the user's signature
+attachment:
+  name: Post-interview-Instructions
+  filename: divorce_no_kids_next_steps
+  docx template file: divorce_no_kids_next_steps.docx
+  variable name: divorce_no_kids_Post_interview_instructions[i]
+  skip undefined: True
+  tagged pdf: True
+---
+attachment:
+  name: divorce no kids
+  filename: divorce_no_kids
+  variable name: divorce_no_kids_attachment[i]
+  skip undefined: True
+  pdf template file: divorce_no_kids.pdf
+  fields:
+      - "docket_number": ${ docket_number }
+      - "trial_court_county": ${ trial_court.address.county }
+      - "users1_name": ${ users[0] }
+      - "other_parties1_name": ${ other_parties[0] }
+      - "users1_name1": ${ users1_name1 }
+      - "users1_birthdate": ${ users[0].birthdate.format() }
+      - "users1_address_line_one": ${ users[0].address.line_one() }
+      - "users1_address_line_two": ${ users[0].address.line_two() }
+      - "users1_address_mailing_line_one": ${ users1_address_mailing_line_one }
+      - "users1_address_mailing_line_two": ${ users1_address_mailing_line_two }
+      - "users1_email": ${ users[0].email }
+      - "users1_eveninng_phone_number": ${ users1_eveninng_phone_number }
+      - "users1_daytime_phone_number": ${ users1_daytime_phone_number }
+      - "users1_attorneys_name": ${ users1_attorneys_name }
+      - "users1_attorneys_phone_numer": ${ users1_attorneys_phone_numer }
+      - "other_parties1_name1": ${ other_parties1_name1 }
+      - "other_parties1_birthdate": ${ other_parties[0].birthdate.format() }
+      - "other_parties1_address_line_one": ${ other_parties[0].address.line_one() }
+      - "other_parties1_address_line_two": ${ other_parties[0].address.line_two() }
+      - "other_parties1__mailing_address_line_one": ${ other_parties1__mailing_address_line_one }
+      - "other_parties1__mailing_address_line_two": ${ other_parties1__mailing_address_line_two }
+      - "other_parties1_email": ${ other_parties[0].email }
+      - "other_parties1_evening_phone_number": ${ other_parties1_evening_phone_number }
+      - "other_parties1_daytime_phone_number": ${ other_parties1_daytime_phone_number }
+      - "other_parties1_attorneys_name": ${ other_parties1_attorneys_name }
+      - "other_parties1_attorneys_phone_number": ${ other_parties1_attorneys_phone_number }
+      - "other_parties1_name2": ${ other_parties1_name2 }
+      - "users1_name2": ${ users1_name2 }
+      - "users1_name2": ${ users1_name2 }
+      - "divorce": ${ divorce }
+      - "civil_union_dissolution": ${ civil_union_dissolution }
+      - "legal_separation": ${ legal_separation }
+      - "trial_court_county1": ${ trial_court_county1 }
+      - "signature_date": ${ signature_date }
+      - "users1_signature": ${ users[0].signature_if_final(i) }
+      - "users1_address_county": ${ users[0].address.county }
+      - "users1_address_state": ${ users[0].address.state }
+      - "plaintiff_VT": ${ plaintiff_VT }
+      - "date_plaintiff_moved_to_VT": ${ date_plaintiff_moved_to_VT }
+      - "other_parties1_address_county": ${ other_parties[0].address.county }
+      - "other_parties1_address_state": ${ other_parties[0].address.state }
+      - "defendant_VT": ${ defendant_VT }
+      - "date_defendant_moved_to_VT": ${ date_defendant_moved_to_VT }
+      - "marriage": ${ marriage }
+      - "marriage_state": ${ marriage_state }
+      - "marriage_city": ${ marriage_city }
+      - "marriage_date": ${ marriage_date.format() }
+      - "civil_union": ${ civil_union }
+      - "civil_union_city": ${ civil_union_city }
+      - "civil_union_state": ${ civil_union_state }
+      - "civil_union_date": ${ civil_union_date.format() }
+      - "divorce1": ${ divorce1 }
+      - "legal_seeparation1": ${ legal_seeparation1 }
+      - "civil_union_dissolution1": ${ civil_union_dissolution1 }
+      - "six_month_separation": ${ six_month_separation }
+      - "separation_date": ${ separation_date.format() }
+      - "other_ground_divorce": ${ other_ground_divorce }
+      - "other_ground_divorce_explanation": ${ other_ground_divorce_explanation }
+      - "filing_financial_form": ${ filing_financial_form }
+      - "not_filing_financial_form": ${ not_filing_financial_form }
+      - "plaintiff_des_assistance": ${ plaintiff_des_assistance }
+      - "defendant_des_assistance": ${ defendant_des_assistance }
+      - "no_earlier_actions": ${ no_earlier_actions }
+      - "earlier_actions": ${ earlier_actions }
+      - "earlier_actions_where_filed1": ${ earlier_actions_where_filed1 }
+      - "earlier_actions_filer1": ${ earlier_actions_filer1 }
+      - "earlier_actions_type1": ${ earlier_actions_type1 }
+      - "earlier_actions_year_filed1": ${ earlier_actions_year_filed1 }
+      - "earlier_actions_where_filed2": ${ earlier_actions_where_filed2 }
+      - "earlier_actions_filer2": ${ earlier_actions_filer2 }
+      - "earlier_actions_type2": ${ earlier_actions_type2 }
+      - "earlier_actions_year_filed2": ${ earlier_actions_year_filed2 }
+      - "earlier_actions_where_filed3": ${ earlier_actions_where_filed3 }
+      - "earlier_actions_filer3": ${ earlier_actions_filer3 }
+      - "earlier_actions_type3": ${ earlier_actions_type3 }
+      - "earlier_actions_year_filed3": ${ earlier_actions_year_filed3 }
+      - "no_earlier_RFA": ${ no_earlier_RFA }
+      - "earlier_RFA": ${ earlier_RFA }
+      - "earlier_RFA_where_filed1": ${ earlier_RFA_where_filed1 }
+      - "earlier_RFA_filer1": ${ earlier_RFA_filer1 }
+      - "earlier_RFA_actions_type1": ${ earlier_RFA_actions_type1 }
+      - "earlier_RFA_year_filed1": ${ earlier_RFA_year_filed1 }
+      - "earlier_RFA_where_filed2": ${ earlier_RFA_where_filed2 }
+      - "earlier_RFA_filer2": ${ earlier_RFA_filer2 }
+      - "earlier_RFA_actions_type2": ${ earlier_RFA_actions_type2 }
+      - "earlier_RFA_year_filed2": ${ earlier_RFA_year_filed2 }
+      - "earlier_RFA_where_filed3": ${ earlier_RFA_where_filed3 }
+      - "earlier_RFA_filer3": ${ earlier_RFA_filer3 }
+      - "earlier_RFA_actions_type3": ${ earlier_RFA_actions_type3 }
+      - "earlier_RFA_year_filed3": ${ earlier_RFA_year_filed3 }
+      - "defendant_military_service": ${ defendant_military_service }
+      - "defendant_no_military_service": ${ defendant_no_military_service }
+      - "plaintiff_military_service": ${ plaintiff_military_service }
+      - "plaintiff_no_military_service": ${ plaintiff_no_military_service }
+      - "grant_for": ${ grant_for }
+      - "divorce_decree": ${ divorce_decree }
+      - "legal_separation_decree": ${ legal_separation_decree }
+      - "dissolution_decree": ${ dissolution_decree }
+      - "property_maintenance": ${ property_maintenance }
+      - "spousal_maintenancee": ${ spousal_maintenancee }
+      - "court_costs": ${ court_costs }
+      - "attorney_fees": ${ attorney_fees }
+      - "name_change": ${ name_change }
+      - "plaintiff_former_name": ${ plaintiff_former_name }
+      - "written_agreement_attached": ${ written_agreement_attached }
+      # It's a signature: test which file version this is; leave empty unless it's the final version)
+      - "users1_signature1": ${ users1_signature1 if i == "final" else '' }
+      - "signature_date1": ${ signature_date1 }
+
+
+
