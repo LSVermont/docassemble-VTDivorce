@@ -361,8 +361,18 @@ sets:
 question: |
   What is your address?
 fields:
-  - code: |
-      users[0].address_fields(default_state=AL_DEFAULT_STATE)
+  - Address: users[0].address.address
+    address autocomplete: True
+  - Unit: users[0].address.unit
+    required: False
+  - City: users[0].address.city
+  - State: users[0].address.state
+    code: |
+      states_list()
+    default: VT
+  - Zip or postal code: users[0].address.zip
+    required: False
+  - County: users[0].address.county
   - Do you have a mailing address that is different from your street address?: users_mailing_address_different
     datatype: yesnoradio
   - Mailing address: users[0].mailing_address.address
@@ -482,8 +492,18 @@ sets:
 question: |
   What is ${ other_parties[0] }'s address?
 fields:
-  - code: |
-      other_parties[0].address_fields(default_state=AL_DEFAULT_STATE)
+  - Address: other_parties[0].address.address
+    address autocomplete: True
+  - Unit: other_parties[0].address.unit
+    required: False
+  - City: other_parties[0].address.city
+  - State: other_parties[0].address.state
+    code: |
+      states_list()
+    default: VT
+  - Zip or postal code: other_parties[0].address.zip
+    required: False
+  - County: other_parties[0].address.county
   - Does ${ other_parties } have a mailing address that is different from their street address?: other_parties_mailing_address_different
     datatype: yesnoradio
   - Mailing address: other_parties[0].mailing_address.address
@@ -621,6 +641,20 @@ review:
       % for item in other_parties:
         * ${ item }
       % endfor
+  - Edit: earlier_actions.revisit
+    button: |
+      **Earlier Actions**
+
+      % for item in earlier_actions:
+        * ${ item }
+      % endfor
+  - Edit: earlier_RFA.revisit
+    button: |
+      **Earlier RFAs**
+
+      % for item in earlier_RFA:
+        * ${ item }
+      % endfor
   - Edit: divorce
     button: |
       **Divorce**:
@@ -689,7 +723,6 @@ review:
     button: |
       **Date of separation**:
       ${ separation_date }
-
   - Edit: filing_financial_form
     button: |
       **Filing financial form**:
@@ -702,118 +735,6 @@ review:
     button: |
       **Defendant des assistance**:
       ${ word(yesno(defendant_des_assistance)) }
-  - Edit: no_earlier_actions
-    button: |
-      **No earlier actions**:
-      ${ word(yesno(no_earlier_actions)) }
-  - Edit: earlier_actions
-    button: |
-      **Earlier actions**:
-      ${ word(yesno(earlier_actions)) }
-  - Edit: earlier_actions_where_filed1
-    button: |
-      **Earlier actions where filed1**:
-      ${ earlier_actions_where_filed1 }
-  - Edit: earlier_actions_filer1
-    button: |
-      **Earlier actions filer1**:
-      ${ earlier_actions_filer1 }
-  - Edit: earlier_actions_type1
-    button: |
-      **Earlier actions type1**:
-      ${ earlier_actions_type1 }
-  - Edit: earlier_actions_year_filed1
-    button: |
-      **Earlier actions year filed1**:
-      ${ earlier_actions_year_filed1 }
-  - Edit: earlier_actions_where_filed2
-    button: |
-      **Earlier actions where filed2**:
-      ${ earlier_actions_where_filed2 }
-  - Edit: earlier_actions_filer2
-    button: |
-      **Earlier actions filer2**:
-      ${ earlier_actions_filer2 }
-  - Edit: earlier_actions_type2
-    button: |
-      **Earlier actions type2**:
-      ${ earlier_actions_type2 }
-  - Edit: earlier_actions_year_filed2
-    button: |
-      **Earlier actions year filed2**:
-      ${ earlier_actions_year_filed2 }
-  - Edit: earlier_actions_where_filed3
-    button: |
-      **Earlier actions where filed3**:
-      ${ earlier_actions_where_filed3 }
-  - Edit: earlier_actions_filer3
-    button: |
-      **Earlier actions filer3**:
-      ${ earlier_actions_filer3 }
-  - Edit: earlier_actions_type3
-    button: |
-      **Earlier actions type3**:
-      ${ earlier_actions_type3 }
-  - Edit: earlier_actions_year_filed3
-    button: |
-      **Earlier actions year filed3**:
-      ${ earlier_actions_year_filed3 }
-  - Edit: no_earlier_RFA
-    button: |
-      **No earlier rfa**:
-      ${ word(yesno(no_earlier_RFA)) }
-  - Edit: earlier_RFA
-    button: |
-      **Earlier rfa**:
-      ${ word(yesno(earlier_RFA)) }
-  - Edit: earlier_RFA_where_filed1
-    button: |
-      **Earlier rfa where filed1**:
-      ${ earlier_RFA_where_filed1 }
-  - Edit: earlier_RFA_filer1
-    button: |
-      **Earlier rfa filer1**:
-      ${ earlier_RFA_filer1 }
-  - Edit: earlier_RFA_actions_type1
-    button: |
-      **Earlier rfa actions type1**:
-      ${ earlier_RFA_actions_type1 }
-  - Edit: earlier_RFA_year_filed1
-    button: |
-      **Earlier rfa year filed1**:
-      ${ earlier_RFA_year_filed1 }
-  - Edit: earlier_RFA_where_filed2
-    button: |
-      **Earlier rfa where filed2**:
-      ${ earlier_RFA_where_filed2 }
-  - Edit: earlier_RFA_filer2
-    button: |
-      **Earlier rfa filer2**:
-      ${ earlier_RFA_filer2 }
-  - Edit: earlier_RFA_actions_type2
-    button: |
-      **Earlier rfa actions type2**:
-      ${ earlier_RFA_actions_type2 }
-  - Edit: earlier_RFA_year_filed2
-    button: |
-      **Earlier rfa year filed2**:
-      ${ earlier_RFA_year_filed2 }
-  - Edit: earlier_RFA_where_filed3
-    button: |
-      **Earlier rfa where filed3**:
-      ${ earlier_RFA_where_filed3 }
-  - Edit: earlier_RFA_filer3
-    button: |
-      **Earlier rfa filer3**:
-      ${ earlier_RFA_filer3 }
-  - Edit: earlier_RFA_actions_type3
-    button: |
-      **Earlier rfa actions type3**:
-      ${ earlier_RFA_actions_type3 }
-  - Edit: earlier_RFA_year_filed3
-    button: |
-      **Earlier rfa year filed3**:
-      ${ earlier_RFA_year_filed3 }
   - Edit: defendant_military_service
     button: |
       **Defendant military service**:
@@ -822,10 +743,6 @@ review:
     button: |
       **Plaintiff military service**:
       ${ word(yesno(plaintiff_military_service)) }
-  - Edit: grant_for
-    button: |
-      **Grant for**:
-      ${ word(yesno(grant_for)) }
   - Edit: divorce_decree
     button: |
       **Divorce decree**:
@@ -892,7 +809,6 @@ edit:
   - address.state
   - email
 confirm: True
-
 ---
 continue button field: other_parties.revisit
 question: |
@@ -919,7 +835,58 @@ edit:
   - address.state
   - email
 confirm: True
+---
+continue button field: earlier_actions.revisit
+question: |
+  Edit earlier actions
+subquestion: |
+  ${ earlier_actions.table }
 
+  ${ earlier_actions.add_action() }
+---
+table: earlier_actions.table
+rows: earlier_actions
+columns:
+  - Where filed: |
+      row_item.where_filed if defined("row_item.where_filed") else ""
+  - Who filed: |
+      row_item.who_filed if defined("row_item.who_filed") else ""
+  - Action type: |
+      row_item.action_type if defined("row_item.action_type") else ""
+  - Year filed: |
+      row_item.year_filed if defined("row_item.year_filed") else ""
+edit:
+  - where_filed
+  - who_filed
+  - action_type
+  - year_filed
+confirm: True
+---
+continue button field: earlier_RFA.revisit
+question: |
+  Edit earlier RFA
+subquestion: |
+  ${ earlier_RFA.table }
+
+  ${ earlier_RFA.add_action() }
+---
+table: earlier_RFA.table
+rows: earlier_RFA
+columns:
+  - Where filed: |
+      row_item.where_filed if defined("row_item.where_filed") else ""
+  - Who filed: |
+      row_item.who_filed if defined("row_item.who_filed") else ""
+  - Action type: |
+      row_item.action_type if defined("row_item.action_type") else ""
+  - Year filed: |
+      row_item.year_filed if defined("row_item.year_filed") else ""
+edit:
+  - where_filed
+  - who_filed
+  - action_type
+  - year_filed
+confirm: True
 ---
 id: download divorce_no_kids
 event: divorce_no_kids_download
@@ -976,8 +943,8 @@ attachment:
       - "users1_birthdate": ${ users[0].birthdate.format() }
       - "users1_address_line_one": ${ users[0].address.line_one() }
       - "users1_address_line_two": ${ users[0].address.line_two() }
-      - "users1_address_mailing_line_one": ${ users1_address_mailing_line_one }
-      - "users1_address_mailing_line_two": ${ users1_address_mailing_line_two }
+      - "users1_address_mailing_line_one": ${ users[0].mailing_address.line_one() }
+      - "users1_address_mailing_line_two": ${ users[0].mailing_address.line_two() }
       - "users1_email": ${ users[0].email }
       - "users1_evening_phone_number": ${ users[0].evening_phone_number }
       - "users1_daytime_phone_number": ${ users[0].daytime_phone_number }
@@ -987,8 +954,8 @@ attachment:
       - "other_parties1_birthdate": ${ other_parties[0].birthdate.format() }
       - "other_parties1_address_line_one": ${ other_parties[0].address.line_one() }
       - "other_parties1_address_line_two": ${ other_parties[0].address.line_two() }
-      - "other_parties1__mailing_address_line_one": ${ other_parties[0].address.mailing.line_one() }
-      - "other_parties1__mailing_address_line_two": ${ other_parties[0].address.mailing.line_two() }
+      - "other_parties1__mailing_address_line_one": ${ other_parties[0].mailing_address.line_one() }
+      - "other_parties1__mailing_address_line_two": ${ other_parties[0].mailing_address.line_two() }
       - "other_parties1_email": ${ other_parties[0].email }
       - "other_parties1_evening_phone_number": ${ other_parties[0].evening_phone_number }
       - "other_parties1_daytime_phone_number": ${ other_parties[0].daytime_phone_number }
@@ -1011,14 +978,15 @@ attachment:
       - "other_parties1_address_state": ${ other_parties[0].address.state }
       - "defendant_VT": ${ defendant_VT }
       - "date_defendant_moved_to_VT": ${ date_defendant_moved_to_VT }
-      - "marriage": ${ marriage }
+      - "marriage": ${ license_type["marriage"] }
       - "marriage_state": ${ marriage_state }
       - "marriage_city": ${ marriage_city }
       - "marriage_date": ${ marriage_date.format() }
-      - "civil_union": ${ civil_union }
+      - "civil_union": ${ license_type["civil_union"] }
       - "civil_union_city": ${ civil_union_city }
       - "civil_union_state": ${ civil_union_state }
       - "civil_union_date": ${ civil_union_date.format() }
+      - "grant_for": True 
       - "divorce1": ${ grant_for["divorce"] }
       - "legal_seeparation1": ${ grant_for["legal_separation"] }
       - "civil_union_dissolution1": ${ grant_for["dissolution"] }
