@@ -139,8 +139,12 @@ code: |
   
   if (not plaintiff_VT and not defendant_VT) or (not defendant_VT and not plaintiff_VT):
   
-    if not marriage_or_civil_union_VT and not both_cant_divorce_current_state and have_school_age_children and not have_property_agreement:
-
+    if not marriage_or_civil_union_VT and not both_cant_divorce_current_state and not have_property_agreement:
+    
+        jurisdiction_kickout
+    
+    if have_school_age_children:
+     
       jurisdiction_kickout
 
   users.gather()
