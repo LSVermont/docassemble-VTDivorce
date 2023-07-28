@@ -138,13 +138,17 @@ code: |
   user_ask_role = "plaintiff"
   
   if (not plaintiff_VT and not defendant_VT) or (not defendant_VT and not plaintiff_VT):
-    jurisdiction_kickout
+  
+    if not marriage_or_civil_union_VT and not both_cant_divorce_current_state and have_school_age_children and not have_property_agreement:
+
+      jurisdiction_kickout
 
   users.gather()
   set_parts(subtitle=str(users))
   users[0].birthdate
   users[0].address.address
   users[0].email
+  user_has_attorney
   
   set_progress(16)
   
@@ -152,6 +156,7 @@ code: |
   other_parties[0].birthdate
   other_parties[0].address.address
   other_parties[0].email
+  other_parties_has_attorney
   
   set_progress(32)
   
@@ -317,6 +322,34 @@ fields:
     datatype: date  
     show if: defendant_VT
 ---
+id: marriage_or_civil_union_VT
+question: |
+  Did you and your spouse get a marriage or civil union in VT?
+fields:
+  - no label: marriage_or_civil_union_VT
+    datatype: yesnoradio
+---
+id: both_cant_divorce_current_state
+question: |
+  Do you and your spouse currently live in states where you can't get a divorce or dissolve your civil union?
+fields:
+  - no label: both_cant_divorce_current_state
+    datatype: yesnoradio
+---
+id: have school age children
+question: |
+  Do you and your spouse have school age children?
+fields:
+  - no label: have_school_age_children
+    datatype: yesnoradio
+---
+id: property agreement
+question: |
+  Do you and your spouse already have an agreement about how to deal with your property and debts?
+fields:
+  - no label: have_property_agreement
+    datatype: yesnoradio
+--- 
 id: earlier actions
 question: |
   Have you or the defendant filed for divorce, legal separation, dissolution or annulment before filing of this petition? 
@@ -460,7 +493,7 @@ fields:
     datatype: yesnoradio
   - Attorney name: other_parties1_attorneys_name
     show if: other_parties_has_attorney
-  - Attorney phone number: other_parties1_attorneys_phone_numer
+  - Attorney phone number: other_parties1_attorneys_phone_number
     datatype: al_international_phone
     show if: other_parties_has_attorney
 ---
@@ -910,7 +943,18 @@ progress: 100
 # ALDocument objects specify the metadata for each template
 objects:
   - divorce_no_kids_Post_interview_instructions: ALDocument.using(title="Instructions", filename="divorce_no_kids_next_steps.docx", enabled=True, has_addendum=False)
-  - divorce_no_kids_attachment: ALDocument.using(title="Divorce (no kids)", filename="divorce_no_kids", enabled=True, has_addendum=False, )
+  - divorce_no_kids_attachment: ALDocument.using(title="Divorce (no kids)", filename="divorce_no_kids", enabled=True, has_addendum=True, )
+---
+attachment:
+  variable name: divorce_no_kids_attachment.addendum
+  docx template file: divorce_no_kids_addendum.docx
+---
+code: |
+  divorce_no_kids_attachment.overflow_fields['earlier_actions'].overflow_trigger = 3
+  divorce_no_kids_attachment.overflow_fields['earlier_actions'].label = "Other earlier actions"
+  divorce_no_kids_attachment.overflow_fields['earlier_RFA'].overflow_trigger = 3
+  divorce_no_kids_attachment.overflow_fields['earlier_RFA'].label = "Other RFA actions"
+  divorce_no_kids_attachment.overflow_fields.gathered = True 
 ---
 # Bundles group the ALDocuments into separate downloads, such as for court and for the user
 objects:
@@ -963,7 +1007,7 @@ attachment:
       - "other_parties1_attorneys_phone_number": ${ other_parties1_attorneys_phone_number }
       - "other_parties1_name2": ${ other_parties[0].name }
       - "users1_name2": ${ users[0].name }
-      - "users1_name2": ${ users[0].name }
+      - "users1_name3": ${ users[0].name }
       - "divorce": ${ grant_for["divorce"] }
       - "civil_union_dissolution": ${ grant_for["dissolution"] }
       - "legal_separation": ${ grant_for["legal_separation"] }
@@ -990,9 +1034,9 @@ attachment:
       - "divorce1": ${ grant_for["divorce"] }
       - "legal_seeparation1": ${ grant_for["legal_separation"] }
       - "civil_union_dissolution1": ${ grant_for["dissolution"] }
-      - "six_month_separation": ${ six_month_separation }
+      - "six_month_separation": ${ grounds["six_month_separation"] }
       - "separation_date": ${ separation_date.format() }
-      - "other_ground": ${ other_ground }
+      - "other_ground": ${ grounds["other_ground"] }
       - "other_ground_explanation": ${ other_ground_explanation }
       - "filing_financial_form": ${ filing_financial_form }
       - "not_filing_financial_form": ${ not filing_financial_form }
@@ -1041,5 +1085,4 @@ attachment:
       - "plaintiff_former_name": ${ plaintiff_former_name }
       - "written_agreement_attached": ${ written_agreement_attached }
       # It's a signature: test which file version this is; leave empty unless it's the final version)
-      - "users1_signature1": ${ users1_signature1 if i == "final" else '' }
       - "signature_date1": ${ signature_date }
