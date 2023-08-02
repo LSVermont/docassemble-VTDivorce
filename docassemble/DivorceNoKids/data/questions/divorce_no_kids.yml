@@ -280,31 +280,42 @@ question: |
   Do you and ${ other_parties } have a marriage or civil union?
 fields:
   - no label: license_type
-    datatype: checkboxes
+    input type: radio
     choices: 
       - Marriage: marriage
       - Civil Union: civil_union
-    none of the above: False
   - Marriage City: marriage_city
-    show if: license_type['marriage']
+    show if: 
+      variable: license_type
+      is: marriage
   - Marriage State: marriage_state
     code: |
       states_list()
     default: VT
-    show if: license_type['marriage']
+    show if: 
+      variable: license_type
+      is: marriage
   - Marriage Date: marriage_date
     datatype: date
-    show if: license_type['marriage']
+    show if: 
+      variable: license_type
+      is: marriage
   - Civil Union City: civil_union_city
-    show if: license_type['civil_union']
+    show if: 
+      variable: license_type
+      is: civil_union
   - Civil Union State: civil_union_state
     code: |
       states_list()
     default: VT
-    show if: license_type['civil_union']
+    show if: 
+      variable: license_type
+      is: civil_union
   - Civil Union Date: civil_union_date
     datatype: date
-    show if: license_type['civil_union']
+    show if: 
+      variable: license_type
+      is: civil_union
 ---
 id: plaintiff VT 6 months
 question: |
@@ -475,7 +486,7 @@ question: |
 subquestion: |
   Examples include: Food Stamps and Reach Up.
 fields: 
-  - I recieves DES assisance: plaintiff_des_assistance
+  - I recieve DES assisance: plaintiff_des_assistance
     datatype: yesno
   - ${ other_parties } recieves DES assisance: defendant_des_assistance
     datatype: yesno
@@ -587,12 +598,11 @@ question: |
   What are you asking the court for?
 fields:
   - Asking for: grant_for
-    datatype: checkboxes
+    input type: radio
     choices: 
       - Divorce: divorce
       - Legal Separation: legal_separation
       - Dissolution: dissolution
-    none of the above: False
   - On what grounds?: grounds
     datatype: checkboxes
     choices: 
@@ -1012,9 +1022,9 @@ attachment:
       - "other_parties1_name2": ${ other_parties[0].name }
       - "users1_name2": ${ users[0].name }
       - "users1_name3": ${ users[0].name }
-      - "divorce": ${ grant_for["divorce"] }
-      - "civil_union_dissolution": ${ grant_for["dissolution"] }
-      - "legal_separation": ${ grant_for["legal_separation"] }
+      - "divorce": ${ grant_for == "divorce" }
+      - "civil_union_dissolution": ${ grant_for == "dissolution" }
+      - "legal_separation": ${ grant_for == "legal_separation" }
       - "trial_court_county1": ${ trial_court_name }
       - "signature_date": ${ signature_date }
       - "users1_signature": ${ users[0].signature_if_final(i) }
@@ -1026,18 +1036,18 @@ attachment:
       - "other_parties1_address_state": ${ other_parties[0].address.state }
       - "defendant_VT": ${ defendant_VT }
       - "date_defendant_moved_to_VT": ${ date_defendant_moved_to_VT }
-      - "marriage": ${ license_type["marriage"] }
+      - "marriage": ${ license_type == "marriage" }
       - "marriage_state": ${ marriage_state }
       - "marriage_city": ${ marriage_city }
       - "marriage_date": ${ marriage_date.format() }
-      - "civil_union": ${ license_type["civil_union"] }
+      - "civil_union": ${ license_type == "civil_union" }
       - "civil_union_city": ${ civil_union_city }
       - "civil_union_state": ${ civil_union_state }
       - "civil_union_date": ${ civil_union_date.format() }
       - "grant_for": True 
-      - "divorce1": ${ grant_for["divorce"] }
-      - "legal_seeparation1": ${ grant_for["legal_separation"] }
-      - "civil_union_dissolution1": ${ grant_for["dissolution"] }
+      - "divorce1": ${ grant_for == "divorce" }
+      - "legal_seeparation1": ${ grant_for == "legal_separation" }
+      - "civil_union_dissolution1": ${ grant_for == "dissolution" }
       - "six_month_separation": ${ grounds["six_month_separation"] }
       - "separation_date": ${ separation_date.format() }
       - "other_ground": ${ grounds["other_ground"] }
@@ -1078,9 +1088,9 @@ attachment:
       - "defendant_no_military_service": ${ defendant_no_military_service }
       - "plaintiff_military_service": ${ plaintiff_military_service }
       - "plaintiff_no_military_service": ${ plaintiff_no_military_service }
-      - "divorce_decree": ${ grant_for["divorce"] }
-      - "legal_separation_decree": ${ grant_for["legal_separation"] }
-      - "dissolution_decree": ${ grant_for["dissolution"] }
+      - "divorce_decree": ${ grant_for == "divorce" }
+      - "legal_separation_decree": ${ grant_for == "legal_separation" }
+      - "dissolution_decree": ${ grant_for == "dissolution" }
       - "property_maintenance": ${ property_maintenance }
       - "spousal_maintenancee": ${ spousal_maintenancee }
       - "court_costs": ${ court_costs }
