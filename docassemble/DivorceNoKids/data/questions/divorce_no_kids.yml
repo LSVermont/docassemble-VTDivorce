@@ -586,11 +586,11 @@ fields:
 ---
 id: filing_financial_form
 question: |
-  Are you also filing a completed Financial form 400-00813B?
+  Are you also filing a completed financial form 400-00813B now?
 subquestion: |
-  This would need to bbe filed with your complaint and list all of the property, assets and debts that you and ${ other_parties[0] } own together or separately that are known to you.
+  On that form you will list all of the property, assets, and debts that you and ${ other_parties[0] } own together or separately that are known to you. You can file it now with the Complaint form, or file it at a later date.
 fields:
-  - "Filing financial form": filing_financial_form
+  - "Are you filing form 400-00813B now?": filing_financial_form
     datatype: yesnoradio
 ---
 id: asking the court for 
