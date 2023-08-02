@@ -367,7 +367,7 @@ fields:
 --- 
 id: earlier actions
 question: |
-  Have you or the defendant filed for divorce, legal separation, dissolution or annulment before filing of this petition? 
+  Have you or the defendant filed for **divorce, legal separation, dissolution, or annulment** before filing this petition? 
 fields:
   - no label: earlier_actions_yes
     datatype: yesnoradio
@@ -375,9 +375,9 @@ fields:
     datatype: integer
     show if: earlier_actions_yes
 ---
-id: earlier actions
+id: earlier RFA actions
 question: |
-  Have you or the defendant filed for divorce, legal separation, dissolution or annulment before filing of this petition? 
+  Have either you or the defendant filed a **complaint for relief from abuse or a request for a protective order** against each other?
 fields:
   - no label: earlier_RFA_yes
     datatype: yesnoradio
@@ -388,7 +388,7 @@ fields:
 id: collect actions
 generic object: DAList
 question: |
-  Tell us about the ${ ordinal(i) } action.
+  Tell us about the **${ ordinal(i) }** action.
 subquestion: |
   Attach a copy of any Court Order issued.
 fields:
