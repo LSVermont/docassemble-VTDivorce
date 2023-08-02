@@ -385,17 +385,47 @@ fields:
     datatype: integer
     show if: earlier_RFA_yes
 ---
-id: collect actions
+id: collect earlier RFA actions
 generic object: DAList
 question: |
   Tell us about the **${ ordinal(i) }** action.
 subquestion: |
   Attach a copy of any Court Order issued.
 fields:
-  - Type of action: x[i].action_type
-  - Who filed: x[i].who_filed
-  - Where filed: x[i].where_filed
-  - Year filed: x[i].year_filed
+  - Type of action: earlier_actions[i].action_type
+    datatype: radio
+    choices: 
+      - Divorce
+      - Legal separation
+      - Dissolution
+      - Annulment
+  - Who filed: earlier_actions[i].who_filed
+    datatype: object_radio
+    choices:
+      - users
+      - other_parties
+  - Where filed: earlier_actions[i].where_filed
+  - Year filed: earlier_actions[i].year_filed
+---
+id: collect earlier RFA actions
+generic object: DAList
+question: |
+  Tell us about the **${ ordinal(i) }** action.
+subquestion: |
+  Attach a copy of any Court Order issued.
+fields:
+  - Type of action: earlier_RFA[i].action_type
+    datatype: radio
+    choices: 
+      - Relief from abuse 
+      - Protective order
+  - Who filed: earlier_RFA[i].who_filed
+    datatype: object_radio
+    choices:
+      - users
+      - other_parties
+  - Where filed: earlier_RFA[i].where_filed
+  - Year filed: earlier_RFA[i].year_filed
 ---
 generic object: DAList
 question: |
