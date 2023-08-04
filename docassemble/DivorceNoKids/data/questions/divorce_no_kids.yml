@@ -688,14 +688,15 @@ question: |
 review:
   - Edit: docket_number
     button: |
+      % if defined("docket_number"):
       **Docket number**:
       ${ docket_number }
+      % endif
   - Edit: trial_court
     button: |
-      **Trial court**
-  
       % if defined("trial_court"):
-      * address: ${ trial_court_address }
+      **Court county**: 
+      ${ trial_court.address.county }
       % endif
   - Edit: users.revisit
     button: |
