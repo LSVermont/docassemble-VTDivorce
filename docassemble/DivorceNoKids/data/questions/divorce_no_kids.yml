@@ -31,6 +31,13 @@ objects:
 images:
   big_logo: LSV_logo.png 
 ---
+objects:
+  - all_courts: ALCourtLoader.using(file_name='courts_list.xlsx')
+---
+code: |
+  trial_court = all_courts.as_court('trial_court', trial_court_index)
+  trial_court.geolocate()  
+---
 reconsider: True
 code: |
   al_menu_items_tmp = [
@@ -78,27 +85,13 @@ code: |
 id: choose a court
 question: |
   Choose a Family Court
-fields:
-  - note: |
-      Choose the county where you will file your forms. 
+subquestion: |
+  Choose the county where you will file your forms. 
       
-      Not sure what county? [Check this list of cities and towns to find the county.](https://en.m.wikipedia.org/wiki/List_of_municipalities_in_Vermont#Cities)
-  - County: trial_court_name
-    choices:
-      - Addison
-      - Bennington
-      - Caledonia
-      - Chittenden
-      - Essex
-      - Franklin
-      - Grand Isle
-      - Lamoille
-      - Orange
-      - Orleans
-      - Rutland
-      - Washington
-      - Windham
-      - Windsor
+  Not sure what county? [Check this list of cities and towns to find the county.](https://en.m.wikipedia.org/wiki/List_of_municipalities_in_Vermont#Cities)
+fields:
+  - County: trial_court_index      
+    code: all_courts._load_courts()['address_county'].items()
 ---
 code: |
   # This controls the default country and list of states in address field questions
@@ -189,7 +182,7 @@ code: |
   
   docket_number
   
-  trial_court_name
+  trial_court
   
   interview_order_divorce_no_kids = True
 ---
@@ -702,7 +695,7 @@ review:
       **Trial court**
   
       % if defined("trial_court"):
-      * address: ${ trial_court }
+      * address: ${ trial_court_address }
       % endif
   - Edit: users.revisit
     button: |
@@ -1024,7 +1017,7 @@ attachment:
   pdf template file: divorce_no_kids.pdf
   fields:
       - "docket_number": ${ docket_number }
-      - "trial_court_county": ${ trial_court_name }
+      - "trial_court_county": ${ trial_court.address.county }
       - "users1_name": ${ users[0].name }
       - "other_parties1_name": ${ other_parties[0] }
       - "users1_name1": ${ users[0].name }
@@ -1055,7 +1048,7 @@ attachment:
       - "divorce": ${ grant_for == "divorce" }
       - "civil_union_dissolution": ${ grant_for == "dissolution" }
       - "legal_separation": ${ grant_for == "legal_separation" }
-      - "trial_court_county1": ${ trial_court_name }
+      - "trial_court_county1": ${ trial_court.address.block() }
       - "signature_date": ${ signature_date }
       - "users1_signature": ${ users[0].signature_if_final(i) }
       - "users1_address_county": ${ users[0].address.county }
