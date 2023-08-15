@@ -111,6 +111,7 @@ code: |
   al_form_type = "starts_case" 
 ---
 objects:
+  - children: ALPeopleList.using(ask_number=True, complete_attribute="complete")
   - users: ALPeopleList.using(ask_number=True,target_number=1)
   - other_parties: ALPeopleList.using(ask_number=True,target_number=1)
   - earlier_actions: DAList.using(object_type=Thing, ask_number=True, complete_attribute='complete')
@@ -135,10 +136,11 @@ code: |
     if not marriage_or_civil_union_VT and not both_cant_divorce_current_state and not have_property_agreement:
     
         jurisdiction_kickout
-    
-    if have_school_age_children:
-     
-      jurisdiction_kickout
+        
+  if have_school_age_children: 
+    children.gather()
+  else: 
+    children.target_number = 0
 
   users.gather()
   set_parts(subtitle=str(users))
@@ -346,10 +348,41 @@ fields:
 ---
 id: have school age children
 question: |
-  Do you and your spouse have school age children?
+  Do you and ${ other_parties } have children of your marriage who are either younger than 18 years old, or are 18 years old and still in high school. Include born or adopted children.
 fields:
   - no label: have_school_age_children
     datatype: yesnoradio
+  - How many: children.target_number
+    datatype: integer
+    show if: have_school_age_children
+---  
+code: |
+  children[i].name.first
+  children[i].birthdate
+  children[i].complete = True 
+---
+id: minor children
+sets:
+  - children[0].name.first
+  - children[0].name.last
+  - children[0].name.middle
+  - children[0].name.suffix
+question: |
+  % if hasattr(children, 'ask_number') and children.ask_number and children.target_number == 1:
+  Child's name
+  % else:
+  Name of first child
+  % endif
+fields:
+  - code: |
+      children[0].name_fields()
+---
+id: minor children dob
+question: |
+  What is ${children[i].name} date of birth?
+fields:
+  - no label: children[i].birthdate
+    datatype: Birthdate
 ---
 id: property agreement
 question: |
@@ -1076,6 +1109,135 @@ attachment:
       - "separation_date": ${ separation_date.format() }
       - "other_ground": ${ grounds["other_ground"] }
       - "other_ground_explanation": ${ other_ground_explanation }
+      - "filing_financial_form": ${ filing_financial_form }
+      - "not_filing_financial_form": ${ not filing_financial_form }
+      - "plaintiff_des_assistance": ${ plaintiff_des_assistance }
+      - "defendant_des_assistance": ${ defendant_des_assistance }
+      - "earlier_actions_no": ${ not earlier_actions_yes }
+      - "earlier_actions_yes": ${ earlier_actions_yes }
+      - "earlier_actions_where_filed1": ${ earlier_actions[0].where_filed }
+      - "earlier_actions_filer1": ${ earlier_actions[0].who_filed }
+      - "earlier_actions_type1": ${ earlier_actions[0].action_type }
+      - "earlier_actions_year_filed1": ${ earlier_actions[0].year_filed }
+      - "earlier_actions_where_filed2": ${ earlier_actions[1].where_filed }
+      - "earlier_actions_filer2": ${ earlier_actions[1].who_filed }
+      - "earlier_actions_type2": ${ earlier_actions[1].action_type }
+      - "earlier_actions_year_filed2": ${ earlier_actions[1].year_filed }
+      - "earlier_actions_where_filed3": ${ earlier_actions[2].where_filed }
+      - "earlier_actions_filer3": ${ earlier_actions_filer[2].who_filed }
+      - "earlier_actions_type3": ${ earlier_actions[2].action_type }
+      - "earlier_actions_year_filed3": ${ earlier_actions[2].year_filed }
+      - "earlier_RFA_no": ${ not earlier_RFA_yes }
+      - "earlier_RFA_yes": ${ earlier_RFA_yes }
+      - "earlier_RFA_where_filed1": ${ earlier_RFA[0].where_filed }
+      - "earlier_RFA_filer1": ${ earlier_RFA[0].who_filed }
+      - "earlier_RFA_actions_type1": ${ earlier_RFA[0].action_type }
+      - "earlier_RFA_year_filed1": ${ earlier_RFA[0].year_filed }
+      - "earlier_RFA_where_filed2": ${ earlier_RFA[1].where_filed }
+      - "earlier_RFA_filer2": ${ earlier_RFA[1].who_filed }
+      - "earlier_RFA_actions_type2": ${ earlier_RFA[1].action_type }
+      - "earlier_RFA_year_filed2": ${ earlier_RFA[1].year_filed }
+      - "earlier_RFA_where_filed3": ${ earlier_RFA[2].where_filed }
+      - "earlier_RFA_filer3": ${ earlier_RFA[2].who_filed }
+      - "earlier_RFA_actions_type3": ${ earlier_RFA[2].action_type }
+      - "earlier_RFA_year_filed3": ${ earlier_RFA[2].year_filed }
+      - "defendant_military_service": ${ defendant_military_service }
+      - "defendant_no_military_service": ${ defendant_no_military_service }
+      - "plaintiff_military_service": ${ plaintiff_military_service }
+      - "plaintiff_no_military_service": ${ plaintiff_no_military_service }
+      - "divorce_decree": ${ grant_for == "divorce" }
+      - "legal_separation_decree": ${ grant_for == "legal_separation" }
+      - "dissolution_decree": ${ grant_for == "dissolution" }
+      - "property_maintenance": ${ property_maintenance }
+      - "spousal_maintenancee": ${ spousal_maintenancee }
+      - "court_costs": ${ court_costs }
+      - "attorney_fees": ${ attorney_fees }
+      - "name_change": ${ name_change }
+      - "plaintiff_former_name": ${ plaintiff_former_name }
+      - "written_agreement_attached": ${ written_agreement_attached }
+      # It's a signature: test which file version this is; leave empty unless it's the final version)
+      - "signature_date1": ${ signature_date }
+---
+attachment:
+  name: divorce with kids
+  filename: divorce_with_kids
+  variable name: divorce_with_kids_attachment[i]
+  skip undefined: True
+  pdf template file: divorce_with_kids.pdf
+  fields:
+      - "docket_number": ${ docket_number }
+      - "trial_court_county": ${ trial_court.address.county }
+      - "users1_name": ${ users[0].name }
+      - "other_parties1_name": ${ other_parties[0] }
+      - "users1_name1": ${ users[0].name }
+      - "users1_birthdate": ${ users[0].birthdate.format() }
+      - "users1_address_line_one": ${ users[0].address.line_one() }
+      - "users1_address_line_two": ${ users[0].address.line_two() }
+      - "users1_address_mailing_line_one": ${ users[0].mailing_address.line_one() }
+      - "users1_address_mailing_line_two": ${ users[0].mailing_address.line_two() }
+      - "users1_email": ${ users[0].email }
+      - "users1_evening_phone_number": ${ users[0].evening_phone_number }
+      - "users1_daytime_phone_number": ${ users[0].daytime_phone_number }
+      - "users1_attorneys_name": ${ users1_attorneys_name }
+      - "users1_attorneys_phone_numer": ${ users1_attorneys_phone_numer }
+      - "other_parties1_name1": ${ other_parties[0].name }
+      - "other_parties1_birthdate": ${ other_parties[0].birthdate.format() }
+      - "other_parties1_address_line_one": ${ other_parties[0].address.line_one() }
+      - "other_parties1_address_line_two": ${ other_parties[0].address.line_two() }
+      - "other_parties1__mailing_address_line_one": ${ other_parties[0].mailing_address.line_one() }
+      - "other_parties1__mailing_address_line_two": ${ other_parties[0].mailing_address.line_two() }
+      - "other_parties1_email": ${ other_parties[0].email }
+      - "other_parties1_evening_phone_number": ${ other_parties[0].evening_phone_number }
+      - "other_parties1_daytime_phone_number": ${ other_parties[0].daytime_phone_number }
+      - "other_parties1_attorneys_name": ${ other_parties1_attorneys_name }
+      - "other_parties1_attorneys_phone_number": ${ other_parties1_attorneys_phone_number }
+      - "other_parties1_name2": ${ other_parties[0].name }
+      - "users1_name2": ${ users[0].name }
+      - "users1_name3": ${ users[0].name }
+      - "divorce": ${ grant_for == "divorce" }
+      - "civil_union_dissolution": ${ grant_for == "dissolution" }
+      - "legal_separation": ${ grant_for == "legal_separation" }
+      - "trial_court_county1": ${ trial_court.address.block() }
+      - "signature_date": ${ signature_date }
+      - "users1_signature": ${ users[0].signature_if_final(i) }
+      - "users1_address_county": ${ users[0].address.county }
+      - "users1_address_state": ${ users[0].address.state }
+      - "plaintiff_VT": ${ plaintiff_VT }
+      - "date_plaintiff_moved_to_VT": ${ date_plaintiff_moved_to_VT }
+      - "other_parties1_address_county": ${ other_parties[0].address.county }
+      - "other_parties1_address_state": ${ other_parties[0].address.state }
+      - "defendant_VT": ${ defendant_VT }
+      - "date_defendant_moved_to_VT": ${ date_defendant_moved_to_VT }
+      - "marriage": ${ license_type == "marriage" }
+      - "marriage_state": ${ marriage_state }
+      - "marriage_city": ${ marriage_city }
+      - "marriage_date": ${ marriage_date.format() }
+      - "civil_union": ${ license_type == "civil_union" }
+      - "civil_union_city": ${ civil_union_city }
+      - "civil_union_state": ${ civil_union_state }
+      - "civil_union_date": ${ civil_union_date.format() }
+      - "grant_for": True 
+      - "divorce1": ${ grant_for == "divorce" }
+      - "legal_seeparation1": ${ grant_for == "legal_separation" }
+      - "civil_union_dissolution1": ${ grant_for == "dissolution" }
+      - "six_month_separation": ${ grounds["six_month_separation"] }
+      - "separation_date": ${ separation_date.format() }
+      - "other_ground": ${ grounds["other_ground"] }
+      - "other_ground_explanation": ${ other_ground_explanation }
+      
+      - "child_name1": ${ children[0].name }
+      - "child_birthdate1": ${ children[0].birthdate }
+      - "child_name2": ${ children[1].name }
+      - "child_birthdate2": ${ children[1].birthdate }
+      - "child_name3": ${ children[2].name }
+      - "child_birthdate3": ${ children[2].birthdate }
+      - "child_name4": ${ children[3].name }
+      - "child_birthdate4": ${ children[3].birthdate }
+      - "child_name5": ${ children[4].name }
+      - "child_birthdate5": ${ children[4].birthdate }
+      
+      
+      
       - "filing_financial_form": ${ filing_financial_form }
       - "not_filing_financial_form": ${ not filing_financial_form }
       - "plaintiff_des_assistance": ${ plaintiff_des_assistance }
