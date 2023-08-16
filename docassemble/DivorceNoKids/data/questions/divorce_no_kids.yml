@@ -141,7 +141,12 @@ code: |
     children.gather()
   else: 
     children.target_number = 0
-
+    
+  if have_school_age_children:
+    children[0].address.address 
+  
+  child_custody
+  legal_rights_responsibilities
   users.gather()
   set_parts(subtitle=str(users))
   users[0].birthdate
@@ -348,7 +353,7 @@ fields:
 ---
 id: have school age children
 question: |
-  Do you and ${ other_parties } have children of your marriage who are either younger than 18 years old, or are 18 years old and still in high school. Include born or adopted children.
+  Do you and ${other_parties} have school aged children?
 fields:
   - no label: have_school_age_children
     datatype: yesnoradio
@@ -359,6 +364,9 @@ fields:
 code: |
   children[i].name.first
   children[i].birthdate
+  children[i].address.address
+  children[i].date
+  children[i].housemate
   children[i].complete = True 
 ---
 id: minor children
@@ -383,6 +391,36 @@ question: |
 fields:
   - Birthdate: children[i].birthdate
     datatype: Birthdate
+---
+id: children information
+question: |
+  Where have your children lived in the past 5 years, and who did they live with
+fields:
+  - Address: children[i].address.address
+    address autocomplete: True
+  - Unit: children[i].address.unit
+    required: False
+  - City: children[i].address.city
+    address autocomplete: True
+  - State: children[i].address.state
+    address autocomplete: True
+  - Dates: children[i].date
+    datatype: date
+  - Name of people that lived with your children: children[i].housemate
+---
+id: child custody
+question: |
+  Please check the box below if the statement next to it is true. For each box you check, please explain your answer on another page.
+fields: 
+  no label: child_custody
+  datatype: checkboxes
+  none of the above: False
+  choices: 
+    - I have participated as a party, witness, or in some other way in a court case about the custody of this child or these children in Vermont or another state.: participation
+    - I have information about a case concerning this child or these children that is now pending in a Vermont court or a court in another state.: information
+    - I have knowledge about a person who is not a party to this case who has physical custody of this child or these children or who claims to have custody of or visitation rights to this child or these children.: knowledge
+
+
 ---
 id: property agreement
 question: |
@@ -687,6 +725,24 @@ fields:
     datatype: yesno
   - note: You must attach the written agreement. To qualify for the reduced filing fee, the attached agreement must cover all the issues that you seek to have the Court resolve.
     show if: written_agreement_attached
+---
+id: parental_rights_responsibilities
+question: |
+  Parental Rights and Responsibilities
+fields: 
+  - Legal parental rights and responsibilities: legal_rights_responsibilities
+    input type: radio
+    choices: 
+      - Shared jointly: legal_shared_jointly
+      - Given solely to myself: legal_myself
+      - Given solely to defendant: legal_defendant
+      
+  - Physical parental rights and responsibilities: physical_rights_responsibilities
+    input type: radio
+    choices: 
+      - Shared jointly: physical_shared_jointly
+      - Given solely to myself: physical_myself
+      - Given solely to defendant: physical_defendant 
 ---
 id: preview divorce_no_kids
 question: |
@@ -1014,7 +1070,7 @@ progress: 100
 # ALDocument objects specify the metadata for each template
 objects:
   - divorce_no_kids_Post_interview_instructions: ALDocument.using(title="Instructions", filename="divorce_no_kids_next_steps.docx", enabled=True, has_addendum=False)
-  - divorce_no_kids_attachment: ALDocument.using(title="Divorce (no kids)", filename="divorce_no_kids", has_addendum=True)
+  - divorce_no_kids_attachment: ALDocument.using(title="Divorce (no kids)", filename="divorce_no_kids", has_addendum=True, )
   - divorce_with_kids_attachment: ALDocument.using(title="Divorce (with kids)", filename="divorce_with_kids")
 ---
 attachment:
@@ -1034,6 +1090,7 @@ objects:
   
   - al_court_bundle: ALDocumentBundle.using(elements=[divorce_with_kids_attachment, divorce_no_kids_attachment],  filename="divorce_with_kids", title="All forms to deliver to court", enabled=True)
 ---
+mandatory: True
 code: |
   if have_school_age_children:
     divorce_with_kids_attachment.enabled = True
@@ -1246,7 +1303,29 @@ attachment:
       - "child_name5": ${ children[4].name }
       - "child_birthdate5": ${ children[4].birthdate }
       
+      - "child_address1": ${ children[0].address } 
+      - "child_date1":    ${ children[0].date }
+      - "child_housemate1": ${ children[0].housemate }
+      - "child_address2": ${ children[1].address } 
+      - "child_date2":    ${ children[1].date }
+      - "child_housemate2": ${ children[1].housemate }
+      - "child_address3": ${ children[2].address } 
+      - "child_date3":    ${ children[2].date }
+      - "child_housemate3": ${ children[2].housemate }
       
+      - "physical_rights_responsibilities": True
+      - "participated_custody_child": ${ child_custody["participateion"] }
+      - "information_child": ${ child_custody["information"] }
+      - "knowledge_custody_child": ${ child_custody["knowledge"] }
+      - "legal_rights_responsibilities": True
+      - "legal_shared_jointly": ${legal_rights_responsibilities == legal_shared_jointly}
+      - "legal_given_solely": ${legal_rights_responsibilities == legal_given_solely}
+      - "legal_myself": ${legal_rights_responsibilities == legal_myself}
+      - "legal_defendant": ${ legal_rights_responsibilities == legal_defendant }
+      - "physical_shared_jointly": ${ physical_rights_responsibilities == physical_shared_jointly}
+      - "physical_given_solely": ${ physical_rights_responsibilities == physical_given_solely}
+      - "physical_myself": ${ physical_rights_responsibilities ==  physical_myself}
+      - "physical_defendant": ${ physical_rights_responsibilities == physical_defendant }
       
       - "filing_financial_form": ${ filing_financial_form }
       - "not_filing_financial_form": ${ not filing_financial_form }
