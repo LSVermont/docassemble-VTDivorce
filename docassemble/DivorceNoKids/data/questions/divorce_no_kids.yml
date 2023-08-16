@@ -144,9 +144,9 @@ code: |
     
   if have_school_age_children:
     children[0].address.address 
-  
-  child_custody
-  legal_rights_responsibilities
+    child_custody
+    legal_rights_responsibilities
+    
   users.gather()
   set_parts(subtitle=str(users))
   users[0].birthdate
@@ -394,7 +394,7 @@ fields:
 ---
 id: children information
 question: |
-  Where have your children lived in the past 5 years, and who did they live with
+  Where has ${children[i]} lived in the past 5 years, and who did ${children[i]} live with
 fields:
   - Address: children[i].address.address
     address autocomplete: True
@@ -734,15 +734,34 @@ fields:
     input type: radio
     choices: 
       - Shared jointly: legal_shared_jointly
-      - Given solely to myself: legal_myself
-      - Given solely to defendant: legal_defendant
+      - Legal parental rights and responsibilities given solely: legal_given_solely 
+      
+  - To myself: legal_myself
+    datatype: yesno
+    show if:
+      variable: legal_rights_responsibilities
+      is: legal_given_solely
+  - To the defendant: legal_defendant
+    datatype: yesno
+    show if: 
+      variable: legal_rights_responsibilities
+      is: legal_given_solely
       
   - Physical parental rights and responsibilities: physical_rights_responsibilities
     input type: radio
     choices: 
       - Shared jointly: physical_shared_jointly
-      - Given solely to myself: physical_myself
-      - Given solely to defendant: physical_defendant 
+      - Physical parental rights and responsibilities given solely: physical_given_solely
+  - To myself: physical_myself
+    datatype: yesno
+    show if: 
+      variable: physical_rights_responsibilities
+      is: physical_given_solely
+  - To the defendant: physical_defendant
+    datatype: yesno
+    show if: 
+      variable: physical_rights_responsibilities 
+      is: physical_given_solely
 ---
 id: preview divorce_no_kids
 question: |
@@ -1314,18 +1333,18 @@ attachment:
       - "child_housemate3": ${ children[2].housemate }
       
       - "physical_rights_responsibilities": True
-      - "participated_custody_child": ${ child_custody["participateion"] }
+      - "participated_custody_child": ${ child_custody["participation"] }
       - "information_child": ${ child_custody["information"] }
       - "knowledge_custody_child": ${ child_custody["knowledge"] }
       - "legal_rights_responsibilities": True
-      - "legal_shared_jointly": ${legal_rights_responsibilities == legal_shared_jointly}
-      - "legal_given_solely": ${legal_rights_responsibilities == legal_given_solely}
-      - "legal_myself": ${legal_rights_responsibilities == legal_myself}
-      - "legal_defendant": ${ legal_rights_responsibilities == legal_defendant }
-      - "physical_shared_jointly": ${ physical_rights_responsibilities == physical_shared_jointly}
-      - "physical_given_solely": ${ physical_rights_responsibilities == physical_given_solely}
-      - "physical_myself": ${ physical_rights_responsibilities ==  physical_myself}
-      - "physical_defendant": ${ physical_rights_responsibilities == physical_defendant }
+      - "legal_shared_jointly": ${legal_rights_responsibilities == "legal_shared_jointly"}
+      - "legal_given_solely": ${legal_rights_responsibilities == "legal_given_solely"}
+      - "legal_myself": ${legal_myself}
+      - "legal_defendant": ${ legal_defendant }
+      - "physical_shared_jointly": ${ physical_rights_responsibilities == "physical_shared_jointly"}
+      - "physical_given_solely": ${ physical_rights_responsibilities == "physical_given_solely"}
+      - "physical_myself": ${physical_myself}
+      - "physical_defendant": ${physical_defendant }
       
       - "filing_financial_form": ${ filing_financial_form }
       - "not_filing_financial_form": ${ not filing_financial_form }
