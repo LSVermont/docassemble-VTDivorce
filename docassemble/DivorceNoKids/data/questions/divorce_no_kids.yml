@@ -381,7 +381,7 @@ id: minor children dob
 question: |
   What is ${children[i].name} date of birth?
 fields:
-  - no label: children[i].birthdate
+  - Birthdate: children[i].birthdate
     datatype: Birthdate
 ---
 id: property agreement
@@ -1014,7 +1014,8 @@ progress: 100
 # ALDocument objects specify the metadata for each template
 objects:
   - divorce_no_kids_Post_interview_instructions: ALDocument.using(title="Instructions", filename="divorce_no_kids_next_steps.docx", enabled=True, has_addendum=False)
-  - divorce_no_kids_attachment: ALDocument.using(title="Divorce (no kids)", filename="divorce_no_kids", enabled=True, has_addendum=True, )
+  - divorce_no_kids_attachment: ALDocument.using(title="Divorce (no kids)", filename="divorce_no_kids", has_addendum=True)
+  - divorce_with_kids_attachment: ALDocument.using(title="Divorce (with kids)", filename="divorce_with_kids")
 ---
 attachment:
   variable name: divorce_no_kids_attachment.addendum
@@ -1029,8 +1030,17 @@ code: |
 ---
 # Bundles group the ALDocuments into separate downloads, such as for court and for the user
 objects:
-  - al_user_bundle: ALDocumentBundle.using(elements=[divorce_no_kids_Post_interview_instructions, divorce_no_kids_attachment], filename="divorce_no_kids", title="All forms to download for your records", enabled=True)
-  - al_court_bundle: ALDocumentBundle.using(elements=[divorce_no_kids_attachment],  filename="divorce_no_kids", title="All forms to deliver to court", enabled=True)
+  - al_user_bundle: ALDocumentBundle.using(elements=[divorce_no_kids_Post_interview_instructions, divorce_with_kids_attachment,  divorce_no_kids_attachment], filename="divorce_with_kids", title="All forms to download for your records", enabled=True)
+  
+  - al_court_bundle: ALDocumentBundle.using(elements=[divorce_with_kids_attachment, divorce_no_kids_attachment],  filename="divorce_with_kids", title="All forms to deliver to court", enabled=True)
+---
+code: |
+  if have_school_age_children:
+    divorce_with_kids_attachment.enabled = True
+    divorce_no_kids_attachment.enabled = False
+  else:
+    divorce_with_kids_attachment.enabled = False
+    divorce_no_kids_attachment.enabled = True
 ---
 # Each attachment defines a key in an ALDocument. We use `i` as the placeholder here so the same template is 
 # used for "preview" and "final" keys, and logic in the template checks the value of 
