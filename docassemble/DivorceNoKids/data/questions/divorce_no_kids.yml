@@ -835,6 +835,13 @@ review:
       % for item in other_parties:
         * ${ item }
       % endfor
+  - Edit: children.revisit
+    button: |
+      **Children**
+      
+      % for item in children:
+        * ${ item } 
+      % endfor
   - Edit: earlier_actions.revisit
     button: |
       **Earlier Actions**
@@ -917,6 +924,55 @@ review:
     button: |
       **Date of separation**:
       ${ separation_date }
+  - Edit: legal_rights_responsibilities
+    button: |
+      **Legal parental rights and responsibilities**:
+      
+      % if legal_shared_jointly:
+      - Shared jointly: **${yesno(legal_shared_jointly)}**
+      % endif
+      
+      % if legal_myself:
+      - Given solely to myself: **${yesno(legal_myself)}**
+      % endif
+      
+      % if legal_defendant:
+      - Given solely to the defendant: **${yesno(legal_defendant)}**
+      % endif
+  
+  - Edit: physical_rights_responsibilities
+    button: |
+      **Physical parental rights and responsibilities**:
+      
+      % if physical_shared_jointly:
+      - Shared jointly: **${yesno(physical_shared_jointly)}**
+      % endif
+      
+      % if legal_myself:
+      - Given solely to myself: **${yesno(physical_myself)}**
+      % endif
+      
+      % if legal_defendant:
+      - Given solely to the defendant: **${yesno(physical_defendant)}**
+      % endif
+  
+  - Edit: contact_for
+    button: |
+      **Parent Child Contact**:
+      
+      % if contact_for_myself:
+      - Contact for myself: **${yesno(contact_for_myself)}**
+      % endif
+      
+      % if contact_for_defendant:
+      - Contact for the defendant: **${ yesno(contact_for_defendant)}**
+      % endif
+      
+  - Edit: child_medical_support
+    button: |
+      **Child support, medical support and/or maintenance supplement**:
+      
+      - ${yesno(child_medical_support)}
   - Edit: filing_financial_form
     button: |
       **Filing financial form**:
@@ -1358,12 +1414,8 @@ attachment:
       - "physical_given_solely": ${ physical_given_solely}
       - "physical_myself": ${physical_myself}
       - "physical_defendant": ${physical_defendant }
-      - "parental_rights": ${ parental_rights }
-      #- "legal_rights_responsibilities": ${ legal_rights_responsibilities }
-      #- "physical_rights_responsibilities": ${ physical_rights_responsibilities }
+      - "parental_rights": ${ parental_rights }    
       
-      
-      - "contact_for": True
       - "contact_for_myself": ${contact_for_myself}
       - "contact_for_defendant": ${ contact_for_defendant }
       - "child_medical_support": ${ child_medical_support }
