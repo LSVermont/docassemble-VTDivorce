@@ -725,43 +725,58 @@ fields:
     datatype: yesno
   - note: You must attach the written agreement. To qualify for the reduced filing fee, the attached agreement must cover all the issues that you seek to have the Court resolve.
     show if: written_agreement_attached
+  
 ---
-id: parental_rights_responsibilities
-question: |
-  Parental Rights and Responsibilities
-fields: 
+id: asking the court for (with children)
+question: |  
+  I ask that the court grant me
+fields:
+  - Parental rights and responsibilities: parental_rights
+    datatype: yesno
   - Legal parental rights and responsibilities: legal_rights_responsibilities
-    input type: radio
-    choices: 
-      - Shared jointly: legal_shared_jointly
-      - Legal parental rights and responsibilities given solely: legal_given_solely 
-      
+    datatype: yesno
+    show if: parental_rights
+  - Shared jointly: legal_shared_jointly
+    datatype: yesno
+    show if: legal_rights_responsibilities
+  - Given solely: legal_given_solely
+    show if: legal_rights_responsibilities
+    datatype: yesno  
   - To myself: legal_myself
     datatype: yesno
-    show if:
-      variable: legal_rights_responsibilities
-      is: legal_given_solely
+    show if: legal_given_solely
   - To the defendant: legal_defendant
     datatype: yesno
-    show if: 
-      variable: legal_rights_responsibilities
-      is: legal_given_solely
-      
+    show if: legal_given_solely
+
   - Physical parental rights and responsibilities: physical_rights_responsibilities
-    input type: radio
-    choices: 
-      - Shared jointly: physical_shared_jointly
-      - Physical parental rights and responsibilities given solely: physical_given_solely
+    datatype: yesno
+    show if: parental_rights
+  - Shared jointly: physical_shared_jointly
+    datatype: yesno
+    show if: physical_rights_responsibilities
+  - Given solely: physical_given_solely
+    show if: physical_rights_responsibilities
+    datatype: yesno
   - To myself: physical_myself
     datatype: yesno
-    show if: 
-      variable: physical_rights_responsibilities
-      is: physical_given_solely
+    show if: physical_given_solely
   - To the defendant: physical_defendant
     datatype: yesno
-    show if: 
-      variable: physical_rights_responsibilities 
-      is: physical_given_solely
+    show if: physical_given_solely
+    
+  - Parent Child Contact for: contact_for
+    datatype: yesno
+  - Contact for myself: contact_for_myself
+    datatype: yesno
+    show if: contact_for
+    required: False
+  - Contact for the defendant: contact_for_defendant
+    datatype: yesno
+    show if: contact_for
+    required: False
+  - Child support, medical support and/or maintenance supplement.: child_medical_support
+    datatype: yesno
 ---
 id: preview divorce_no_kids
 question: |
@@ -1321,7 +1336,7 @@ attachment:
       - "child_birthdate4": ${ children[3].birthdate }
       - "child_name5": ${ children[4].name }
       - "child_birthdate5": ${ children[4].birthdate }
-      
+     
       - "child_address1": ${ children[0].address } 
       - "child_date1":    ${ children[0].date }
       - "child_housemate1": ${ children[0].housemate }
@@ -1331,20 +1346,27 @@ attachment:
       - "child_address3": ${ children[2].address } 
       - "child_date3":    ${ children[2].date }
       - "child_housemate3": ${ children[2].housemate }
-      
-      - "physical_rights_responsibilities": True
+   
       - "participated_custody_child": ${ child_custody["participation"] }
       - "information_child": ${ child_custody["information"] }
       - "knowledge_custody_child": ${ child_custody["knowledge"] }
-      - "legal_rights_responsibilities": True
-      - "legal_shared_jointly": ${legal_rights_responsibilities == "legal_shared_jointly"}
-      - "legal_given_solely": ${legal_rights_responsibilities == "legal_given_solely"}
+      - "legal_shared_jointly": ${legal_shared_jointly}
+      - "legal_given_solely": ${legal_given_solely}
       - "legal_myself": ${legal_myself}
       - "legal_defendant": ${ legal_defendant }
-      - "physical_shared_jointly": ${ physical_rights_responsibilities == "physical_shared_jointly"}
-      - "physical_given_solely": ${ physical_rights_responsibilities == "physical_given_solely"}
+      - "physical_shared_jointly": ${physical_shared_jointly}
+      - "physical_given_solely": ${ physical_given_solely}
       - "physical_myself": ${physical_myself}
       - "physical_defendant": ${physical_defendant }
+      - "parental_rights": ${ parental_rights }
+      #- "legal_rights_responsibilities": ${ legal_rights_responsibilities }
+      #- "physical_rights_responsibilities": ${ physical_rights_responsibilities }
+      
+      
+      - "contact_for": True
+      - "contact_for_myself": ${contact_for_myself}
+      - "contact_for_defendant": ${ contact_for_defendant }
+      - "child_medical_support": ${ child_medical_support }
       
       - "filing_financial_form": ${ filing_financial_form }
       - "not_filing_financial_form": ${ not filing_financial_form }
