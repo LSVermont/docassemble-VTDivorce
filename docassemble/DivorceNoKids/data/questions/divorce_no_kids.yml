@@ -733,35 +733,45 @@ question: |
 fields:
   - Parental rights and responsibilities: parental_rights
     datatype: yesno
+    required: False
   - Legal parental rights and responsibilities: legal_rights_responsibilities
     datatype: yesno
+    required: False
     show if: parental_rights
   - Shared jointly: legal_shared_jointly
     datatype: yesno
+    required: False
     show if: legal_rights_responsibilities
   - Given solely: legal_given_solely
+    required: False
     show if: legal_rights_responsibilities
     datatype: yesno  
   - To myself: legal_myself
     datatype: yesno
     show if: legal_given_solely
+    required: False
   - To the defendant: legal_defendant
     datatype: yesno
     show if: legal_given_solely
-
+    required: False
   - Physical parental rights and responsibilities: physical_rights_responsibilities
     datatype: yesno
+    required: False
     show if: parental_rights
   - Shared jointly: physical_shared_jointly
+    required: False
     datatype: yesno
     show if: physical_rights_responsibilities
   - Given solely: physical_given_solely
+    required: False
     show if: physical_rights_responsibilities
     datatype: yesno
   - To myself: physical_myself
+    required: False
     datatype: yesno
     show if: physical_given_solely
   - To the defendant: physical_defendant
+    required: False
     datatype: yesno
     show if: physical_given_solely
     
@@ -1161,7 +1171,7 @@ progress: 100
 objects:
   - divorce_no_kids_Post_interview_instructions: ALDocument.using(title="Instructions", filename="divorce_no_kids_next_steps.docx", enabled=True, has_addendum=False)
   - divorce_no_kids_attachment: ALDocument.using(title="Divorce (no kids)", filename="divorce_no_kids", has_addendum=True, )
-  - divorce_with_kids_attachment: ALDocument.using(title="Divorce (with kids)", filename="divorce_with_kids")
+  - divorce_with_kids_attachment: ALDocument.using(title="Divorce (with kids)", filename="divorce_with_kids", has_addendum=True)
 ---
 attachment:
   variable name: divorce_no_kids_attachment.addendum
@@ -1173,6 +1183,15 @@ code: |
   divorce_no_kids_attachment.overflow_fields['earlier_RFA'].overflow_trigger = 3
   divorce_no_kids_attachment.overflow_fields['earlier_RFA'].label = "Other RFA actions"
   divorce_no_kids_attachment.overflow_fields.gathered = True 
+---
+attachment: 
+  variable name: divorce_with_kids_attachment.addendum
+  docx template file: divorce_with_kids_addendum.docx
+---
+code: |
+  divorce_with_kids_attachment.overflow_fields['children'].overflow_trigger = 3
+  divorce_with_kids_attachment.overflow_fields['children'].label = "Other children"
+  divorce_with_kids_attachment.overflow_fields.gathered = True 
 ---
 # Bundles group the ALDocuments into separate downloads, such as for court and for the user
 objects:
@@ -1415,11 +1434,9 @@ attachment:
       - "physical_myself": ${physical_myself}
       - "physical_defendant": ${physical_defendant }
       - "parental_rights": ${ parental_rights }    
-      
       - "contact_for_myself": ${contact_for_myself}
       - "contact_for_defendant": ${ contact_for_defendant }
       - "child_medical_support": ${ child_medical_support }
-      
       - "filing_financial_form": ${ filing_financial_form }
       - "not_filing_financial_form": ${ not filing_financial_form }
       - "plaintiff_des_assistance": ${ plaintiff_des_assistance }
