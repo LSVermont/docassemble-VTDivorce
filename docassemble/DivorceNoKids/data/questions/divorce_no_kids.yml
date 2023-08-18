@@ -137,23 +137,13 @@ code: |
     
         jurisdiction_kickout
         
-  if have_school_age_children: 
-    children.gather()
-  else: 
-    children.target_number = 0
-    
-  if have_school_age_children:
-    children[0].address.address 
-    child_custody
-    legal_rights_responsibilities
-    
   users.gather()
   set_parts(subtitle=str(users))
   users[0].birthdate
   users[0].address.address
   users[0].email
   user_has_attorney
-  
+
   set_progress(16)
   
   other_parties.gather()
@@ -163,6 +153,14 @@ code: |
   other_parties_has_attorney
   
   set_progress(32)
+        
+  if have_school_age_children: 
+    children.gather()
+    children[0].address.address 
+    child_custody
+    parental_rights
+  else: 
+    children.target_number = 0
   
   license_type
   
@@ -405,7 +403,6 @@ fields:
   - State: children[i].address.state
     address autocomplete: True
   - Dates: children[i].date
-    datatype: date
   - Name of people that lived with your children: children[i].housemate
 ---
 id: child custody
