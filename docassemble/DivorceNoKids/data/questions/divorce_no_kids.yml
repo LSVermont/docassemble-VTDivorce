@@ -10,13 +10,13 @@ metadata:
   short title: >-
     Divorce (no kids)
   description: |-
-    This interview helps someone in Vermont ask the court for a Divorce (no kids).
+    This interview helps someone in Vermont ask the court for a Divorce, Separation or Civil Union Dissolution.
   tags:
     - "FA-00-00-00-00"
   authors:
     - Mia Bonardi
   original_form:
-    - https://www.vermontjudiciary.org/sites/default/files/documents/400-00836NoKids_1.pdf
+    - https://www.vermontjudiciary.org/media/243
   allowed_courts: []
   typical_role: "plaintiff"
   al_weaver_version: "1.10.1"
@@ -86,9 +86,9 @@ id: choose a court
 question: |
   Choose a Family Court
 subquestion: |
-  Choose the county where you will file your forms. 
+  Choose the county where you will file your forms. This can be the county where you both live or xxxxxxxxxxxx.
       
-  Not sure what county? [Check this list of cities and towns to find the county.](https://en.m.wikipedia.org/wiki/List_of_municipalities_in_Vermont#Cities)
+  Not sure what county? [Check this list of cities and towns to find the county they are in.](https://en.m.wikipedia.org/wiki/List_of_municipalities_in_Vermont#Cities)
 fields:
   - County: trial_court_index      
     code: all_courts._load_courts()['address_county'].items()
@@ -105,7 +105,7 @@ code: |
   github_repo_name =  'docassemble-DivorceNoKids'
 ---
 code: |
-  interview_short_title = "Ask the court for a Divorce (no kids)"
+  interview_short_title = "Ask the court for a divorce (no kids)"
 ---
 code: |
   al_form_type = "starts_case" 
@@ -180,7 +180,7 @@ code: |
   plaintiff_des_assistance
   plaintiff_military_service
   
-  docket_number
+  #docket_number
   
   trial_court
   
@@ -193,7 +193,10 @@ sets:
   - other_parties[i].name.suffix
 id: names of opposing parties
 question: |
-  Name of the **defendant** in this matter
+  Name of the **other party** in this matter
+subquestion: |
+  The “other party” is your former spouse, partner or “ex.” When you file for a divorce, you are called the plaintiff and the other party is called the defendant on court forms. Use the name that they use currently in the marriage or civil union.
+
 fields:
   - code: |
       other_parties[i].name_fields(person_or_business='person')
@@ -202,7 +205,9 @@ id: jurisdiction kickout
 question: |
   Stop
 subquestion: |
-  <i class="fas fa-hand-paper fa-3x" aria-hidden="true"></i>  **Stop.** In this situation, these are **not** the right forms to fill out. **Do not use this interview.** 
+  <i class="fas fa-hand-paper fa-3x" aria-hidden="true"></i>  **Stop.** In this situation, these are **not** the right forms to fill out. **Do not use this interview.**
+  
+  See the [Divorce Roadmap on the VTLawHelp.org website](https://vtlawhelp.org/roadmap/divorce/step-1) to find out what is required for you to be able to file for a divorce, separation or civil union dissolution in Vermont.
 continue button field: jurisdiction_kickout
 buttons:
   - Exit: exit
@@ -244,12 +249,12 @@ subquestion: |
   <li><b>Step 3:</b> Download, save or print the final forms. You will need to mail, email, efile or deliver them to the court on your own.</li></ul>
   </div>  
 
-  VTCourtForms interviews were created by Legal Services Vermont with support from the Legal Services Corporation. It is free to use this program. This site is not a lawyer. Visit our [VTLawHelp.org website](https://vtlawhelp.org/roadmap/relief-from-abuse/step-1) for more information about Relief from Abuse orders.
+  VTCourtForms interviews were created by Legal Services Vermont with support from the Legal Services Corporation. It is free to use this program. This site is not a lawyer. Visit our [VTLawHelp.org website](https://vtlawhelp.org/roadmap/divorce/step-1) for more information about divorce, separation and civil union dissolution.
   
   [FILE big_logo, 30%, Legal Services Vermont logo]
 
 fields:
-  - To continue, please accept our [terms of use](https://vtlawhelp.org/vlh-privacy).: acknowledged_information_use
+  - To continue, please accept our [terms of use](https://vtlawhelp.org/vtcourtforms/terms-of-use).: acknowledged_information_use
     datatype: checkboxes
     none of the above: False    
     minlength: 1
@@ -322,7 +327,9 @@ fields:
 ---
 id: defendant VT 6 months
 question: |
-  Has the defendant lived in Vermont since ${ today().minus(months=6) }?
+  Has the other party lived in Vermont since ${ today().minus(months=6) }?
+subquestion: |
+  The “other party” is your former spouse, partner or “ex.” When you file for a divorce, you are called the plaintiff and the other party is called the defendant on court forms.
 fields:
   - no label: defendant_VT
     datatype: yesnoradio
@@ -332,49 +339,49 @@ fields:
 ---
 id: marriage_or_civil_union_VT
 question: |
-  Did you and your spouse get a marriage or civil union in VT?
+  Did you and the other party get married or get a civil union in Vermont?
 fields:
   - no label: marriage_or_civil_union_VT
     datatype: yesnoradio
 ---
 id: both_cant_divorce_current_state
 question: |
-  Do you and your spouse currently live in states where you can't get a divorce or dissolve your civil union?
+  Do you and the other party currently live in states where you can't get a divorce or dissolve your civil union?
 fields:
   - no label: both_cant_divorce_current_state
     datatype: yesnoradio
 ---
 id: have school age children
 question: |
-  Do you and your spouse have school age children?
+  Do you and the other party have school-aged children?
 fields:
   - no label: have_school_age_children
     datatype: yesnoradio
 ---
 id: property agreement
 question: |
-  Do you and your spouse already have an agreement about how to deal with your property and debts?
+  Do you and the other party already have an agreement about how to deal with your property and debts?
 fields:
   - no label: have_property_agreement
     datatype: yesnoradio
 --- 
 id: earlier actions
 question: |
-  Have you or the defendant filed for **divorce, legal separation, dissolution, or annulment** before filing this petition? 
+  Have you or the other party filed for **divorce, legal separation, civil union dissolution or annulment** before filing this petition? 
 fields:
   - no label: earlier_actions_yes
     datatype: yesnoradio
-  - How many?: earlier_actions.target_number
+  - How many of these have you filed?: earlier_actions.target_number
     datatype: integer
     show if: earlier_actions_yes
 ---
 id: earlier RFA actions
 question: |
-  Have either you or the defendant filed a **complaint for relief from abuse or a request for a protective order** against each other?
+  Have either you or the other party filed a **complaint for relief from abuse or a request for a protective order** against each other?
 fields:
   - no label: earlier_RFA_yes
     datatype: yesnoradio
-  - How many?: earlier_RFA.target_number
+  - How many of these have you filed?: earlier_RFA.target_number
     datatype: integer
     show if: earlier_RFA_yes
 ---
@@ -383,7 +390,7 @@ generic object: DAList
 question: |
   Tell us about the **${ ordinal(i) }** action.
 subquestion: |
-  Attach a copy of any Court Order issued.
+  You'll have to attach a copy of any court order that was issued.
 fields:
   - Type of action: earlier_actions[i].action_type
     datatype: radio
@@ -397,15 +404,17 @@ fields:
     choices:
       - users
       - other_parties
-  - Where filed: earlier_actions[i].where_filed
+  - Where filed. Include the court, county and state. Example - Family, Chittenden Co., VT: earlier_actions[i].where_filed
+    maxlength: 30
   - Year filed: earlier_actions[i].year_filed
+    maxlength: 4
 ---
 id: collect earlier RFA actions
 generic object: DAList
 question: |
   Tell us about the **${ ordinal(i) }** action.
 subquestion: |
-  Attach a copy of any Court Order issued.
+  You'll have to attach a copy of any court order that was issued.
 fields:
   - Type of action: earlier_RFA[i].action_type
     datatype: radio
@@ -417,8 +426,10 @@ fields:
     choices:
       - users
       - other_parties
-  - Where filed: earlier_RFA[i].where_filed
+  - Where filed. Include the court, county and state. Example - Family, Chittenden Co., VT: earlier_RFA[i].where_filed
+    maxlength: 30
   - Year filed: earlier_RFA[i].year_filed
+    maxlength: 4
 ---
 generic object: DAList
 question: |
@@ -460,7 +471,6 @@ fields:
     default: VT
     show if: users_mailing_address_different
   - Zip or postal code: users[0].mailing_address.zip
-    required: False
     show if: users_mailing_address_different
 ---
 id: Gather users contact information
@@ -486,7 +496,7 @@ validation code: |
 ---
 id: Users attorney info
 question: |
-  Do you have an attorney?
+  Do you have a lawyer for this matter?
 fields:
   - no label: user_has_attorney
     datatype: yesnoradio
@@ -503,15 +513,31 @@ fields:
   - no label: user_resided_VT_6_months
     datatype: yesnoradio
 ---
-id: des assistance
+id: DES assistance
 question: |
-   Do you or ${ other_parties } receive assistance from the Division of Economic Services (DES) 
+   Do you or ${ other_parties } get assistance from the Vermont Division of Economic Services?
 subquestion: |
-  Examples include: Food Stamps and Reach Up.
+  Examples include:
+  
+  * 3SquaresVT (food stamps)
+  
+  * Reach Up
+  
+  * Emergency Housing
+  
+  * Emergency Assistance
+  
+  * Essential Person Assistance
+  
+  * Fuel Assistance
+  
+  * Water Assistance
+  
+  * Energy Assistance
 fields: 
-  - I recieve DES assisance: plaintiff_des_assistance
+  - I get help from the Vermont Division of Economic Services: plaintiff_des_assistance
     datatype: yesno
-  - ${ other_parties } recieves DES assisance: defendant_des_assistance
+  - ${ other_parties } gets help from the Vermont Division of Economic Services: defendant_des_assistance
     datatype: yesno
 ---
 id: military service
@@ -525,7 +551,7 @@ fields:
 ---
 id: other parties attorney info
 question: |
-  Does ${ other_parties[0] } have an attorney?
+  Does ${ other_parties[0] } have a lawyer for this matter?
 fields:
   - no label: other_parties_has_attorney
     datatype: yesnomaybe
@@ -616,9 +642,9 @@ fields:
 ---
 id: filing_financial_form
 question: |
-  Are you also filing a completed financial form 400-00813B now?
+  Are you also filing completed financial affidavit form 813B now?
 subquestion: |
-  On that form you will list all of the property, assets, and debts that you and ${ other_parties[0] } own together or separately that are known to you. You can file it now with the Complaint form, or file it at a later date.
+  On that form you will list all of the property, assets and debts that you and ${ other_parties[0] } own together or separately. You can file it now with the Complaint form, or file it at a later date.
 fields:
   - "Are you filing form 400-00813B now?": filing_financial_form
     datatype: yesnoradio
@@ -631,35 +657,36 @@ fields:
     input type: radio
     choices: 
       - Divorce: divorce
-      - Legal Separation: legal_separation
-      - Dissolution: dissolution
-  - On what grounds?: grounds
+      - Legal separation: legal_separation
+      - Civil union dissolution: dissolution
+  - note: See [this Divorce page on the VTLawHelp.org website](https://vtlawhelp.org/roadmap/divorce/step-1) for details on the above terms.
+  - On what grounds? (For what reason?): grounds
     datatype: checkboxes
     choices: 
-      - Six month separation: six_month_separation
-      - Other ground divorce: other_ground
+      - We have or will have lived separate and apart for more than six consecutive months and it is not reasonably probable that we can resume our relationship. (This is the most common reason.): six_month_separation
+      - Another reason, such as irreconcilable differences: other_ground
     none of the above: False
   - Date of separation: separation_date
     datatype: date
     show if: grounds["six_month_separation"]
-  - Other ground divorce explanation: other_ground_explanation
+  - Other reason: other_ground_explanation
     show if: grounds["other_ground"]
-  - note: Other things you are asking the court for
-  - Property maintenance: property_maintenance
+  - note: Other things you are asking the court for. Check as many as apply.
+  - Division of property (divide our property, assets and debts): property_maintenance
     datatype: yesno
-  - Spousal maintenancee: spousal_maintenancee
+  - Spousal maintenance (alimony): spousal_maintenancee
     datatype: yesno
-  - Court costs: court_costs
+  - Court fees and costs: court_costs
     datatype: yesno
-  - Attorney fees: attorney_fees
+  - Fees you paid to your attorney: attorney_fees
     datatype: yesno
-  - Name change: name_change
+  - Go back to using my name before my marriage or union: name_change
     datatype: yesno
-  - Plaintiff former name: plaintiff_former_name
+  - Your former name: plaintiff_former_name
     show if: name_change
   - Issue an order with a written agreement between you and ${ other_parties }: written_agreement_attached
     datatype: yesno
-  - note: You must attach the written agreement. To qualify for the reduced filing fee, the attached agreement must cover all the issues that you seek to have the Court resolve.
+  - note: You must attach the written agreement. If you have an agreement that covers all the issues above that you seek to have the court resolve, you may qualify for a reduced filing fee.
     show if: written_agreement_attached
 ---
 id: preview divorce_no_kids
@@ -803,23 +830,23 @@ review:
       ${ separation_date }
   - Edit: filing_financial_form
     button: |
-      **Filing financial form**:
+      **Filing financial form 813B now**:
       ${ word(yesno(filing_financial_form)) }
   - Edit: plaintiff_des_assistance
     button: |
-      **Plaintiff des assistance**:
+      **You get assistance from Vermont Economic Services Division**:
       ${ word(yesno(plaintiff_des_assistance)) }
   - Edit: defendant_des_assistance
     button: |
-      **Defendant des assistance**:
+      **The other party gets assistance from Vermont Economic Services Division**:
       ${ word(yesno(defendant_des_assistance)) }
   - Edit: defendant_military_service
     button: |
-      **Defendant military service**:
+      **The other party is in the military**:
       ${ word(yesno(defendant_military_service)) }
   - Edit: plaintiff_military_service
     button: |
-      **Plaintiff military service**:
+      **You are in the military**:
       ${ word(yesno(plaintiff_military_service)) }
   - Edit: divorce_decree
     button: |
@@ -851,11 +878,11 @@ review:
       ${ word(yesno(attorney_fees)) }
   - Edit: name_change
     button: |
-      **Name change**:
+      **Go back to using former name**:
       ${ word(yesno(name_change)) }
   - Edit: plaintiff_former_name
     button: |
-      **Plaintiff former name**:
+      **Your former name**:
       ${ plaintiff_former_name }
   - Edit: written_agreement_attached
     button: |
