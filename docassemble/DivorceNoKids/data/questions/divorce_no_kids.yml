@@ -156,7 +156,8 @@ code: |
         
   if have_school_age_children: 
     children.gather()
-    children[0].address.address 
+    children[0].address.address
+    children[0].date
     child_custody
     parental_rights
   else: 
@@ -402,8 +403,15 @@ fields:
     address autocomplete: True
   - State: children[i].address.state
     address autocomplete: True
+---
+id: date and housemates
+question: |
+  List the dates your children lived in the specified houses and the people that they lived with
+fields: 
   - Dates: children[i].date
+    datatype: date
   - Name of people that lived with your children: children[i].housemate
+    datatype: area
 ---
 id: child custody
 question: |
