@@ -152,7 +152,7 @@ code: |
   other_parties.gather()
   other_parties[0].birthdate
   other_parties[0].address.address
-  other_parties[0].email
+  defendant_contact_unknown
   other_parties_has_attorney
   
   set_progress(32)
@@ -528,19 +528,25 @@ question: |
   Does ${ other_parties[0] } have an attorney?
 fields:
   - no label: other_parties_has_attorney
-    datatype: yesnoradio
-  - Attorney name: other_parties1_attorneys_name
+    datatype: yesnomaybe
+  - note: |
+      **Include ${ other_parties[0] }'s attorney's information if you know it.**
     show if: other_parties_has_attorney
+  - Attorney's name: other_parties1_attorneys_name
+    show if: other_parties_has_attorney
+    required: False
   - Attorney phone number: other_parties1_attorneys_phone_number
     datatype: al_international_phone
     show if: other_parties_has_attorney
+    required: False
 ---
 id: Gather other parties contact information
 question: |
   What is ${ other_parties[0] }'s contact information?
-subquestion: |
-  Include at least **one way** to reach you. 
-fields:  
+fields:
+  - I don't know ${ other_parties[0] }'s contact information: defendant_contact_unknown
+    datatype: yesno
+    disable others: True
   - Daytime phone number: other_parties[0].daytime_phone_number
     datatype: al_international_phone
     required: False
@@ -549,12 +555,13 @@ fields:
     required: False
   - Email: other_parties[0].email    
     datatype: email
-    required: False      
+    required: False    
 validation code: |
   if (not showifdef('other_parties[0].daytime_phone_number') and \
       (not showifdef('other_parties[0].email')) and \
-      (not showifdef('other_parties[0].evening_phone_number'))):
-    validation_error(word("You need to provide at least one contact method."))
+      (not showifdef('other_parties[0].evening_phone_number')) and \
+      (not showifdef('defendant_contact_unknown'))):
+    validation_error(word("You must make a selection or provide at least one contact method."))
 ---
 id: Gather other parties street or mailing address
 sets:
