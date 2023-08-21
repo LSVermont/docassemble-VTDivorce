@@ -10,13 +10,13 @@ metadata:
   short title: >-
     Divorce (no kids)
   description: |-
-    This interview helps someone in Vermont ask the court for a Divorce (no kids).
+    This interview helps someone in Vermont ask the court for a Divorce, Separation or Civil Union Dissolution.
   tags:
     - "FA-00-00-00-00"
   authors:
     - Mia Bonardi
   original_form:
-    - https://www.vermontjudiciary.org/sites/default/files/documents/400-00836NoKids_1.pdf
+    - https://www.vermontjudiciary.org/media/243
   allowed_courts: []
   typical_role: "plaintiff"
   al_weaver_version: "1.10.1"
@@ -105,7 +105,7 @@ code: |
   github_repo_name =  'docassemble-DivorceNoKids'
 ---
 code: |
-  interview_short_title = "Ask the court for a Divorce (no kids)"
+  interview_short_title = "Ask the court for a divorce (no kids)"
 ---
 code: |
   al_form_type = "starts_case" 
@@ -205,7 +205,9 @@ id: jurisdiction kickout
 question: |
   Stop
 subquestion: |
-  <i class="fas fa-hand-paper fa-3x" aria-hidden="true"></i>  **Stop.** In this situation, these are **not** the right forms to fill out. **Do not use this interview.** 
+  <i class="fas fa-hand-paper fa-3x" aria-hidden="true"></i>  **Stop.** In this situation, these are **not** the right forms to fill out. **Do not use this interview.**
+  
+  See the [Divorce Roadmap on the VTLawHelp.org website](https://vtlawhelp.org/roadmap/divorce/step-1) to find out what is required for you to be able to file for a divorce, separation or civil union dissolution in Vermont.
 continue button field: jurisdiction_kickout
 buttons:
   - Exit: exit
@@ -247,12 +249,12 @@ subquestion: |
   <li><b>Step 3:</b> Download, save or print the final forms. You will need to mail, email, efile or deliver them to the court on your own.</li></ul>
   </div>  
 
-  VTCourtForms interviews were created by Legal Services Vermont with support from the Legal Services Corporation. It is free to use this program. This site is not a lawyer. Visit our [VTLawHelp.org website](https://vtlawhelp.org/roadmap/relief-from-abuse/step-1) for more information about Relief from Abuse orders.
+  VTCourtForms interviews were created by Legal Services Vermont with support from the Legal Services Corporation. It is free to use this program. This site is not a lawyer. Visit our [VTLawHelp.org website](https://vtlawhelp.org/roadmap/divorce/step-1) for more information about divorce, separation and civil union dissolution.
   
   [FILE big_logo, 30%, Legal Services Vermont logo]
 
 fields:
-  - To continue, please accept our [terms of use](https://vtlawhelp.org/vlh-privacy).: acknowledged_information_use
+  - To continue, please accept our [terms of use](https://vtlawhelp.org/vtcourtforms/terms-of-use).: acknowledged_information_use
     datatype: checkboxes
     none of the above: False    
     minlength: 1
@@ -337,28 +339,28 @@ fields:
 ---
 id: marriage_or_civil_union_VT
 question: |
-  Did you and your spouse get a marriage or civil union in VT?
+  Did you and the other party get married or get a civil union in Vermont?
 fields:
   - no label: marriage_or_civil_union_VT
     datatype: yesnoradio
 ---
 id: both_cant_divorce_current_state
 question: |
-  Do you and your spouse currently live in states where you can't get a divorce or dissolve your civil union?
+  Do you and the other party currently live in states where you can't get a divorce or dissolve your civil union?
 fields:
   - no label: both_cant_divorce_current_state
     datatype: yesnoradio
 ---
 id: have school age children
 question: |
-  Do you and your spouse have school age children?
+  Do you and the other party have school-aged children?
 fields:
   - no label: have_school_age_children
     datatype: yesnoradio
 ---
 id: property agreement
 question: |
-  Do you and your spouse already have an agreement about how to deal with your property and debts?
+  Do you and the other party already have an agreement about how to deal with your property and debts?
 fields:
   - no label: have_property_agreement
     datatype: yesnoradio
@@ -828,23 +830,23 @@ review:
       ${ separation_date }
   - Edit: filing_financial_form
     button: |
-      **Filing financial form**:
+      **Filing financial form 813B now**:
       ${ word(yesno(filing_financial_form)) }
   - Edit: plaintiff_des_assistance
     button: |
-      **Plaintiff des assistance**:
+      **You get assistance from Vermont Economic Services Division**:
       ${ word(yesno(plaintiff_des_assistance)) }
   - Edit: defendant_des_assistance
     button: |
-      **Defendant des assistance**:
+      **The other party gets assistance from Vermont Economic Services Division**:
       ${ word(yesno(defendant_des_assistance)) }
   - Edit: defendant_military_service
     button: |
-      **Defendant military service**:
+      **The other party is in the military**:
       ${ word(yesno(defendant_military_service)) }
   - Edit: plaintiff_military_service
     button: |
-      **Plaintiff military service**:
+      **You are in the military**:
       ${ word(yesno(plaintiff_military_service)) }
   - Edit: divorce_decree
     button: |
