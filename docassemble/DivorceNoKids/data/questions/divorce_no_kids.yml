@@ -112,6 +112,8 @@ code: |
 ---
 objects:
   - children: ALPeopleList.using(ask_number=True, complete_attribute="complete")
+  - children[i].locations: DAList
+  - locations: DAList
   - users: ALPeopleList.using(ask_number=True,target_number=1)
   - other_parties: ALPeopleList.using(ask_number=True,target_number=1)
   - earlier_actions: DAList.using(object_type=Thing, ask_number=True, complete_attribute='complete')
@@ -156,8 +158,6 @@ code: |
         
   if have_school_age_children: 
     children.gather()
-    children[0].address.address
-    children[0].date
     child_custody
     parental_rights
   else: 
@@ -363,10 +363,12 @@ fields:
 code: |
   children[i].name.first
   children[i].birthdate
-  children[i].address.address
-  children[i].date
-  children[i].housemate
+  children[i].locations.gather()
   children[i].complete = True 
+---
+code: |
+  children[i].locations[j].housemates
+  children[i].locations[j].complete = True 
 ---
 id: minor children
 sets:
@@ -386,32 +388,27 @@ fields:
 ---
 id: minor children dob
 question: |
-  What is ${children[i].name} date of birth?
+  What is ${children[i].name}'s date of birth?
 fields:
   - Birthdate: children[i].birthdate
     datatype: Birthdate
 ---
 id: children information
 question: |
-  Where has ${children[i]} lived in the past 5 years, and who did ${children[i]} live with
+  Where has ${children[i]} lived in the past 5 years, and who did ${children[i]} live with?
 fields:
-  - Address: children[i].address.address
-    address autocomplete: True
-  - Unit: children[i].address.unit
-    required: False
-  - City: children[i].address.city
-    address autocomplete: True
-  - State: children[i].address.state
-    address autocomplete: True
----
-id: date and housemates
-question: |
-  List the dates your children lived in the specified houses and the people that they lived with
-fields: 
-  - Dates: children[i].date
-    datatype: date
-  - Name of people that lived with your children: children[i].housemate
+  - All people that lived with your child: children[i].locations[j].housemates
     datatype: area
+  - Start date: children[i].locations[j].start_date
+  - End date: children[i].locations[j].end_date
+  - Address: children[i].locations[j].address.address
+    address autocomplete: True
+  - Unit: children[i].locations[j].address.unit
+    required: False
+  - City: children[i].locations[j].address.city
+    address autocomplete: True
+  - State: children[i].locations[j].address.state
+    address autocomplete: True
 ---
 id: child custody
 question: |
@@ -424,8 +421,6 @@ fields:
     - I have participated as a party, witness, or in some other way in a court case about the custody of this child or these children in Vermont or another state.: participation
     - I have information about a case concerning this child or these children that is now pending in a Vermont court or a court in another state.: information
     - I have knowledge about a person who is not a party to this case who has physical custody of this child or these children or who claims to have custody of or visitation rights to this child or these children.: knowledge
-
-
 ---
 id: property agreement
 question: |
@@ -1417,15 +1412,15 @@ attachment:
       - "child_name5": ${ children[4].name }
       - "child_birthdate5": ${ children[4].birthdate }
      
-      - "child_address1": ${ children[0].address } 
-      - "child_date1":    ${ children[0].date }
-      - "child_housemate1": ${ children[0].housemate }
-      - "child_address2": ${ children[1].address } 
-      - "child_date2":    ${ children[1].date }
-      - "child_housemate2": ${ children[1].housemate }
-      - "child_address3": ${ children[2].address } 
-      - "child_date3":    ${ children[2].date }
-      - "child_housemate3": ${ children[2].housemate }
+      - "child_address1": ${ children[0].locations[0].address } 
+      - "child_date1": ${ children[0].start_date } - ${ children[0].end_date }
+      - "child_housemate1": ${ children[0].housemates }
+      - "child_address2": ${ children[0].locations[0].address } 
+      - "child_date2": ${ children[0].start_date } - ${ children[0].end_date }
+      - "child_housemate2": ${ children[0].housemates }
+      - "child_address3": ${ children[0].locations[0].address } 
+      - "child_date3": ${ children[0].start_date } - ${ children[0].end_date }
+      - "child_housemate3": ${ children[0].locations[0].housemates }
    
       - "participated_custody_child": ${ child_custody["participation"] }
       - "information_child": ${ child_custody["information"] }
