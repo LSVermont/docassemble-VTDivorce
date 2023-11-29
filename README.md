@@ -1,6 +1,6 @@
-# docassemble.DivorceNoKids
+# docassemble.VTDivorce
 
-Divorce (no kids)
+Divorce
 
 ## Author
 
