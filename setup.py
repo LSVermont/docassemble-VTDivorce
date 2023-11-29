@@ -43,10 +43,10 @@ def find_package_data(where='.', package='', exclude=standard_exclude, exclude_d
                 out.setdefault(package, []).append(prefix+name)
     return out
 
-setup(name='docassemble.DivorceNoKids',
+setup(name='docassemble.VTDivorce',
       version='1.0',
-      description=('Divorce (no kids)'),
-      long_description='# docassemble.DivorceNoKids\r\n\r\nDivorce (no kids)\r\n\r\n## Author\r\n\r\nMia Bonardi\r\n\r\n',
+      description=('VTDivorce'),
+      long_description='# docassemble.VTDivorce\r\n\r\nDivorce\r\n\r\n## Author\r\n\r\nMia Bonardi\r\n\r\n',
       long_description_content_type='text/markdown',
       author='Mia Bonardi',
       author_email='mbonardi@su.suffolk.edu',
@@ -54,8 +54,8 @@ setup(name='docassemble.DivorceNoKids',
       url='legalservicesvt.org',
       packages=find_packages(),
       namespace_packages=['docassemble'],
-      install_requires=['docassemble.ALAnyState', 'docassemble.AssemblyLine>=2.24.0'],
+      install_requires=['docassemble.ALAnyState>=0.1.0', 'docassemble.AssemblyLine>=2.26.0', 'docassemble.VTSharedYMLFile'],
       zip_safe=False,
-      package_data=find_package_data(where='docassemble/DivorceNoKids/', package='docassemble.DivorceNoKids'),
+      package_data=find_package_data(where='docassemble/VTDivorce/', package='docassemble.VTDivorce'),
      )
 
