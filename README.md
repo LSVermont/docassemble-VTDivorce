@@ -1,8 +1,9 @@
 # docassemble.DivorceNoKids
 
-Divorce (no kids)
+Divorce
 
-## Author
+## Authors
 
 Mia Bonardi
+Stavros Constantinou
 
