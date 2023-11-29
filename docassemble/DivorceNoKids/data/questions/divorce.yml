@@ -33,8 +33,7 @@ code: |
 ---
 objects:
   - children: ALPeopleList.using(ask_number=True, complete_attribute="complete")
-  - children[i].locations: DAList
-  - locations: DAList
+  - children[i].locations: DAList.using(object_type=DAObject,there_are_any=True, complete_attribute="complete")
   - users: ALPeopleList.using(ask_number=True,target_number=1)
   - other_parties: ALPeopleList.using(ask_number=True,target_number=1)
   - earlier_actions: DAList.using(object_type=Thing, ask_number=True, complete_attribute='complete')
@@ -79,6 +78,8 @@ code: |
         
   if have_school_age_children: 
     children.gather()
+    for child in children:
+      child.locations.gather()
     child_custody
     parental_rights
   else: 
@@ -284,12 +285,7 @@ fields:
 code: |
   children[i].name.first
   children[i].birthdate
-  children[i].locations.gather()
   children[i].complete = True 
----
-code: |
-  children[i].locations[j].housemates
-  children[i].locations[j].complete = True 
 ---
 id: minor children
 sets:
@@ -314,22 +310,25 @@ fields:
   - Birthdate: children[i].birthdate
     datatype: Birthdate
 ---
+code: |
+  children[i].locations[j].housemates
+  children[i].locations[j].complete = True
+---
 id: children information
+sets:
+  - children[i].locations[j].address.address
+  - children[i].locations[j].address.city
+  - children[i].locations[j].address.unit
+  - children[i].locations[j].address.state
 question: |
-  Where has ${children[i]} lived in the past 5 years, and who did ${children[i]} live with?
+  Where has child lived in the past 5 years, and who did child live with?
 fields:
+  - code: |
+      children[i].locations[j].address_fields(country_code=AL_DEFAULT_COUNTRY, default_state=AL_DEFAULT_STATE)
   - All people that lived with your child: children[i].locations[j].housemates
     datatype: area
   - Start date: children[i].locations[j].start_date
-  - End date: children[i].locations[j].end_date
-  - Address: children[i].locations[j].address.address
-    address autocomplete: True
-  - Unit: children[i].locations[j].address.unit
-    required: False
-  - City: children[i].locations[j].address.city
-    address autocomplete: True
-  - State: children[i].locations[j].address.state
-    address autocomplete: True
+  - End date: children[i].locations[j].end_date 
 ---
 id: child custody
 question: |

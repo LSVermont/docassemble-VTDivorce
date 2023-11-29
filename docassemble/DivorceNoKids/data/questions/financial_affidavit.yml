@@ -3,6 +3,7 @@ include:
   - docassemble.AssemblyLine:assembly_line.yml
   - docassemble.ALAnyState:any_state.yml
   - docassemble.ALToolbox:phone-number-validation.yml
+  - docassemble.VTSharedYMLFile:VTSharedYMLFile.yml
 ---
 metadata:
   title: >-
@@ -18,17 +19,6 @@ metadata:
   typical_role: "unknown"
   al_weaver_version: "1.10.2"
   generated_on: "2023-08-18"
----
-code: |
-  # This controls the default country and list of states in address field questions
-  AL_DEFAULT_COUNTRY = "US"
----
-code: |
-  # This controls the default state in address field questions
-  AL_DEFAULT_STATE = "VT"
----
-code: |
-  github_repo_name =  'docassemble-FinancialAffidavit'
 ---
 code: |
   interview_short_title = "File a Financial affidavit"
@@ -50,22 +40,6 @@ objects:
 ---
 sections:
   - review_financial_affidavit: Review your answers
----
-features:
-  css: style.css
----
-objects:
-  - al_logo: DAStaticFile.using(filename="LSV_bug.png")
----
-images:
-  big_logo: LSV_logo.png 
----
-objects:
-  - all_courts: ALCourtLoader.using(file_name='courts_list.xlsx')
----
-code: |
-  trial_court = all_courts.as_court('trial_court', trial_court_index)
-  trial_court.geolocate() 
 ---
 #################### Interview order #####################
 comment: |
@@ -185,47 +159,6 @@ code: |
       },
   )
   financial_affidavit_download
----
-id: choose a court
-question: |
-  Choose a Family Court
-subquestion: |
-  Choose the county where you will file your forms. 
-      
-  Not sure what county? [Check this list of cities and towns to find the county.](https://en.m.wikipedia.org/wiki/List_of_municipalities_in_Vermont#Cities)
-fields:
-  - County: trial_court_index      
-    code: all_courts._load_courts()['address_county'].items()
----
-id: basic questions intro screen
-decoration: form-lineal
-question: |
-  **${interview_short_title} in Vermont**
-subquestion: |  
-  <div class="border-around-text">
-  <p>Welcome to ${ AL_ORGANIZATION_TITLE}.</p>
-  
-  <p>${ AL_ORGANIZATION_TITLE } can help you complete and download forms in 3 steps:</p>
-  <ul><li><b>Step 1:</b> Answer questions that will fill in court forms for you.</li>
-  <li><b>Step 2:</b> Preview the completed forms.</li>
-  <li><b>Step 3:</b> Download, save or print the final forms. You will need to mail, email, efile or deliver them to the court on your own.</li></ul>
-  </div>  
-
-  VTCourtForms interviews were created by Legal Services Vermont with support from the Legal Services Corporation. It is free to use this program. This site is not a lawyer. Visit our [VTLawHelp.org website](https://vtlawhelp.org/roadmap/relief-from-abuse/step-1) for more information about Relief from Abuse orders.
-  
-  [FILE big_logo, 30%, Legal Services Vermont logo]
-
-fields:
-  - To continue, please accept our [terms of use](https://vtlawhelp.org/vlh-privacy).: acknowledged_information_use
-    datatype: checkboxes
-    none of the above: False    
-    minlength: 1
-    choices:
-      - I accept the terms of use.
-    validation messages:
-      minlength: |
-        You cannot continue unless you agree to the terms of use.        
-continue button field: al_intro_screen
 ---
 id: User is
 question: |
