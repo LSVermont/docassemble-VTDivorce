@@ -221,7 +221,7 @@ mandatory: True
 code: |
   al_intro_screen
   interview_order_divorce_no_kids
-  signature_date
+  
   # Store anonymous data for analytics / statistics
   store_variables_snapshot(
       persistent=True,
@@ -231,6 +231,7 @@ code: |
       },
   )
   divorce_no_kids_preview_question
+  printed_signature
   basic_questions_signature_flow    
   
   divorce_no_kids_download
@@ -707,6 +708,31 @@ continue button field: divorce_no_kids_preview_question
 ---
 code: |
   signature_fields = ['users[0].signature']
+---
+id: Signing your forms
+question: |
+  Attestation and signature
+subquestion: |
+  You must agree to this statement before you can sign your documents. Check the box to agree.
+fields:
+  - "I declare that my statements are true and accurate to the best of my knowledge and belief. I understand that if my statements are false, I will be subject to the penalty of perjury or to other sanctions in the discretion of the court.": attestation
+    datatype: yesno
+  - "This is how your name will appear under your signature.": printed_signature
+    default: |
+      ${ users[0].name }
+    maxlength: 34
+    show if: attestation
+  - "Date of your signature for these forms": signature_date
+    show if: attestation
+    datatype: date
+    required: False
+    default: |
+      ${ today() }
+  -  note: |
+       You can change this date later if you want.
+       
+       **Tap Next to choose how to sign your documents.**
+     show if: attestation
 ---
 code: |
   # This is a placeholder for the addresses that will be searched
