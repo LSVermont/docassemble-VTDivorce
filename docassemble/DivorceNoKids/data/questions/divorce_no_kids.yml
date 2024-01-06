@@ -1109,7 +1109,7 @@ attachment:
       - "divorce": ${ grant_for == "divorce" }
       - "civil_union_dissolution": ${ grant_for == "dissolution" }
       - "legal_separation": ${ grant_for == "legal_separation" }
-      - "trial_court_county1": ${ trial_court.address.block() }
+      - "trial_court_county1": ${trial_court.address.county} Family Court: ${ trial_court.address.block() } 
       - "signature_date": ${ signature_date }
       - "users1_signature": ${ users[0].signature_if_final(i) }
       - "users1_address_county": ${ users[0].address.county }
