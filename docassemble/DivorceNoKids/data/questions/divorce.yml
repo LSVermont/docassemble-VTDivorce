@@ -33,7 +33,8 @@ code: |
 ---
 objects:
   - children: ALPeopleList.using(ask_number=True, complete_attribute="complete")
-  - children[i].locations: ALPeopleList.using(there_are_any=True,complete_attribute="complete") #DAList.using(object_type=DAObject,there_are_any=True, complete_attribute="complete")
+#  - children[i].locations: #ALPeopleList.using(there_are_any=True,complete_attribute="complete") #DAList.using(object_type=DAObject,there_are_any=True, complete_attribute="complete")
+  - locations: ALPeopleList.using(there_are_any=True,complete_attribute="complete") 
   - users: ALPeopleList.using(ask_number=True,target_number=1)
   - other_parties: ALPeopleList.using(ask_number=True,target_number=1)
   - earlier_actions: DAList.using(object_type=Thing, ask_number=True, complete_attribute='complete')
@@ -78,8 +79,8 @@ code: |
         
   if have_school_age_children: 
     children.gather()
-    for child in children:
-      child.locations.gather()
+    #for child in children:
+    locations.gather()
     child_custody
     parental_rights
   else: 
@@ -311,31 +312,31 @@ fields:
     datatype: Birthdate
 ---
 code: |
-  children[i].locations[j].housemates
-  children[i].locations[j].complete = True
+  locations[i].housemates
+  locations[i].complete = True
 ---
 id: children information
 sets:
-  - children[i].locations[j].address.address
-  - children[i].locations[j].address.city
-  - children[i].locations[j].address.unit
-  - children[i].locations[j].address.state
+  - locations[i].address.address
+  - locations[i].address.city
+  - locations[i].address.unit
+  - locations[i].address.state
 question: |
   Where has ${children[i]} lived in the past 5 years, and who did ${children[i]} live with?
 fields:
   - code: |
-      children[i].locations[j].address_fields(country_code=AL_DEFAULT_COUNTRY, default_state=AL_DEFAULT_STATE)
-  - All people that lived with your child: children[i].locations[j].housemates
+      locations[i].address_fields(country_code=AL_DEFAULT_COUNTRY, default_state=AL_DEFAULT_STATE)
+  - All people that lived with your child: locations[i].housemates
     datatype: area
-  - Start date: children[i].locations[j].start_date
-  - End date: children[i].locations[j].end_date 
+  - Start date: locations[i].start_date
+  - End date: locations[i].end_date 
 ---
 generic object: ALPeopleList
 id: any other locations
 question: |
   Do you have any other locations to tell us about?
 fields:
-  - no label: children[i].locations.there_is_another
+  - no label: locations.there_is_another
     datatype: yesnoradio
 ---
 id: child custody
@@ -1117,8 +1118,14 @@ attachment:
   docx template file: divorce_with_kids_addendum.docx
 ---
 code: |
-  divorce_with_kids_attachment.overflow_fields['children'].overflow_trigger = 3
+  divorce_with_kids_attachment.overflow_fields['earlier_actions'].overflow_trigger = 3
+  divorce_with_kids_attachment.overflow_fields['earlier_actions'].label = "Other earlier actions"
+  divorce_with_kids_attachment.overflow_fields['earlier_RFA'].overflow_trigger = 3
+  divorce_with_kids_attachment.overflow_fields['earlier_RFA'].label = "Other RFA actions"
+  divorce_with_kids_attachment.overflow_fields['children'].overflow_trigger = 5
   divorce_with_kids_attachment.overflow_fields['children'].label = "Other children"
+  divorce_with_kids_attachment.overflow_fields['locations'].overflow_trigger = 3
+  divorce_with_kids_attachment.overflow_fields['locations'].label = "More information of the children's housing situation"
   divorce_with_kids_attachment.overflow_fields.gathered = True 
 ---
 # Bundles group the ALDocuments into separate downloads, such as for court and for the user
@@ -1340,15 +1347,15 @@ attachment:
       - "child_name5": ${ children[4].name }
       - "child_birthdate5": ${ children[4].birthdate }
      
-      - "child_address1": ${ children[0].locations[0].address } 
-      - "child_date1": ${ children[0].start_date } - ${ children[0].end_date }
-      - "child_housemate1": ${ children[0].housemates }
-      - "child_address2": ${ children[0].locations[0].address } 
-      - "child_date2": ${ children[0].start_date } - ${ children[0].end_date }
-      - "child_housemate2": ${ children[0].housemates }
-      - "child_address3": ${ children[0].locations[0].address } 
-      - "child_date3": ${ children[0].start_date } - ${ children[0].end_date }
-      - "child_housemate3": ${ children[0].locations[0].housemates }
+      - "child_address1": ${ locations[0].address } 
+      - "child_date1": ${ locations[0].start_date } - ${ locations[0].end_date }
+      - "child_housemate1": ${ locations[0].housemates }
+      - "child_address2": ${ locations[1].address } 
+      - "child_date2": ${ locations[1].start_date } - ${ locations[1].end_date }
+      - "child_housemate2": ${ locations[1].housemates }
+      - "child_address3": ${ locations[2].address } 
+      - "child_date3": ${ locations[2].start_date } - ${ locations[2].end_date }
+      - "child_housemate3": ${ locations[2].housemates }
    
       - "participated_custody_child": ${ child_custody["participation"] }
       - "information_child": ${ child_custody["information"] }
