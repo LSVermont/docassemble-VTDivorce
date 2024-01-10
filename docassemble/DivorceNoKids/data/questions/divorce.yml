@@ -38,7 +38,7 @@ objects:
   - users: ALPeopleList.using(ask_number=True,target_number=1)
   - other_parties: ALPeopleList.using(ask_number=True,target_number=1)
   - earlier_actions: DAList.using(object_type=Thing, ask_number=True, complete_attribute='complete')
-  - earlier_RFA: DAList.using(object_type=Thing, ask_number=True, complete_attribute='complete1')
+  - earlier_RFA: DAList.using(object_type=Thing, ask_number=True, complete_attribute='complete')
 ---
 sections:
   - review_divorce: Review your answers
@@ -195,7 +195,7 @@ code: |
 ---
 code: |
   earlier_RFA[i].action_type
-  earlier_RFA[i].complete1 = True
+  earlier_RFA[i].complete = True
 ---
 id: marriage or civil union
 question: |
