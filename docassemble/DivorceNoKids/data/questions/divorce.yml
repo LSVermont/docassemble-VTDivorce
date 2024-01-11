@@ -33,7 +33,6 @@ code: |
 ---
 objects:
   - children: ALPeopleList.using(ask_number=True, complete_attribute="complete")
-#  - children[i].locations: #ALPeopleList.using(there_are_any=True,complete_attribute="complete") #DAList.using(object_type=DAObject,there_are_any=True, complete_attribute="complete")
   - locations: ALPeopleList.using(there_are_any=True,complete_attribute="complete") 
   - users: ALPeopleList.using(ask_number=True,target_number=1)
   - other_parties: ALPeopleList.using(ask_number=True,target_number=1)
@@ -322,14 +321,16 @@ sets:
   - locations[i].address.unit
   - locations[i].address.state
 question: |
-  Where has ${children[i]} lived in the past 5 years, and who did ${children[i]} live with?
+  Where have your children lived in the past 5 years, and who did your children live with?
 fields:
   - code: |
       locations[i].address_fields(country_code=AL_DEFAULT_COUNTRY, default_state=AL_DEFAULT_STATE)
   - All people that lived with your child: locations[i].housemates
     datatype: area
   - Start date: locations[i].start_date
+    datatype: date
   - End date: locations[i].end_date 
+    datatype: date
 ---
 generic object: ALPeopleList
 id: any other locations
