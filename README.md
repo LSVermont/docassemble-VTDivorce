@@ -1,9 +1,9 @@
-# docassemble.DivorceNoKids
+# docassemble.Divorce
 
 Divorce
 
 ## Authors
 
-Mia Bonardi
-Stavros Constantinou
+- Mia Bonardi
+- Stavros Constantinou
 
