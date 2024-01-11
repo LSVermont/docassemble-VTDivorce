@@ -45,8 +45,8 @@ def find_package_data(where='.', package='', exclude=standard_exclude, exclude_d
 
 setup(name='docassemble.DivorceNoKids',
       version='1.0',
-      description=('Divorce (no kids)'),
-      long_description='# docassemble.DivorceNoKids\r\n\r\nDivorce (no kids)\r\n\r\n## Author\r\n\r\nMia Bonardi\r\n\r\n',
+      description=('Divorce'),
+      long_description='# docassemble.DivorceNoKids\r\n\r\nDivorce\r\n\r\n## Authors\r\n\r\nMia Bonardi\r\nStavros Constantinou\r\n\r\n',
       long_description_content_type='text/markdown',
       author='Mia Bonardi',
       author_email='mbonardi@su.suffolk.edu',

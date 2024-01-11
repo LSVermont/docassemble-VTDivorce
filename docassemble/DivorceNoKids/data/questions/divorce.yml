@@ -3,133 +3,53 @@ include:
   - docassemble.AssemblyLine:assembly_line.yml
   - docassemble.ALAnyState:any_state.yml
   - docassemble.ALToolbox:phone-number-validation.yml
+  - docassemble.VTSharedYMLFile:VTSharedYMLFile.yml
 ---
 metadata:
   title: >-
-    Divorce (no kids)
+    Divorce
   short title: >-
-    Divorce (no kids)
+    Divorce
   description: |-
-    This interview helps someone in Vermont ask the court for a Divorce, Separation or Civil Union Dissolution.
+    This interview helps someone in Vermont ask the court for a Divorce.
   tags:
     - "FA-00-00-00-00"
   authors:
     - Mia Bonardi
+    - Stavros Constantinou
   original_form:
-    - https://www.vermontjudiciary.org/media/243
+    - https://www.vermontjudiciary.org/sites/default/files/documents/400-00836NoKids_1.pdf
+    - https://www.vermontjudiciary.org/sites/default/files/documents/400-00836Children.pdf
   allowed_courts: []
   typical_role: "plaintiff"
   al_weaver_version: "1.10.1"
   generated_on: "2023-07-25"
 ---
-features:
-  css: style.css
----
-objects:
-  - al_logo: DAStaticFile.using(filename="LSV_bug.png")
----
-images:
-  big_logo: LSV_logo.png 
----
-objects:
-  - all_courts: ALCourtLoader.using(file_name='courts_list.xlsx')
----
 code: |
-  trial_court = all_courts.as_court('trial_court', trial_court_index)
-  trial_court.geolocate()  
----
-reconsider: True
-code: |
-  al_menu_items_tmp = [
-    {"url": url_ask(['al_start_over_confirmation','al_start_over']),
-    "label": "Start over"
-    },
-    {
-      "url": url_ask(['al_exit_logout_confirmation', 'al_exit_logout']),
-      "label": "Exit and delete my answers"
-    },
-  ]
-  if al_enable_incomplete_downloads:
-    al_menu_items_tmp.append({
-        "url": url_action('al_error_action_download_screen'), 
-        "label": "Download current progress"
-    })
-  
-  # Answer set feature is behind a server-wide configuration option
-  if get_config('assembly line',{}).get('enable answer sets'):
-    al_menu_items_tmp.extend([
-    {"url": url_ask(["al_sessions_snapshot_label", {"recompute": ["al_sessions_save_session_snapshot"]}, "al_sessions_save_status"]),
-    "label": "Save answer set"
-    },
-    action_menu_item("Load answer set", "al_load_saved_session"),
-  ]
-  )
-  
-  if get_config('assembly line',{}).get('enable answer set imports'):
-    al_menu_items_tmp.append(
-      {"url": url_ask(["al_sessions_json_file", {"recompute": ["al_sessions_import_json"]}, "al_sessions_load_status"]),
-      "label": "Import answer set"
-      }
-    )
-  al_menu_items_tmp.append(
-    {
-      "url": url_action('edit_answers_screen'),
-      "label": "Edit your answers"
-      
-    }
-  )
-    
-  al_menu_items = al_menu_items_tmp
-  del al_menu_items_tmp
----
-id: choose a court
-question: |
-  Choose a Family Court
-subquestion: |
-  Choose the county where you will file your forms. This can be the county where you both live or xxxxxxxxxxxx.
-      
-  Not sure what county? [Check this list of cities and towns to find the county they are in.](https://en.m.wikipedia.org/wiki/List_of_municipalities_in_Vermont#Cities)
-fields:
-  - County: trial_court_index      
-    code: all_courts._load_courts()['address_county'].items()
----
-code: |
-  # This controls the default country and list of states in address field questions
-  AL_DEFAULT_COUNTRY = "US"
----
-code: |
-  # This controls the default state in address field questions
-  AL_DEFAULT_STATE = "VT"
----
-code: |
-  github_repo_name =  'docassemble-DivorceNoKids'
----
-code: |
-  interview_short_title = "Ask the court for a divorce (no kids)"
+  interview_short_title = "Ask the court for a Divorce"
 ---
 code: |
   al_form_type = "starts_case" 
 ---
 objects:
   - children: ALPeopleList.using(ask_number=True, complete_attribute="complete")
-  - children[i].locations: DAList
-  - locations: DAList
+  - locations: ALPeopleList.using(there_are_any=True,complete_attribute="complete") 
   - users: ALPeopleList.using(ask_number=True,target_number=1)
   - other_parties: ALPeopleList.using(ask_number=True,target_number=1)
   - earlier_actions: DAList.using(object_type=Thing, ask_number=True, complete_attribute='complete')
-  - earlier_RFA: DAList.using(object_type=Thing, ask_number=True, complete_attribute='complete1')
+  - earlier_RFA: DAList.using(object_type=Thing, ask_number=True, complete_attribute='complete')
 ---
 sections:
-  - review_divorce_no_kids: Review your answers
+  - review_divorce: Review your answers
 ---
 #################### Interview order #####################
 comment: |
   Controls order and branching logic for questions specific to this form
-id: interview_order_divorce_no_kids
+id: interview_order_divorce
 code: |
   # Set the allowed courts for this interview
   allowed_courts = []
-  nav.set_section("review_divorce_no_kids")
+  nav.set_section("review_divorce")
   user_role = "plaintiff"
   user_ask_role = "plaintiff"
   
@@ -137,7 +57,7 @@ code: |
   
     if not marriage_or_civil_union_VT and not both_cant_divorce_current_state and not have_property_agreement:
     
-        jurisdiction_kickout
+      jurisdiction_kickout
         
   users.gather()
   set_parts(subtitle=str(users))
@@ -151,13 +71,15 @@ code: |
   other_parties.gather()
   other_parties[0].birthdate
   other_parties[0].address.address
-  defendant_contact_unknown
+  other_parties[0].email
   other_parties_has_attorney
   
   set_progress(32)
         
   if have_school_age_children: 
     children.gather()
+    #for child in children:
+    locations.gather()
     child_custody
     parental_rights
   else: 
@@ -186,11 +108,11 @@ code: |
   plaintiff_des_assistance
   plaintiff_military_service
   
-  #docket_number
+  docket_number
   
   trial_court
   
-  interview_order_divorce_no_kids = True
+  interview_order_divorce = True
 ---
 sets:
   - other_parties[i].name.first
@@ -199,10 +121,7 @@ sets:
   - other_parties[i].name.suffix
 id: names of opposing parties
 question: |
-  Name of the **other party** in this matter
-subquestion: |
-  The “other party” is your former spouse, partner or “ex.” When you file for a divorce, you are called the plaintiff and the other party is called the defendant on court forms. Use the name that they use currently in the marriage or civil union.
-
+  Name of the **defendant** in this matter
 fields:
   - code: |
       other_parties[i].name_fields(person_or_business='person')
@@ -211,9 +130,7 @@ id: jurisdiction kickout
 question: |
   Stop
 subquestion: |
-  <i class="fas fa-hand-paper fa-3x" aria-hidden="true"></i>  **Stop.** In this situation, these are **not** the right forms to fill out. **Do not use this interview.**
-  
-  See the [Divorce Roadmap on the VTLawHelp.org website](https://vtlawhelp.org/roadmap/divorce/step-1) to find out what is required for you to be able to file for a divorce, separation or civil union dissolution in Vermont.
+  <i class="fas fa-hand-paper fa-3x" aria-hidden="true"></i>  **Stop.** In this situation, these are **not** the right forms to fill out. **Do not use this interview.** 
 continue button field: jurisdiction_kickout
 buttons:
   - Exit: exit
@@ -226,8 +143,8 @@ comment: |
 mandatory: True
 code: |
   al_intro_screen
-  interview_order_divorce_no_kids
-  
+  interview_order_divorce
+  signature_date
   # Store anonymous data for analytics / statistics
   store_variables_snapshot(
       persistent=True,
@@ -236,11 +153,10 @@ code: |
           "reached_interview_end": True,
       },
   )
-  divorce_no_kids_preview_question
-  printed_signature
+  divorce_preview_question
   basic_questions_signature_flow    
   
-  divorce_no_kids_download
+  divorce_download
 ---
 id: basic questions intro screen
 decoration: form-lineal
@@ -256,12 +172,12 @@ subquestion: |
   <li><b>Step 3:</b> Download, save or print the final forms. You will need to mail, email, efile or deliver them to the court on your own.</li></ul>
   </div>  
 
-  VTCourtForms interviews were created by Legal Services Vermont with support from the Legal Services Corporation. It is free to use this program. This site is not a lawyer. Visit our [VTLawHelp.org website](https://vtlawhelp.org/roadmap/divorce/step-1) for more information about divorce, separation and civil union dissolution.
+  VTCourtForms interviews were created by Legal Services Vermont with support from the Legal Services Corporation. It is free to use this program. This site is not a lawyer. Visit our [VTLawHelp.org website](https://vtlawhelp.org/roadmap/relief-from-abuse/step-1) for more information about Relief from Abuse orders.
   
   [FILE big_logo, 30%, Legal Services Vermont logo]
 
 fields:
-  - To continue, please accept our [terms of use](https://vtlawhelp.org/vtcourtforms/terms-of-use).: acknowledged_information_use
+  - To continue, please accept our [terms of use](https://vtlawhelp.org/vlh-privacy).: acknowledged_information_use
     datatype: checkboxes
     none of the above: False    
     minlength: 1
@@ -278,7 +194,7 @@ code: |
 ---
 code: |
   earlier_RFA[i].action_type
-  earlier_RFA[i].complete1 = True
+  earlier_RFA[i].complete = True
 ---
 id: marriage or civil union
 question: |
@@ -334,9 +250,7 @@ fields:
 ---
 id: defendant VT 6 months
 question: |
-  Has the other party lived in Vermont since ${ today().minus(months=6) }?
-subquestion: |
-  The “other party” is your former spouse, partner or “ex.” When you file for a divorce, you are called the plaintiff and the other party is called the defendant on court forms.
+  Has the defendant lived in Vermont since ${ today().minus(months=6) }?
 fields:
   - no label: defendant_VT
     datatype: yesnoradio
@@ -346,14 +260,14 @@ fields:
 ---
 id: marriage_or_civil_union_VT
 question: |
-  Did you and the other party get married or get a civil union in Vermont?
+  Did you and your spouse get a marriage or civil union in VT?
 fields:
   - no label: marriage_or_civil_union_VT
     datatype: yesnoradio
 ---
 id: both_cant_divorce_current_state
 question: |
-  Do you and the other party currently live in states where you can't get a divorce or dissolve your civil union?
+  Do you and your spouse currently live in states where you can't get a divorce or dissolve your civil union?
 fields:
   - no label: both_cant_divorce_current_state
     datatype: yesnoradio
@@ -371,12 +285,7 @@ fields:
 code: |
   children[i].name.first
   children[i].birthdate
-  children[i].locations.gather()
   children[i].complete = True 
----
-code: |
-  children[i].locations[j].housemates
-  children[i].locations[j].complete = True 
 ---
 id: minor children
 sets:
@@ -401,22 +310,35 @@ fields:
   - Birthdate: children[i].birthdate
     datatype: Birthdate
 ---
+code: |
+  locations[i].housemates
+  locations[i].complete = True
+---
 id: children information
+sets:
+  - locations[i].address.address
+  - locations[i].address.city
+  - locations[i].address.unit
+  - locations[i].address.state
 question: |
-  Where has ${children[i]} lived in the past 5 years, and who did ${children[i]} live with?
+  Where have your children lived in the past 5 years, and who did your children live with?
 fields:
-  - All people that lived with your child: children[i].locations[j].housemates
+  - code: |
+      locations[i].address_fields(country_code=AL_DEFAULT_COUNTRY, default_state=AL_DEFAULT_STATE)
+  - All people that lived with your child: locations[i].housemates
     datatype: area
-  - Start date: children[i].locations[j].start_date
-  - End date: children[i].locations[j].end_date
-  - Address: children[i].locations[j].address.address
-    address autocomplete: True
-  - Unit: children[i].locations[j].address.unit
-    required: False
-  - City: children[i].locations[j].address.city
-    address autocomplete: True
-  - State: children[i].locations[j].address.state
-    address autocomplete: True
+  - Start date: locations[i].start_date
+    datatype: date
+  - End date: locations[i].end_date 
+    datatype: date
+---
+generic object: ALPeopleList
+id: any other locations
+question: |
+  Do you have any other locations to tell us about?
+fields:
+  - no label: locations.there_is_another
+    datatype: yesnoradio
 ---
 id: child custody
 question: |
@@ -432,28 +354,28 @@ fields:
 ---
 id: property agreement
 question: |
-  Do you and the other party already have an agreement about how to deal with your property and debts?
+  Do you and your spouse already have an agreement about how to deal with your property and debts?
 fields:
   - no label: have_property_agreement
     datatype: yesnoradio
 --- 
 id: earlier actions
 question: |
-  Have you or the other party filed for **divorce, legal separation, civil union dissolution or annulment** before filing this petition? 
+  Have you or the defendant filed for **divorce, legal separation, dissolution, or annulment** before filing this petition? 
 fields:
   - no label: earlier_actions_yes
     datatype: yesnoradio
-  - How many of these have you filed?: earlier_actions.target_number
+  - How many?: earlier_actions.target_number
     datatype: integer
     show if: earlier_actions_yes
 ---
 id: earlier RFA actions
 question: |
-  Have either you or the other party filed a **complaint for relief from abuse or a request for a protective order** against each other?
+  Have either you or the defendant filed a **complaint for relief from abuse or a request for a protective order** against each other?
 fields:
   - no label: earlier_RFA_yes
     datatype: yesnoradio
-  - How many of these have you filed?: earlier_RFA.target_number
+  - How many?: earlier_RFA.target_number
     datatype: integer
     show if: earlier_RFA_yes
 ---
@@ -462,7 +384,7 @@ generic object: DAList
 question: |
   Tell us about the **${ ordinal(i) }** action.
 subquestion: |
-  You'll have to attach a copy of any court order that was issued.
+  Attach a copy of any Court Order issued.
 fields:
   - Type of action: earlier_actions[i].action_type
     datatype: radio
@@ -476,17 +398,15 @@ fields:
     choices:
       - users
       - other_parties
-  - Where filed. Include the court, county and state. Example - Family, Chittenden Co., VT: earlier_actions[i].where_filed
-    maxlength: 30
+  - Where filed: earlier_actions[i].where_filed
   - Year filed: earlier_actions[i].year_filed
-    maxlength: 4
 ---
 id: collect earlier RFA actions
 generic object: DAList
 question: |
   Tell us about the **${ ordinal(i) }** action.
 subquestion: |
-  You'll have to attach a copy of any court order that was issued.
+  Attach a copy of any Court Order issued.
 fields:
   - Type of action: earlier_RFA[i].action_type
     datatype: radio
@@ -498,10 +418,8 @@ fields:
     choices:
       - users
       - other_parties
-  - Where filed. Include the court, county and state. Example - Family, Chittenden Co., VT: earlier_RFA[i].where_filed
-    maxlength: 30
+  - Where filed: earlier_RFA[i].where_filed
   - Year filed: earlier_RFA[i].year_filed
-    maxlength: 4
 ---
 generic object: DAList
 question: |
@@ -543,6 +461,7 @@ fields:
     default: VT
     show if: users_mailing_address_different
   - Zip or postal code: users[0].mailing_address.zip
+    required: False
     show if: users_mailing_address_different
 ---
 id: Gather users contact information
@@ -568,7 +487,7 @@ validation code: |
 ---
 id: Users attorney info
 question: |
-  Do you have a lawyer for this matter?
+  Do you have an attorney?
 fields:
   - no label: user_has_attorney
     datatype: yesnoradio
@@ -585,31 +504,15 @@ fields:
   - no label: user_resided_VT_6_months
     datatype: yesnoradio
 ---
-id: DES assistance
+id: des assistance
 question: |
-   Do you or ${ other_parties } get assistance from the Vermont Division of Economic Services?
+   Do you or ${ other_parties } receive assistance from the Division of Economic Services (DES) 
 subquestion: |
-  Examples include:
-  
-  * 3SquaresVT (food stamps)
-  
-  * Reach Up
-  
-  * Emergency Housing
-  
-  * Emergency Assistance
-  
-  * Essential Person Assistance
-  
-  * Fuel Assistance
-  
-  * Water Assistance
-  
-  * Energy Assistance
+  Examples include: Food Stamps and Reach Up.
 fields: 
-  - I get help from the Vermont Division of Economic Services: plaintiff_des_assistance
+  - I recieve DES assisance: plaintiff_des_assistance
     datatype: yesno
-  - ${ other_parties } gets help from the Vermont Division of Economic Services: defendant_des_assistance
+  - ${ other_parties } recieves DES assisance: defendant_des_assistance
     datatype: yesno
 ---
 id: military service
@@ -623,28 +526,22 @@ fields:
 ---
 id: other parties attorney info
 question: |
-  Does ${ other_parties[0] } have a lawyer for this matter?
+  Does ${ other_parties[0] } have an attorney?
 fields:
   - no label: other_parties_has_attorney
-    datatype: yesnomaybe
-  - note: |
-      **Include ${ other_parties[0] }'s attorney's information if you know it.**
+    datatype: yesnoradio
+  - Attorney name: other_parties1_attorneys_name
     show if: other_parties_has_attorney
-  - Attorney's name: other_parties1_attorneys_name
-    show if: other_parties_has_attorney
-    required: False
   - Attorney phone number: other_parties1_attorneys_phone_number
     datatype: al_international_phone
     show if: other_parties_has_attorney
-    required: False
 ---
 id: Gather other parties contact information
 question: |
   What is ${ other_parties[0] }'s contact information?
-fields:
-  - I don't know ${ other_parties[0] }'s contact information: defendant_contact_unknown
-    datatype: yesno
-    disable others: True
+subquestion: |
+  Include at least **one way** to reach you. 
+fields:  
   - Daytime phone number: other_parties[0].daytime_phone_number
     datatype: al_international_phone
     required: False
@@ -653,13 +550,12 @@ fields:
     required: False
   - Email: other_parties[0].email    
     datatype: email
-    required: False    
+    required: False      
 validation code: |
   if (not showifdef('other_parties[0].daytime_phone_number') and \
       (not showifdef('other_parties[0].email')) and \
-      (not showifdef('other_parties[0].evening_phone_number')) and \
-      (not showifdef('defendant_contact_unknown'))):
-    validation_error(word("You must make a selection or provide at least one contact method."))
+      (not showifdef('other_parties[0].evening_phone_number'))):
+    validation_error(word("You need to provide at least one contact method."))
 ---
 id: Gather other parties street or mailing address
 sets:
@@ -714,9 +610,9 @@ fields:
 ---
 id: filing_financial_form
 question: |
-  Are you also filing completed financial affidavit form 813B now?
+  Are you also filing a completed financial form 400-00813B now?
 subquestion: |
-  On that form you will list all of the property, assets and debts that you and ${ other_parties[0] } own together or separately. You can file it now with the Complaint form, or file it at a later date.
+  On that form you will list all of the property, assets, and debts that you and ${ other_parties[0] } own together or separately that are known to you. You can file it now with the Complaint form, or file it at a later date.
 fields:
   - "Are you filing form 400-00813B now?": filing_financial_form
     datatype: yesnoradio
@@ -729,36 +625,35 @@ fields:
     input type: radio
     choices: 
       - Divorce: divorce
-      - Legal separation: legal_separation
-      - Civil union dissolution: dissolution
-  - note: See [this Divorce page on the VTLawHelp.org website](https://vtlawhelp.org/roadmap/divorce/step-1) for details on the above terms.
-  - On what grounds? (For what reason?): grounds
+      - Legal Separation: legal_separation
+      - Dissolution: dissolution
+  - On what grounds?: grounds
     datatype: checkboxes
     choices: 
-      - We have or will have lived separate and apart for more than six consecutive months and it is not reasonably probable that we can resume our relationship. (This is the most common reason.): six_month_separation
-      - Another reason, such as irreconcilable differences: other_ground
+      - Six month separation: six_month_separation
+      - Other ground divorce: other_ground
     none of the above: False
   - Date of separation: separation_date
     datatype: date
     show if: grounds["six_month_separation"]
-  - Other reason: other_ground_explanation
+  - Other ground divorce explanation: other_ground_explanation
     show if: grounds["other_ground"]
-  - note: Other things you are asking the court for. Check as many as apply.
-  - Division of property (divide our property, assets and debts): property_maintenance
+  - note: Other things you are asking the court for
+  - Property maintenance: property_maintenance
     datatype: yesno
-  - Spousal maintenance (alimony): spousal_maintenancee
+  - Spousal maintenancee: spousal_maintenancee
     datatype: yesno
-  - Court fees and costs: court_costs
+  - Court costs: court_costs
     datatype: yesno
-  - Fees you paid to your attorney: attorney_fees
+  - Attorney fees: attorney_fees
     datatype: yesno
-  - Go back to using my name before my marriage or union: name_change
+  - Name change: name_change
     datatype: yesno
-  - Your former name: plaintiff_former_name
+  - Plaintiff former name: plaintiff_former_name
     show if: name_change
   - Issue an order with a written agreement between you and ${ other_parties }: written_agreement_attached
     datatype: yesno
-  - note: You must attach the written agreement. If you have an agreement that covers all the issues above that you seek to have the court resolve, you may qualify for a reduced filing fee.
+  - note: You must attach the written agreement. To qualify for the reduced filing fee, the attached agreement must cover all the issues that you seek to have the Court resolve.
     show if: written_agreement_attached
   
 ---
@@ -823,7 +718,7 @@ fields:
   - Child support, medical support and/or maintenance supplement.: child_medical_support
     datatype: yesno
 ---
-id: preview divorce_no_kids
+id: preview divorce
 question: |
   Preview your form before you sign it
 subquestion: |
@@ -834,38 +729,13 @@ subquestion: |
   Click the image to open it in a new tab. Click the "Edit answers" button
   to edit your answers.
 
-  ${ action_button_html(url_action('review_divorce_no_kids'), label='Edit answers', color='info') }
+  ${ action_button_html(url_action('review_divorce'), label='Edit answers', color='info') }
   
   Remember to come back to this window to continue and sign your form.
-continue button field: divorce_no_kids_preview_question    
+continue button field: divorce_preview_question    
 ---
 code: |
   signature_fields = ['users[0].signature']
----
-id: Signing your forms
-question: |
-  Attestation and signature
-subquestion: |
-  You must agree to this statement before you can sign your documents. Check the box to agree.
-fields:
-  - "I declare that my statements are true and accurate to the best of my knowledge and belief. I understand that if my statements are false, I will be subject to the penalty of perjury or to other sanctions in the discretion of the court.": attestation
-    datatype: yesno
-  - "This is how your name will appear under your signature.": printed_signature
-    default: |
-      ${ users[0].name }
-    maxlength: 34
-    show if: attestation
-  - "Date of your signature for these forms": signature_date
-    show if: attestation
-    datatype: date
-    required: False
-    default: |
-      ${ today() }
-  -  note: |
-       You can change this date later if you want.
-       
-       **Tap Next to choose how to sign your documents.**
-     show if: attestation
 ---
 code: |
   # This is a placeholder for the addresses that will be searched
@@ -875,7 +745,7 @@ code: |
   addresses_to_search = [user.address for user in users.complete_elements()]
 ---
 id: divorce no kids review screen
-event: review_divorce_no_kids
+event: review_divorce
 question: |
   Review your answers
 review:
@@ -1045,23 +915,23 @@ review:
       - ${yesno(child_medical_support)}
   - Edit: filing_financial_form
     button: |
-      **Filing financial form 813B now**:
+      **Filing financial form**:
       ${ word(yesno(filing_financial_form)) }
   - Edit: plaintiff_des_assistance
     button: |
-      **You get assistance from Vermont Economic Services Division**:
+      **Plaintiff des assistance**:
       ${ word(yesno(plaintiff_des_assistance)) }
   - Edit: defendant_des_assistance
     button: |
-      **The other party gets assistance from Vermont Economic Services Division**:
+      **Defendant des assistance**:
       ${ word(yesno(defendant_des_assistance)) }
   - Edit: defendant_military_service
     button: |
-      **The other party is in the military**:
+      **Defendant military service**:
       ${ word(yesno(defendant_military_service)) }
   - Edit: plaintiff_military_service
     button: |
-      **You are in the military**:
+      **Plaintiff military service**:
       ${ word(yesno(plaintiff_military_service)) }
   - Edit: divorce_decree
     button: |
@@ -1093,11 +963,11 @@ review:
       ${ word(yesno(attorney_fees)) }
   - Edit: name_change
     button: |
-      **Go back to using former name**:
+      **Name change**:
       ${ word(yesno(name_change)) }
   - Edit: plaintiff_former_name
     button: |
-      **Your former name**:
+      **Plaintiff former name**:
       ${ plaintiff_former_name }
   - Edit: written_agreement_attached
     button: |
@@ -1208,8 +1078,8 @@ edit:
   - year_filed
 confirm: True
 ---
-id: download divorce_no_kids
-event: divorce_no_kids_download
+id: download divorce
+event: divorce_download
 question: |
   All done
 subquestion: |
@@ -1217,7 +1087,7 @@ subquestion: |
   
   View, download and send your form below. Click the "Edit answers" button to fix any mistakes.
 
-  ${ action_button_html(url_action('review_divorce_no_kids'), label='Edit answers', color='info') }
+  ${ action_button_html(url_action('review_divorce'), label='Edit answers', color='info') }
   
   
   ${ al_user_bundle.download_list_html() }
@@ -1249,8 +1119,14 @@ attachment:
   docx template file: divorce_with_kids_addendum.docx
 ---
 code: |
-  divorce_with_kids_attachment.overflow_fields['children'].overflow_trigger = 3
+  divorce_with_kids_attachment.overflow_fields['earlier_actions'].overflow_trigger = 3
+  divorce_with_kids_attachment.overflow_fields['earlier_actions'].label = "Other earlier actions"
+  divorce_with_kids_attachment.overflow_fields['earlier_RFA'].overflow_trigger = 3
+  divorce_with_kids_attachment.overflow_fields['earlier_RFA'].label = "Other RFA actions"
+  divorce_with_kids_attachment.overflow_fields['children'].overflow_trigger = 5
   divorce_with_kids_attachment.overflow_fields['children'].label = "Other children"
+  divorce_with_kids_attachment.overflow_fields['locations'].overflow_trigger = 3
+  divorce_with_kids_attachment.overflow_fields['locations'].label = "More information of the children's housing situation"
   divorce_with_kids_attachment.overflow_fields.gathered = True 
 ---
 # Bundles group the ALDocuments into separate downloads, such as for court and for the user
@@ -1318,7 +1194,7 @@ attachment:
       - "divorce": ${ grant_for == "divorce" }
       - "civil_union_dissolution": ${ grant_for == "dissolution" }
       - "legal_separation": ${ grant_for == "legal_separation" }
-      - "trial_court_county1": ${trial_court.address.county} Family Court ${ trial_court.address.block() } 
+      - "trial_court_county1": ${ trial_court.address.block() }
       - "signature_date": ${ signature_date }
       - "users1_signature": ${ users[0].signature_if_final(i) }
       - "users1_address_county": ${ users[0].address.county }
@@ -1472,15 +1348,15 @@ attachment:
       - "child_name5": ${ children[4].name }
       - "child_birthdate5": ${ children[4].birthdate }
      
-      - "child_address1": ${ children[0].locations[0].address } 
-      - "child_date1": ${ children[0].start_date } - ${ children[0].end_date }
-      - "child_housemate1": ${ children[0].housemates }
-      - "child_address2": ${ children[0].locations[0].address } 
-      - "child_date2": ${ children[0].start_date } - ${ children[0].end_date }
-      - "child_housemate2": ${ children[0].housemates }
-      - "child_address3": ${ children[0].locations[0].address } 
-      - "child_date3": ${ children[0].start_date } - ${ children[0].end_date }
-      - "child_housemate3": ${ children[0].locations[0].housemates }
+      - "child_address1": ${ locations[0].address } 
+      - "child_date1": ${ locations[0].start_date } - ${ locations[0].end_date }
+      - "child_housemate1": ${ locations[0].housemates }
+      - "child_address2": ${ locations[1].address } 
+      - "child_date2": ${ locations[1].start_date } - ${ locations[1].end_date }
+      - "child_housemate2": ${ locations[1].housemates }
+      - "child_address3": ${ locations[2].address } 
+      - "child_date3": ${ locations[2].start_date } - ${ locations[2].end_date }
+      - "child_housemate3": ${ locations[2].housemates }
    
       - "participated_custody_child": ${ child_custody["participation"] }
       - "information_child": ${ child_custody["information"] }
