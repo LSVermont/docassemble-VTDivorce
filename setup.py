@@ -43,10 +43,10 @@ def find_package_data(where='.', package='', exclude=standard_exclude, exclude_d
                 out.setdefault(package, []).append(prefix+name)
     return out
 
-setup(name='docassemble.DivorceNoKids',
+setup(name='docassemble.Divorce',
       version='1.0',
       description=('Divorce'),
-      long_description='# docassemble.DivorceNoKids\r\n\r\nDivorce\r\n\r\n## Authors\r\n\r\nMia Bonardi\r\nStavros Constantinou\r\n\r\n',
+      long_description='# docassemble.Divorce\r\n\r\nDivorce\r\n\r\n## Authors\r\n\r\n- Mia Bonardi\r\n- Stavros Constantinou\r\n\r\n',
       long_description_content_type='text/markdown',
       author='Mia Bonardi',
       author_email='mbonardi@su.suffolk.edu',
@@ -56,6 +56,6 @@ setup(name='docassemble.DivorceNoKids',
       namespace_packages=['docassemble'],
       install_requires=['docassemble.ALAnyState>=0.1.0', 'docassemble.AssemblyLine>=2.26.0'],
       zip_safe=False,
-      package_data=find_package_data(where='docassemble/DivorceNoKids/', package='docassemble.DivorceNoKids'),
+      package_data=find_package_data(where='docassemble/Divorce/', package='docassemble.Divorce'),
      )
 
