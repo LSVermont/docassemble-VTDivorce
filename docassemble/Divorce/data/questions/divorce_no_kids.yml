@@ -133,11 +133,10 @@ code: |
   user_role = "plaintiff"
   user_ask_role = "plaintiff"
   
-  if (not plaintiff_VT and not defendant_VT) or (not defendant_VT and not plaintiff_VT):
-  
-    if not marriage_or_civil_union_VT and not both_cant_divorce_current_state and not have_property_agreement:
-    
-        jurisdiction_kickout
+  if not plaintiff_VT: 
+    jurisdiction_kickout
+  if not defendant_VT: 
+    jurisdiction_kickout
         
   users.gather()
   set_parts(subtitle=str(users))
@@ -164,7 +163,8 @@ code: |
     children.target_number = 0
   
   license_type
-  
+  if marriage_state or civil_union_state != 'Vermont':
+    jurisdiction_kickout
   grant_for
   
   set_progress(48)
