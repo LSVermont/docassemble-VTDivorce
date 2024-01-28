@@ -163,8 +163,15 @@ code: |
     children.target_number = 0
   
   license_type
-  if marriage_state or civil_union_state != 'Vermont':
-    jurisdiction_kickout
+  
+  if license_type == 'marriage':
+    if marriage_state != 'Vermont':
+      jurisdiction_kickout
+      
+  if license_type == 'civil_union':    
+    if civil_union_state != 'Vermont':
+      jurisdiction_kickout
+    
   grant_for
   
   set_progress(48)
