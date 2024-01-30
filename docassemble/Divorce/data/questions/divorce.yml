@@ -130,7 +130,18 @@ id: jurisdiction kickout
 question: |
   Stop
 subquestion: |
-  <i class="fas fa-hand-paper fa-3x" aria-hidden="true"></i>  **Stop.** In this situation, these are **not** the right forms to fill out. **Do not use this interview.** 
+    <i class="fas fa-hand-paper fa-3x" aria-hidden="true"></i>**Stop.** In this situation, these are **not** the right forms to fill out. **Do not use this interview.**
+  
+  Contact a lawyer or legal aid organization in the state where you live.
+  
+  If neither of you live in Vermont, a Vermont family court will only take your divorce case if these four things are true:
+  
+  * You got married or got a civil union in Vermont. 
+  * You and your spouse currently live in states where you can't get a divorce or dissolve your civil union
+  * You don't have minor children (under 18), and
+  * You and your spouse already have an agreement about how to deal with your property and debts.
+  
+  See the [Divorce Roadmap on the VTLawHelp.org website](https://vtlawhelp.org/roadmap/divorce/step-1) to find out what is required for you to be able to file for a divorce, separation or civil union dissolution in Vermont.
 continue button field: jurisdiction_kickout
 buttons:
   - Exit: exit
