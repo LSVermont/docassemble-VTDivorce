@@ -53,9 +53,9 @@ code: |
   user_role = "plaintiff"
   user_ask_role = "plaintiff"
   
-  if (not plaintiff_VT and not defendant_VT) or (not defendant_VT and not plaintiff_VT):
+  if not plaintiff_VT and not defendant_VT:
   
-    if not marriage_or_civil_union_VT and not both_cant_divorce_current_state and not have_property_agreement:
+    if not marriage_or_civil_union_VT:
     
       jurisdiction_kickout
         
