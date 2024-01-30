@@ -130,7 +130,7 @@ id: jurisdiction kickout
 question: |
   Stop
 subquestion: |
-    <i class="fas fa-hand-paper fa-3x" aria-hidden="true"></i>**Stop.** In this situation, these are **not** the right forms to fill out. **Do not use this interview.**
+    <i class="fas fa-hand-paper fa-3x" aria-hidden="true"></i> **Stop.** In this situation, these are **not** the right forms to fill out. **Do not use this interview.**
   
   Contact a lawyer or legal aid organization in the state where you live.
   
