@@ -133,11 +133,10 @@ code: |
   user_role = "plaintiff"
   user_ask_role = "plaintiff"
   
-  if not plaintiff_VT and not defendant_VT:
-  
-    if not marriage_or_civil_union_VT:
-    
-      jurisdiction_kickout
+  if not plaintiff_VT: 
+    jurisdiction_kickout
+  if not defendant_VT: 
+    jurisdiction_kickout
         
   users.gather()
   set_parts(subtitle=str(users))
@@ -165,6 +164,14 @@ code: |
   
   license_type
   
+  if license_type == 'marriage':
+    if marriage_state != 'Vermont':
+      jurisdiction_kickout
+      
+  if license_type == 'civil_union':    
+    if civil_union_state != 'Vermont':
+      jurisdiction_kickout
+    
   grant_for
   
   set_progress(48)
@@ -211,7 +218,7 @@ id: jurisdiction kickout
 question: |
   Stop
 subquestion: |
-  <i class="fas fa-hand-paper fa-3x" aria-hidden="true"></i> **Stop.** In this situation, these are **not** the right forms to fill out. **Do not use this interview.**
+  <i class="fas fa-hand-paper fa-3x" aria-hidden="true"></i>  **Stop.** In this situation, these are **not** the right forms to fill out. **Do not use this interview.**
   
   Contact a lawyer or legal aid organization in the state where you live.
   
