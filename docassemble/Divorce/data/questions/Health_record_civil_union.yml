@@ -123,7 +123,8 @@ code: |
   set_parts(subtitle=str(users))
   set_progress(16)
   civil_union_state
-  separation_date_month
+  separation_date
+  minor_children_number
   FillText1a
   docket_number
   set_progress(32)
@@ -132,7 +133,7 @@ code: |
   other_parties.gather()
   set_progress(48)
   other_parties[0].address.address
-  minor_children_number
+  
   users[0].attorneys[0].address.address
   interview_order_Health_record_civil_union = True
 ---
@@ -225,24 +226,19 @@ fields:
 #    choices:
 #      - 1: 1
 #---
-id: Users1 birth month
+id: Users1 birthday
 question: |
   When is your birthday
 fields:
-  - "Users1 birth month": users[0].birth_month
-    maxlength: 3
-  - "Users1 birth day": users[0].birth_day
-    maxlength: 3
-  - "Users1 birth year": users[0].birth_year
-    maxlength: 7
-  - "Other parties1 birth month": other_parties[0].birth_month
-    maxlength: 3
-  - "Other parties1 birth day": other_parties[0].birth_day
-    maxlength: 3
-  - "Other parties1 birth year": other_parties[0].birth_year
-    maxlength: 7
-  - "Minor children number": minor_children_number
-    maxlength: 14
+  - "Birthdate": users[0].birthdate
+    datatype: BirthDate
+--- 
+id: Other party birthday
+question: | 
+  When is the birthdate of ${other_parties[0].name}
+fields:
+  - "Birthdate": other_parties[0].birthdate
+    datatype: BirthDate
 ---
 id: civil_union
 question: |
@@ -260,12 +256,10 @@ id: separation
 question: |
   Information about the separation
 fields:
-  - "Separation date month": separation_date_month
-    maxlength: 3
-  - "Separation date day": separation_date_day
-    maxlength: 3
-  - "Separation date year": separation_date_year
-    maxlength: 6
+  - "Date couple last resided in same household": separation_date
+    datatype: date
+  - "As of the specified date, how many children under the age of 18 were in the household?": minor_children_number
+    datatype: integer
 ---
 id: attorneys_information
 sets:
@@ -289,24 +283,41 @@ question: |
 fields:
   - "Filltext1a": FillText1a
     maxlength: 19
-  - "Filltext37": FillText37
-    maxlength: 4
-  - "Filltext38": FillText38
-    maxlength: 3
-  - "Filltext43": FillText43
-    maxlength: 6
-  - "Filltext44": FillText44
-    maxlength: 52
-  - "Filltext14b": FillText14b
-    maxlength: 3
-  - "Filltext14c": FillText14c
-    maxlength: 3
-  - "Filltext14d": FillText14d
-    maxlength: 5
-  - "Filltext14": FillText14
-    maxlength: 62
-  - "Filltext14a": FillText14a
+---
+id: decree
+question: |
+  What date did this decree become final
+fields: 
+  - Date: decree_date
+    datatype: date
+---
+id: type_of_decree
+question: |
+  What was the type of decree
+fields:
+  - no label: label
+    input type: radio
+    choices:
+      - Absolute Dissolution: type1
+      - Annulment: type2
+---
+id: decree_county
+question: |
+  What county is the decree in
+fields:
+  - County: decree_county
+---
+id: legal_grounds
+question: |
+  Information about the decree
+fields:
+  - "What were the legal grounds for the decree": legal_grounds
+    datatype: area
+  - "Who was the court manager": court_manager
     maxlength: 54
+  - "When was the decree signed": signature_date
+    datatype: date
+  
 ---
 id: preview Health_record_civil_union
 question: |
@@ -374,42 +385,22 @@ review:
     button: |
       **Type2**:
       ${ type2 }
-  - Edit: FillText37
+  - Edit: decree_date
     button: |
-      **Filltext37**:
-      ${ FillText37 }
-  - Edit: FillText38
+      **decree_date**:
+      ${ decree_date }
+  - Edit: decree_county
     button: |
-      **Filltext38**:
-      ${ FillText38 }
-  - Edit: FillText43
+      **decree_county**:
+      ${ decree_county }
+  - Edit: legal_grounds
     button: |
-      **Filltext43**:
-      ${ FillText43 }
-  - Edit: FillText44
+      **legal_grounds**:
+      ${ legal_grounds }
+  - Edit: court_manager
     button: |
-      **Filltext44**:
-      ${ FillText44 }
-  - Edit: FillText14b
-    button: |
-      **Filltext14b**:
-      ${ FillText14b }
-  - Edit: FillText14c
-    button: |
-      **Filltext14c**:
-      ${ FillText14c }
-  - Edit: FillText14d
-    button: |
-      **Filltext14d**:
-      ${ FillText14d }
-  - Edit: FillText14
-    button: |
-      **Filltext14**:
-      ${ FillText14 }
-  - Edit: FillText14a
-    button: |
-      **Filltext14a**:
-      ${ FillText14a }
+      **court_manager**:
+      ${ court_manager }
 ---
 continue button field: users.revisit
 question: |
@@ -473,24 +464,24 @@ progress: 100
 ---
 # ALDocument objects specify the metadata for each template
 objects:
-  - Health_record_civil_union_Post_interview_instructions: ALDocument.using(title="Instructions", filename="Health_record_civil_union_next_steps.docx", enabled=True, has_addendum=False)
+  #- Health_record_civil_union_Post_interview_instructions: ALDocument.using(title="Instructions", filename="Health_record_civil_union_next_steps.docx", enabled=True, has_addendum=False)
   - Health_record_civil_union_attachment: ALDocument.using(title="Health record civil union", filename="Health_record_civil_union", enabled=True, has_addendum=False, )
 ---
 # Bundles group the ALDocuments into separate downloads, such as for court and for the user
 objects:
-  - al_user_bundle: ALDocumentBundle.using(elements=[Health_record_civil_union_Post_interview_instructions, Health_record_civil_union_attachment], filename="Health_record_civil_union", title="All forms to download for your records", enabled=True)
+  - al_user_bundle: ALDocumentBundle.using(elements=[Health_record_civil_union_attachment], filename="Health_record_civil_union", title="All forms to download for your records", enabled=True)
   - al_court_bundle: ALDocumentBundle.using(elements=[Health_record_civil_union_attachment],  filename="Health_record_civil_union", title="All forms to deliver to court", enabled=True)
 ---
 # Each attachment defines a key in an ALDocument. We use `i` as the placeholder here so the same template is 
 # used for "preview" and "final" keys, and logic in the template checks the value of 
 # `i` to show or hide the user's signature
-attachment:
-  name: Post-interview-Instructions
-  filename: Health_record_civil_union_next_steps
-  docx template file: Health_record_civil_union_next_steps.docx
-  variable name: Health_record_civil_union_Post_interview_instructions[i]
-  skip undefined: True
-  tagged pdf: True
+#attachment:
+#  name: Post-interview-Instructions
+#  filename: Health_record_civil_union_next_steps
+#  docx template file: Health_record_civil_union_next_steps.docx
+#  variable name: Health_record_civil_union_Post_interview_instructions[i]
+#  skip undefined: True
+#  tagged pdf: True
 ---
 attachment:
   name: Health record civil union
@@ -504,9 +495,9 @@ attachment:
       - "users1_name": ${ users[0] }
       - "users1_former_name": ${ users[0].name_former }
       - "users1_sex": ${ users[0].sex }
-      - "users1_birth_month": ${ users[0].birth_month }
-      - "users1_birth_day": ${ users[0].birth_day }
-      - "users1_birth_year": ${ users[0].birth_year }
+      - "users1_birth_month": ${ format_date(users[0].birthdate, format='M') }
+      - "users1_birth_day": ${ format_date(users[0].birthdate, format='dd') }
+      - "users1_birth_year": ${ format_date(users[0].birthdate, format='yyyy') }
       - "users1_address_state": ${ users[0].address.state }
       - "users1_address_city": ${ users[0].address.city }
       - "other_parties1_name": ${ other_parties[0].name }
@@ -525,15 +516,15 @@ attachment:
       - "minor_children_number": ${ minor_children_number }
       - "type1": ${ type1 }
       - "type2": ${ type2 }
-      - "FillText37": ${ FillText37 }
-      - "FillText38": ${ FillText38 }
-      - "FillText43": ${ FillText43 }
-      - "FillText44": ${ FillText44 }
-      - "FillText14b": ${ FillText14b }
-      - "FillText14c": ${ FillText14c }
-      - "FillText14d": ${ FillText14d }
-      - "FillText14": ${ FillText14 }
-      - "FillText14a": ${ FillText14a }
+      - "decree_date_month": ${ format_date(decree_date, format='M') }
+      - "decree_date": ${ format_date(decree_date, format='dd') }
+      - "decree_date_year": ${ format_date(decree_date, format='yyyy') }
+      - "decree_county": ${ decree_county }
+      - "signature_date_month": ${ format_date(signature_date, format='M') }
+      - "signature_date": ${  format_date(signature_date, format='dd') }
+      - "signature_date_year": ${ format_date(signature_date, format='yyyy') }
+      - "legal_grounds": ${ legal_grounds }
+      - "court_manager": ${ court_manager }
 
 
 
