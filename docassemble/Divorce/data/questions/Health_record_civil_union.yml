@@ -125,11 +125,17 @@ code: |
   civil_union_state
   separation_date
   minor_children_number
-  FillText1a
+  decree_date
+  type_of_decree
+  decree_county
+  legal_grounds
+  court_manager
+  signature_date
   docket_number
   set_progress(32)
-
+  users[0].birthdate
   users[0].address.address
+  other_parties[0].birthdate
   other_parties.gather()
   set_progress(48)
   other_parties[0].address.address
@@ -228,7 +234,7 @@ fields:
 #---
 id: Users1 birthday
 question: |
-  When is your birthday
+  What is your date of birth?
 fields:
   - "Birthdate": users[0].birthdate
     datatype: BirthDate
@@ -276,13 +282,13 @@ fields:
       users[i].attorneys[j].name_fields()
   - code: |
       users[i].attorneys[j].address_fields(country_code=AL_DEFAULT_COUNTRY, default_state=AL_DEFAULT_STATE)
----
-id: Filltext1a
-question: |
-  Filltext1a
-fields:
-  - "Filltext1a": FillText1a
-    maxlength: 19
+#---
+#id: Filltext1a
+#question: |
+#  Filltext1a
+#fields:
+#  - "Filltext1a": FillText1a
+#    maxlength: 19
 ---
 id: decree
 question: |
@@ -295,7 +301,7 @@ id: type_of_decree
 question: |
   What was the type of decree
 fields:
-  - no label: label
+  - no label: type_of_decree
     input type: radio
     choices:
       - Absolute Dissolution: type1
@@ -354,10 +360,10 @@ review:
     button: |
       **Docket number**:
       ${ docket_number }
-  - Edit: FillText1a
-    button: |
-      **Filltext1a**:
-      ${ FillText1a }
+#  - Edit: FillText1a
+#    button: |
+#      **Filltext1a**:
+#      ${ FillText1a }
   - Edit: users.revisit
     button: |
       **Users**
@@ -491,7 +497,7 @@ attachment:
   pdf template file: Health_record_civil_union.pdf
   fields:
       - "docket_number": ${ docket_number }
-      - "FillText1a": ${ FillText1a }
+      #- "FillText1a": ${ FillText1a }
       - "users1_name": ${ users[0] }
       - "users1_former_name": ${ users[0].name_former }
       - "users1_sex": ${ users[0].sex }
@@ -505,17 +511,20 @@ attachment:
       - "users1_attorneys_address": ${ users[0].attorneys[0].address }
       - "users1_attorneys_name": ${users[0].attorneys[0].name}
       - "other_parties1_former_name": ${ other_parties[0].name_former }
-      - "other_parties1_birth_month": ${ other_parties[0].birth_month }
-      - "other_parties1_birth_day": ${ other_parties[0].birth_day }
-      - "other_parties1_birth_year": ${ other_parties[0].birth_year }
+      - "other_parties1_birth_month": ${ format_date(other_parties[0].birthdate, format='M') }
+      - "other_parties1_birth_day": ${ format_date(other_parties[0].birthdate, format='dd') }
+      - "other_parties1_birth_year": ${ format_date(other_parties[0].birthdate, format='yyyy') }
       - "other_parties1_address_state": ${ other_parties[0].address.state }
       - "other_parties1_address_city": ${ other_parties[0].address.city }
       - "civil_union_state": ${ civil_union_state }
       - "civil_union_city": ${ civil_union_city }
-      - "civil_union_date": ${ civil_union_date }
+      - "civil_union_date_month": ${ format_date(civil_union_date, format='M') }
+      - "civil_union_date_day": ${ format_date(civil_union_date, format='dd') }
+      - "civil_union_date_year": ${ format_date(civil_union_date, format='yyyy') }
       - "minor_children_number": ${ minor_children_number }
-      - "type1": ${ type1 }
-      - "type2": ${ type2 }
+      - "type_of_decree": True
+      - "type1": ${ type_of_decree == "type1" }
+      - "type2": ${ type_of_decree == "type2" }
       - "decree_date_month": ${ format_date(decree_date, format='M') }
       - "decree_date": ${ format_date(decree_date, format='dd') }
       - "decree_date_year": ${ format_date(decree_date, format='yyyy') }
@@ -523,6 +532,9 @@ attachment:
       - "signature_date_month": ${ format_date(signature_date, format='M') }
       - "signature_date": ${  format_date(signature_date, format='dd') }
       - "signature_date_year": ${ format_date(signature_date, format='yyyy') }
+      - "separation_date_month": ${ format_date(separation_date, format='M') }
+      - "separation_date_day": ${ format_date(separation_date, format='dd') }
+      - "separation_date_year": ${ format_date(separation_date, format='yyyy') }
       - "legal_grounds": ${ legal_grounds }
       - "court_manager": ${ court_manager }
 
