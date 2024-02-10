@@ -141,7 +141,7 @@ code: |
   set_progress(48)
   other_parties[0].address.address
   
-  users[0].attorneys[0].address.address
+  no_attorney_involved
   interview_order_Health_record_divorce_annulment = True
 ---
 ###################### Main order ######################
@@ -541,7 +541,7 @@ attachment:
       - "users1_address_city": ${ users[0].address.city }
       - "other_parties1_name": ${ other_parties[0].name }
       - "other_parties1_sex": ${ other_parties[0].sex }
-      - "users1_attorneys_address": ${ users[0].address.on_one_line() }
+      - "users1_attorneys_address": ${ users[0].attorneys[0].address.on_one_line() }
       - "users1_attorneys_name": ${users[0].attorneys[0].name}
       - "other_parties1_former_name": ${ other_parties[0].name_former }
       - "other_parties1_birth_month": ${ format_date(other_parties[0].birthdate, format='M') }
@@ -555,9 +555,12 @@ attachment:
       - "marriage_date_day": ${ format_date(marriage_date, format='dd') }
       - "marriage_date_year": ${ format_date(marriage_date, format='yyyy') }
       - "minor_children_number": ${ minor_children_number }
+      - "no_attorney_involved": True
+      - "no_attorney_involved": ${no_attorney_involved == True }
       - "type_of_decree": True
       - "type1": ${ type_of_decree == "type1" }
       - "type2": ${ type_of_decree == "type2" }
+
       - "decree_date_month": ${ format_date(decree_date, format='M') }
       - "decree_date": ${ format_date(decree_date, format='dd') }
       - "decree_date_year": ${ format_date(decree_date, format='yyyy') }

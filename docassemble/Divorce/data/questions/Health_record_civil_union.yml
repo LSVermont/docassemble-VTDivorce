@@ -268,20 +268,47 @@ fields:
     datatype: integer
 ---
 id: attorneys_information
-sets:
-  - users[i].attorneys[j].name.first
-  - users[i].attorneys[j].name.last
-  - users[i].attorneys[j].name.middle
-  - users[i].attorneys[j].name.suffix
-  - users[i].attorneys[j].address
-  
 question: |
   Information about your attorney
 fields:
-  - code: |
-      users[i].attorneys[j].name_fields()
-  - code: |
-      users[i].attorneys[j].address_fields(country_code=AL_DEFAULT_COUNTRY, default_state=AL_DEFAULT_STATE)
+  - "Do you have an attorney": no_attorney_involved
+    datatype: yesnoradio
+    
+  - "Attorney's first name": users[0].attorneys[0].name.first
+    required: True
+    show if: no_attorney_involved
+    
+  - "Attorney's last name": users[0].attorneys[0].name.last
+    required: True
+    show if: no_attorney_involved
+    
+  - "Attorney's middle name": users[0].attorneys[0].name.middle
+    required: False
+    show if: no_attorney_involved
+    
+  - "Attorney's suffix": users[0].attorneys[0].name.suffix
+    required: False
+    show if: no_attorney_involved
+    
+  - "Street Address": users[0].attorneys[0].address.address
+    required: True
+    show if: no_attorney_involved
+    
+  - "City": users[0].attorneys[0].address.city
+    required: True
+    show if: no_attorney_involved
+    
+  - "State": users[0].attorneys[0].address.state
+    code: |
+      states_list()
+    default: VT
+    required: True
+    show if: no_attorney_involved
+ 
+  - "Zip": users[0].attorneys[0].address.zip
+    required: True
+    show if: no_attorney_involved
+    
 #---
 #id: Filltext1a
 #question: |
@@ -508,7 +535,7 @@ attachment:
       - "users1_address_city": ${ users[0].address.city }
       - "other_parties1_name": ${ other_parties[0].name }
       - "other_parties1_sex": ${ other_parties[0].sex }
-      - "users1_attorneys_address": ${ users[0].attorneys[0].address }
+      - "users1_attorneys_address": ${ users[0].attorneys[0].address.on_one_line() }
       - "users1_attorneys_name": ${users[0].attorneys[0].name}
       - "other_parties1_former_name": ${ other_parties[0].name_former }
       - "other_parties1_birth_month": ${ format_date(other_parties[0].birthdate, format='M') }
