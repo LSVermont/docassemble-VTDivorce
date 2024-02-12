@@ -373,15 +373,27 @@ fields:
 ---
 id: child custody
 question: |
-  Please check the box below if the statement next to it is true. For each box you check, please explain your answer on another page.
+  Custody: Check all statements that apply to you
 fields: 
-  no label: child_custody
-  datatype: checkboxes
-  none of the above: False
-  choices: 
-    - I have participated as a party, witness, or in some other way in a court case about the custody of this child or these children in Vermont or another state.: participation
-    - I have information about a case concerning this child or these children that is now pending in a Vermont court or a court in another state.: information
-    - I have knowledge about a person who is not a party to this case who has physical custody of this child or these children or who claims to have custody of or visitation rights to this child or these children.: knowledge
+  - no label: child_custody
+    datatype: checkboxes
+    #none of the above: False
+    choices: 
+      - A. I have participated as a party, witness, or in some other way in a court case about the custody of this child or these children in Vermont or another state.: participation
+      - B. I have information about a case concerning this child or these children that is now pending in a Vermont court or a court in another state.: information
+      - C. I have knowledge about a person who is not a party to this case who has physical custody of this child or these children or who claims to have custody of or visitation rights to this child or these children.: knowledge
+  - Statement A -- Please briefly explain: participation_explain
+    show if: child_custody["participation"]
+    input type: area
+    maxlength: 300
+  - Statement B -- Please briefly explain: information_explain
+    show if: child_custody["information"]
+    input type: area
+    maxlength: 300
+  - Statement C -- Please briefly explain: knowledge_explain
+    show if: child_custody["knowledge"]
+    input type: area
+    maxlength: 300
 ---
 id: property agreement
 question: |
