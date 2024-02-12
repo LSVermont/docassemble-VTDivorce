@@ -121,7 +121,9 @@ sets:
   - other_parties[i].name.suffix
 id: names of opposing parties
 question: |
-  Name of the **defendant** in this matter
+  Name of the defendant in this matter
+subquestion: |
+  The other party is called the "defendant."
 fields:
   - code: |
       other_parties[i].name_fields(person_or_business='person')
@@ -285,12 +287,16 @@ fields:
 ---
 id: have school age children
 question: |
-  Do you and ${other_parties} have school aged children?
+  Children
+subquestion: |  
+  Do you and ${other_parties} have children who are either younger than 18 years old, or are 18 years old and still in high school? Include born or adopted children.  
 fields:
   - no label: have_school_age_children
     datatype: yesnoradio
-  - How many: children.target_number
+  - How many?: children.target_number
     datatype: integer
+    min: 1
+    max: 20
     show if: have_school_age_children
 ---  
 code: |
@@ -324,6 +330,7 @@ fields:
 code: |
   locations[i].housemates
   locations[i].complete = True
+  
 ---
 id: children information
 sets:
@@ -333,20 +340,28 @@ sets:
   - locations[i].address.state
 question: |
   Where have your children lived in the past 5 years, and who did your children live with?
+subquestion: |
+  Start with the most recent address. You'll be able to add other addresses as needed.
+  
+  If children have lived at different addresses from each other, enter the addresses for each child.
 fields:
   - code: |
       locations[i].address_fields(country_code=AL_DEFAULT_COUNTRY, default_state=AL_DEFAULT_STATE)
-  - All people that lived with your child: locations[i].housemates
-    datatype: area
   - Start date: locations[i].start_date
     datatype: date
   - End date: locations[i].end_date 
     datatype: date
+  - All people that lived with your child/children: locations[i].housemates
+    maxlength: 30
+  - note: |
+      Use abbreviated names for the people who lived with them. Use a comma between names. Example: Jane T., John Z. There's not much room on the form!
 ---
 generic object: ALPeopleList
 id: any other locations
 question: |
   Do you have any other locations to tell us about?
+subquestion: |
+  The court needs to know where they lived over the last 5 years.
 fields:
   - no label: locations.there_is_another
     datatype: yesnoradio
@@ -498,11 +513,11 @@ validation code: |
 ---
 id: Users attorney info
 question: |
-  Do you have an attorney?
+  Do you have a lawyer for this legal matter?
 fields:
   - no label: user_has_attorney
     datatype: yesnoradio
-  - Attorney name: users1_attorneys_name
+  - Attorney (lawyer) name: users1_attorneys_name
     show if: user_has_attorney
   - Attorney phone number: users1_attorneys_phone_numer
     datatype: al_international_phone
@@ -537,11 +552,11 @@ fields:
 ---
 id: other parties attorney info
 question: |
-  Does ${ other_parties[0] } have an attorney?
+  Does ${ other_parties[0] } have a lawyer for this legal matter?
 fields:
   - no label: other_parties_has_attorney
     datatype: yesnoradio
-  - Attorney name: other_parties1_attorneys_name
+  - Attorney (lawyer) name: other_parties1_attorneys_name
     show if: other_parties_has_attorney
   - Attorney phone number: other_parties1_attorneys_phone_number
     datatype: al_international_phone
@@ -551,7 +566,7 @@ id: Gather other parties contact information
 question: |
   What is ${ other_parties[0] }'s contact information?
 subquestion: |
-  Include at least **one way** to reach you. 
+  Include at least **one way** to reach them. 
 fields:  
   - Daytime phone number: other_parties[0].daytime_phone_number
     datatype: al_international_phone
