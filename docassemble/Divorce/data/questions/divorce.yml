@@ -82,7 +82,7 @@ code: |
     where_children_lived
     locations.gather()
     child_custody
-    parental_rights
+    child_medical_support
   else: 
     children.target_number = 0
   
@@ -373,7 +373,9 @@ fields:
 ---
 id: child custody
 question: |
-  Custody: Check all statements that apply to you
+  Custody
+subquestion: |  
+  Check all statements that apply to you.
 fields: 
   - no label: child_custody
     datatype: checkboxes
@@ -702,64 +704,79 @@ fields:
 ---
 id: asking the court for (with children)
 question: |  
-  I ask that the court grant me
+  Custody, visitation and child support
+subquestion: |     
+  **I ask that the court grant me the following.**
 fields:
-  - Parental rights and responsibilities: parental_rights
-    datatype: yesno
-    required: False
+  - note: |
+      Parental rights and responsibilities:
+  #- Parental rights and responsibilities: parental_rights
+    #datatype: yesno
+    #required: False
   - Legal parental rights and responsibilities: legal_rights_responsibilities
     datatype: yesno
     required: False
-    show if: parental_rights
+    #css class: indent-me
+    #show if: parental_rights
   - Shared jointly: legal_shared_jointly
     datatype: yesno
     required: False
+    css class: indent-me
     show if: legal_rights_responsibilities
-  - Given solely: legal_given_solely
-    required: False
+
+  - Given only to myself: legal_myself
+    datatype: yesno
+    css class: indent-me
     show if: legal_rights_responsibilities
-    datatype: yesno  
-  - To myself: legal_myself
-    datatype: yesno
-    show if: legal_given_solely
     required: False
-  - To the defendant: legal_defendant
+  - Given only to the defendant: legal_defendant
     datatype: yesno
-    show if: legal_given_solely
+    css class: indent-me
+    show if: legal_rights_responsibilities
     required: False
   - Physical parental rights and responsibilities: physical_rights_responsibilities
     datatype: yesno
     required: False
-    show if: parental_rights
+    #show if: parental_rights
   - Shared jointly: physical_shared_jointly
     required: False
+    css class: indent-me
     datatype: yesno
     show if: physical_rights_responsibilities
-  - Given solely: physical_given_solely
+  - Given only to myself: physical_myself
     required: False
+    css class: indent-me
+    datatype: yesno
     show if: physical_rights_responsibilities
-    datatype: yesno
-  - To myself: physical_myself
+  - Given only to the defendant: physical_defendant
     required: False
+    css class: indent-me
     datatype: yesno
-    show if: physical_given_solely
-  - To the defendant: physical_defendant
-    required: False
-    datatype: yesno
-    show if: physical_given_solely
-    
-  - Parent Child Contact for: contact_for
-    datatype: yesno
+    show if: physical_rights_responsibilities
+  - note: |
+      ---
+  - note: |
+      Parent-child contact:  
+  #- Parent-child contact: contact_for
+    #datatype: yesno
   - Contact for myself: contact_for_myself
     datatype: yesno
-    show if: contact_for
+    css class: indent-me
+    #show if: contact_for
     required: False
   - Contact for the defendant: contact_for_defendant
     datatype: yesno
-    show if: contact_for
+    css class: indent-me
+    #show if: contact_for
     required: False
-  - Child support, medical support and/or maintenance supplement.: child_medical_support
+  - note: |
+      ---
+  - note: |
+      Support:
+  - Child support, medical support and/or maintenance supplement: child_medical_support
     datatype: yesno
+  - note: |
+      Check all that apply. Learn what these terms mean on the [VTLawHelp website.](https://vtlawhelp.org/custody-visitation)
 ---
 id: preview divorce
 question: |
