@@ -140,7 +140,7 @@ code: |
   set_progress(48)
   other_parties[0].address.address
   
-  users[0].attorneys[0].address.address
+  no_attorney_involved
   interview_order_Health_record_civil_union = True
 ---
 ###################### Main order ######################
@@ -564,6 +564,8 @@ attachment:
       - "separation_date_year": ${ format_date(separation_date, format='yyyy') }
       - "legal_grounds": ${ legal_grounds }
       - "court_manager": ${ court_manager }
+      - "no_attorney_involved": True
+      - "no_attorney_involved": ${no_attorney_involved == no_attorney_involved}
 
 
 

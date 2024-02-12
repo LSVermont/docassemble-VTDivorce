@@ -136,6 +136,7 @@ code: |
   set_progress(32)
   users[0].birthdate
   users[0].address.address
+  other_parties_role
   other_parties[0].birthdate
   other_parties.gather()
   set_progress(48)
@@ -228,12 +229,12 @@ id: other_parties_husband_wife_spouse
 question: |
   Information about ${ other_parties[0].name }
 fields:
-  - "Select one": other_parties_role
+  - "Is ${ other_parties[0].name } the": other_parties_role
     input type: radio
     choices: 
-      - "Is ${ other_parties[0].name } the husband": husband
-      - "Is ${ other_parties[0].name } the wife": wife
-      - "Is ${ other_parties[0].name } the spouse": spouse
+      - "Husband": husband
+      - "Wife": wife
+      - "Spouse": spouse
   
 ---
 id: users_name
@@ -556,11 +557,10 @@ attachment:
       - "marriage_date_year": ${ format_date(marriage_date, format='yyyy') }
       - "minor_children_number": ${ minor_children_number }
       - "no_attorney_involved": True
-      - "no_attorney_involved": ${no_attorney_involved == True }
+      - "no_attorney_involved": ${no_attorney_involved == no_attorney_involved}
       - "type_of_decree": True
       - "type1": ${ type_of_decree == "type1" }
       - "type2": ${ type_of_decree == "type2" }
-
       - "decree_date_month": ${ format_date(decree_date, format='M') }
       - "decree_date": ${ format_date(decree_date, format='dd') }
       - "decree_date_year": ${ format_date(decree_date, format='yyyy') }
