@@ -79,6 +79,7 @@ code: |
   if have_school_age_children: 
     children.gather()
     #for child in children:
+    where_children_lived
     locations.gather()
     child_custody
     parental_rights
@@ -121,7 +122,9 @@ sets:
   - other_parties[i].name.suffix
 id: names of opposing parties
 question: |
-  Name of the **defendant** in this matter
+  Name of the defendant in this matter
+subquestion: |
+  The other party is called the "defendant."
 fields:
   - code: |
       other_parties[i].name_fields(person_or_business='person')
@@ -134,12 +137,12 @@ subquestion: |
   
   Contact a lawyer or legal aid organization in the state where you live.
   
-  If neither of you live in Vermont, a Vermont family court will only take your divorce case if these four things are true:
+  If neither of you live in Vermont, a Vermont family court will only take your divorce case if **all these four things are true**:
   
-  * You got married or got a civil union in Vermont. 
-  * You and your spouse currently live in states where you can't get a divorce or dissolve your civil union
-  * You don't have minor children (under 18), and
-  * You and your spouse already have an agreement about how to deal with your property and debts.
+  1. You got married or got a civil union in Vermont
+  2. You and your spouse currently live in states where you can't get a divorce or dissolve your civil union
+  3. You don't have minor children (under 18), and
+  4. You and your spouse already have an agreement about how to deal with your property and debts.
   
   See the [Divorce Roadmap on the VTLawHelp.org website](https://vtlawhelp.org/roadmap/divorce/step-1) to find out what is required for you to be able to file for a divorce, separation or civil union dissolution in Vermont.
 continue button field: jurisdiction_kickout
@@ -285,12 +288,16 @@ fields:
 ---
 id: have school age children
 question: |
-  Do you and ${other_parties} have school aged children?
+  Children
+subquestion: |  
+  Do you and ${other_parties} have children who are either younger than 18 years old, or are 18 years old and still in high school? Include born or adopted children.  
 fields:
   - no label: have_school_age_children
     datatype: yesnoradio
-  - How many: children.target_number
+  - How many?: children.target_number
     datatype: integer
+    min: 1
+    max: 20
     show if: have_school_age_children
 ---  
 code: |
@@ -325,6 +332,15 @@ code: |
   locations[i].housemates
   locations[i].complete = True
 ---
+id: instructions for where children lived
+question: |
+  Where have your children lived in the past 5 years, and who did your children live with?
+subquestion: |
+  On the next screen, start with the most recent address. You'll be able to add other addresses as needed.
+  
+  If children have lived at different addresses from each other, enter the addresses for each child.
+continue button field: where_children_lived
+---
 id: children information
 sets:
   - locations[i].address.address
@@ -332,36 +348,52 @@ sets:
   - locations[i].address.unit
   - locations[i].address.state
 question: |
-  Where have your children lived in the past 5 years, and who did your children live with?
+  Where have they lived?
 fields:
   - code: |
       locations[i].address_fields(country_code=AL_DEFAULT_COUNTRY, default_state=AL_DEFAULT_STATE)
-  - All people that lived with your child: locations[i].housemates
-    datatype: area
   - Start date: locations[i].start_date
     datatype: date
   - End date: locations[i].end_date 
     datatype: date
+  - All people that lived with your child/children: locations[i].housemates
+    maxlength: 30
+  - note: |
+      Use abbreviated names for the people who lived with them. Use a comma between names. Example: Jane T., John Z. There's not much room on the form!
 ---
 generic object: ALPeopleList
 id: any other locations
 question: |
   Do you have any other locations to tell us about?
+subquestion: |
+  The court needs to know where they lived over the last 5 years.
 fields:
   - no label: locations.there_is_another
     datatype: yesnoradio
 ---
 id: child custody
 question: |
-  Please check the box below if the statement next to it is true. For each box you check, please explain your answer on another page.
+  Custody: Check all statements that apply to you
 fields: 
-  no label: child_custody
-  datatype: checkboxes
-  none of the above: False
-  choices: 
-    - I have participated as a party, witness, or in some other way in a court case about the custody of this child or these children in Vermont or another state.: participation
-    - I have information about a case concerning this child or these children that is now pending in a Vermont court or a court in another state.: information
-    - I have knowledge about a person who is not a party to this case who has physical custody of this child or these children or who claims to have custody of or visitation rights to this child or these children.: knowledge
+  - no label: child_custody
+    datatype: checkboxes
+    #none of the above: False
+    choices: 
+      - A. I have participated as a party, witness, or in some other way in a court case about the custody of this child or these children in Vermont or another state.: participation
+      - B. I have information about a case concerning this child or these children that is now pending in a Vermont court or a court in another state.: information
+      - C. I have knowledge about a person who is not a party to this case who has physical custody of this child or these children or who claims to have custody of or visitation rights to this child or these children.: knowledge
+  - Statement A -- Please briefly explain: participation_explain
+    show if: child_custody["participation"]
+    input type: area
+    maxlength: 300
+  - Statement B -- Please briefly explain: information_explain
+    show if: child_custody["information"]
+    input type: area
+    maxlength: 300
+  - Statement C -- Please briefly explain: knowledge_explain
+    show if: child_custody["knowledge"]
+    input type: area
+    maxlength: 300
 ---
 id: property agreement
 question: |
@@ -498,11 +530,11 @@ validation code: |
 ---
 id: Users attorney info
 question: |
-  Do you have an attorney?
+  Do you have a lawyer for this legal matter?
 fields:
   - no label: user_has_attorney
     datatype: yesnoradio
-  - Attorney name: users1_attorneys_name
+  - Attorney (lawyer) name: users1_attorneys_name
     show if: user_has_attorney
   - Attorney phone number: users1_attorneys_phone_numer
     datatype: al_international_phone
@@ -537,11 +569,11 @@ fields:
 ---
 id: other parties attorney info
 question: |
-  Does ${ other_parties[0] } have an attorney?
+  Does ${ other_parties[0] } have a lawyer for this legal matter?
 fields:
   - no label: other_parties_has_attorney
     datatype: yesnoradio
-  - Attorney name: other_parties1_attorneys_name
+  - Attorney (lawyer) name: other_parties1_attorneys_name
     show if: other_parties_has_attorney
   - Attorney phone number: other_parties1_attorneys_phone_number
     datatype: al_international_phone
@@ -551,7 +583,7 @@ id: Gather other parties contact information
 question: |
   What is ${ other_parties[0] }'s contact information?
 subquestion: |
-  Include at least **one way** to reach you. 
+  Include at least **one way** to reach them. 
 fields:  
   - Daytime phone number: other_parties[0].daytime_phone_number
     datatype: al_international_phone
