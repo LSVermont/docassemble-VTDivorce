@@ -11,7 +11,7 @@ metadata:
   short title: >-
     Divorce
   description: |-
-    This interview helps someone in Vermont ask the court for a Divorce.
+    This interview helps someone in Vermont ask the court for a divorce, separation, or civil union dissolution.
   tags:
     - "FA-00-00-00-00"
   authors:
@@ -27,7 +27,7 @@ metadata:
   generated_on: "2023-07-25"
 ---
 code: |
-  interview_short_title = "Ask the court for a Divorce"
+  interview_short_title = "Ask the court for a divorce, separation or dissolution"
 ---
 code: |
   al_form_type = "starts_case" 
@@ -203,18 +203,16 @@ decoration: form-lineal
 question: |
   **${interview_short_title} in Vermont**
 subquestion: |  
-  <div class="border-around-text">
-  <p>Welcome to ${ AL_ORGANIZATION_TITLE}.</p>
-  
-  <p>${ AL_ORGANIZATION_TITLE } can help you complete and download forms in 3 steps:</p>
-  <ul><li><b>Step 1:</b> Answer questions that will fill in court forms for you.</li>
-  <li><b>Step 2:</b> Preview the completed forms.</li>
-  <li><b>Step 3:</b> Download, save or print the final forms. You will need to mail, email, efile or deliver them to the court on your own.</li></ul>
-  </div>  
 
-  VTCourtForms interviews were created by Legal Services Vermont with support from the Legal Services Corporation. It is free to use this program. This site is not a lawyer. Visit our [VTLawHelp.org website](https://vtlawhelp.org/roadmap/relief-from-abuse/step-1) for more information.
+  <p>${ intro_vtcourtforms_3_steps }</p>
   
-  [FILE big_logo, 30%, Legal Services Vermont logo]
+  <i class="fas fa-file-text fa-2x"></i> This guided interview will produce an initial package of forms needed to ask the court for a divorce, separation, or civil union dissolution.
+  
+  <i class="fas fa-clock fa-2x"></i> It may take you over 1 hour to complete this interview.
+  
+  <i class="fas fa-circle-info fa-2x"></i> It is free to use this program. This site is not a lawyer. Visit our [VTLawHelp.org website](https://vtlawhelp.org/roadmap/divorce/step-1) for more information about divorce, separation, or civil union dissolution.
+
+  <p>${ intro_vtcourtforms_created_by }</p>
 
 fields:
   - To continue, please accept our [terms of use](https://vtlawhelp.org/vlh-privacy).: acknowledged_information_use
