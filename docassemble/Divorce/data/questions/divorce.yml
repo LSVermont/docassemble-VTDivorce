@@ -695,7 +695,7 @@ id: Why are you seeking x from the court
 question: |
   What is your reason for getting a x?
 fields:
-  - "We've been separated for 6 months or more. (Note: This is the most common reason.)": six_month_separation
+  - "We have been or will have lived separate and apart for more than 6 months in a row. It is not reasonably probable that we can resume our relationship. (Note - This is the most common reason.)": six_month_separation
     datatype: yesno
   - "Date of separation": separation_date
     datatype: date
@@ -724,21 +724,24 @@ fields:
       - Legal Separation: legal_separation
       - Dissolution: dissolution
   - On what grounds (for what reason)?: grounds
-    datatype: checkboxes
+    input type: radio
     choices: 
-      - We've been separated for 6 months or more. Note - This is the most common reason.: six_month_separation
+      - We have been or will have lived separate and apart for more than 6 months in a row. It is not reasonably probable that we can resume our relationship. (Note - This is the most common reason.): six_month_separation
       - Other grounds (a different reason): other_ground
-    none of the above: False
   - Date of separation: separation_date
     datatype: date
-    show if: grounds["six_month_separation"]
+    show if: 
+      variable: grounds
+      is: six_month_separation
   - Describe the other grounds (different reason): other_ground_explanation
-    show if: grounds["other_ground"]
-    maxlength: 40
-  - note: Other things you are asking the court for
-  - Property maintenance: property_maintenance
+    show if: 
+      variable: grounds
+      is: other_ground
+    maxlength: 60
+  - note: Other things you are asking the court for. Check all that apply.
+  - Divide our property, assets and debts: property_maintenance
     datatype: yesno
-  - Spousal maintenancee: spousal_maintenancee
+  - Spousal maintenancee (alimony): spousal_maintenancee
     datatype: yesno
   - Court costs: court_costs
     datatype: yesno
@@ -746,11 +749,11 @@ fields:
     datatype: yesno
   - Name change: name_change
     datatype: yesno
-  - Plaintiff former name: plaintiff_former_name
+  - I would like to go back to my former full name: plaintiff_former_name
     show if: name_change
-  - Issue an order with a written agreement between you and ${ other_parties }: written_agreement_attached
+  - I will attach a written agreement signed by me and ${ other_parties }. I ask the court to issue an order that includes the provisions in our written agreement. : written_agreement_attached
     datatype: yesno
-  - note: You must attach the written agreement. To qualify for the reduced filing fee, the attached agreement must cover all the issues that you seek to have the Court resolve.
+  - note: You must attach the written agreement to the forms that you file with the court. To qualify for the reduced filing fee, the attached agreement must cover all the issues that you seek to have the court resolve.
     show if: written_agreement_attached
   
 ---
