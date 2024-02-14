@@ -64,7 +64,8 @@ code: |
       jurisdiction_kickout
     if have_school_age_children:
       jurisdiction_kickout
-        
+      
+  initial_screening_continue      
   users.gather()
   set_parts(subtitle=str(users))
   users[0].birthdate
@@ -327,6 +328,22 @@ subquestion: |
 fields:
   - no label: have_property_agreement
     datatype: yesnoradio
+    
+---
+id: initial_screening_continue
+question: |
+  Continue
+subquestion: |
+  <i class="fas fa-check fa-3x" style="color: #429a3c;" aria-hidden="true"></i>  Yes, you can use this interview to fill out these forms. 
+  
+  Remember, you can edit your answers after you preview the finished forms. You can also do that anytime by choosing Edit Your Answers in the Menu at the top-right of the page.
+  
+  You can also go to the Menu and quickly Exit and Delete Your Answers if you need to. And, you may choose to make a free account so you can store your answers online and come back to them later.
+  
+  Let's get started.
+continue button field: initial_screening_continue
+buttons:
+  - Start the interview: continue
 ---
 id: have school age children
 question: |
