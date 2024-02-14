@@ -115,6 +115,25 @@ code: |
   
   interview_order_divorce = True
 ---
+id: choose a court
+question: |
+  Choose a Family Court
+fields:
+  - note: |
+      Choose the county where you will file your forms. 
+      
+      It can be:
+      
+      * the county you live in, or
+      * the county the other person lives in (the "defendant"), or
+      * if you have children with the other person, it should be in the county in which the children spend the most time, or
+      * if you had a civil union, the county where your civil union took place. 
+    
+      
+      Not sure what county? [Check this list of cities and towns to find the county.](https://en.m.wikipedia.org/wiki/List_of_municipalities_in_Vermont#Cities)
+  - County: trial_court_index
+    code: all_courts._load_courts()['address_county'].items()
+---
 sets:
   - other_parties[i].name.first
   - other_parties[i].name.last
