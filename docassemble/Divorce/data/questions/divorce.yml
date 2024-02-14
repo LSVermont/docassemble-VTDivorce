@@ -608,16 +608,18 @@ fields:
   - no label: user_resided_VT_6_months
     datatype: yesnoradio
 ---
-id: des assistance
+id: DES assistance
 question: |
-   Do you or ${ other_parties } receive assistance from the Division of Economic Services (DES) 
+   Do you or ${ other_parties } get assistance from the Vermont Division of Economic Services (DES)?
 subquestion: |
-  Examples include: Food Stamps and Reach Up.
+  Examples: Food stamps and Reach Up.
 fields: 
-  - I recieve DES assisance: plaintiff_des_assistance
+  - I get DES assistance: plaintiff_des_assistance
     datatype: yesno
-  - ${ other_parties } recieves DES assisance: defendant_des_assistance
+  - ${ other_parties } gets DES assistance: defendant_des_assistance
     datatype: yesno
+  - We don't get DES assistance: no_des_assistance
+    datatype: yesno  
 ---
 id: military service
 question: |
@@ -627,6 +629,8 @@ fields:
     datatype: yesno
   - ${ other_parties } served in the military: defendant_military_service
     datatype: yesno
+  - We have not served in the military: no_military_service
+    datatype: yesno  
 ---
 id: other parties attorney info
 question: |
