@@ -150,7 +150,7 @@ id: names of opposing parties
 question: |
   Name of the defendant in this matter
 subquestion: |
-  The other party is called the "defendant."
+  The other party (your spouse) is called the "defendant."
 fields:
   - code: |
       other_parties[i].name_fields(person_or_business='person')
@@ -243,34 +243,34 @@ fields:
     choices: 
       - Marriage: marriage
       - Civil Union: civil_union
-  - Marriage City: marriage_city
+  - Marriage city: marriage_city
     show if: 
       variable: license_type
       is: marriage
-  - Marriage State: marriage_state
+  - Marriage state: marriage_state
     code: |
       states_list()
     default: VT
     show if: 
       variable: license_type
       is: marriage
-  - Marriage Date: marriage_date
+  - Marriage date: marriage_date
     datatype: date
     show if: 
       variable: license_type
       is: marriage
-  - Civil Union City: civil_union_city
+  - Civil Union city: civil_union_city
     show if: 
       variable: license_type
       is: civil_union
-  - Civil Union State: civil_union_state
+  - Civil Union state: civil_union_state
     code: |
       states_list()
     default: VT
     show if: 
       variable: license_type
       is: civil_union
-  - Civil Union Date: civil_union_date
+  - Civil Union date: civil_union_date
     datatype: date
     show if: 
       variable: license_type
@@ -334,7 +334,7 @@ question: |
 subquestion: |
   <i class="fas fa-check fa-3x" style="color: #429a3c;" aria-hidden="true"></i>  Yes, you can use this interview to fill out these forms. 
   
-  Remember, you can edit your answers after you preview the finished forms. You can also do that anytime by choosing Edit Your Answers in the Menu at the top-right of the page.
+  Keep in mind, you can edit your answers after you preview the finished forms. You can also do that anytime by choosing Edit Your Answers in the Menu at the top-right of the page.
   
   You can also go to the Menu and quickly Exit and Delete Your Answers if you need to. And, you may choose to make a free account so you can store your answers online and come back to them later.
   
@@ -391,7 +391,7 @@ code: |
 ---
 id: instructions for where children lived
 question: |
-  Where have your children lived in the past 5 years, and who did your children live with?
+  Where have your children lived in the past 5 years, and who did they live with?
 subquestion: |
   On the next screen, start with the most recent address. You'll be able to add other addresses as needed.
   
@@ -457,7 +457,7 @@ fields:
 --- 
 id: earlier actions
 question: |
-  Have you or the defendant filed for **divorce, legal separation, dissolution, or annulment** before filing this petition? 
+  Have you or the defendant filed for **divorce, legal separation, dissolution or annulment** before filing this petition? 
 fields:
   - no label: earlier_actions_yes
     datatype: yesnoradio
@@ -693,15 +693,15 @@ fields:
 ---
 id: Why are you seeking x from the court
 question: |
-  What are your grounds for divorce?
+  What is your reason for getting a x?
 fields:
-  - "Six month separation": six_month_separation
+  - "We've been separated for 6 months or more. (Note: This is the most common reason.)": six_month_separation
     datatype: yesno
   - "Date of separation": separation_date
     datatype: date
-  - "Other ground divorce": other_ground_divorce
+  - "Other grounds (other reason)": other_ground_divorce
     datatype: yesno
-  - "Other ground divorce explanation": other_ground_divorce_explanation
+  - "Explain the other grounds": other_ground_divorce_explanation
     maxlength: 55
 ---
 id: filing_financial_form
@@ -723,17 +723,18 @@ fields:
       - Divorce: divorce
       - Legal Separation: legal_separation
       - Dissolution: dissolution
-  - On what grounds?: grounds
+  - On what grounds (for what reason)?: grounds
     datatype: checkboxes
     choices: 
-      - Six month separation: six_month_separation
-      - Other ground divorce: other_ground
+      - We've been separated for 6 months or more. Note - This is the most common reason.: six_month_separation
+      - Other grounds (a different reason): other_ground
     none of the above: False
   - Date of separation: separation_date
     datatype: date
     show if: grounds["six_month_separation"]
-  - Other ground divorce explanation: other_ground_explanation
+  - Describe the other grounds (different reason): other_ground_explanation
     show if: grounds["other_ground"]
+    maxlength: 40
   - note: Other things you are asking the court for
   - Property maintenance: property_maintenance
     datatype: yesno
