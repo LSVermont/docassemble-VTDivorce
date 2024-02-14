@@ -150,7 +150,7 @@ id: names of opposing parties
 question: |
   Name of the defendant in this matter
 subquestion: |
-  The other party is called the "defendant."
+  The other party (your spouse) is called the "defendant."
 fields:
   - code: |
       other_parties[i].name_fields(person_or_business='person')
@@ -243,34 +243,34 @@ fields:
     choices: 
       - Marriage: marriage
       - Civil Union: civil_union
-  - Marriage City: marriage_city
+  - Marriage city: marriage_city
     show if: 
       variable: license_type
       is: marriage
-  - Marriage State: marriage_state
+  - Marriage state: marriage_state
     code: |
       states_list()
     default: VT
     show if: 
       variable: license_type
       is: marriage
-  - Marriage Date: marriage_date
+  - Marriage date: marriage_date
     datatype: date
     show if: 
       variable: license_type
       is: marriage
-  - Civil Union City: civil_union_city
+  - Civil Union city: civil_union_city
     show if: 
       variable: license_type
       is: civil_union
-  - Civil Union State: civil_union_state
+  - Civil Union state: civil_union_state
     code: |
       states_list()
     default: VT
     show if: 
       variable: license_type
       is: civil_union
-  - Civil Union Date: civil_union_date
+  - Civil Union date: civil_union_date
     datatype: date
     show if: 
       variable: license_type
@@ -334,7 +334,7 @@ question: |
 subquestion: |
   <i class="fas fa-check fa-3x" style="color: #429a3c;" aria-hidden="true"></i>  Yes, you can use this interview to fill out these forms. 
   
-  Remember, you can edit your answers after you preview the finished forms. You can also do that anytime by choosing Edit Your Answers in the Menu at the top-right of the page.
+  Keep in mind, you can edit your answers after you preview the finished forms. You can also do that anytime by choosing Edit Your Answers in the Menu at the top-right of the page.
   
   You can also go to the Menu and quickly Exit and Delete Your Answers if you need to. And, you may choose to make a free account so you can store your answers online and come back to them later.
   
@@ -391,7 +391,7 @@ code: |
 ---
 id: instructions for where children lived
 question: |
-  Where have your children lived in the past 5 years, and who did your children live with?
+  Where have your children lived in the past 5 years, and who did they live with?
 subquestion: |
   On the next screen, start with the most recent address. You'll be able to add other addresses as needed.
   
@@ -457,17 +457,17 @@ fields:
 --- 
 id: earlier actions
 question: |
-  Have you or the defendant filed for **divorce, legal separation, dissolution, or annulment** before filing this petition? 
+  Have you or the defendant filed for divorce, legal separation, dissolution or annulment **before** filing this form? 
 fields:
   - no label: earlier_actions_yes
     datatype: yesnoradio
-  - How many?: earlier_actions.target_number
+  - How many of these actions were filed?: earlier_actions.target_number
     datatype: integer
     show if: earlier_actions_yes
 ---
 id: earlier RFA actions
 question: |
-  Have either you or the defendant filed a **complaint for relief from abuse or a request for a protective order** against each other?
+  Have either you or the defendant filed a complaint for relief from abuse (RFA) or a request for a protective order against each other?
 fields:
   - no label: earlier_RFA_yes
     datatype: yesnoradio
@@ -475,12 +475,16 @@ fields:
     datatype: integer
     show if: earlier_RFA_yes
 ---
-id: collect earlier RFA actions
+id: collect earlier actions
 generic object: DAList
 question: |
+  % if hasattr(earlier_actions, 'ask_number') and earlier_actions.ask_number and earlier_actions.target_number == 1:
+  Tell us about what was filed.
+  % else:
   Tell us about the **${ ordinal(i) }** action.
+  % endif
 subquestion: |
-  Attach a copy of any Court Order issued.
+  If you got a court order, attach a copy of it to the forms that you file with the court.
 fields:
   - Type of action: earlier_actions[i].action_type
     datatype: radio
@@ -489,33 +493,37 @@ fields:
       - Legal separation
       - Dissolution
       - Annulment
-  - Who filed: earlier_actions[i].who_filed
+  - Who filed it?: earlier_actions[i].who_filed
     datatype: object_radio
     choices:
       - users
       - other_parties
-  - Where filed: earlier_actions[i].where_filed
-  - Year filed: earlier_actions[i].year_filed
+  - In what court, county and state?: earlier_actions[i].where_filed
+  - In what year?: earlier_actions[i].year_filed
 ---
 id: collect earlier RFA actions
 generic object: DAList
 question: |
+  % if hasattr(earlier_RFA, 'ask_number') and earlier_RFA.ask_number and earlier_RFA.target_number == 1:
+  Tell us about what was filed.
+  % else:
   Tell us about the **${ ordinal(i) }** action.
+  % endif
 subquestion: |
-  Attach a copy of any Court Order issued.
+  If you got a court order, attach a copy of it to the forms that you file with the court.
 fields:
   - Type of action: earlier_RFA[i].action_type
     datatype: radio
     choices: 
       - Relief from abuse 
       - Protective order
-  - Who filed: earlier_RFA[i].who_filed
+  - Who filed it?: earlier_RFA[i].who_filed
     datatype: object_radio
     choices:
       - users
       - other_parties
-  - Where filed: earlier_RFA[i].where_filed
-  - Year filed: earlier_RFA[i].year_filed
+  - In what court, county and state?: earlier_RFA[i].where_filed
+  - In what year?: earlier_RFA[i].year_filed
 ---
 generic object: DAList
 question: |
@@ -600,16 +608,18 @@ fields:
   - no label: user_resided_VT_6_months
     datatype: yesnoradio
 ---
-id: des assistance
+id: DES assistance
 question: |
-   Do you or ${ other_parties } receive assistance from the Division of Economic Services (DES) 
+   Do you or ${ other_parties } get assistance from the Vermont Division of Economic Services (DES)?
 subquestion: |
-  Examples include: Food Stamps and Reach Up.
+  Examples: Food stamps and Reach Up.
 fields: 
-  - I recieve DES assisance: plaintiff_des_assistance
+  - I get DES assistance: plaintiff_des_assistance
     datatype: yesno
-  - ${ other_parties } recieves DES assisance: defendant_des_assistance
+  - ${ other_parties } gets DES assistance: defendant_des_assistance
     datatype: yesno
+  - We don't get DES assistance: no_des_assistance
+    datatype: yesno  
 ---
 id: military service
 question: |
@@ -619,6 +629,8 @@ fields:
     datatype: yesno
   - ${ other_parties } served in the military: defendant_military_service
     datatype: yesno
+  - We have not served in the military: no_military_service
+    datatype: yesno  
 ---
 id: other parties attorney info
 question: |
@@ -693,15 +705,15 @@ fields:
 ---
 id: Why are you seeking x from the court
 question: |
-  What are your grounds for divorce?
+  What is your reason for getting a x?
 fields:
-  - "Six month separation": six_month_separation
+  - "We have been or will have lived separate and apart for more than 6 months in a row. It is not reasonably probable that we can resume our relationship. (Note - This is the most common reason.)": six_month_separation
     datatype: yesno
   - "Date of separation": separation_date
     datatype: date
-  - "Other ground divorce": other_ground_divorce
+  - "Other grounds (other reason)": other_ground_divorce
     datatype: yesno
-  - "Other ground divorce explanation": other_ground_divorce_explanation
+  - "Explain the other grounds": other_ground_divorce_explanation
     maxlength: 55
 ---
 id: filing_financial_form
@@ -723,21 +735,25 @@ fields:
       - Divorce: divorce
       - Legal Separation: legal_separation
       - Dissolution: dissolution
-  - On what grounds?: grounds
-    datatype: checkboxes
+  - On what grounds (for what reason)?: grounds
+    input type: radio
     choices: 
-      - Six month separation: six_month_separation
-      - Other ground divorce: other_ground
-    none of the above: False
+      - We have been or will have lived separate and apart for more than 6 months in a row. It is not reasonably probable that we can resume our relationship. (Note - This is the most common reason.): six_month_separation
+      - Other grounds (a different reason): other_ground
   - Date of separation: separation_date
     datatype: date
-    show if: grounds["six_month_separation"]
-  - Other ground divorce explanation: other_ground_explanation
-    show if: grounds["other_ground"]
-  - note: Other things you are asking the court for
-  - Property maintenance: property_maintenance
+    show if: 
+      variable: grounds
+      is: six_month_separation
+  - Describe the other grounds (different reason): other_ground_explanation
+    show if: 
+      variable: grounds
+      is: other_ground
+    maxlength: 60
+  - note: Other things you are asking the court for. Check all that apply.
+  - Divide our property, assets and debts: property_maintenance
     datatype: yesno
-  - Spousal maintenancee: spousal_maintenancee
+  - Spousal maintenancee (alimony): spousal_maintenancee
     datatype: yesno
   - Court costs: court_costs
     datatype: yesno
@@ -745,11 +761,11 @@ fields:
     datatype: yesno
   - Name change: name_change
     datatype: yesno
-  - Plaintiff former name: plaintiff_former_name
+  - I would like to go back to my former full name: plaintiff_former_name
     show if: name_change
-  - Issue an order with a written agreement between you and ${ other_parties }: written_agreement_attached
+  - I will attach a written agreement signed by me and ${ other_parties }. I ask the court to issue an order that includes the provisions in our written agreement. : written_agreement_attached
     datatype: yesno
-  - note: You must attach the written agreement. To qualify for the reduced filing fee, the attached agreement must cover all the issues that you seek to have the Court resolve.
+  - note: You must attach the written agreement to the forms that you file with the court. To qualify for the reduced filing fee, the attached agreement must cover all the issues that you seek to have the court resolve.
     show if: written_agreement_attached
   
 ---
