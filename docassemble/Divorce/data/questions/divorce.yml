@@ -17,6 +17,7 @@ metadata:
   authors:
     - Mia Bonardi
     - Stavros Constantinou
+    - Legal Services Vermont
   original_form:
     - https://www.vermontjudiciary.org/sites/default/files/documents/400-00836NoKids_1.pdf
     - https://www.vermontjudiciary.org/sites/default/files/documents/400-00836Children.pdf
@@ -56,7 +57,12 @@ code: |
   if not plaintiff_VT and not defendant_VT:
   
     if not marriage_or_civil_union_VT:
-    
+      jurisdiction_kickout
+    if not both_cant_divorce_current_state:
+      jurisdiction_kickout
+    if not have_property_agreement:
+      jurisdiction_kickout
+    if have_school_age_children:
       jurisdiction_kickout
         
   users.gather()
@@ -205,7 +211,7 @@ subquestion: |
   <li><b>Step 3:</b> Download, save or print the final forms. You will need to mail, email, efile or deliver them to the court on your own.</li></ul>
   </div>  
 
-  VTCourtForms interviews were created by Legal Services Vermont with support from the Legal Services Corporation. It is free to use this program. This site is not a lawyer. Visit our [VTLawHelp.org website](https://vtlawhelp.org/roadmap/relief-from-abuse/step-1) for more information about Relief from Abuse orders.
+  VTCourtForms interviews were created by Legal Services Vermont with support from the Legal Services Corporation. It is free to use this program. This site is not a lawyer. Visit our [VTLawHelp.org website](https://vtlawhelp.org/roadmap/relief-from-abuse/step-1) for more information.
   
   [FILE big_logo, 30%, Legal Services Vermont logo]
 
@@ -273,43 +279,60 @@ fields:
 ---
 id: plaintiff VT 6 months
 question: |
+  See if this interview is right for your situation
+subquestion: |
   Have you lived in Vermont since ${ today().minus(months=6) }?
 fields:
   - no label: plaintiff_VT
     datatype: yesnoradio
-  - Date you moved to VT: date_plaintiff_moved_to_VT
+  - Date you moved to Vermont: date_plaintiff_moved_to_VT
     datatype: date
     show if: plaintiff_VT
 ---
 id: defendant VT 6 months
 question: |
-  Has the defendant lived in Vermont since ${ today().minus(months=6) }?
+  See if this interview is right for your situation
+subquestion: |
+  Has your spouse lived in Vermont since ${ today().minus(months=6) }?
 fields:
   - no label: defendant_VT
     datatype: yesnoradio
-  - Date the defendant moved to VT: date_defendant_moved_to_VT
+  - Date they moved to Vermont: date_defendant_moved_to_VT
     datatype: date  
     show if: defendant_VT
 ---
 id: marriage_or_civil_union_VT
 question: |
-  Did you and your spouse get a marriage or civil union in VT?
+  See if this interview is right for your situation
+subquestion: |
+  Did you and your spouse get your marriage or civil union in Vermont?
 fields:
   - no label: marriage_or_civil_union_VT
     datatype: yesnoradio
 ---
 id: both_cant_divorce_current_state
 question: |
+  See if this interview is right for your situation
+subquestion: |
   Do you and your spouse currently live in states where you can't get a divorce or dissolve your civil union?
 fields:
   - no label: both_cant_divorce_current_state
+    datatype: yesnoradio
+---
+id: property agreement
+question: |
+  See if this interview is right for your situation
+subquestion: |
+  Do you and your spouse already have an agreement about how to deal with your property and debts?
+fields:
+  - no label: have_property_agreement
     datatype: yesnoradio
 ---
 id: have school age children
 question: |
   Children
 subquestion: |  
-  Do you and ${other_parties} have children who are either younger than 18 years old, or are 18 years old and still in high school? Include born or adopted children.  
+  Do you and the other party have children together who are either younger than 18 years old, or are 18 years old and still in high school? Include born or adopted children.  
 fields:
   - no label: have_school_age_children
     datatype: yesnoradio
@@ -373,7 +396,7 @@ fields:
       locations[i].address_fields(country_code=AL_DEFAULT_COUNTRY, default_state=AL_DEFAULT_STATE)
   - Start date: locations[i].start_date
     datatype: date
-  - End date: locations[i].end_date 
+  - End date (or today's date): locations[i].end_date 
     datatype: date
   - All people that lived with your child/children: locations[i].housemates
     maxlength: 30
@@ -413,13 +436,7 @@ fields:
     show if: child_custody["knowledge"]
     input type: area
     maxlength: 300
----
-id: property agreement
-question: |
-  Do you and your spouse already have an agreement about how to deal with your property and debts?
-fields:
-  - no label: have_property_agreement
-    datatype: yesnoradio
+
 --- 
 id: earlier actions
 question: |
