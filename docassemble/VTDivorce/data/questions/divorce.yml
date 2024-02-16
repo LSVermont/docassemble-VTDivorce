@@ -287,6 +287,9 @@ fields:
   - Date you moved to Vermont: date_plaintiff_moved_to_VT
     datatype: date
     show if: plaintiff_VT
+validation code: |
+  if plaintiff_VT and date_plaintiff_moved_to_VT >= today().minus(months=6):
+    validation_error("To get a divorce in Vermont, this date needs to be 6 months ago or more.", field="date_plaintiff_moved_to_VT")    
 ---
 id: defendant VT 6 months
 question: |
@@ -299,6 +302,9 @@ fields:
   - Date they moved to Vermont: date_defendant_moved_to_VT
     datatype: date  
     show if: defendant_VT
+validation code: |
+  if defendant_VT and date_defendant_moved_to_VT >= today().minus(months=6):
+    validation_error("To get a divorce in Vermont, this date needs to be 6 months ago or more.", field="date_defendant_moved_to_VT")
 ---
 id: marriage_or_civil_union_VT
 question: |
