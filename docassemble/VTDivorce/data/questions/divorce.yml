@@ -95,8 +95,6 @@ code: |
   
   license_type
   
-  grant_for
-  
   set_progress(48)
   
   filing_financial_form
@@ -233,48 +231,6 @@ code: |
 code: |
   earlier_RFA[i].action_type
   earlier_RFA[i].complete = True
----
-id: marriage or civil union
-question: |
-  Do you and ${ other_parties } have a marriage or civil union?
-fields:
-  - no label: license_type
-    input type: radio
-    choices: 
-      - Marriage: marriage
-      - Civil Union: civil_union
-  - Marriage city: marriage_city
-    show if: 
-      variable: license_type
-      is: marriage
-  - Marriage state: marriage_state
-    code: |
-      states_list()
-    default: VT
-    show if: 
-      variable: license_type
-      is: marriage
-  - Marriage date: marriage_date
-    datatype: date
-    show if: 
-      variable: license_type
-      is: marriage
-  - Civil Union city: civil_union_city
-    show if: 
-      variable: license_type
-      is: civil_union
-  - Civil Union state: civil_union_state
-    code: |
-      states_list()
-    default: VT
-    show if: 
-      variable: license_type
-      is: civil_union
-  - Civil Union date: civil_union_date
-    datatype: date
-    show if: 
-      variable: license_type
-      is: civil_union
 ---
 id: plaintiff VT 6 months
 question: |
@@ -731,16 +687,64 @@ fields:
   - "Are you filing form 400-00813B now?": filing_financial_form
     datatype: yesnoradio
 ---
-id: asking the court for 
+id: marriage or civil union
 question: |
-  What are you asking the court for?
+  Do you and ${ other_parties } have a marriage or civil union?
 fields:
+  - no label: license_type
+    input type: radio
+    choices: 
+      - Marriage: marriage
+      - Civil Union: civil_union
+  - Marriage city: marriage_city
+    show if: 
+      variable: license_type
+      is: marriage
+  - Marriage state: marriage_state
+    code: |
+      states_list()
+    default: VT
+    show if: 
+      variable: license_type
+      is: marriage
+  - Marriage date: marriage_date
+    datatype: date
+    show if: 
+      variable: license_type
+      is: marriage
+  - Civil Union city: civil_union_city
+    show if: 
+      variable: license_type
+      is: civil_union
+  - Civil Union state: civil_union_state
+    code: |
+      states_list()
+    default: VT
+    show if: 
+      variable: license_type
+      is: civil_union
+  - Civil Union date: civil_union_date
+    datatype: date
+    show if: 
+      variable: license_type
+      is: civil_union
+  - note: |
+      ###What are you asking the court for?
   - Asking for: grant_for
     input type: radio
     choices: 
       - Divorce: divorce
       - Legal Separation: legal_separation
+    show if: 
+      variable: license_type
+      is: marriage
+  - Asking for: grant_for
+    input type: radio
+    choices: 
       - Dissolution: dissolution
+    show if: 
+      variable: license_type
+      is: civil_union
   - On what grounds (for what reason)?: grounds
     input type: radio
     choices: 
@@ -773,7 +777,6 @@ fields:
     datatype: yesno
   - note: You must attach the written agreement to the forms that you file with the court. To qualify for the reduced filing fee, the attached agreement must cover all the issues that you seek to have the court resolve.
     show if: written_agreement_attached
-  
 ---
 id: asking the court for (with children)
 question: |  
