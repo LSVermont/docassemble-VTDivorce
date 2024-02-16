@@ -11,12 +11,13 @@ metadata:
   short title: >-
     Divorce
   description: |-
-    This interview helps someone in Vermont ask the court for a Divorce.
+    This interview helps someone in Vermont ask the court for a divorce, separation, or civil union dissolution.
   tags:
     - "FA-00-00-00-00"
   authors:
     - Mia Bonardi
     - Stavros Constantinou
+    - Legal Services Vermont
   original_form:
     - https://www.vermontjudiciary.org/sites/default/files/documents/400-00836NoKids_1.pdf
     - https://www.vermontjudiciary.org/sites/default/files/documents/400-00836Children.pdf
@@ -26,7 +27,7 @@ metadata:
   generated_on: "2023-07-25"
 ---
 code: |
-  interview_short_title = "Ask the court for a Divorce"
+  interview_short_title = "Ask the court for a divorce, separation or dissolution"
 ---
 code: |
   al_form_type = "starts_case" 
@@ -53,15 +54,18 @@ code: |
   user_role = "plaintiff"
   user_ask_role = "plaintiff"
   
-  if not plaintiff_VT: 
-    jurisdiction_kickout
-  if not defendant_VT:
-    jurisdiction_kickout
+  if not plaintiff_VT and not defendant_VT:
   
-    if not marriage_or_civil_union_VT and not both_cant_divorce_current_state and not have_property_agreement:
-    
+    if not marriage_or_civil_union_VT:
       jurisdiction_kickout
-        
+    if not both_cant_divorce_current_state:
+      jurisdiction_kickout
+    if not have_property_agreement:
+      jurisdiction_kickout
+    if have_school_age_children:
+      jurisdiction_kickout
+      
+  initial_screening_continue      
   users.gather()
   set_parts(subtitle=str(users))
   users[0].birthdate
@@ -85,19 +89,12 @@ code: |
     where_children_lived
     locations.gather()
     child_custody
-    parental_rights
+    child_medical_support
   else: 
     children.target_number = 0
   
   license_type
-  if license_type == 'marriage':
-    if marriage_state != 'Vermont':
-      jurisdiction_kickout
-      
-  if license_type == 'civil_union':    
-    if civil_union_state != 'Vermont':
-      jurisdiction_kickout
-      
+  
   grant_for
   
   set_progress(48)
@@ -125,6 +122,25 @@ code: |
   
   interview_order_divorce = True
 ---
+id: choose a court
+question: |
+  Choose a Family Court
+fields:
+  - note: |
+      Choose the county where you will file your forms. 
+      
+      It can be:
+      
+      * the county you live in, or
+      * the county the other person lives in (the "defendant"), or
+      * if you have children with the other person, it should be in the county in which the children spend the most time, or
+      * if you had a civil union, the county where your civil union took place. 
+    
+      
+      Not sure what county? [Check this list of cities and towns to find the county.](https://en.m.wikipedia.org/wiki/List_of_municipalities_in_Vermont#Cities)
+  - County: trial_court_index
+    code: all_courts._load_courts()['address_county'].items()
+---
 sets:
   - other_parties[i].name.first
   - other_parties[i].name.last
@@ -134,7 +150,7 @@ id: names of opposing parties
 question: |
   Name of the defendant in this matter
 subquestion: |
-  The other party is called the "defendant."
+  The other party (your spouse) is called the "defendant."
 fields:
   - code: |
       other_parties[i].name_fields(person_or_business='person')
@@ -143,7 +159,7 @@ id: jurisdiction kickout
 question: |
   Stop
 subquestion: |
-  <i class="fas fa-hand-paper fa-3x" aria-hidden="true"></i>  **Stop.** In this situation, these are **not** the right forms to fill out. **Do not use this interview.**
+  <i class="fas fa-hand-paper fa-3x" aria-hidden="true"></i> **Stop.** In this situation, these are **not** the right forms to fill out. **Do not use this interview.**
   
   Contact a lawyer or legal aid organization in the state where you live.
   
@@ -187,18 +203,16 @@ decoration: form-lineal
 question: |
   **${interview_short_title} in Vermont**
 subquestion: |  
-  <div class="border-around-text">
-  <p>Welcome to ${ AL_ORGANIZATION_TITLE}.</p>
-  
-  <p>${ AL_ORGANIZATION_TITLE } can help you complete and download forms in 3 steps:</p>
-  <ul><li><b>Step 1:</b> Answer questions that will fill in court forms for you.</li>
-  <li><b>Step 2:</b> Preview the completed forms.</li>
-  <li><b>Step 3:</b> Download, save or print the final forms. You will need to mail, email, efile or deliver them to the court on your own.</li></ul>
-  </div>  
 
-  VTCourtForms interviews were created by Legal Services Vermont with support from the Legal Services Corporation. It is free to use this program. This site is not a lawyer. Visit our [VTLawHelp.org website](https://vtlawhelp.org/roadmap/relief-from-abuse/step-1) for more information about Relief from Abuse orders.
+  <p>${ intro_vtcourtforms_3_steps }</p>
   
-  [FILE big_logo, 30%, Legal Services Vermont logo]
+  <i class="fas fa-file-text fa-2x"></i> This guided interview will produce an initial package of forms needed to ask the court for a divorce, separation, or civil union dissolution.
+  
+  <i class="fas fa-clock fa-2x"></i> It may take you over 1 hour to complete this interview.
+  
+  <i class="fas fa-circle-info fa-2x"></i> It is free to use this program. This site is not a lawyer. Visit our [VTLawHelp.org website](https://vtlawhelp.org/roadmap/divorce/step-1) for more information about divorce, separation, or civil union dissolution.
+
+  <p>${ intro_vtcourtforms_created_by }</p>
 
 fields:
   - To continue, please accept our [terms of use](https://vtlawhelp.org/vlh-privacy).: acknowledged_information_use
@@ -229,34 +243,34 @@ fields:
     choices: 
       - Marriage: marriage
       - Civil Union: civil_union
-  - Marriage City: marriage_city
+  - Marriage city: marriage_city
     show if: 
       variable: license_type
       is: marriage
-  - Marriage State: marriage_state
+  - Marriage state: marriage_state
     code: |
       states_list()
     default: VT
     show if: 
       variable: license_type
       is: marriage
-  - Marriage Date: marriage_date
+  - Marriage date: marriage_date
     datatype: date
     show if: 
       variable: license_type
       is: marriage
-  - Civil Union City: civil_union_city
+  - Civil Union city: civil_union_city
     show if: 
       variable: license_type
       is: civil_union
-  - Civil Union State: civil_union_state
+  - Civil Union state: civil_union_state
     code: |
       states_list()
     default: VT
     show if: 
       variable: license_type
       is: civil_union
-  - Civil Union Date: civil_union_date
+  - Civil Union date: civil_union_date
     datatype: date
     show if: 
       variable: license_type
@@ -264,43 +278,82 @@ fields:
 ---
 id: plaintiff VT 6 months
 question: |
+  See if this interview is right for your situation
+subquestion: |
   Have you lived in Vermont since ${ today().minus(months=6) }?
 fields:
   - no label: plaintiff_VT
     datatype: yesnoradio
-  - Date you moved to VT: date_plaintiff_moved_to_VT
+  - Date you moved to Vermont: date_plaintiff_moved_to_VT
     datatype: date
     show if: plaintiff_VT
+validation code: |
+  if plaintiff_VT and date_plaintiff_moved_to_VT >= today().minus(months=6):
+    validation_error("To get a divorce in Vermont, this date needs to be 6 months ago or more.", field="date_plaintiff_moved_to_VT")    
 ---
 id: defendant VT 6 months
 question: |
-  Has the defendant lived in Vermont since ${ today().minus(months=6) }?
+  See if this interview is right for your situation
+subquestion: |
+  Has your spouse lived in Vermont since ${ today().minus(months=6) }?
 fields:
   - no label: defendant_VT
     datatype: yesnoradio
-  - Date the defendant moved to VT: date_defendant_moved_to_VT
+  - Date they moved to Vermont: date_defendant_moved_to_VT
     datatype: date  
     show if: defendant_VT
+validation code: |
+  if defendant_VT and date_defendant_moved_to_VT >= today().minus(months=6):
+    validation_error("To get a divorce in Vermont, this date needs to be 6 months ago or more.", field="date_defendant_moved_to_VT")
 ---
 id: marriage_or_civil_union_VT
 question: |
-  Did you and your spouse get a marriage or civil union in VT?
+  See if this interview is right for your situation
+subquestion: |
+  Did you and your spouse get your marriage or civil union in Vermont?
 fields:
   - no label: marriage_or_civil_union_VT
     datatype: yesnoradio
 ---
 id: both_cant_divorce_current_state
 question: |
+  See if this interview is right for your situation
+subquestion: |
   Do you and your spouse currently live in states where you can't get a divorce or dissolve your civil union?
 fields:
   - no label: both_cant_divorce_current_state
     datatype: yesnoradio
 ---
+id: property agreement
+question: |
+  See if this interview is right for your situation
+subquestion: |
+  Do you and your spouse already have an agreement about how to deal with your property and debts?
+fields:
+  - no label: have_property_agreement
+    datatype: yesnoradio
+    
+---
+id: initial_screening_continue
+question: |
+  Continue
+subquestion: |
+  <i class="fas fa-check fa-3x" style="color: #429a3c;" aria-hidden="true"></i>  Yes, you can use this interview to fill out these forms. 
+  
+  Keep in mind, you can edit your answers after you preview the finished forms. You can also do that anytime by choosing Edit Your Answers in the Menu at the top-right of the page.
+  
+  You can also go to the Menu and quickly Exit and Delete Your Answers if you need to. And, you may choose to make a free account so you can store your answers online and come back to them later.
+  
+  Let's get started.
+continue button field: initial_screening_continue
+buttons:
+  - Start the interview: continue
+---
 id: have school age children
 question: |
   Children
 subquestion: |  
-  Do you and ${other_parties} have children who are either younger than 18 years old, or are 18 years old and still in high school? Include born or adopted children.  
+  Do you and the other party have children together who are either younger than 18 years old, or are 18 years old and still in high school? Include born or adopted children.  
 fields:
   - no label: have_school_age_children
     datatype: yesnoradio
@@ -344,7 +397,7 @@ code: |
 ---
 id: instructions for where children lived
 question: |
-  Where have your children lived in the past 5 years, and who did your children live with?
+  Where have your children lived in the past 5 years, and who did they live with?
 subquestion: |
   On the next screen, start with the most recent address. You'll be able to add other addresses as needed.
   
@@ -364,7 +417,7 @@ fields:
       locations[i].address_fields(country_code=AL_DEFAULT_COUNTRY, default_state=AL_DEFAULT_STATE)
   - Start date: locations[i].start_date
     datatype: date
-  - End date: locations[i].end_date 
+  - End date (or today's date): locations[i].end_date 
     datatype: date
   - All people that lived with your child/children: locations[i].housemates
     maxlength: 30
@@ -383,7 +436,9 @@ fields:
 ---
 id: child custody
 question: |
-  Custody: Check all statements that apply to you
+  Custody
+subquestion: |  
+  Check all statements that apply to you.
 fields: 
   - no label: child_custody
     datatype: checkboxes
@@ -404,27 +459,21 @@ fields:
     show if: child_custody["knowledge"]
     input type: area
     maxlength: 300
----
-id: property agreement
-question: |
-  Do you and your spouse already have an agreement about how to deal with your property and debts?
-fields:
-  - no label: have_property_agreement
-    datatype: yesnoradio
+
 --- 
 id: earlier actions
 question: |
-  Have you or the defendant filed for **divorce, legal separation, dissolution, or annulment** before filing this petition? 
+  Have you or the defendant filed for divorce, legal separation, dissolution or annulment **before** filing this form? 
 fields:
   - no label: earlier_actions_yes
     datatype: yesnoradio
-  - How many?: earlier_actions.target_number
+  - How many of these actions were filed?: earlier_actions.target_number
     datatype: integer
     show if: earlier_actions_yes
 ---
 id: earlier RFA actions
 question: |
-  Have either you or the defendant filed a **complaint for relief from abuse or a request for a protective order** against each other?
+  Have either you or the defendant filed a complaint for relief from abuse (RFA) or a request for a protective order against each other?
 fields:
   - no label: earlier_RFA_yes
     datatype: yesnoradio
@@ -432,12 +481,16 @@ fields:
     datatype: integer
     show if: earlier_RFA_yes
 ---
-id: collect earlier RFA actions
+id: collect earlier actions
 generic object: DAList
 question: |
+  % if hasattr(earlier_actions, 'ask_number') and earlier_actions.ask_number and earlier_actions.target_number == 1:
+  Tell us about what was filed.
+  % else:
   Tell us about the **${ ordinal(i) }** action.
+  % endif
 subquestion: |
-  Attach a copy of any Court Order issued.
+  If you got a court order, attach a copy of it to the forms that you file with the court.
 fields:
   - Type of action: earlier_actions[i].action_type
     datatype: radio
@@ -446,33 +499,37 @@ fields:
       - Legal separation
       - Dissolution
       - Annulment
-  - Who filed: earlier_actions[i].who_filed
+  - Who filed it?: earlier_actions[i].who_filed
     datatype: object_radio
     choices:
       - users
       - other_parties
-  - Where filed: earlier_actions[i].where_filed
-  - Year filed: earlier_actions[i].year_filed
+  - In what court, county and state?: earlier_actions[i].where_filed
+  - In what year?: earlier_actions[i].year_filed
 ---
 id: collect earlier RFA actions
 generic object: DAList
 question: |
+  % if hasattr(earlier_RFA, 'ask_number') and earlier_RFA.ask_number and earlier_RFA.target_number == 1:
+  Tell us about what was filed.
+  % else:
   Tell us about the **${ ordinal(i) }** action.
+  % endif
 subquestion: |
-  Attach a copy of any Court Order issued.
+  If you got a court order, attach a copy of it to the forms that you file with the court.
 fields:
   - Type of action: earlier_RFA[i].action_type
     datatype: radio
     choices: 
       - Relief from abuse 
       - Protective order
-  - Who filed: earlier_RFA[i].who_filed
+  - Who filed it?: earlier_RFA[i].who_filed
     datatype: object_radio
     choices:
       - users
       - other_parties
-  - Where filed: earlier_RFA[i].where_filed
-  - Year filed: earlier_RFA[i].year_filed
+  - In what court, county and state?: earlier_RFA[i].where_filed
+  - In what year?: earlier_RFA[i].year_filed
 ---
 generic object: DAList
 question: |
@@ -557,16 +614,18 @@ fields:
   - no label: user_resided_VT_6_months
     datatype: yesnoradio
 ---
-id: des assistance
+id: DES assistance
 question: |
-   Do you or ${ other_parties } receive assistance from the Division of Economic Services (DES) 
+   Do you or ${ other_parties } get assistance from the Vermont Division of Economic Services (DES)?
 subquestion: |
-  Examples include: Food Stamps and Reach Up.
+  Examples: Food stamps and Reach Up.
 fields: 
-  - I recieve DES assisance: plaintiff_des_assistance
+  - I get DES assistance: plaintiff_des_assistance
     datatype: yesno
-  - ${ other_parties } recieves DES assisance: defendant_des_assistance
+  - ${ other_parties } gets DES assistance: defendant_des_assistance
     datatype: yesno
+  - We don't get DES assistance: no_des_assistance
+    datatype: yesno  
 ---
 id: military service
 question: |
@@ -576,6 +635,8 @@ fields:
     datatype: yesno
   - ${ other_parties } served in the military: defendant_military_service
     datatype: yesno
+  - We have not served in the military: no_military_service
+    datatype: yesno  
 ---
 id: other parties attorney info
 question: |
@@ -650,15 +711,15 @@ fields:
 ---
 id: Why are you seeking x from the court
 question: |
-  What are your grounds for divorce?
+  What is your reason for getting a x?
 fields:
-  - "Six month separation": six_month_separation
+  - "We have been or will have lived separate and apart for more than 6 months in a row. It is not reasonably probable that we can resume our relationship. (Note - This is the most common reason.)": six_month_separation
     datatype: yesno
   - "Date of separation": separation_date
     datatype: date
-  - "Other ground divorce": other_ground_divorce
+  - "Other grounds (other reason)": other_ground_divorce
     datatype: yesno
-  - "Other ground divorce explanation": other_ground_divorce_explanation
+  - "Explain the other grounds": other_ground_divorce_explanation
     maxlength: 55
 ---
 id: filing_financial_form
@@ -680,21 +741,25 @@ fields:
       - Divorce: divorce
       - Legal Separation: legal_separation
       - Dissolution: dissolution
-  - On what grounds?: grounds
-    datatype: checkboxes
+  - On what grounds (for what reason)?: grounds
+    input type: radio
     choices: 
-      - Six month separation: six_month_separation
-      - Other ground divorce: other_ground
-    none of the above: False
+      - We have been or will have lived separate and apart for more than 6 months in a row. It is not reasonably probable that we can resume our relationship. (Note - This is the most common reason.): six_month_separation
+      - Other grounds (a different reason): other_ground
   - Date of separation: separation_date
     datatype: date
-    show if: grounds["six_month_separation"]
-  - Other ground divorce explanation: other_ground_explanation
-    show if: grounds["other_ground"]
-  - note: Other things you are asking the court for
-  - Property maintenance: property_maintenance
+    show if: 
+      variable: grounds
+      is: six_month_separation
+  - Describe the other grounds (different reason): other_ground_explanation
+    show if: 
+      variable: grounds
+      is: other_ground
+    maxlength: 60
+  - note: Other things you are asking the court for. Check all that apply.
+  - Divide our property, assets and debts: property_maintenance
     datatype: yesno
-  - Spousal maintenancee: spousal_maintenancee
+  - Spousal maintenancee (alimony): spousal_maintenancee
     datatype: yesno
   - Court costs: court_costs
     datatype: yesno
@@ -702,74 +767,89 @@ fields:
     datatype: yesno
   - Name change: name_change
     datatype: yesno
-  - Plaintiff former name: plaintiff_former_name
+  - I would like to go back to my former full name: plaintiff_former_name
     show if: name_change
-  - Issue an order with a written agreement between you and ${ other_parties }: written_agreement_attached
+  - I will attach a written agreement signed by me and ${ other_parties }. I ask the court to issue an order that includes the provisions in our written agreement. : written_agreement_attached
     datatype: yesno
-  - note: You must attach the written agreement. To qualify for the reduced filing fee, the attached agreement must cover all the issues that you seek to have the Court resolve.
+  - note: You must attach the written agreement to the forms that you file with the court. To qualify for the reduced filing fee, the attached agreement must cover all the issues that you seek to have the court resolve.
     show if: written_agreement_attached
   
 ---
 id: asking the court for (with children)
 question: |  
-  I ask that the court grant me
+  Custody, visitation and child support
+subquestion: |     
+  **I ask that the court grant me the following.**
 fields:
-  - Parental rights and responsibilities: parental_rights
-    datatype: yesno
-    required: False
+  - note: |
+      Parental rights and responsibilities:
+  #- Parental rights and responsibilities: parental_rights
+    #datatype: yesno
+    #required: False
   - Legal parental rights and responsibilities: legal_rights_responsibilities
     datatype: yesno
     required: False
-    show if: parental_rights
+    #css class: indent-me
+    #show if: parental_rights
   - Shared jointly: legal_shared_jointly
     datatype: yesno
     required: False
+    css class: indent-me
     show if: legal_rights_responsibilities
-  - Given solely: legal_given_solely
-    required: False
+
+  - Given only to myself: legal_myself
+    datatype: yesno
+    css class: indent-me
     show if: legal_rights_responsibilities
-    datatype: yesno  
-  - To myself: legal_myself
-    datatype: yesno
-    show if: legal_given_solely
     required: False
-  - To the defendant: legal_defendant
+  - Given only to the defendant: legal_defendant
     datatype: yesno
-    show if: legal_given_solely
+    css class: indent-me
+    show if: legal_rights_responsibilities
     required: False
   - Physical parental rights and responsibilities: physical_rights_responsibilities
     datatype: yesno
     required: False
-    show if: parental_rights
+    #show if: parental_rights
   - Shared jointly: physical_shared_jointly
     required: False
+    css class: indent-me
     datatype: yesno
     show if: physical_rights_responsibilities
-  - Given solely: physical_given_solely
+  - Given only to myself: physical_myself
     required: False
+    css class: indent-me
+    datatype: yesno
     show if: physical_rights_responsibilities
-    datatype: yesno
-  - To myself: physical_myself
+  - Given only to the defendant: physical_defendant
     required: False
+    css class: indent-me
     datatype: yesno
-    show if: physical_given_solely
-  - To the defendant: physical_defendant
-    required: False
-    datatype: yesno
-    show if: physical_given_solely
-    
-  - Parent Child Contact for: contact_for
-    datatype: yesno
+    show if: physical_rights_responsibilities
+  - note: |
+      ---
+  - note: |
+      Parent-child contact:  
+  #- Parent-child contact: contact_for
+    #datatype: yesno
   - Contact for myself: contact_for_myself
     datatype: yesno
-    show if: contact_for
+    css class: indent-me
+    #show if: contact_for
     required: False
   - Contact for the defendant: contact_for_defendant
     datatype: yesno
-    show if: contact_for
+    css class: indent-me
+    #show if: contact_for
     required: False
-  - Child support, medical support and/or maintenance supplement.: child_medical_support
+  - note: |
+      ---
+  - note: |
+      Support:
+  - Child support, medical support and/or maintenance supplement: child_medical_support
     datatype: yesno
+  - note: |
+      Check all that apply. Learn what these terms mean on the [VTLawHelp website.](https://vtlawhelp.org/custody-visitation)
 ---
 id: preview divorce
 question: |
