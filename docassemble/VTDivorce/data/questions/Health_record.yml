@@ -4,11 +4,11 @@ include:
 ---
 metadata:
   title: >-
-    Health record civil union
+    Health record 
   short title: >-
-    Health record civil union
+    Health record 
   description: |-
-    Health record civil union
+    Health record 
   tags: []
   authors:
     - Stavros Constantinou
@@ -123,21 +123,28 @@ code: |
   if not (plaintiff_VT and defendant_VT) or not marriage_or_civil_union_VT:
     jurisdiction_kickout
     
-  users.gather()
-  set_parts(subtitle=str(users))
-  set_progress(16)
+  if marriage_or_civil_union_VT == "civil union":
+    users[0].sex
+  if marriage_or_civil_union_VT == "marriage":
+    users[0].gender
+  users[0].birthdate
+  
   
   if marriage_or_civil_union_VT == "civil union": 
-    civil_union_state
-    
-  separation_date
-  minor_children_number
-  
-  if marriage_or_civil_union_VT == "marriage": 
+    users[0].sex
+  if marriage_or_civil_union_VT == "marriage":
+    users[0].gender
     marriage_state
     users_role
-    other_parties_role
     
+  set_parts(subtitle=str(users))
+  set_progress(16)
+    
+  if marriage_or_civil_union_VT == "civil union": 
+    civil_union_state
+  
+  separation_date
+  minor_children_number  
  
   decree_date
   type_of_decree
@@ -150,8 +157,22 @@ code: |
   set_progress(32)
   users[0].birthdate
   users[0].address.address
+  
+  if marriage_or_civil_union_VT == "marriage":
+    other_parties_role
+    
+  if marriage_or_civil_union_VT == "civil union":
+    other_parties[0].sex
+  if marriage_or_civil_union_VT == "marriage":
+    other_parties[0].gender
+    
   other_parties[0].birthdate
-  other_parties.gather()
+ 
+  if marriage_or_civil_union_VT == "civil union":
+    other_parties[0].sex
+  if marriage_or_civil_union_VT == "marriage":
+    other_parties[0].gender
+    
   set_progress(48)
   other_parties[0].address.address
   
@@ -296,7 +317,26 @@ fields:
   - Sex: users[0].sex
       
 ---
-id: users_name
+id: users_info_marriage
+sets:
+    - users[0].name.first
+    - users[0].name.last
+    - users[0].name.middle
+    - users[0].name.suffix
+question:  |
+  Information about you
+fields:
+  - code: |
+      users[0].name_fields()
+  - Maiden Surname: users[0].name_former
+    required: False
+  - Sex: users[0].gender
+    datatype: radio
+    choices: 
+      - Male: male
+      - Female: female
+---
+id: other_parties_info
 sets:
     - other_parties[0].name.first
     - other_parties[0].name.last
@@ -311,15 +351,26 @@ fields:
     required: False
   - Sex: other_parties[0].sex
 ---
-#  - "Type1": type1
-#    input type: radio
-#    choices:
-#      - 1: 1
-#  - "Type2": type2
-#    input type: radio
-#    choices:
-#      - 1: 1
-#---
+id: other_parties_info_marriage
+sets:
+    - other_parties[0].name.first
+    - other_parties[0].name.last
+    - other_parties[0].name.middle
+    - other_parties[0].name.suffix
+question:  |
+  Information about the other party
+fields:
+  - code: |
+      other_parties[0].name_fields()
+  - Maiden Surname: other_parties[0].name_former
+    required: False
+  - Gender: other_parties[0].gender
+    input type: radio
+    choices:
+      - Male: male
+      - Female: female
+
+---
 id: Users1 birthday
 question: |
   What is your date of birth?
@@ -501,7 +552,7 @@ code: |
   [user.address.address for user in users.complete_elements()]
   addresses_to_search = [user.address for user in users.complete_elements()]
 ---
-id: Health record civil union review screen
+id: Health record 
 event: review_Health_record_civil_union
 question: |
   Review your answers
