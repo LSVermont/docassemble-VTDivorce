@@ -183,7 +183,7 @@ code: |
 comment: |
   This block includes the logic for standalone interviews.
   Delete mandatory: True to include in another interview
-mandatory: True
+#mandatory: True
 code: |
   al_intro_screen
   interview_order_Health_record
@@ -198,15 +198,8 @@ code: |
   )
   Health_record_civil_union_download
 ---
-mandatory: True
-code: |
-  if marriage_or_civil_union_VT == "civil union":
-    Health_record_divorce_annulment_attachment.enabled = False
-    Health_record_civil_union_attachment.enabled = True
+
     
-  if marriage_or_civil_union_VT == "marriage":
-    Health_record_divorce_annulment_attachment.enabled = True
-    Health_record_civil_union_attachment.enabled = False
 ---
 id: basic questions intro screen
 decoration: form-lineal
@@ -669,127 +662,8 @@ subquestion: |
 
 progress: 100
 ---
-# ALDocument objects specify the metadata for each template
-objects:
-  - Health_record_divorce_annulment_attachment: ALDocument.using(title="Health record divorce annulment", filename="Health_record_divorce_annulment", has_addendum=False, )
-  - Health_record_civil_union_attachment: ALDocument.using(title="Health record civil union", filename="Health_record_civil_union", has_addendum=False, )
----
 # Bundles group the ALDocuments into separate downloads, such as for court and for the user
-objects:
-  - al_user_bundle: ALDocumentBundle.using(elements=[Health_record_civil_union_attachment, Health_record_divorce_annulment_attachment],filename="Health_record_civil_union", title="All forms to download for your records", enabled=True)
-  - al_court_bundle: ALDocumentBundle.using(elements=[Health_record_civil_union_attachment, Health_record_divorce_annulment_attachment],  filename="Health_record_civil_union", title="All forms to deliver to court", enabled=True)
----
-attachment:
-  name: Health record civil union
-  filename: Health_record_civil_union
-  variable name: Health_record_civil_union_attachment[i]
-  skip undefined: True
-  pdf template file: Health_record_civil_union.pdf
-  fields:
-      - "docket_number": ${ docket_number }
-      #- "FillText1a": ${ FillText1a }
-      - "users1_name": ${ users[0] }
-      - "users1_former_name": ${ users[0].name_former }
-      - "users1_sex": ${ users[0].sex }
-      - "users1_birth_month": ${ format_date(users[0].birthdate, format='M') }
-      - "users1_birth_day": ${ format_date(users[0].birthdate, format='dd') }
-      - "users1_birth_year": ${ format_date(users[0].birthdate, format='yyyy') }
-      - "users1_address_state": ${ users[0].address.state }
-      - "users1_address_city": ${ users[0].address.city }
-      - "other_parties1_name": ${ other_parties[0].name }
-      - "other_parties1_sex": ${ other_parties[0].sex }
-      - "users1_attorneys_address": ${ users[0].attorneys[0].address.on_one_line() }
-      - "users1_attorneys_name": ${users[0].attorneys[0].name}
-      - "other_parties1_former_name": ${ other_parties[0].name_former }
-      - "other_parties1_birth_month": ${ format_date(other_parties[0].birthdate, format='M') }
-      - "other_parties1_birth_day": ${ format_date(other_parties[0].birthdate, format='dd') }
-      - "other_parties1_birth_year": ${ format_date(other_parties[0].birthdate, format='yyyy') }
-      - "other_parties1_address_state": ${ other_parties[0].address.state }
-      - "other_parties1_address_city": ${ other_parties[0].address.city }
-      - "civil_union_state": ${ civil_union_state }
-      - "civil_union_city": ${ civil_union_city }
-      - "civil_union_date_month": ${ format_date(civil_union_date, format='M') }
-      - "civil_union_date_day": ${ format_date(civil_union_date, format='dd') }
-      - "civil_union_date_year": ${ format_date(civil_union_date, format='yyyy') }
-      - "minor_children_number": ${ minor_children_number }
-      - "type_of_decree": True
-      - "type1": ${ type_of_decree == "type1" }
-      - "type2": ${ type_of_decree == "type2" }
-      - "decree_date_month": ${ format_date(decree_date, format='M') }
-      - "decree_date": ${ format_date(decree_date, format='dd') }
-      - "decree_date_year": ${ format_date(decree_date, format='yyyy') }
-      - "decree_county": ${ decree_county }
-      - "signature_date_month": ${ format_date(signature_date, format='M') }
-      - "signature_date": ${  format_date(signature_date, format='dd') }
-      - "signature_date_year": ${ format_date(signature_date, format='yyyy') }
-      - "separation_date_month": ${ format_date(separation_date, format='M') }
-      - "separation_date_day": ${ format_date(separation_date, format='dd') }
-      - "separation_date_year": ${ format_date(separation_date, format='yyyy') }
-      - "legal_grounds": ${ legal_grounds }
-      - "court_manager": ${ court_manager }
-      - "no_attorney_involved": True
-      - "no_attorney_involved": ${no_attorney_involved == no_attorney_involved}
+#objects:
+#  - al_user_bundle: ALDocumentBundle.using(elements=[Health_record_civil_union_attachment, Health_record_divorce_annulment_attachment],filename="Health_record_civil_union", title="All forms to download for your records", enabled=True)
+#  - al_court_bundle: ALDocumentBundle.using(elements=[Health_record_civil_union_attachment, Health_record_divorce_annulment_attachment],  filename="Health_record_civil_union", title="All forms to deliver to court", enabled=True)
 
----
-attachment:
-  name: Health record divorce annulment
-  filename: Health_record_divorce_annulment
-  variable name: Health_record_divorce_annulment_attachment[i]
-  skip undefined: True
-  pdf template file: Health_record_divorce_annulment.pdf
-  fields:
-      - "docket_number": ${ docket_number }
-      - "users1_name": ${ users[0] }
-      - "users1_former_name": ${ users[0].name_former }
-      - "users_role": True
-      - "users1_role_husband": ${ users_role == "husband" }
-      - "users1_role_wife": ${ users_role == "wife" }
-      - "users1_role_spouse": ${ users_role == "spouse" }
-      - "other_parties_role": True
-      - "other_parties1_role_husband": ${ other_parties_role == "husband" }
-      - "other_parties1_role_wife": ${ other_parties_role == "wife" }
-      - "other_parties1_role_spouse": ${ other_parties_role == "spouse" }
-      - "users[0].gender": True
-      - "users1_gender_female": ${ users[0].gender == "female" }
-      - "users1_gender_male": ${ users[0].gender == "male" }
-      - "other_parties[0].gender": True
-      - "other_parties1_gender_female": ${ other_parties[0].gender == "female" }
-      - "other_parties1_gender_male": ${ other_parties[0].gender == "male" }
-      - "users1_birth_month": ${ format_date(users[0].birthdate, format='M') }
-      - "users1_birth_day": ${ format_date(users[0].birthdate, format='dd') }
-      - "users1_birth_year": ${ format_date(users[0].birthdate, format='yyyy') }
-      - "users1_address_state": ${ users[0].address.state }
-      - "users1_address_city": ${ users[0].address.city }
-      - "other_parties1_name": ${ other_parties[0].name }
-      - "other_parties1_sex": ${ other_parties[0].sex }
-      - "users1_attorneys_address": ${ users[0].attorneys[0].address.on_one_line() }
-      - "users1_attorneys_name": ${users[0].attorneys[0].name}
-      - "other_parties1_former_name": ${ other_parties[0].name_former }
-      - "other_parties1_birth_month": ${ format_date(other_parties[0].birthdate, format='M') }
-      - "other_parties1_birth_day": ${ format_date(other_parties[0].birthdate, format='dd') }
-      - "other_parties1_birth_year": ${ format_date(other_parties[0].birthdate, format='yyyy') }
-      - "other_parties1_address_state": ${ other_parties[0].address.state }
-      - "other_parties1_address_city": ${ other_parties[0].address.city }
-      - "marriage_state": ${ marriage_state }
-      - "marriage_city": ${ marriage_city }
-      - "marriage_date_month": ${ format_date(marriage_date, format='M') }
-      - "marriage_date_day": ${ format_date(marriage_date, format='dd') }
-      - "marriage_date_year": ${ format_date(marriage_date, format='yyyy') }
-      - "minor_children_number": ${ minor_children_number }
-      - "no_attorney_involved": True
-      - "no_attorney_involved": ${no_attorney_involved == no_attorney_involved}
-      - "type_of_decree": True
-      - "type1": ${ type_of_decree == "type1" }
-      - "type2": ${ type_of_decree == "type2" }
-      - "decree_date_month": ${ format_date(decree_date, format='M') }
-      - "decree_date": ${ format_date(decree_date, format='dd') }
-      - "decree_date_year": ${ format_date(decree_date, format='yyyy') }
-      - "decree_county": ${ decree_county }
-      - "signature_date_month": ${ format_date(signature_date, format='M') }
-      - "signature_date": ${  format_date(signature_date, format='dd') }
-      - "signature_date_year": ${ format_date(signature_date, format='yyyy') }
-      - "separation_date_month": ${ format_date(separation_date, format='M') }
-      - "separation_date_day": ${ format_date(separation_date, format='dd') }
-      - "separation_date_year": ${ format_date(separation_date, format='yyyy') }
-      - "legal_grounds": ${ legal_grounds }
-      - "court_manager": ${ court_manager }
