@@ -171,10 +171,12 @@ subquestion: |
   4. You and your spouse already have an agreement about how to deal with your property and debts.
   
   See the [Divorce Roadmap on the VTLawHelp.org website](https://vtlawhelp.org/roadmap/divorce/step-1) to find out what is required for you to be able to file for a divorce, separation or civil union dissolution in Vermont.
+  
+  [Go to the VTLawHelp.org website.](https://vtlawhelp.org/roadmap/divorce/step-1)
 continue button field: jurisdiction_kickout
 buttons:
-  - Exit: exit
-    url: https://vtlawhelp.org
+  - DELETE your answers and go to the VTLawHelp website: exit
+    url: https://vtlawhelp.org/roadmap/divorce/step-1
 ---
 ###################### Main order ######################
 comment: |
@@ -184,7 +186,6 @@ mandatory: True
 code: |
   al_intro_screen
   interview_order_divorce
-  signature_date
   # Store anonymous data for analytics / statistics
   store_variables_snapshot(
       persistent=True,
@@ -194,6 +195,7 @@ code: |
       },
   )
   divorce_preview_question
+  signature_date
   al_form_requires_digital_signature = False
   basic_questions_signature_flow    
   
