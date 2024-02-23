@@ -192,6 +192,7 @@ code: |
       },
   )
   divorce_preview_question
+  al_form_requires_digital_signature = False
   basic_questions_signature_flow    
   
   divorce_download
@@ -248,6 +249,8 @@ question: |
 subquestion: |
   Have you lived in Vermont since ${ today().minus(months=6) }?
 fields:
+  - note: |
+      ${ collapse_template(asterisk) }
   - no label: plaintiff_VT
     datatype: yesnoradio
   - Date you moved to Vermont: date_plaintiff_moved_to_VT
@@ -872,10 +875,10 @@ subquestion: |
   
   ${ al_court_bundle.as_pdf(key='preview') }
 
-  Click the image to open it in a new tab. Click the "Edit answers" button
+  Click the image to open it in a new tab. Click the "Edit your answers" button
   to edit your answers.
 
-  ${ action_button_html(url_action('review_divorce'), label='Edit answers', color='info') }
+  ${ action_button_html(url_action('review_divorce'), label='Edit your answers', color='info') }
   
   Remember to come back to this window to continue and sign your form.
 continue button field: divorce_preview_question    
@@ -894,6 +897,9 @@ id: divorce no kids review screen
 event: review_divorce
 question: |
   Review your answers
+subquestion: |  
+  ${ review_screen_instructions }
+  
 review:
   - Edit: docket_number
     button: |
@@ -1227,19 +1233,22 @@ confirm: True
 id: download divorce
 event: divorce_download
 question: |
-  All done
+  Review your forms and download and/or print them
 subquestion: |
-  Thank you ${users}. Your form is ready to download and deliver.
-  
-  View, download and send your form below. Click the "Edit answers" button to fix any mistakes.
+  ${ download_screen_instructions }
 
-  ${ action_button_html(url_action('review_divorce'), label='Edit answers', color='info') }
+  ${ action_button_html(url_action('review_divorce'), label='Edit your answers', color='info') }
   
   
   ${ al_user_bundle.download_list_html() }
   
 
   ${ al_user_bundle.send_button_html(show_editable_checkbox=False) }
+  
+  ${ download_screen_bottom_instructions }
+  
+  ${ collapse_template(not_seeing_email) }
+  ${ collapse_template(log_out_when_done) }
 
 progress: 100
 ---
