@@ -1,13 +1,12 @@
 ---
 include:
   - docassemble.AssemblyLine:assembly_line.yml
-  - docassemble.ALAnyState:any_state.yml
   - docassemble.ALToolbox:phone-number-validation.yml
   - docassemble.VTSharedYMLFile:VTSharedYMLFile.yml
 ---
 metadata:
   title: >-
-    Divorce
+    Divorce / Separation / Dissolution
   short title: >-
     Divorce
   description: |-
@@ -19,6 +18,7 @@ metadata:
     - Stavros Constantinou
     - Legal Services Vermont
   original_form:
+    - https://vtlawhelp.org/roadmap/divorce/step-3
     - https://www.vermontjudiciary.org/sites/default/files/documents/400-00836NoKids_1.pdf
     - https://www.vermontjudiciary.org/sites/default/files/documents/400-00836Children.pdf
   allowed_courts: []
@@ -27,7 +27,7 @@ metadata:
   generated_on: "2023-07-25"
 ---
 code: |
-  interview_short_title = "Ask the court for a divorce, separation or dissolution"
+  interview_short_title = "Ask the court for a divorce, separation or civil union dissolution"
 ---
 code: |
   al_form_type = "starts_case" 
@@ -204,7 +204,17 @@ subquestion: |
 
   <p>${ intro_vtcourtforms_3_steps }</p>
   
-  <i class="fas fa-file-text fa-2x"></i> This guided interview will produce an initial package of forms needed to ask the court for a divorce, separation, or civil union dissolution.
+  <i class="fas fa-file-text fa-2x"></i> This guided interview will produce an initial package of forms needed to ask the court for a divorce, separation, or civil union dissolution. You can use this interview whether you have kids or not.
+  
+  This interview produces the following forms:
+  
+  * Summons and Complaint for a Divorce / Separation / Dissolution - form 400-00836
+  * Notice of Appearance for Self-Represented Party - form 400-00831
+  * Certificate of Service - form 600-00264
+  * Family Court Information Form - form 800
+  * Department of Health Record of Divorce or Dissolution
+  
+  When you give these forms to the court, it is **only the first step** in the process to getting a divorce, separation, or civil union dissolution.
   
   <i class="fas fa-clock fa-2x"></i> It may take you over 1 hour to complete this interview.
   
@@ -1390,9 +1400,9 @@ attachment:
       - "earlier_RFA_actions_type3": ${ earlier_RFA[2].action_type }
       - "earlier_RFA_year_filed3": ${ earlier_RFA[2].year_filed }
       - "defendant_military_service": ${ defendant_military_service }
-      - "defendant_no_military_service": ${ defendant_no_military_service }
+      - "defendant_no_military_service": ${ not defendant_no_military_service }
       - "plaintiff_military_service": ${ plaintiff_military_service }
-      - "plaintiff_no_military_service": ${ plaintiff_no_military_service }
+      - "plaintiff_no_military_service": ${ not plaintiff_no_military_service }
       - "divorce_decree": ${ grant_for == "divorce" }
       - "legal_separation_decree": ${ grant_for == "legal_separation" }
       - "dissolution_decree": ${ grant_for == "dissolution" }
@@ -1542,9 +1552,9 @@ attachment:
       - "earlier_RFA_actions_type3": ${ earlier_RFA[2].action_type }
       - "earlier_RFA_year_filed3": ${ earlier_RFA[2].year_filed }
       - "defendant_military_service": ${ defendant_military_service }
-      - "defendant_no_military_service": ${ defendant_no_military_service }
+      - "defendant_no_military_service": ${ not defendant_no_military_service }
       - "plaintiff_military_service": ${ plaintiff_military_service }
-      - "plaintiff_no_military_service": ${ plaintiff_no_military_service }
+      - "plaintiff_no_military_service": ${ not plaintiff_no_military_service }
       - "divorce_decree": ${ grant_for == "divorce" }
       - "legal_separation_decree": ${ grant_for == "legal_separation" }
       - "dissolution_decree": ${ grant_for == "dissolution" }
