@@ -132,7 +132,7 @@ fields:
       * the county you live in, or
       * the county the other person lives in (the "defendant"), or
       * if you have children with the other person, it should be in the county in which the children spend the most time, or
-      * if you had a civil union, the county where your civil union took place. 
+      * if you had a civil union, it can be the county where your civil union took place. 
     
       
       Not sure what county? [Check this list of cities and towns to find the county.](https://en.m.wikipedia.org/wiki/List_of_municipalities_in_Vermont#Cities)
@@ -454,9 +454,9 @@ id: collect earlier actions
 generic object: DAList
 question: |
   % if hasattr(earlier_actions, 'ask_number') and earlier_actions.ask_number and earlier_actions.target_number == 1:
-  Tell us about what was filed.
+  Tell us about what was filed
   % else:
-  Tell us about the **${ ordinal(i) }** action.
+  Tell us about the **${ ordinal(i) }** action
   % endif
 subquestion: |
   If you got a court order, attach a copy of it to the forms that you file with the court.
@@ -473,16 +473,16 @@ fields:
     choices:
       - users
       - other_parties
-  - In what court, county and state? Example":" Family, Orleans, VT: earlier_actions[i].where_filed
+  - In what court, county and state? Example -- Family, Orleans, VT: earlier_actions[i].where_filed
   - In what year?: earlier_actions[i].year_filed
 ---
 id: collect earlier RFA actions
 generic object: DAList
 question: |
   % if hasattr(earlier_RFA, 'ask_number') and earlier_RFA.ask_number and earlier_RFA.target_number == 1:
-  Tell us about what was filed.
+  Tell us about what was filed
   % else:
-  Tell us about the **${ ordinal(i) }** action.
+  Tell us about the **${ ordinal(i) }** action
   % endif
 subquestion: |
   If you got a court order, attach a copy of it to the forms that you file with the court.
@@ -497,7 +497,7 @@ fields:
     choices:
       - users
       - other_parties
-  - In what court, county and state? Example":" Family, Orleans, VT: earlier_RFA[i].where_filed
+  - In what court, county and state? Example -- Family, Orleans, VT: earlier_RFA[i].where_filed
   - In what year?: earlier_RFA[i].year_filed
 ---
 generic object: DAList
@@ -547,7 +547,7 @@ id: Gather users contact information
 question: |
   What is your contact information?
 subquestion: |
-  Include at least **one way** to reach you. 
+  Include **at least one way** to reach you. 
 fields:  
   - Daytime phone number: users[0].daytime_phone_number
     datatype: al_international_phone
@@ -623,7 +623,7 @@ id: Gather other parties contact information
 question: |
   What is ${ other_parties[0] }'s contact information?
 subquestion: |
-  Include at least **one way** to reach them. 
+  Include **at least one way** to reach them. 
 fields:  
   - Daytime phone number: other_parties[0].daytime_phone_number
     datatype: al_international_phone
@@ -695,7 +695,7 @@ id: filing_financial_form
 question: |
   Are you also filing a completed financial form 400-00813B now?
 subquestion: |
-  On that form you will list all of the property, assets, and debts that you and ${ other_parties[0] } own together or separately that are known to you. You can file it now with the Complaint form, or file it at a later date.
+  On that form you will list all of the property, assets, and debts that you and ${ other_parties[0] } own together or separately that are known to you. You can file it now with the Complaint form, or file it at a later date. ([See the paper version of the form.](https://www.vermontjudiciary.org/media/926))
 fields:
   - "Are you filing form 400-00813B now?": filing_financial_form
     datatype: yesnoradio
