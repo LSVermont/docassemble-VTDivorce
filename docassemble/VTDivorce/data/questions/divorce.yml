@@ -599,7 +599,7 @@ question: |
 fields: 
   - I served in the military: plaintiff_military_service
     datatype: yesno
-  - ${ other_parties } served in the military: defendant_military_service
+  - ${ other_parties } served in the military: other_parties1_military
     datatype: yesno
   - We have not served in the military: no_military_service
     datatype: yesno  
@@ -1071,10 +1071,10 @@ review:
     button: |
       **Defendant des assistance**:
       ${ word(yesno(defendant_des_assistance)) }
-  - Edit: defendant_military_service
+  - Edit: other_parties1_military
     button: |
       **Defendant military service**:
-      ${ word(yesno(defendant_military_service)) }
+      ${ word(yesno(other_parties1_military)) }
   - Edit: plaintiff_military_service
     button: |
       **Plaintiff military service**:
@@ -1399,10 +1399,10 @@ attachment:
       - "earlier_RFA_filer3": ${ earlier_RFA[2].who_filed }
       - "earlier_RFA_actions_type3": ${ earlier_RFA[2].action_type }
       - "earlier_RFA_year_filed3": ${ earlier_RFA[2].year_filed }
-      - "defendant_military_service": ${ defendant_military_service }
-      - "defendant_no_military_service": ${ not defendant_no_military_service }
+      - "defendant_military_service": ${ other_parties1_military }
+      - "defendant_no_military_service": ${ not other_parties1_military }
       - "plaintiff_military_service": ${ plaintiff_military_service }
-      - "plaintiff_no_military_service": ${ not plaintiff_no_military_service }
+      - "plaintiff_no_military_service": ${ not plaintiff_military_service }
       - "divorce_decree": ${ grant_for == "divorce" }
       - "legal_separation_decree": ${ grant_for == "legal_separation" }
       - "dissolution_decree": ${ grant_for == "dissolution" }
@@ -1551,10 +1551,10 @@ attachment:
       - "earlier_RFA_filer3": ${ earlier_RFA[2].who_filed }
       - "earlier_RFA_actions_type3": ${ earlier_RFA[2].action_type }
       - "earlier_RFA_year_filed3": ${ earlier_RFA[2].year_filed }
-      - "defendant_military_service": ${ defendant_military_service }
-      - "defendant_no_military_service": ${ not defendant_no_military_service }
+      - "defendant_military_service": ${ other_parties1_military }
+      - "defendant_no_military_service": ${ not other_parties1_military }
       - "plaintiff_military_service": ${ plaintiff_military_service }
-      - "plaintiff_no_military_service": ${ not plaintiff_no_military_service }
+      - "plaintiff_no_military_service": ${ not plaintiff_military_service }
       - "divorce_decree": ${ grant_for == "divorce" }
       - "legal_separation_decree": ${ grant_for == "legal_separation" }
       - "dissolution_decree": ${ grant_for == "dissolution" }
