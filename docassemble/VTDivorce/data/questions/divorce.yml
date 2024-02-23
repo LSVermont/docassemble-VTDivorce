@@ -66,8 +66,6 @@ code: |
     if have_school_age_children:
       jurisdiction_kickout
   
-  interview_order_Health_record
-  
   initial_screening_continue      
   users.gather()
   set_parts(subtitle=str(users))
@@ -122,6 +120,8 @@ code: |
   docket_number
   
   trial_court
+  
+  interview_order_Health_record
   
   interview_order_divorce = True
 ---
@@ -316,10 +316,7 @@ subquestion: |
   Did you and your spouse get your marriage or civil union in Vermont?
 fields:
   - no label: marriage_or_civil_union_VT
-    datatype: radio
-    choices: 
-      - Marriage: marriage
-      - Civil Union: civil union
+    datatype: yesnoradio
 ---
 id: both_cant_divorce_current_state
 question: |
@@ -1276,7 +1273,6 @@ objects:
   
   - al_court_bundle: ALDocumentBundle.using(elements=[divorce_with_kids_attachment, divorce_no_kids_attachment,Health_record_civil_union_attachment, Health_record_divorce_annulment_attachment],  filename="divorce_with_kids", title="All forms to deliver to court", enabled=True)
 ---
-mandatory: True
 code: |
   if have_school_age_children:
     divorce_with_kids_attachment.enabled = True
@@ -1285,13 +1281,12 @@ code: |
     divorce_with_kids_attachment.enabled = False
     divorce_no_kids_attachment.enabled = True
 ---
-mandatory: True
 code: |
-  if marriage_or_civil_union_VT == "civil union":
+  if license_type == "civil union":
     Health_record_civil_union_attachment.enabled = True
     Health_record_divorce_annulment_attachment.enabled = False
     
-  if marriage_or_civil_union_VT == "marriage":
+  if license_type == "marriage":
     Health_record_divorce_annulment_attachment.enabled = True
     Health_record_civil_union_attachment.enabled = False
 ---

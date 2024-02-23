@@ -119,9 +119,6 @@ code: |
   
   user_role = "plaintiff"
   user_ask_role = "plaintiff"
-  
-  if not (plaintiff_VT and defendant_VT) or not marriage_or_civil_union_VT:
-    jurisdiction_kickout
     
   if marriage_or_civil_union_VT == "civil union":
     users[0].sex
