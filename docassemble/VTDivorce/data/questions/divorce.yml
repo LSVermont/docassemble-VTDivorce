@@ -54,6 +54,8 @@ code: |
   user_role = "plaintiff"
   user_ask_role = "plaintiff"
   
+  plaintiff_VT
+  defendant_VT
   if not plaintiff_VT and not defendant_VT:
   
     if not marriage_or_civil_union_VT:
