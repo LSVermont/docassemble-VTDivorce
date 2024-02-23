@@ -1313,7 +1313,7 @@ attachment:
       - "users1_name": ${ users[0].name }
       - "other_parties1_name": ${ other_parties[0] }
       - "users1_name1": ${ users[0].name }
-      - "users1_birthdate": ${ users[0].birthdate.format() }
+      - "users1_birthdate": ${ format_date(users[0].birthdate, format='M/d/yyyy') }
       - "users1_address_line_one": ${ users[0].address.line_one() }
       - "users1_address_line_two": ${ users[0].address.line_two() }
       - "users1_address_mailing_line_one": ${ users[0].mailing_address.line_one() }
@@ -1324,7 +1324,7 @@ attachment:
       - "users1_attorneys_name": ${ users1_attorneys_name }
       - "users1_attorneys_phone_numer": ${ users1_attorneys_phone_numer }
       - "other_parties1_name1": ${ other_parties[0].name }
-      - "other_parties1_birthdate": ${ other_parties[0].birthdate.format() }
+      - "other_parties1_birthdate": ${ format_date(other_parties[0].birthdate, format='M/d/yyyy') }
       - "other_parties1_address_line_one": ${ other_parties[0].address.line_one() }
       - "other_parties1_address_line_two": ${ other_parties[0].address.line_two() }
       - "other_parties1__mailing_address_line_one": ${ other_parties[0].mailing_address.line_one() }
@@ -1346,7 +1346,7 @@ attachment:
       - "users1_address_county": ${ users[0].address.county }
       - "users1_address_state": ${ users[0].address.state }
       - "plaintiff_VT": ${ plaintiff_VT }
-      - "date_plaintiff_moved_to_VT": ${ date_plaintiff_moved_to_VT }
+      - "date_plaintiff_moved_to_VT": ${ format_date(date_plaintiff_moved_to_VT, format='M/d/yyyy') }
       - "other_parties1_address_county": ${ other_parties[0].address.county }
       - "other_parties1_address_state": ${ other_parties[0].address.state }
       - "defendant_VT": ${ defendant_VT }
@@ -1354,7 +1354,7 @@ attachment:
       - "marriage": ${ license_type == "marriage" }
       - "marriage_state": ${ marriage_state }
       - "marriage_city": ${ marriage_city }
-      - "marriage_date": ${ marriage_date.format() }
+      - "marriage_date": ${ format_date(marriage_date, format='M/d/yyyy') }
       - "civil_union": ${ license_type == "civil_union" }
       - "civil_union_city": ${ civil_union_city }
       - "civil_union_state": ${ civil_union_state }
@@ -1428,7 +1428,7 @@ attachment:
       - "users1_name": ${ users[0].name }
       - "other_parties1_name": ${ other_parties[0] }
       - "users1_name1": ${ users[0].name }
-      - "users1_birthdate": ${ users[0].birthdate.format() }
+      - "users1_birthdate": ${ format_date(users[0].birthdate, format='M/d/yyyy') }
       - "users1_address_line_one": ${ users[0].address.line_one() }
       - "users1_address_line_two": ${ users[0].address.line_two() }
       - "users1_address_mailing_line_one": ${ users[0].mailing_address.line_one() }
@@ -1439,7 +1439,7 @@ attachment:
       - "users1_attorneys_name": ${ users1_attorneys_name }
       - "users1_attorneys_phone_numer": ${ users1_attorneys_phone_numer }
       - "other_parties1_name1": ${ other_parties[0].name }
-      - "other_parties1_birthdate": ${ other_parties[0].birthdate.format() }
+      - "other_parties1_birthdate": ${ format_date(other_parties[0].birthdate, format='M/d/yyyy') }
       - "other_parties1_address_line_one": ${ other_parties[0].address.line_one() }
       - "other_parties1_address_line_two": ${ other_parties[0].address.line_two() }
       - "other_parties1__mailing_address_line_one": ${ other_parties[0].mailing_address.line_one() }
@@ -1461,7 +1461,7 @@ attachment:
       - "users1_address_county": ${ users[0].address.county }
       - "users1_address_state": ${ users[0].address.state }
       - "plaintiff_VT": ${ plaintiff_VT }
-      - "date_plaintiff_moved_to_VT": ${ date_plaintiff_moved_to_VT }
+      - "date_plaintiff_moved_to_VT": ${ format_date(date_plaintiff_moved_to_VT, format='M/d/yyyy') }
       - "other_parties1_address_county": ${ other_parties[0].address.county }
       - "other_parties1_address_state": ${ other_parties[0].address.state }
       - "defendant_VT": ${ defendant_VT }
@@ -1469,7 +1469,7 @@ attachment:
       - "marriage": ${ license_type == "marriage" }
       - "marriage_state": ${ marriage_state }
       - "marriage_city": ${ marriage_city }
-      - "marriage_date": ${ marriage_date.format() }
+      - "marriage_date": ${ format_date(marriage_date, format='M/d/yyyy') }
       - "civil_union": ${ license_type == "civil_union" }
       - "civil_union_city": ${ civil_union_city }
       - "civil_union_state": ${ civil_union_state }
@@ -1495,7 +1495,7 @@ attachment:
       - "child_birthdate5": ${ children[4].birthdate }
      
       - "child_address1": ${ locations[0].address } 
-      - "child_date1": ${ locations[0].start_date } - ${ locations[0].end_date }
+      - "child_date1": ${ format_date(locations[0].start_date, format='M/d/yyyy') }-${ format_date(locations[0].end_date, format='M/d/yyyy') }
       - "child_housemate1": ${ locations[0].housemates }
       - "child_address2": ${ locations[1].address } 
       - "child_date2": ${ locations[1].start_date } - ${ locations[1].end_date }
