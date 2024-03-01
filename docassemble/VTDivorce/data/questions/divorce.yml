@@ -822,42 +822,24 @@ fields:
   - Legal parental rights and responsibilities: legal_rights_responsibilities
     datatype: yesno
     required: False
-    #css class: indent-me
-    #show if: parental_rights
-  - Shared jointly: legal_shared_jointly
-    datatype: yesno
-    required: False
+  - Choose one: lrr_choice
+    choices:
+    - Shared jointly: legal_shared_jointly
+    - Given only to myself: legal_myself
+    - Given only to the defendant: legal_defendant
+    input type: radio
     css class: indent-me
     show if: legal_rights_responsibilities
-
-  - Given only to myself: legal_myself
-    datatype: yesno
-    css class: indent-me
-    show if: legal_rights_responsibilities
-    required: False
-  - Given only to the defendant: legal_defendant
-    datatype: yesno
-    css class: indent-me
-    show if: legal_rights_responsibilities
-    required: False
   - Physical parental rights and responsibilities: physical_rights_responsibilities
     datatype: yesno
     required: False
-    #show if: parental_rights
-  - Shared jointly: physical_shared_jointly
-    required: False
+  - Choose one: prr_choice
+    choices:
+    - Shared jointly: physical_shared_jointly
+    - Given only to myself: physical_myself
+    - Given only to the defendant: physical_defendant
+    input type: radio
     css class: indent-me
-    datatype: yesno
-    show if: physical_rights_responsibilities
-  - Given only to myself: physical_myself
-    required: False
-    css class: indent-me
-    datatype: yesno
-    show if: physical_rights_responsibilities
-  - Given only to the defendant: physical_defendant
-    required: False
-    css class: indent-me
-    datatype: yesno
     show if: physical_rights_responsibilities
   - note: |
       ---
@@ -1033,55 +1015,77 @@ review:
     button: |
       **Date of separation**:
       ${ separation_date }
+      
+  - note: |
+      ###What you want in the order
   - Edit: legal_rights_responsibilities
     button: |
-      **Legal parental rights and responsibilities**:
+      % if legal_rights_responsibilities:
+      Legal parental rights and responsibilities:
       
-      % if legal_shared_jointly:
-      - Shared jointly: **${yesno(legal_shared_jointly)}**
-      % endif
+        % if lrr_choice == "legal_shared_jointly":
+        - **Shared jointly**
+        % endif
+        % if lrr_choice == "legal_myself":
+        - **Given solely to myself**
+        % endif
+        % if lrr_choice == "legal_defendant":
+        - **Given solely to the defendant**
+        % endif
+      % else:
+      Legal parental rights and responsibilities:
       
-      % if legal_myself:
-      - Given solely to myself: **${yesno(legal_myself)}**
-      % endif
-      
-      % if legal_defendant:
-      - Given solely to the defendant: **${yesno(legal_defendant)}**
+      - **None**
       % endif
   
   - Edit: physical_rights_responsibilities
     button: |
-      **Physical parental rights and responsibilities**:
+      % if physical_rights_responsibilities:
+      Physical parental rights and responsibilities:
       
-      % if physical_shared_jointly:
-      - Shared jointly: **${yesno(physical_shared_jointly)}**
-      % endif
+        % if prr_choice == "physical_shared_jointly":
+        - **Shared jointly**
+        % endif
+        % if prr_choice == "physical_myself":
+        - **Given solely to myself**
+        % endif
+        % if prr_choice == "physical_defendant":
+        - **Given solely to the defendant**
+        % endif
+      % else:
+      Physical parental rights and responsibilities:
       
-      % if legal_myself:
-      - Given solely to myself: **${yesno(physical_myself)}**
-      % endif
-      
-      % if legal_defendant:
-      - Given solely to the defendant: **${yesno(physical_defendant)}**
+      - **None**
       % endif
   
-  - Edit: contact_for
+  - Edit: contact_for_myself
     button: |
-      **Parent Child Contact**:
+      % if defined("contact_for_myself") and contact_for_myself:
+        % if defined("contact_for_defendant") and contact_for_defendant:
+        Parent-Child Contact:
+        
+        - **Contact for myself**
+        - **Contact for the defendant**
+        % else:
+        Parent-Child Contact:
       
-      % if contact_for_myself:
-      - Contact for myself: **${yesno(contact_for_myself)}**
-      % endif
+        - **Contact for myself**
+        % endif
+      % elif defined("contact_for_defendant") and contact_for_defendant:
+      Parent-Child Contact:
       
-      % if contact_for_defendant:
-      - Contact for the defendant: **${ yesno(contact_for_defendant)}**
+      - **Contact for the defendant**
+      % else:
+      Parent-Child Contact:
+      
+      - **None**      
       % endif
       
   - Edit: child_medical_support
     button: |
-      **Child support, medical support and/or maintenance supplement**:
+      Child support, medical support and/or maintenance supplement:
       
-      - ${yesno(child_medical_support)}
+      - **${yesno(child_medical_support)}**
   - Edit: filing_financial_form
     button: |
       **Filing financial form**:
@@ -1533,15 +1537,22 @@ attachment:
       - "participated_custody_child": ${ child_custody["participation"] }
       - "information_child": ${ child_custody["information"] }
       - "knowledge_custody_child": ${ child_custody["knowledge"] }
-      - "legal_shared_jointly": ${legal_shared_jointly}
-      - "legal_given_solely": ${legal_given_solely}
-      - "legal_myself": ${legal_myself}
-      - "legal_defendant": ${ legal_defendant }
-      - "physical_shared_jointly": ${physical_shared_jointly}
-      - "physical_given_solely": ${ physical_given_solely}
-      - "physical_myself": ${physical_myself}
-      - "physical_defendant": ${physical_defendant }
-      - "parental_rights": ${ parental_rights }    
+      - "parental_rights": ${ legal_rights_responsibilities or physical_rights_responsibilities }    
+      - "legal_shared_jointly": ${ lrr_choice == "legal_shared_jointly"}
+      - "legal_given_solely": |
+          % if lrr_choice == "legal_defendant" or lrr_choice == "legal_myself":
+          ${ True }
+          % endif
+      - "legal_myself": ${ lrr_choice == "legal_myself" }
+      - "legal_defendant": ${ lrr_choice == "legal_defendant" }
+      - "physical_shared_jointly": ${ prr_choice == "physical_shared_jointly" }
+      - "physical_given_solely": |
+          % if prr_choice == "physical_defendant" or prr_choice == "physical_myself":
+          ${ True }
+          % endif
+      - "physical_myself": ${ prr_choice == "physical_myself" }
+      - "physical_defendant": ${ prr_choice == "physical_defendant" }
+      - "contact_for": ${ contact_for_myself or contact_for_defendant }
       - "contact_for_myself": ${contact_for_myself}
       - "contact_for_defendant": ${ contact_for_defendant }
       - "child_medical_support": ${ child_medical_support }
