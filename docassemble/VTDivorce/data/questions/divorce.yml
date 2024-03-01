@@ -6,7 +6,7 @@ include:
 ---
 metadata:
   title: >-
-    Divorce / Separation / Dissolution
+    Divorce / separation / dissolution
   short title: >-
     Divorce
   description: |-
@@ -41,19 +41,24 @@ objects:
   - earlier_RFA: DAList.using(object_type=Thing, ask_number=True, complete_attribute='complete')
 ---
 sections:
-  - review_divorce: Review your answers
+  - intro: Introduction
+  - screening: Is this interview right for you
+  - about: About you
+  - defendant: About the defendant
+  - past_actions: Earlier court actions
+  - review_divorce: Edit your answers
+  - sign: Signature
+  - get_docs: Get your documents
 ---
 #################### Interview order #####################
 comment: |
   Controls order and branching logic for questions specific to this form
 id: interview_order_divorce
 code: |
-  # Set the allowed courts for this interview
-  allowed_courts = []
-  nav.set_section("review_divorce")
+  nav.set_section("intro")
   user_role = "plaintiff"
   user_ask_role = "plaintiff"
-  
+  nav.set_section("screening")
   plaintiff_VT
   defendant_VT
   if not plaintiff_VT and not defendant_VT:
@@ -67,7 +72,8 @@ code: |
     if have_school_age_children:
       jurisdiction_kickout
       
-  initial_screening_continue      
+  initial_screening_continue
+  nav.set_section("about")
   users.gather()
   set_parts(subtitle=str(users))
   users[0].birthdate
@@ -76,7 +82,7 @@ code: |
   user_has_attorney
 
   set_progress(16)
-  
+  nav.set_section("defendant")
   other_parties.gather()
   other_parties[0].birthdate
   other_parties[0].address.address
@@ -100,7 +106,7 @@ code: |
   set_progress(48)
   
   filing_financial_form
-  
+  nav.set_section("past_actions")
   if earlier_actions_yes: 
     earlier_actions.gather()
   else: 
@@ -150,7 +156,7 @@ id: names of opposing parties
 question: |
   Name of the defendant in this matter
 subquestion: |
-  The other party (your spouse) is called the "defendant."
+  Because you are starting this court case, you are called the "plaintiff." The other party (your spouse) is called the "defendant."
 fields:
   - code: |
       other_parties[i].name_fields(person_or_business='person')
@@ -194,11 +200,13 @@ code: |
           "reached_interview_end": True,
       },
   )
+  nav.set_section("review_divorce")
   divorce_preview_question
+  nav.set_section("sign")
   signature_date
   al_form_requires_digital_signature = False
   basic_questions_signature_flow    
-  
+  nav.set_section("get_docs")
   divorce_download
 ---
 id: basic questions intro screen
