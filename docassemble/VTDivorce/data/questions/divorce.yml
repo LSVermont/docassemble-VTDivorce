@@ -1015,55 +1015,77 @@ review:
     button: |
       **Date of separation**:
       ${ separation_date }
+      
+  - note: |
+      ###What you want in the order
   - Edit: legal_rights_responsibilities
     button: |
       % if legal_rights_responsibilities:
       Legal parental rights and responsibilities:
-      % if lrr_choice["legal_shared_jointly"]:
-      - **Shared jointly**
-      % endif
-      % if lrr_choice["legal_myself"]:
-      - **Given solely to myself**
-      % endif
-      % if lrr_choice["legal_defendant"]:
-      - **Given solely to the defendant**
-      % endif
+      
+        % if lrr_choice == "legal_shared_jointly":
+        - **Shared jointly**
+        % endif
+        % if lrr_choice == "legal_myself":
+        - **Given solely to myself**
+        % endif
+        % if lrr_choice == "legal_defendant":
+        - **Given solely to the defendant**
+        % endif
+      % else:
+      Legal parental rights and responsibilities:
+      
+      - **None**
       % endif
   
   - Edit: physical_rights_responsibilities
     button: |
       % if physical_rights_responsibilities:
       Physical parental rights and responsibilities:
-      % if prr_choice["physical_shared_jointly"]:
-      - **Shared jointly**
-      % endif
-      % if prr_choice["physical_myself"]:
-      - **Given solely to myself**
-      % endif
-      % if prr_choice["physical_defendant"]:
-      - **Given solely to the defendant**
-      % endif
+      
+        % if prr_choice == "physical_shared_jointly":
+        - **Shared jointly**
+        % endif
+        % if prr_choice == "physical_myself":
+        - **Given solely to myself**
+        % endif
+        % if prr_choice == "physical_defendant":
+        - **Given solely to the defendant**
+        % endif
+      % else:
+      Physical parental rights and responsibilities:
+      
+      - **None**
       % endif
   
-  - Edit: contact_for
+  - Edit: contact_for_myself
     button: |
-      % if contact_for:
-      Parent Child Contact:
+      % if defined("contact_for_myself") and contact_for_myself:
+        % if defined("contact_for_defendant") and contact_for_defendant:
+        Parent-Child Contact:
+        
+        - **Contact for myself**
+        - **Contact for the defendant**
+        % else:
+        Parent-Child Contact:
       
-      % if contact_for_myself:
-      - **Contact for myself**
-      % endif
+        - **Contact for myself**
+        % endif
+      % elif defined("contact_for_defendant") and contact_for_defendant:
+      Parent-Child Contact:
       
-      % if contact_for_defendant:
       - **Contact for the defendant**
-      % endif
+      % else:
+      Parent-Child Contact:
+      
+      - **None**      
       % endif
       
   - Edit: child_medical_support
     button: |
-      **Child support, medical support and/or maintenance supplement**:
+      Child support, medical support and/or maintenance supplement:
       
-      - ${yesno(child_medical_support)}
+      - **${yesno(child_medical_support)}**
   - Edit: filing_financial_form
     button: |
       **Filing financial form**:
