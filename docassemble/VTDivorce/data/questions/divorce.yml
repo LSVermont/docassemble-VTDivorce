@@ -822,42 +822,24 @@ fields:
   - Legal parental rights and responsibilities: legal_rights_responsibilities
     datatype: yesno
     required: False
-    #css class: indent-me
-    #show if: parental_rights
-  - Shared jointly: legal_shared_jointly
-    datatype: yesno
-    required: False
+  - Choose one: lrr_choice
+    choices:
+    - Shared jointly: legal_shared_jointly
+    - Given only to myself: legal_myself
+    - Given only to the defendant: legal_defendant
+    input type: radio
     css class: indent-me
     show if: legal_rights_responsibilities
-
-  - Given only to myself: legal_myself
-    datatype: yesno
-    css class: indent-me
-    show if: legal_rights_responsibilities
-    required: False
-  - Given only to the defendant: legal_defendant
-    datatype: yesno
-    css class: indent-me
-    show if: legal_rights_responsibilities
-    required: False
   - Physical parental rights and responsibilities: physical_rights_responsibilities
     datatype: yesno
     required: False
-    #show if: parental_rights
-  - Shared jointly: physical_shared_jointly
-    required: False
+  - Choose one: prr_choice
+    choices:
+    - Shared jointly: physical_shared_jointly
+    - Given only to myself: physical_myself
+    - Given only to the defendant: physical_defendant
+    input type: radio
     css class: indent-me
-    datatype: yesno
-    show if: physical_rights_responsibilities
-  - Given only to myself: physical_myself
-    required: False
-    css class: indent-me
-    datatype: yesno
-    show if: physical_rights_responsibilities
-  - Given only to the defendant: physical_defendant
-    required: False
-    css class: indent-me
-    datatype: yesno
     show if: physical_rights_responsibilities
   - note: |
       ---
