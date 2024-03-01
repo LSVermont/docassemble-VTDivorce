@@ -1282,7 +1282,7 @@ code: |
     divorce_no_kids_attachment.enabled = True
 ---
 code: |
-  if license_type == "civil union":
+  if license_type == "civil_union":
     Health_record_civil_union_attachment.enabled = True
     Health_record_divorce_annulment_attachment.enabled = False
     
@@ -1576,7 +1576,6 @@ attachment:
   pdf template file: Health_record_civil_union.pdf
   fields:
       - "docket_number": ${ docket_number }
-      #- "FillText1a": ${ FillText1a }
       - "users1_name": ${ users[0] }
       - "users1_former_name": ${ users[0].name_former }
       - "users1_sex": ${ users[0].sex }
