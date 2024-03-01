@@ -119,27 +119,12 @@ code: |
   
   user_role = "plaintiff"
   user_ask_role = "plaintiff"
+  
     
-  if marriage_or_civil_union_VT == "civil union":
-    users[0].sex
-  if marriage_or_civil_union_VT == "marriage":
-    users[0].gender
-  users[0].birthdate
-  
-  
-  if marriage_or_civil_union_VT == "civil union": 
-    users[0].sex
-  if marriage_or_civil_union_VT == "marriage":
-    users[0].gender
-    marriage_state
-    users_role
     
   set_parts(subtitle=str(users))
   set_progress(16)
     
-  if marriage_or_civil_union_VT == "civil union": 
-    civil_union_state
-  
   separation_date
   minor_children_number  
  
@@ -152,28 +137,15 @@ code: |
   signature_date
   docket_number
   set_progress(32)
-  users[0].birthdate
-  users[0].address.address
   
-  if marriage_or_civil_union_VT == "marriage":
-    other_parties_role
-    
-  if marriage_or_civil_union_VT == "civil union":
-    other_parties[0].sex
-  if marriage_or_civil_union_VT == "marriage":
-    other_parties[0].gender
+  
     
   other_parties[0].birthdate
- 
-  if marriage_or_civil_union_VT == "civil union":
-    other_parties[0].sex
-  if marriage_or_civil_union_VT == "marriage":
-    other_parties[0].gender
     
   set_progress(48)
-  other_parties[0].address.address
   
-  no_attorney_involved
+  
+  
   interview_order_Health_record = True
 ---
 ###################### Main order ######################
@@ -278,18 +250,18 @@ fields:
 validation code: |
   if defendant_VT and date_defendant_moved_to_VT >= today().minus(months=6):
     validation_error("To get a divorce in Vermont, this date needs to be 6 months ago or more.", field="date_defendant_moved_to_VT")
----
-id: marriage_or_civil_union_VT
-question: |
-  See if this interview is right for your situation
-subquestion: |
-  Did you and your spouse get your marriage or civil union in Vermont?
-fields:
-  - no label: marriage_or_civil_union_VT
-    datatype: radio
-    choices: 
-      - Marriage: marriage
-      - Civil Union: civil union
+#---
+#id: marriage_or_civil_union_VT
+#question: |
+#  See if this interview is right for your situation
+#subquestion: |
+#  Did you and your spouse get your marriage or civil union in Vermont?
+#fields:
+#  - no label: marriage_or_civil_union_VT
+#    datatype: radio
+#    choices: 
+#      - Marriage: marriage
+#      - Civil Union: civil union
 ---
 id: users_info
 sets:
@@ -438,6 +410,10 @@ fields:
     required: True
     show if: no_attorney_involved
     
+  - "Attorney's phone number": users1_attorneys_phone_numer
+    datatype: al_international_phone
+    show if: no_attorney_involved
+    
 #---
 #id: Filltext1a
 #question: |
@@ -503,6 +479,7 @@ question: |
   What county is the decree in
 fields:
   - County: decree_county
+    code: all_courts._load_courts()['address_county'].items()
 ---
 id: legal_grounds
 question: |
