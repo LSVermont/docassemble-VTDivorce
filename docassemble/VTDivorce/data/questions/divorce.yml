@@ -616,7 +616,7 @@ question: |
   Does ${ other_parties[0] } have a lawyer for this legal matter?
 fields:
   - no label: other_parties_has_attorney
-    datatype: yesnoradio
+    datatype: yesnomaybe
   - Attorney (lawyer) name: other_parties1_attorneys_name
     show if: other_parties_has_attorney
   - Attorney phone number: other_parties1_attorneys_phone_number
