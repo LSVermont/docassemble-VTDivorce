@@ -277,26 +277,37 @@ fields:
   - Maiden Surname: users[0].name_former
     required: False
   - Sex: users[0].sex
-      
----
-id: users_info_marriage
-sets:
-    - users[0].name.first
-    - users[0].name.last
-    - users[0].name.middle
-    - users[0].name.suffix
-question:  |
-  Information about you
-fields:
-  - code: |
-      users[0].name_fields()
-  - Maiden Surname: users[0].name_former
-    required: False
-  - Sex: users[0].gender
-    datatype: radio
-    choices: 
+    show if: 
+      code: |
+        license_type == "civil_union"
+  - Gender: users[0].gender
+    input type: radio
+    choices:
       - Male: male
       - Female: female
+    show if: 
+      code: |
+        license_type == "marriage"
+      
+---
+#id: users_info_marriage
+#sets:
+#    - users[0].name.first
+#    - users[0].name.last
+#    - users[0].name.middle
+#    - users[0].name.suffix
+#question:  |
+#  Information about you
+#fields:
+#  - code: |
+#      users[0].name_fields()
+#  - Maiden Surname: users[0].name_former
+#    required: False
+#  - Sex: users[0].gender
+#    datatype: radio
+#    choices: 
+#      - Male: male
+#      - Female: female
 ---
 id: other_parties_info
 sets:
@@ -312,25 +323,32 @@ fields:
   - Maiden Surname: other_parties[0].name_former
     required: False
   - Sex: other_parties[0].sex
----
-id: other_parties_info_marriage
-sets:
-    - other_parties[0].name.first
-    - other_parties[0].name.last
-    - other_parties[0].name.middle
-    - other_parties[0].name.suffix
-question:  |
-  Information about the other party
-fields:
-  - code: |
-      other_parties[0].name_fields()
-  - Maiden Surname: other_parties[0].name_former
-    required: False
+    show if: 
+      code: |
+        license_type == "civil_union"
   - Gender: other_parties[0].gender
     input type: radio
     choices:
       - Male: male
       - Female: female
+    show if: 
+      code: |
+        license_type == "marriage"
+---
+#id: other_parties_info_marriage
+#sets:
+#    - other_parties[0].name.first
+#    - other_parties[0].name.last
+#    - other_parties[0].name.middle
+#    - other_parties[0].name.suffix
+#question:  |
+#  Information about the other party
+#fields:
+#  - code: |
+#      other_parties[0].name_fields()
+#  - Maiden Surname: other_parties[0].name_former
+#    required: False
+
 
 ---
 id: Users1 birthday
@@ -342,7 +360,7 @@ fields:
 --- 
 id: Other party birthday
 question: | 
-  When is the birthdate of ${other_parties[0].name}
+  When is ${other_parties[0].name}'s birthdate?
 fields:
   - "Birthdate": other_parties[0].birthdate
     datatype: BirthDate
@@ -422,23 +440,6 @@ fields:
 #  - "Filltext1a": FillText1a
 #    maxlength: 19
 ---
-id: decree
-question: |
-  What date did this decree become final
-fields: 
-  - Date: decree_date
-    datatype: date
----
-id: type_of_decree
-question: |
-  What was the type of decree
-fields:
-  - no label: type_of_decree
-    input type: radio
-    choices:
-      - Absolute Dissolution: type1
-      - Annulment: type2
----
 id: marriage
 question: |
   Information about the marriage
@@ -472,26 +473,25 @@ fields:
       - "Husband": husband
       - "Wife": wife
       - "Spouse": spouse
-  
----
-id: decree_county
-question: |
-  What county is the decree in
-fields:
-  - County: decree_county
-    code: all_courts._load_courts()['address_county'].items()
 ---
 id: legal_grounds
 question: |
   Information about the decree
 fields:
-  - "What were the legal grounds for the decree": legal_grounds
-    datatype: area
-  - "Who was the court manager": court_manager
-    maxlength: 54
-  - "When was the decree signed": signature_date
+  - "What type of decree was it?": type_of_decree
+    input type: radio
+    choices:
+      - Absolute Dissolution: type1
+      - Annulment: type2
+  - "When did this decree become final?": decree_date
     datatype: date
-  
+  - "What were the legal grounds for the decree?": legal_grounds
+    datatype: area
+  - "What county is the decree in?": decree_county
+  - "Who was the court manager?": court_manager
+    maxlength: 54
+  - "When was the decree signed?": signature_date
+    datatype: date
 ---
 id: preview Health_record_civil_union
 question: |

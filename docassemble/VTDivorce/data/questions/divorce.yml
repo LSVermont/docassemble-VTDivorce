@@ -66,16 +66,12 @@ code: |
     if have_school_age_children:
       jurisdiction_kickout
   
-  initial_screening_continue      
+  initial_screening_continue 
+  license_type
+  
   users.gather()
-  if license_type == "civil_union":
-    users[0].sex
   if license_type == "marriage":
-    users[0].gender
-    marriage_state
     users_role
-  if license_type == "civil_union": 
-    civil_union_state
   set_parts(subtitle=str(users))
   users[0].birthdate
   users[0].address.address
@@ -87,11 +83,6 @@ code: |
   other_parties.gather()
   if license_type == "marriage":
     other_parties_role
-    
-  if license_type == "civil_union":
-    other_parties[0].sex
-  if license_type == "marriage":
-    other_parties[0].gender
   other_parties[0].birthdate
   other_parties[0].address.address
   other_parties[0].email
@@ -108,8 +99,6 @@ code: |
     child_medical_support
   else: 
     children.target_number = 0
-  
-  license_type
   
   grant_for
   
@@ -240,7 +229,7 @@ code: |
 ---
 id: marriage or civil union
 question: |
-  Do you and ${ other_parties } have a marriage or civil union?
+  Do you and your spouse have a marriage or civil union?
 fields:
   - no label: license_type
     input type: radio
