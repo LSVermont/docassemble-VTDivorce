@@ -1017,46 +1017,46 @@ review:
       ${ separation_date }
   - Edit: legal_rights_responsibilities
     button: |
-      **Legal parental rights and responsibilities**:
-      
-      % if legal_shared_jointly:
-      - Shared jointly: **${yesno(legal_shared_jointly)}**
+      % if legal_rights_responsibilities:
+      Legal parental rights and responsibilities:
+      % if lrr_choice["legal_shared_jointly"]:
+      - **Shared jointly**
       % endif
-      
-      % if legal_myself:
-      - Given solely to myself: **${yesno(legal_myself)}**
+      % if lrr_choice["legal_myself"]:
+      - **Given solely to myself**
       % endif
-      
-      % if legal_defendant:
-      - Given solely to the defendant: **${yesno(legal_defendant)}**
+      % if lrr_choice["legal_defendant"]:
+      - **Given solely to the defendant**
+      % endif
       % endif
   
   - Edit: physical_rights_responsibilities
     button: |
-      **Physical parental rights and responsibilities**:
-      
-      % if physical_shared_jointly:
-      - Shared jointly: **${yesno(physical_shared_jointly)}**
+      % if physical_rights_responsibilities:
+      Physical parental rights and responsibilities:
+      % if prr_choice["physical_shared_jointly"]:
+      - **Shared jointly**
       % endif
-      
-      % if legal_myself:
-      - Given solely to myself: **${yesno(physical_myself)}**
+      % if prr_choice["physical_myself"]:
+      - **Given solely to myself**
       % endif
-      
-      % if legal_defendant:
-      - Given solely to the defendant: **${yesno(physical_defendant)}**
+      % if prr_choice["physical_defendant"]:
+      - **Given solely to the defendant**
+      % endif
       % endif
   
   - Edit: contact_for
     button: |
-      **Parent Child Contact**:
+      % if contact_for:
+      Parent Child Contact:
       
       % if contact_for_myself:
-      - Contact for myself: **${yesno(contact_for_myself)}**
+      - **Contact for myself**
       % endif
       
       % if contact_for_defendant:
-      - Contact for the defendant: **${ yesno(contact_for_defendant)}**
+      - **Contact for the defendant**
+      % endif
       % endif
       
   - Edit: child_medical_support
@@ -1515,15 +1515,22 @@ attachment:
       - "participated_custody_child": ${ child_custody["participation"] }
       - "information_child": ${ child_custody["information"] }
       - "knowledge_custody_child": ${ child_custody["knowledge"] }
-      - "legal_shared_jointly": ${legal_shared_jointly}
-      - "legal_given_solely": ${legal_given_solely}
-      - "legal_myself": ${legal_myself}
-      - "legal_defendant": ${ legal_defendant }
-      - "physical_shared_jointly": ${physical_shared_jointly}
-      - "physical_given_solely": ${ physical_given_solely}
-      - "physical_myself": ${physical_myself}
-      - "physical_defendant": ${physical_defendant }
-      - "parental_rights": ${ parental_rights }    
+      - "parental_rights": ${ legal_rights_responsibilities or physical_rights_responsibilities }    
+      - "legal_shared_jointly": ${ lrr_choice == "legal_shared_jointly"}
+      - "legal_given_solely": |
+          % if lrr_choice == "legal_defendant" or lrr_choice == "legal_myself":
+          ${ True }
+          % endif
+      - "legal_myself": ${ lrr_choice == "legal_myself" }
+      - "legal_defendant": ${ lrr_choice == "legal_defendant" }
+      - "physical_shared_jointly": ${ prr_choice == "physical_shared_jointly" }
+      - "physical_given_solely": |
+          % if prr_choice == "physical_defendant" or prr_choice == "physical_myself":
+          ${ True }
+          % endif
+      - "physical_myself": ${ prr_choice == "physical_myself" }
+      - "physical_defendant": ${ prr_choice == "physical_defendant" }
+      - "contact_for": ${ contact_for_myself or contact_for_defendant }
       - "contact_for_myself": ${contact_for_myself}
       - "contact_for_defendant": ${ contact_for_defendant }
       - "child_medical_support": ${ child_medical_support }
