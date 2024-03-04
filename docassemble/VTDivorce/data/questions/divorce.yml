@@ -1042,15 +1042,15 @@ review:
     button: |
       **Date of civil union**:
       ${ civil_union_date }
-  - Edit: six_month_separation
+  - Edit: grounds
     button: |
-      **Six month separation**:
-      ${ word(yesno(six_month_separation)) }
-  - Edit: separation_date
-    button: |
-      **Date of separation**:
-      ${ separation_date }
+      Grounds:
       
+      % if grounds == "six_month_separation":
+      - **Six-month separation** -- Date of separation: ${ separation_date }
+      % else:
+      - **${ other_ground_explanation}**
+      % endif
   - note: |
       ###What you want in the order
   - Edit: legal_rights_responsibilities
