@@ -989,11 +989,13 @@ review:
       % endif
   - Edit: earlier_RFA.revisit
     button: |
-      **Earlier RFAs**
+      % if defined("earlier_RFA[0]"):
+        Earlier protection orders:
 
       % for item in earlier_RFA:
-        * ${ item }
+        - **${ item.action_type }**, in ${ item.year_filed }, filed by ${ item.who_filed }, in this court: ${ item.where_filed }
       % endfor
+      % endif
   - Edit: divorce
     button: |
       **Divorce**:
