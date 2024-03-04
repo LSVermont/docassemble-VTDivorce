@@ -1,14 +1,13 @@
 ---
 include:
   - docassemble.AssemblyLine:assembly_line.yml
-  - docassemble.ALAnyState:any_state.yml
   - docassemble.ALToolbox:phone-number-validation.yml
   - docassemble.VTSharedYMLFile:VTSharedYMLFile.yml
   - Health_record.yml
 ---
 metadata:
   title: >-
-    Divorce
+    Divorce / separation / dissolution
   short title: >-
     Divorce
   description: |-
@@ -20,6 +19,7 @@ metadata:
     - Stavros Constantinou
     - Legal Services Vermont
   original_form:
+    - https://vtlawhelp.org/roadmap/divorce/step-3
     - https://www.vermontjudiciary.org/sites/default/files/documents/400-00836NoKids_1.pdf
     - https://www.vermontjudiciary.org/sites/default/files/documents/400-00836Children.pdf
   allowed_courts: []
@@ -28,7 +28,7 @@ metadata:
   generated_on: "2023-07-25"
 ---
 code: |
-  interview_short_title = "Ask the court for a divorce, separation or dissolution"
+  interview_short_title = "Ask the court for a divorce, separation or civil union dissolution"
 ---
 code: |
   al_form_type = "starts_case" 
@@ -42,19 +42,27 @@ objects:
   - earlier_RFA: DAList.using(object_type=Thing, ask_number=True, complete_attribute='complete')
 ---
 sections:
-  - review_divorce: Review your answers
+  - intro: Introduction
+  - screening: Is this interview right for you
+  - about: About you
+  - defendant: About the defendant
+  - kids: About the children
+  - past_actions: Earlier court actions
+  - review_divorce: Edit your answers
+  - sign: Signature
+  - get_docs: Get your documents
 ---
 #################### Interview order #####################
 comment: |
   Controls order and branching logic for questions specific to this form
 id: interview_order_divorce
 code: |
-  # Set the allowed courts for this interview
-  allowed_courts = []
-  nav.set_section("review_divorce")
+  nav.set_section("intro")
   user_role = "plaintiff"
   user_ask_role = "plaintiff"
-  
+  nav.set_section("screening")
+  plaintiff_VT
+  defendant_VT
   if not plaintiff_VT and not defendant_VT:
   
     if not marriage_or_civil_union_VT:
@@ -69,6 +77,8 @@ code: |
   initial_screening_continue 
   license_type
   
+  nav.set_section("about")
+
   users.gather()
   if license_type == "marriage":
     users_role
@@ -79,7 +89,7 @@ code: |
   no_attorney_involved
 
   set_progress(16)
-  
+  nav.set_section("defendant")
   other_parties.gather()
   if license_type == "marriage":
     other_parties_role
@@ -91,6 +101,7 @@ code: |
   set_progress(32)
         
   if have_school_age_children: 
+    nav.set_section("kids")
     children.gather()
     #for child in children:
     where_children_lived
@@ -100,12 +111,14 @@ code: |
   else: 
     children.target_number = 0
   
+
   grant_for
+
   
   set_progress(48)
   
   filing_financial_form
-  
+  nav.set_section("past_actions")
   if earlier_actions_yes: 
     earlier_actions.gather()
   else: 
@@ -141,13 +154,28 @@ fields:
       * the county you live in, or
       * the county the other person lives in (the "defendant"), or
       * if you have children with the other person, it should be in the county in which the children spend the most time, or
-      * if you had a civil union, the county where your civil union took place. 
+      * if you had a civil union, it can be the county where your civil union took place. 
     
       
       Not sure what county? [Check this list of cities and towns to find the county.](https://en.m.wikipedia.org/wiki/List_of_municipalities_in_Vermont#Cities)
   - County: trial_court_index
     code: all_courts._load_courts()['address_county'].items()
 ---
+sets:
+  - other_parties[i].name.first
+  - other_parties[i].name.last
+  - other_parties[i].name.middle
+  - other_parties[i].name.suffix
+id: names of opposing parties
+question: |
+  Name of the defendant in this matter
+subquestion: |
+  Because you are starting this court case, you are called the "plaintiff." The other party (your spouse) is called the "defendant."
+fields:
+  - code: |
+      other_parties[i].name_fields(person_or_business='person')
+---
+
 id: jurisdiction kickout
 question: |
   Stop
@@ -164,10 +192,12 @@ subquestion: |
   4. You and your spouse already have an agreement about how to deal with your property and debts.
   
   See the [Divorce Roadmap on the VTLawHelp.org website](https://vtlawhelp.org/roadmap/divorce/step-1) to find out what is required for you to be able to file for a divorce, separation or civil union dissolution in Vermont.
+  
+  [Go to the VTLawHelp.org website.](https://vtlawhelp.org/roadmap/divorce/step-1)
 continue button field: jurisdiction_kickout
 buttons:
-  - Exit: exit
-    url: https://vtlawhelp.org
+  - DELETE your answers and go to the VTLawHelp website: exit
+    url: https://vtlawhelp.org/roadmap/divorce/step-1
 ---
 ###################### Main order ######################
 comment: |
@@ -177,7 +207,6 @@ mandatory: True
 code: |
   al_intro_screen
   interview_order_divorce
-  signature_date
   # Store anonymous data for analytics / statistics
   store_variables_snapshot(
       persistent=True,
@@ -186,9 +215,13 @@ code: |
           "reached_interview_end": True,
       },
   )
+  nav.set_section("review_divorce")
   divorce_preview_question
+  nav.set_section("sign")
+  signature_date
+  al_form_requires_digital_signature = False
   basic_questions_signature_flow    
-  
+  nav.set_section("get_docs")
   divorce_download
 ---
 id: basic questions intro screen
@@ -199,7 +232,17 @@ subquestion: |
 
   <p>${ intro_vtcourtforms_3_steps }</p>
   
-  <i class="fas fa-file-text fa-2x"></i> This guided interview will produce an initial package of forms needed to ask the court for a divorce, separation, or civil union dissolution.
+  <i class="fas fa-file-text fa-2x"></i> This guided interview will produce an initial package of forms needed to ask the court for a divorce, separation, or civil union dissolution. You can use this interview whether you have kids or not.
+  
+  This interview produces the following forms:
+  
+  * Summons and Complaint for a Divorce / Separation / Dissolution - form 400-00836
+  * Notice of Appearance for Self-Represented Party - form 400-00831
+  * Certificate of Service - form 600-00264
+  * Family Court Information Form - form 800
+  * Department of Health Record of Divorce or Dissolution
+  
+  When you give these forms to the court, it is **only the first step** in the process to getting a divorce, separation, or civil union dissolution.
   
   <i class="fas fa-clock fa-2x"></i> It may take you over 1 hour to complete this interview.
   
@@ -227,6 +270,7 @@ code: |
   earlier_RFA[i].action_type
   earlier_RFA[i].complete = True
 ---
+
 id: marriage or civil union
 question: |
   Do you and your spouse have a marriage or civil union?
@@ -275,6 +319,8 @@ question: |
 subquestion: |
   Have you lived in Vermont since ${ today().minus(months=6) }?
 fields:
+  - note: |
+      ${ collapse_template(asterisk) }
   - no label: plaintiff_VT
     datatype: yesnoradio
   - Date you moved to Vermont: date_plaintiff_moved_to_VT
@@ -478,9 +524,9 @@ id: collect earlier actions
 generic object: DAList
 question: |
   % if hasattr(earlier_actions, 'ask_number') and earlier_actions.ask_number and earlier_actions.target_number == 1:
-  Tell us about what was filed.
+  Tell us about what was filed
   % else:
-  Tell us about the **${ ordinal(i) }** action.
+  Tell us about the **${ ordinal(i) }** action
   % endif
 subquestion: |
   If you got a court order, attach a copy of it to the forms that you file with the court.
@@ -497,16 +543,16 @@ fields:
     choices:
       - users
       - other_parties
-  - In what court, county and state?: earlier_actions[i].where_filed
+  - In what court, county and state? Example -- Family, Orleans, VT: earlier_actions[i].where_filed
   - In what year?: earlier_actions[i].year_filed
 ---
 id: collect earlier RFA actions
 generic object: DAList
 question: |
   % if hasattr(earlier_RFA, 'ask_number') and earlier_RFA.ask_number and earlier_RFA.target_number == 1:
-  Tell us about what was filed.
+  Tell us about what was filed
   % else:
-  Tell us about the **${ ordinal(i) }** action.
+  Tell us about the **${ ordinal(i) }** action
   % endif
 subquestion: |
   If you got a court order, attach a copy of it to the forms that you file with the court.
@@ -521,7 +567,7 @@ fields:
     choices:
       - users
       - other_parties
-  - In what court, county and state?: earlier_RFA[i].where_filed
+  - In what court, county and state? Example -- Family, Orleans, VT: earlier_RFA[i].where_filed
   - In what year?: earlier_RFA[i].year_filed
 ---
 generic object: DAList
@@ -571,7 +617,7 @@ id: Gather users contact information
 question: |
   What is your contact information?
 subquestion: |
-  Include at least **one way** to reach you. 
+  Include **at least one way** to reach you. 
 fields:  
   - Daytime phone number: users[0].daytime_phone_number
     datatype: al_international_phone
@@ -614,7 +660,7 @@ question: |
 fields: 
   - I served in the military: plaintiff_military_service
     datatype: yesno
-  - ${ other_parties } served in the military: defendant_military_service
+  - ${ other_parties } served in the military: other_parties1_military
     datatype: yesno
   - We have not served in the military: no_military_service
     datatype: yesno  
@@ -624,7 +670,7 @@ question: |
   Does ${ other_parties[0] } have a lawyer for this legal matter?
 fields:
   - no label: other_parties_has_attorney
-    datatype: yesnoradio
+    datatype: yesnomaybe
   - Attorney (lawyer) name: other_parties1_attorneys_name
     show if: other_parties_has_attorney
   - Attorney phone number: other_parties1_attorneys_phone_number
@@ -635,7 +681,7 @@ id: Gather other parties contact information
 question: |
   What is ${ other_parties[0] }'s contact information?
 subquestion: |
-  Include at least **one way** to reach them. 
+  Include **at least one way** to reach them. 
 fields:  
   - Daytime phone number: other_parties[0].daytime_phone_number
     datatype: al_international_phone
@@ -659,18 +705,33 @@ sets:
 question: |
   What is ${ other_parties[0] }'s address?
 fields:
-  - Address: other_parties[0].address.address
+  - Defendant's address: other_parties[0].address
+    datatype: object_radio
+    choices:
+      - users[0].address if defined("users[0].address.address") else None
+    object labeler: |
+      lambda y: y.on_one_line()
+    none of the above: |
+      Somewhere else
+    default: users[0].address
+    disable others: True      
+    show if:
+      code: |
+        defined("users[0].address.address")
+  - ${ users[0].address.address_label}: other_parties[0].address.address
     address autocomplete: True
-  - Unit: other_parties[0].address.unit
+  - ${ users[0].address.unit_label}: other_parties[0].address.unit
     required: False
-  - City: other_parties[0].address.city
-  - State: other_parties[0].address.state
+  - ${ users[0].address.city_label}: other_parties[0].address.city
+  - ${ users[0].address.state_label}: other_parties[0].address.state
     code: |
-      states_list()
-    default: VT
-  - Zip or postal code: other_parties[0].address.zip
-    required: False
-  - County: other_parties[0].address.county
+      states_list(country_code=AL_DEFAULT_COUNTRY)
+    default: ${ AL_DEFAULT_STATE }
+  - ${ users[0].address.zip_label}: other_parties[0].address.zip
+    required: False      
+  - ${ users[0].address.country_label}: other_parties[0].address.country
+    code: countries_list()
+    default: ${ AL_DEFAULT_COUNTRY }
   - Does ${ other_parties } have a mailing address that is different from their street address?: other_parties_mailing_address_different
     datatype: yesnoradio
   - Mailing address: other_parties[0].mailing_address.address
@@ -707,12 +768,54 @@ id: filing_financial_form
 question: |
   Are you also filing a completed financial form 400-00813B now?
 subquestion: |
-  On that form you will list all of the property, assets, and debts that you and ${ other_parties[0] } own together or separately that are known to you. You can file it now with the Complaint form, or file it at a later date.
+  On that form you will list all of the property, assets, and debts that you and ${ other_parties[0] } own together or separately that are known to you. You can file it now with the Complaint form, or file it at a later date. ([See the paper version of the form.](https://www.vermontjudiciary.org/media/926))
 fields:
   - "Are you filing form 400-00813B now?": filing_financial_form
     datatype: yesnoradio
 ---
-id: asking the court for 
+id: do you have marriage or civil union
+question: |
+  Do you and ${ other_parties } have a marriage or civil union?
+fields:
+  - no label: license_type
+    input type: radio
+    choices: 
+      - Marriage: marriage
+      - Civil Union: civil_union
+  - Marriage city: marriage_city
+    show if: 
+      variable: license_type
+      is: marriage
+  - Marriage state: marriage_state
+    code: |
+      states_list()
+    default: VT
+    show if: 
+      variable: license_type
+      is: marriage
+  - Marriage date: marriage_date
+    datatype: date
+    show if: 
+      variable: license_type
+      is: marriage
+  - Civil Union city: civil_union_city
+    show if: 
+      variable: license_type
+      is: civil_union
+  - Civil Union state: civil_union_state
+    code: |
+      states_list()
+    default: VT
+    show if: 
+      variable: license_type
+      is: civil_union
+  - Civil Union date: civil_union_date
+    datatype: date
+    show if: 
+      variable: license_type
+      is: civil_union
+---
+id: what asking court for and grounds
 question: |
   What are you asking the court for?
 fields:
@@ -721,7 +824,16 @@ fields:
     choices: 
       - Divorce: divorce
       - Legal Separation: legal_separation
+    show if: 
+      variable: license_type
+      is: marriage
+  - Asking for: grant_for
+    input type: radio
+    choices: 
       - Dissolution: dissolution
+    show if: 
+      variable: license_type
+      is: civil_union
   - On what grounds (for what reason)?: grounds
     input type: radio
     choices: 
@@ -754,13 +866,12 @@ fields:
     datatype: yesno
   - note: You must attach the written agreement to the forms that you file with the court. To qualify for the reduced filing fee, the attached agreement must cover all the issues that you seek to have the court resolve.
     show if: written_agreement_attached
-  
 ---
-id: asking the court for (with children)
+id: ask for custody visitation and child support
 question: |  
   Custody, visitation and child support
 subquestion: |     
-  **I ask that the court grant me the following.**
+  **I ask that the court grant me the following.** Check all that apply.
 fields:
   - note: |
       Parental rights and responsibilities:
@@ -770,42 +881,24 @@ fields:
   - Legal parental rights and responsibilities: legal_rights_responsibilities
     datatype: yesno
     required: False
-    #css class: indent-me
-    #show if: parental_rights
-  - Shared jointly: legal_shared_jointly
-    datatype: yesno
-    required: False
+  - Choose one: lrr_choice
+    choices:
+    - Shared jointly: legal_shared_jointly
+    - Given only to myself: legal_myself
+    - Given only to the defendant: legal_defendant
+    input type: radio
     css class: indent-me
     show if: legal_rights_responsibilities
-
-  - Given only to myself: legal_myself
-    datatype: yesno
-    css class: indent-me
-    show if: legal_rights_responsibilities
-    required: False
-  - Given only to the defendant: legal_defendant
-    datatype: yesno
-    css class: indent-me
-    show if: legal_rights_responsibilities
-    required: False
   - Physical parental rights and responsibilities: physical_rights_responsibilities
     datatype: yesno
     required: False
-    #show if: parental_rights
-  - Shared jointly: physical_shared_jointly
-    required: False
+  - Choose one: prr_choice
+    choices:
+    - Shared jointly: physical_shared_jointly
+    - Given only to myself: physical_myself
+    - Given only to the defendant: physical_defendant
+    input type: radio
     css class: indent-me
-    datatype: yesno
-    show if: physical_rights_responsibilities
-  - Given only to myself: physical_myself
-    required: False
-    css class: indent-me
-    datatype: yesno
-    show if: physical_rights_responsibilities
-  - Given only to the defendant: physical_defendant
-    required: False
-    css class: indent-me
-    datatype: yesno
     show if: physical_rights_responsibilities
   - note: |
       ---
@@ -830,7 +923,7 @@ fields:
   - Child support, medical support and/or maintenance supplement: child_medical_support
     datatype: yesno
   - note: |
-      Check all that apply. Learn what these terms mean on the [VTLawHelp website.](https://vtlawhelp.org/custody-visitation)
+      Learn what these terms mean on the [VTLawHelp website.](https://vtlawhelp.org/custody-visitation)
 ---
 id: preview divorce
 question: |
@@ -840,10 +933,10 @@ subquestion: |
   
   ${ al_court_bundle.as_pdf(key='preview') }
 
-  Click the image to open it in a new tab. Click the "Edit answers" button
+  Click the image to open it in a new tab. Click the "Edit your answers" button
   to edit your answers.
 
-  ${ action_button_html(url_action('review_divorce'), label='Edit answers', color='info') }
+  ${ action_button_html(url_action('review_divorce'), label='Edit your answers', color='info') }
   
   Remember to come back to this window to continue and sign your form.
 continue button field: divorce_preview_question    
@@ -862,6 +955,9 @@ id: divorce no kids review screen
 event: review_divorce
 question: |
   Review your answers
+subquestion: |  
+  ${ review_screen_instructions }
+  
 review:
   - Edit: docket_number
     button: |
@@ -978,55 +1074,77 @@ review:
     button: |
       **Date of separation**:
       ${ separation_date }
+      
+  - note: |
+      ###What you want in the order
   - Edit: legal_rights_responsibilities
     button: |
-      **Legal parental rights and responsibilities**:
+      % if legal_rights_responsibilities:
+      Legal parental rights and responsibilities:
       
-      % if legal_shared_jointly:
-      - Shared jointly: **${yesno(legal_shared_jointly)}**
-      % endif
+        % if lrr_choice == "legal_shared_jointly":
+        - **Shared jointly**
+        % endif
+        % if lrr_choice == "legal_myself":
+        - **Given solely to myself**
+        % endif
+        % if lrr_choice == "legal_defendant":
+        - **Given solely to the defendant**
+        % endif
+      % else:
+      Legal parental rights and responsibilities:
       
-      % if legal_myself:
-      - Given solely to myself: **${yesno(legal_myself)}**
-      % endif
-      
-      % if legal_defendant:
-      - Given solely to the defendant: **${yesno(legal_defendant)}**
+      - **None**
       % endif
   
   - Edit: physical_rights_responsibilities
     button: |
-      **Physical parental rights and responsibilities**:
+      % if physical_rights_responsibilities:
+      Physical parental rights and responsibilities:
       
-      % if physical_shared_jointly:
-      - Shared jointly: **${yesno(physical_shared_jointly)}**
-      % endif
+        % if prr_choice == "physical_shared_jointly":
+        - **Shared jointly**
+        % endif
+        % if prr_choice == "physical_myself":
+        - **Given solely to myself**
+        % endif
+        % if prr_choice == "physical_defendant":
+        - **Given solely to the defendant**
+        % endif
+      % else:
+      Physical parental rights and responsibilities:
       
-      % if legal_myself:
-      - Given solely to myself: **${yesno(physical_myself)}**
-      % endif
-      
-      % if legal_defendant:
-      - Given solely to the defendant: **${yesno(physical_defendant)}**
+      - **None**
       % endif
   
-  - Edit: contact_for
+  - Edit: contact_for_myself
     button: |
-      **Parent Child Contact**:
+      % if defined("contact_for_myself") and contact_for_myself:
+        % if defined("contact_for_defendant") and contact_for_defendant:
+        Parent-Child Contact:
+        
+        - **Contact for myself**
+        - **Contact for the defendant**
+        % else:
+        Parent-Child Contact:
       
-      % if contact_for_myself:
-      - Contact for myself: **${yesno(contact_for_myself)}**
-      % endif
+        - **Contact for myself**
+        % endif
+      % elif defined("contact_for_defendant") and contact_for_defendant:
+      Parent-Child Contact:
       
-      % if contact_for_defendant:
-      - Contact for the defendant: **${ yesno(contact_for_defendant)}**
+      - **Contact for the defendant**
+      % else:
+      Parent-Child Contact:
+      
+      - **None**      
       % endif
       
   - Edit: child_medical_support
     button: |
-      **Child support, medical support and/or maintenance supplement**:
+      Child support, medical support and/or maintenance supplement:
       
-      - ${yesno(child_medical_support)}
+      - **${yesno(child_medical_support)}**
   - Edit: filing_financial_form
     button: |
       **Filing financial form**:
@@ -1039,10 +1157,10 @@ review:
     button: |
       **Defendant des assistance**:
       ${ word(yesno(defendant_des_assistance)) }
-  - Edit: defendant_military_service
+  - Edit: other_parties1_military
     button: |
       **Defendant military service**:
-      ${ word(yesno(defendant_military_service)) }
+      ${ word(yesno(other_parties1_military)) }
   - Edit: plaintiff_military_service
     button: |
       **Plaintiff military service**:
@@ -1195,19 +1313,22 @@ confirm: True
 id: download divorce
 event: divorce_download
 question: |
-  All done
+  Review your forms and download and/or print them
 subquestion: |
-  Thank you ${users}. Your form is ready to download and deliver.
-  
-  View, download and send your form below. Click the "Edit answers" button to fix any mistakes.
+  ${ download_screen_instructions }
 
-  ${ action_button_html(url_action('review_divorce'), label='Edit answers', color='info') }
+  ${ action_button_html(url_action('review_divorce'), label='Edit your answers', color='info') }
   
   
   ${ al_user_bundle.download_list_html() }
   
 
   ${ al_user_bundle.send_button_html(show_editable_checkbox=False) }
+  
+  ${ download_screen_bottom_instructions }
+  
+  ${ collapse_template(not_seeing_email) }
+  ${ collapse_template(log_out_when_done) }
 
 progress: 100
 ---
@@ -1291,7 +1412,7 @@ attachment:
       - "users1_name": ${ users[0].name }
       - "other_parties1_name": ${ other_parties[0] }
       - "users1_name1": ${ users[0].name }
-      - "users1_birthdate": ${ users[0].birthdate.format() }
+      - "users1_birthdate": ${ format_date(users[0].birthdate, format='M/d/yyyy') }
       - "users1_address_line_one": ${ users[0].address.line_one() }
       - "users1_address_line_two": ${ users[0].address.line_two() }
       - "users1_address_mailing_line_one": ${ users[0].mailing_address.line_one() }
@@ -1302,7 +1423,7 @@ attachment:
       - "users1_attorneys_name": ${ users[0].attorneys[0].name }
       - "users1_attorneys_phone_numer": ${ users[0].attorneys[0].phone_number }
       - "other_parties1_name1": ${ other_parties[0].name }
-      - "other_parties1_birthdate": ${ other_parties[0].birthdate.format() }
+      - "other_parties1_birthdate": ${ format_date(other_parties[0].birthdate, format='M/d/yyyy') }
       - "other_parties1_address_line_one": ${ other_parties[0].address.line_one() }
       - "other_parties1_address_line_two": ${ other_parties[0].address.line_two() }
       - "other_parties1__mailing_address_line_one": ${ other_parties[0].mailing_address.line_one() }
@@ -1319,30 +1440,30 @@ attachment:
       - "civil_union_dissolution": ${ grant_for == "dissolution" }
       - "legal_separation": ${ grant_for == "legal_separation" }
       - "trial_court_county1": ${ trial_court.address.block() }
-      - "signature_date": ${ signature_date }
+      - "signature_date": ${ format_date(signature_date, format='M/d/yyyy') }
       - "users1_signature": ${ users[0].signature_if_final(i) }
       - "users1_address_county": ${ users[0].address.county }
       - "users1_address_state": ${ users[0].address.state }
       - "plaintiff_VT": ${ plaintiff_VT }
-      - "date_plaintiff_moved_to_VT": ${ date_plaintiff_moved_to_VT }
+      - "date_plaintiff_moved_to_VT": ${ format_date(date_plaintiff_moved_to_VT, format='M/d/yyyy') }
       - "other_parties1_address_county": ${ other_parties[0].address.county }
       - "other_parties1_address_state": ${ other_parties[0].address.state }
       - "defendant_VT": ${ defendant_VT }
-      - "date_defendant_moved_to_VT": ${ date_defendant_moved_to_VT }
+      - "date_defendant_moved_to_VT": ${ format_date(date_defendant_moved_to_VT, format='M/d/yyyy') }
       - "marriage": ${ license_type == "marriage" }
       - "marriage_state": ${ marriage_state }
       - "marriage_city": ${ marriage_city }
-      - "marriage_date": ${ marriage_date.format() }
+      - "marriage_date": ${ format_date(marriage_date, format='M/d/yyyy') }
       - "civil_union": ${ license_type == "civil_union" }
       - "civil_union_city": ${ civil_union_city }
       - "civil_union_state": ${ civil_union_state }
-      - "civil_union_date": ${ civil_union_date.format() }
+      - "civil_union_date": ${ format_date(civil_union_date, format='M/d/yyyy') }
       - "grant_for": True 
       - "divorce1": ${ grant_for == "divorce" }
       - "legal_seeparation1": ${ grant_for == "legal_separation" }
       - "civil_union_dissolution1": ${ grant_for == "dissolution" }
       - "six_month_separation": ${ grounds["six_month_separation"] }
-      - "separation_date": ${ separation_date.format() }
+      - "separation_date": ${ format_date(separation_date, format='M/d/yyyy') }
       - "other_ground": ${ grounds["other_ground"] }
       - "other_ground_explanation": ${ other_ground_explanation }
       - "filing_financial_form": ${ filing_financial_form }
@@ -1377,10 +1498,10 @@ attachment:
       - "earlier_RFA_filer3": ${ earlier_RFA[2].who_filed }
       - "earlier_RFA_actions_type3": ${ earlier_RFA[2].action_type }
       - "earlier_RFA_year_filed3": ${ earlier_RFA[2].year_filed }
-      - "defendant_military_service": ${ defendant_military_service }
-      - "defendant_no_military_service": ${ defendant_no_military_service }
+      - "defendant_military_service": ${ other_parties1_military }
+      - "defendant_no_military_service": ${ not other_parties1_military }
       - "plaintiff_military_service": ${ plaintiff_military_service }
-      - "plaintiff_no_military_service": ${ plaintiff_no_military_service }
+      - "plaintiff_no_military_service": ${ not plaintiff_military_service }
       - "divorce_decree": ${ grant_for == "divorce" }
       - "legal_separation_decree": ${ grant_for == "legal_separation" }
       - "dissolution_decree": ${ grant_for == "dissolution" }
@@ -1392,7 +1513,7 @@ attachment:
       - "plaintiff_former_name": ${ plaintiff_former_name }
       - "written_agreement_attached": ${ written_agreement_attached }
       # It's a signature: test which file version this is; leave empty unless it's the final version)
-      - "signature_date1": ${ signature_date }
+      - "signature_date1": ${ format_date(signature_date, format='M/d/yyyy') }
 ---
 attachment:
   name: divorce with kids
@@ -1406,7 +1527,7 @@ attachment:
       - "users1_name": ${ users[0].name }
       - "other_parties1_name": ${ other_parties[0] }
       - "users1_name1": ${ users[0].name }
-      - "users1_birthdate": ${ users[0].birthdate.format() }
+      - "users1_birthdate": ${ format_date(users[0].birthdate, format='M/d/yyyy') }
       - "users1_address_line_one": ${ users[0].address.line_one() }
       - "users1_address_line_two": ${ users[0].address.line_two() }
       - "users1_address_mailing_line_one": ${ users[0].mailing_address.line_one() }
@@ -1417,7 +1538,7 @@ attachment:
       - "users1_attorneys_name": ${ users[0].attorneys[0].name }
       - "users1_attorneys_phone_numer": ${ users[0].attorneys[0].phone_number }
       - "other_parties1_name1": ${ other_parties[0].name }
-      - "other_parties1_birthdate": ${ other_parties[0].birthdate.format() }
+      - "other_parties1_birthdate": ${ format_date(other_parties[0].birthdate, format='M/d/yyyy') }
       - "other_parties1_address_line_one": ${ other_parties[0].address.line_one() }
       - "other_parties1_address_line_two": ${ other_parties[0].address.line_two() }
       - "other_parties1__mailing_address_line_one": ${ other_parties[0].mailing_address.line_one() }
@@ -1434,30 +1555,30 @@ attachment:
       - "civil_union_dissolution": ${ grant_for == "dissolution" }
       - "legal_separation": ${ grant_for == "legal_separation" }
       - "trial_court_county1": ${ trial_court.address.block() }
-      - "signature_date": ${ signature_date }
+      - "signature_date": ${ format_date(signature_date, format='M/d/yyyy') }
       - "users1_signature": ${ users[0].signature_if_final(i) }
       - "users1_address_county": ${ users[0].address.county }
       - "users1_address_state": ${ users[0].address.state }
       - "plaintiff_VT": ${ plaintiff_VT }
-      - "date_plaintiff_moved_to_VT": ${ date_plaintiff_moved_to_VT }
+      - "date_plaintiff_moved_to_VT": ${ format_date(date_plaintiff_moved_to_VT, format='M/d/yyyy') }
       - "other_parties1_address_county": ${ other_parties[0].address.county }
       - "other_parties1_address_state": ${ other_parties[0].address.state }
       - "defendant_VT": ${ defendant_VT }
-      - "date_defendant_moved_to_VT": ${ date_defendant_moved_to_VT }
+      - "date_defendant_moved_to_VT": ${ format_date(date_defendant_moved_to_VT, format='M/d/yyyy') }
       - "marriage": ${ license_type == "marriage" }
       - "marriage_state": ${ marriage_state }
       - "marriage_city": ${ marriage_city }
-      - "marriage_date": ${ marriage_date.format() }
+      - "marriage_date": ${ format_date(marriage_date, format='M/d/yyyy') }
       - "civil_union": ${ license_type == "civil_union" }
       - "civil_union_city": ${ civil_union_city }
       - "civil_union_state": ${ civil_union_state }
-      - "civil_union_date": ${ civil_union_date.format() }
+      - "civil_union_date": ${ format_date(civil_union_date, format='M/d/yyyy') }
       - "grant_for": True 
       - "divorce1": ${ grant_for == "divorce" }
       - "legal_seeparation1": ${ grant_for == "legal_separation" }
       - "civil_union_dissolution1": ${ grant_for == "dissolution" }
       - "six_month_separation": ${ grounds["six_month_separation"] }
-      - "separation_date": ${ separation_date.format() }
+      - "separation_date": ${ format_date(separation_date, format='M/d/yyyy') }
       - "other_ground": ${ grounds["other_ground"] }
       - "other_ground_explanation": ${ other_ground_explanation }
       
@@ -1473,27 +1594,34 @@ attachment:
       - "child_birthdate5": ${ children[4].birthdate }
      
       - "child_address1": ${ locations[0].address } 
-      - "child_date1": ${ locations[0].start_date } - ${ locations[0].end_date }
+      - "child_date1": ${ format_date(locations[0].start_date, format='M/d/yyyy') }-${ format_date(locations[0].end_date, format='M/d/yyyy') }
       - "child_housemate1": ${ locations[0].housemates }
       - "child_address2": ${ locations[1].address } 
-      - "child_date2": ${ locations[1].start_date } - ${ locations[1].end_date }
+      - "child_date2": ${ format_date(locations[1].start_date, format='M/d/yyyy') }-${ format_date(locations[1].end_date, format='M/d/yyyy') }
       - "child_housemate2": ${ locations[1].housemates }
       - "child_address3": ${ locations[2].address } 
-      - "child_date3": ${ locations[2].start_date } - ${ locations[2].end_date }
+      - "child_date3": ${ format_date(locations[2].start_date, format='M/d/yyyy') }-${ format_date(locations[2].end_date, format='M/d/yyyy') }
       - "child_housemate3": ${ locations[2].housemates }
    
       - "participated_custody_child": ${ child_custody["participation"] }
       - "information_child": ${ child_custody["information"] }
       - "knowledge_custody_child": ${ child_custody["knowledge"] }
-      - "legal_shared_jointly": ${legal_shared_jointly}
-      - "legal_given_solely": ${legal_given_solely}
-      - "legal_myself": ${legal_myself}
-      - "legal_defendant": ${ legal_defendant }
-      - "physical_shared_jointly": ${physical_shared_jointly}
-      - "physical_given_solely": ${ physical_given_solely}
-      - "physical_myself": ${physical_myself}
-      - "physical_defendant": ${physical_defendant }
-      - "parental_rights": ${ parental_rights }    
+      - "parental_rights": ${ legal_rights_responsibilities or physical_rights_responsibilities }    
+      - "legal_shared_jointly": ${ lrr_choice == "legal_shared_jointly"}
+      - "legal_given_solely": |
+          % if lrr_choice == "legal_defendant" or lrr_choice == "legal_myself":
+          ${ True }
+          % endif
+      - "legal_myself": ${ lrr_choice == "legal_myself" }
+      - "legal_defendant": ${ lrr_choice == "legal_defendant" }
+      - "physical_shared_jointly": ${ prr_choice == "physical_shared_jointly" }
+      - "physical_given_solely": |
+          % if prr_choice == "physical_defendant" or prr_choice == "physical_myself":
+          ${ True }
+          % endif
+      - "physical_myself": ${ prr_choice == "physical_myself" }
+      - "physical_defendant": ${ prr_choice == "physical_defendant" }
+      - "contact_for": ${ contact_for_myself or contact_for_defendant }
       - "contact_for_myself": ${contact_for_myself}
       - "contact_for_defendant": ${ contact_for_defendant }
       - "child_medical_support": ${ child_medical_support }
@@ -1529,10 +1657,10 @@ attachment:
       - "earlier_RFA_filer3": ${ earlier_RFA[2].who_filed }
       - "earlier_RFA_actions_type3": ${ earlier_RFA[2].action_type }
       - "earlier_RFA_year_filed3": ${ earlier_RFA[2].year_filed }
-      - "defendant_military_service": ${ defendant_military_service }
-      - "defendant_no_military_service": ${ defendant_no_military_service }
+      - "defendant_military_service": ${ other_parties1_military }
+      - "defendant_no_military_service": ${ not other_parties1_military }
       - "plaintiff_military_service": ${ plaintiff_military_service }
-      - "plaintiff_no_military_service": ${ plaintiff_no_military_service }
+      - "plaintiff_no_military_service": ${ not plaintiff_military_service }
       - "divorce_decree": ${ grant_for == "divorce" }
       - "legal_separation_decree": ${ grant_for == "legal_separation" }
       - "dissolution_decree": ${ grant_for == "dissolution" }
@@ -1659,3 +1787,4 @@ attachment:
       - "separation_date_year": ${ format_date(separation_date, format='yyyy') }
       - "legal_grounds": ${ legal_grounds }
       - "court_manager": ${ court_manager }
+
