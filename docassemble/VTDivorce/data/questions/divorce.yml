@@ -978,6 +978,19 @@ review:
       % for item in children:
         * ${ item } 
       % endfor
+  - Edit: grant_for
+    button: |
+      You are seeking a:
+      
+      % if grant_for == "divorce":
+      - **Divorce**
+      % endif
+      % if grant_for == "legal_separation":
+      - **Legal separation**
+      % endif
+      % if grant_for == "dissolution":
+      - **Civil union dissolution**
+      % endif
   - Edit: earlier_actions.revisit
     button: |
       % if defined("earlier_actions[0]"):
