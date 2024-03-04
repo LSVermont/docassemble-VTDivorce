@@ -82,7 +82,6 @@ code: |
   users.gather()
   if license_type == "marriage":
     users_role
-  set_parts(subtitle=str(users))
   users[0].birthdate
   users[0].address.address
   users[0].email
@@ -978,6 +977,18 @@ review:
       % for item in children:
         * ${ item } 
       % endfor
+  - Edit: license_type
+    button: |
+      % if license_type == "marriage":
+      You were married in:
+      
+      - **${ marriage_city }, ${ marriage_state }, on ${ marriage_date }**
+      % endif
+      % if license_type == "civil_union":
+      You had a civil union in:
+      
+      - **${ civil_union_city }, ${ civil_union_state }, on ${ civil_union_date }**
+      % endif
   - Edit: grant_for
     button: |
       You are seeking a:
@@ -990,6 +1001,15 @@ review:
       % endif
       % if grant_for == "dissolution":
       - **Civil union dissolution**
+      % endif
+  - Edit: grounds
+    button: |
+      Grounds / reason:
+      
+      % if grounds == "six_month_separation":
+      - **Separated six months or more** -- Date of separation: ${ separation_date }
+      % else:
+      - **${ other_ground_explanation}**
       % endif
   - Edit: earlier_actions.revisit
     button: |
@@ -1008,61 +1028,6 @@ review:
       % for item in earlier_RFA:
         - **${ item.action_type }**, in ${ item.year_filed }, filed by ${ item.who_filed }, in this court: ${ item.where_filed }
       % endfor
-      % endif
-  - Edit: divorce
-    button: |
-      **Divorce**:
-      ${ word(yesno(divorce)) }
-  - Edit: civil_union_dissolution
-    button: |
-      **Civil union dissolution**:
-      ${ word(yesno(civil_union_dissolution)) }
-  - Edit: legal_separation
-    button: |
-      **Legal separation**:
-      ${ word(yesno(legal_separation)) }
-      
-
-  - Edit: marriage
-    button: |
-      **Marriage**:
-      ${ word(yesno(marriage)) }
-  - Edit: marriage_state
-    button: |
-      **Marriage state**:
-      ${ marriage_state }
-  - Edit: marriage_city
-    button: |
-      **Marriage city**:
-      ${ marriage_city }
-  - Edit: marriage_date
-    button: |
-      **Date of marriage**:
-      ${ marriage_date }
-  - Edit: civil_union
-    button: |
-      **Civil union**:
-      ${ word(yesno(civil_union)) }
-  - Edit: civil_union_city
-    button: |
-      **Civil union city**:
-      ${ civil_union_city }
-  - Edit: civil_union_state
-    button: |
-      **Civil union state**:
-      ${ civil_union_state }
-  - Edit: civil_union_date
-    button: |
-      **Date of civil union**:
-      ${ civil_union_date }
-  - Edit: grounds
-    button: |
-      Grounds:
-      
-      % if grounds == "six_month_separation":
-      - **Six-month separation** -- Date of separation: ${ separation_date }
-      % else:
-      - **${ other_ground_explanation}**
       % endif
   - note: |
       ###What you want in the order
