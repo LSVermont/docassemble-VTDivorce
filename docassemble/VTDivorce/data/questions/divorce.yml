@@ -783,15 +783,15 @@ fields:
       - Divorce: divorce
       - Legal Separation: legal_separation
     show if: 
-      variable: license_type
-      is: marriage
+      code: |
+        license_type == "marriage"
   - Asking for: grant_for
     input type: radio
     choices: 
       - Dissolution: dissolution
     show if: 
-      variable: license_type
-      is: civil_union
+      code: |
+        license_type == "civil_union"
   - On what grounds (for what reason)?: grounds
     input type: radio
     choices: 
