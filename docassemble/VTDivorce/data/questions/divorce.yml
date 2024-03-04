@@ -985,6 +985,34 @@ review:
       % for item in other_parties:
         * ${ item }
       % endfor
+  - Edit: plaintiff_VT
+    button: |
+      You live in Vermont: **${ word(yesno(plaintiff_VT)) }**
+      
+      % if defined("date_plaintiff_moved_to_VT"):
+      * Date you moved to Vermont: ${ format_date(date_plaintiff_moved_to_VT, format="M/d/yyyy") }
+      % endif
+
+  - Edit: defendant_VT
+    button: |
+      Defendant lives in Vermont: **${ word(yesno(defendant_VT)) }**
+      
+      % if defined("date_defendant_moved_to_VT"):
+      * Date they moved to Vermont: ${ format_date(date_defendant_moved_to_VT, format="M/d/yyyy") }
+      % endif
+
+  - Edit: defendant_des_assistance
+    button: |
+      Get assistance from Division of Economic Services (DES):
+      
+      * You: **${ word(yesno(plaintiff_des_assistance)) }**
+      * The defendant: **${ word(yesno(defendant_des_assistance)) }**
+  - Edit: other_parties1_military
+    button: |
+      Military service:
+      
+      * You: **${ word(yesno(plaintiff_military_service)) }**
+      * The defendant:** ${ word(yesno(other_parties1_military)) }**
   - Edit: children.revisit
     button: |
       **Children**
@@ -1018,22 +1046,8 @@ review:
     button: |
       **Legal separation**:
       ${ word(yesno(legal_separation)) }
-  - Edit: plaintiff_VT
-    button: |
-      **Plaintiff vt**:
-      ${ word(yesno(plaintiff_VT)) }
-  - Edit: date_plaintiff_moved_to_VT
-    button: |
-      **Date plaintiff moved to vt**:
-      ${ date_plaintiff_moved_to_VT }
-  - Edit: defendant_VT
-    button: |
-      **Defendant vt**:
-      ${ word(yesno(defendant_VT)) }
-  - Edit: date_defendant_moved_to_VT
-    button: |
-      **Date defendant moved to vt**:
-      ${ date_defendant_moved_to_VT }
+      
+
   - Edit: marriage
     button: |
       **Marriage**:
@@ -1149,22 +1163,8 @@ review:
     button: |
       **Filing financial form**:
       ${ word(yesno(filing_financial_form)) }
-  - Edit: plaintiff_des_assistance
-    button: |
-      **Plaintiff des assistance**:
-      ${ word(yesno(plaintiff_des_assistance)) }
-  - Edit: defendant_des_assistance
-    button: |
-      **Defendant des assistance**:
-      ${ word(yesno(defendant_des_assistance)) }
-  - Edit: other_parties1_military
-    button: |
-      **Defendant military service**:
-      ${ word(yesno(other_parties1_military)) }
-  - Edit: plaintiff_military_service
-    button: |
-      **Plaintiff military service**:
-      ${ word(yesno(plaintiff_military_service)) }
+
+      
   - Edit: divorce_decree
     button: |
       **Divorce decree**:
