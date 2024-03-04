@@ -12,30 +12,29 @@ metadata:
   tags: []
   authors:
     - Stavros Constantinou
-  allowed_courts: []
   typical_role: "unknown"
   al_weaver_version: "1.10.2"
   generated_on: "2024-01-28"
 ---
-features:
-  css: style.css
----
-objects:
-  - al_logo: DAStaticFile.using(filename="LSV_bug.png")
----
-images:
-  big_logo: LSV_logo.png 
----
-objects:
-  - all_courts: ALCourtLoader.using(file_name='courts_list.xlsx')
----
-code: |
-  trial_court = all_courts.as_court('trial_court', trial_court_index)
-  trial_court.geolocate()  
----
-code: |
-  trial_court = all_courts.as_court('trial_court', trial_court_index)
-  trial_court.geolocate()  
+#features:
+#  css: style.css
+#---
+#objects:
+#  - al_logo: DAStaticFile.using(filename="LSV_bug.png")
+#---
+#images:
+#  big_logo: LSV_logo.png 
+#---
+#objects:
+#  - all_courts: ALCourtLoader.using(file_name='courts_list.xlsx')
+#---
+#code: |
+#  trial_court = all_courts.as_court('trial_court', trial_court_index)
+#  trial_court.geolocate()  
+#---
+#code: |
+#  trial_court = all_courts.as_court('trial_court', trial_court_index)
+#  trial_court.geolocate()  
 ---
 reconsider: True
 code: |
@@ -102,7 +101,7 @@ objects:
   - users: ALPeopleList.using(ask_number=True,target_number=1)
   - users[i].attorneys: ALPeopleList.using(ask_number=True,target_number=1)
   - other_parties: ALPeopleList.using(ask_number=True,target_number=1)
-  - users: ALPeopleList
+  #- users: ALPeopleList
 ---
 sections:
   - review_Health_record_civil_union: Review your answers
@@ -113,16 +112,12 @@ comment: |
   Controls order and branching logic for questions specific to this form
 id: interview_order_Health_record
 code: |
-  # Set the allowed courts for this interview
-  allowed_courts = []
+
   nav.set_section("review_Health_record_civil_union")
   
   user_role = "plaintiff"
   user_ask_role = "plaintiff"
   
-    
-    
-  set_parts(subtitle=str(users))
   set_progress(16)
     
   separation_date

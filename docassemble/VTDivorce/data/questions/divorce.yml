@@ -751,18 +751,18 @@ fields:
     required: False
     show if: other_parties_mailing_address_different
 ---
-id: Why are you seeking x from the court
-question: |
-  What is your reason for getting a x?
-fields:
-  - "We have been or will have lived separate and apart for more than 6 months in a row. It is not reasonably probable that we can resume our relationship. (Note - This is the most common reason.)": six_month_separation
-    datatype: yesno
-  - "Date of separation": separation_date
-    datatype: date
-  - "Other grounds (other reason)": other_ground_divorce
-    datatype: yesno
-  - "Explain the other grounds": other_ground_divorce_explanation
-    maxlength: 55
+#id: Why are you seeking x from the court
+#question: |
+#  What is your reason for getting a x?
+#fields:
+#  - "We have been or will have lived separate and apart for more than 6 months in a row. It is not reasonably probable that we can resume our relationship. (Note - This is the most common reason.)": six_month_separation
+#    datatype: yesno
+#  - "Date of separation": separation_date
+#    datatype: date
+#  - "Other grounds (other reason)": other_ground_divorce
+#    datatype: yesno
+#  - "Explain the other grounds": other_ground_divorce_explanation
+#    maxlength: 55
 ---
 id: filing_financial_form
 question: |
@@ -980,11 +980,13 @@ review:
       % endfor
   - Edit: earlier_actions.revisit
     button: |
-      **Earlier Actions**
+      % if defined("earlier_actions[0]"):
+        Earlier actions:
 
       % for item in earlier_actions:
-        * ${ item }
+        - **${ item.action_type }**, in ${ item.year_filed }, filed by ${ item.who_filed }, in this court: ${ item.where_filed }
       % endfor
+      % endif
   - Edit: earlier_RFA.revisit
     button: |
       **Earlier RFAs**
