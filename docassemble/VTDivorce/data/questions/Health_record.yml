@@ -13,90 +13,10 @@ metadata:
   tags: []
   authors:
     - Stavros Constantinou / Lemma Legal
+    - Legal Services Vermont
   typical_role: "unknown"
   al_weaver_version: "1.10.2"
   generated_on: "2024-01-28"
----
-#features:
-#  css: style.css
-#---
-#objects:
-#  - al_logo: DAStaticFile.using(filename="LSV_bug.png")
-#---
-#images:
-#  big_logo: LSV_logo.png 
-#---
-#objects:
-#  - all_courts: ALCourtLoader.using(file_name='courts_list.xlsx')
-#---
-#code: |
-#  trial_court = all_courts.as_court('trial_court', trial_court_index)
-#  trial_court.geolocate()  
-#---
-#code: |
-#  trial_court = all_courts.as_court('trial_court', trial_court_index)
-#  trial_court.geolocate()  
-#---
-#reconsider: True
-#code: |
-#  al_menu_items_tmp = [
-#    {"url": url_ask(['al_start_over_confirmation','al_start_over']),
-#    "label": "Start over"
-#    },
-#    {
-#      "url": url_ask(['al_exit_logout_confirmation', 'al_exit_logout']),
-#      "label": "Exit and delete my answers"
-#    },
-#  ]
-#  if al_enable_incomplete_downloads:
-#    al_menu_items_tmp.append({
-#        "url": url_action('al_error_action_download_screen'), 
-#        "label": "Download current progress"
-#    })
-#  
-#  # Answer set feature is behind a server-wide configuration option
-#  if get_config('assembly line',{}).get('enable answer sets'):
-#    al_menu_items_tmp.extend([
-#    {"url": url_ask(["al_sessions_snapshot_label", {"recompute": ["al_sessions_save_session_snapshot"]}, "al_sessions_save_status"]),
-#    "label": "Save answer set"
-#    },
-#    action_menu_item("Load answer set", "al_load_saved_session"),
-#  ]
-#  )
-#  
-#  if get_config('assembly line',{}).get('enable answer set imports'):
-#    al_menu_items_tmp.append(
-#      {"url": url_ask(["al_sessions_json_file", {"recompute": ["al_sessions_import_json"]}, "al_sessions_load_status"]),
-#      "label": "Import answer set"
-#      }
-#    )
-#  al_menu_items_tmp.append(
-#    {
-#      "url": url_action('edit_answers_screen'),
-#      "label": "Edit your answers"
-#      
-#    }
-#  )
-#    
-#  al_menu_items = al_menu_items_tmp
-#  del al_menu_items_tmp
-#---
-#code: |
-#  # This controls the default country and list of states in address field questions
-#  AL_DEFAULT_COUNTRY = "US"
-#---
-#code: |
-#  # This controls the default state in address field questions
-#  AL_DEFAULT_STATE = "VT"
-#---
-#code: |
-#  github_repo_name =  'docassemble-HealthRecordCivilUnion'
-#---
-#code: |
-#  interview_short_title = "Get a Health record civil union"
-#---
-#code: |
-#  al_form_type = "other" 
 ---
 objects:
   - users[i].attorneys: ALPeopleList.using(ask_number=True,target_number=1)
@@ -120,26 +40,6 @@ code: |
   court_manager
 
   interview_order_Health_record = True
----
-###################### Main order ######################
-#comment: |
-#  This block includes the logic for standalone interviews.
-#  Delete mandatory: True to include in another interview
-#mandatory: True
-#code: |
-#  al_intro_screen
-#  interview_order_Health_record
-#  signature_date
-#  # Store anonymous data for analytics / statistics
-#  store_variables_snapshot(
-#      persistent=True,
-#      data={
-#          "zip": showifdef("users[0].address.zip"),
-#          "reached_interview_end": True,
-#      },
-#  )
-#  Health_record_civil_union_download
-
 ---
 id: users_info
 sets:
@@ -167,26 +67,6 @@ fields:
     show if: 
       code: |
         license_type == "marriage"
-      
----
-#id: users_info_marriage
-#sets:
-#    - users[0].name.first
-#    - users[0].name.last
-#    - users[0].name.middle
-#    - users[0].name.suffix
-#question:  |
-#  Information about you
-#fields:
-#  - code: |
-#      users[0].name_fields()
-#  - Maiden Surname: users[0].name_former
-#    required: False
-#  - Sex: users[0].gender
-#    datatype: radio
-#    choices: 
-#      - Male: male
-#      - Female: female
 ---
 id: other_parties_info
 sets:
@@ -216,48 +96,6 @@ fields:
     show if: 
       code: |
         license_type == "marriage"
----
-#id: other_parties_info_marriage
-#sets:
-#    - other_parties[0].name.first
-#    - other_parties[0].name.last
-#    - other_parties[0].name.middle
-#    - other_parties[0].name.suffix
-#question:  |
-#  Information about the other party
-#fields:
-#  - code: |
-#      other_parties[0].name_fields()
-#  - Maiden Surname: other_parties[0].name_former
-#    required: False
-
-
----
-#id: Users1 birthday
-#question: |
-#  What is your date of birth?
-#fields:
-#  - "Birthdate": users[0].birthdate
-#    datatype: BirthDate
-#--- 
-#id: Other party birthday
-#question: | 
-#  When is ${other_parties[0].name}'s birthdate?
-#fields:
-#  - "Birthdate": other_parties[0].birthdate
-#    datatype: BirthDate
----
-#id: civil_union
-#question: |
-#  Information about the civil union
-#fields:
-#  - "Civil Union State": civil_union_state
-#    code: |
-#      states_list()
-#    default: VT
-#  - "Civil Union City": civil_union_city
-#  - Civil Union Date: civil_union_date
-#    datatype: date
 ---
 id: separation
 question: |
@@ -367,32 +205,6 @@ fields:
   - "When was the decree signed?": signature_date
     datatype: date
 ---
-#id: preview Health_record_civil_union
-#question: |
-#  Preview your form before you sign it
-#subquestion: |
-#  Here is a preview of the form you will sign on the next page.   
-#  
-#  ${ al_court_bundle.as_pdf(key='preview') }
-#
-#  Click the image to open it in a new tab. Click the "Edit answers" button
-#  to edit your answers.
-#
-#  ${ action_button_html(url_action('review_Health_record_civil_union'), label='Edit answers', color='info') }
-#  
-#  Remember to come back to this window to continue and sign your form.
-#continue button field: Health_record_civil_union_preview_question    
-#---
-#code: |
-#  signature_fields = []
-#---
-#code: |
-#  # This is a placeholder for the addresses that will be searched
-#  # for matching address to court. Edit if court venue is based on 
-#  # a different address than the user's
-#  [user.address.address for user in users.complete_elements()]
-#  addresses_to_search = [user.address for user in users.complete_elements()]
----
 id: Health record 
 event: review_Health_record_civil_union
 question: |
@@ -490,29 +302,5 @@ edit:
   - name.first
   - address.city
 confirm: True
-
 ---
-#id: download Health_record_civil_union
-#event: Health_record_civil_union_download
-#question: |
-#  All done
-#subquestion: |
-#  Thank you ${users}. Your form is ready to download and deliver.
-#  
-#  View, download and send your form below. Click the "Edit answers" button to fix any mistakes.
-#
-#  ${ action_button_html(url_action('review_Health_record_civil_union'), label='Edit answers', color='info') }
-#  
-#  
-#  ${ al_user_bundle.download_list_html() }
-#  
-#
-#  ${ al_user_bundle.send_button_html(show_editable_checkbox=False) }
-#
-#progress: 100
----
-# Bundles group the ALDocuments into separate downloads, such as for court and for the user
-#objects:
-#  - al_user_bundle: ALDocumentBundle.using(elements=[Health_record_civil_union_attachment, Health_record_divorce_annulment_attachment],filename="Health_record_civil_union", title="All forms to download for your records", enabled=True)
-#  - al_court_bundle: ALDocumentBundle.using(elements=[Health_record_civil_union_attachment, Health_record_divorce_annulment_attachment],  filename="Health_record_civil_union", title="All forms to deliver to court", enabled=True)
 
