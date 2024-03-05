@@ -52,9 +52,10 @@ sections:
   - screening: Is this interview right for you
   - about: About you
   - defendant: About the defendant
-  - kids: About the children
+  - kids: About children
+  - what_want: What you want in the order
   - past_actions: Earlier court actions
-  - review_divorce: Edit your answers
+  - review_answers: Edit your answers
   - sign: Signature
   - get_docs: Get your documents
 ---
@@ -93,7 +94,8 @@ code: |
   users[0].birthdate
   users[0].address.address
   users[0].email
-  no_attorney_involved
+  if user_has_attorney:
+    users[0].attorneys[0].name.last
 
   set_progress(16)
   nav.set_section("defendant")
@@ -118,10 +120,8 @@ code: |
   else: 
     children.target_number = 0
   
-
+  nav.set_section("what_want")
   grant_for
-
-  
   set_progress(48)
   
   filing_financial_form
@@ -141,56 +141,14 @@ code: |
   plaintiff_des_assistance
   plaintiff_military_service
   
+  set_progress(75)
   docket_number
-  
   trial_court
   
   interview_order_Health_record
   
   interview_order_divorce = True
----
-id: choose a court
-question: |
-  Choose a Family Court
-fields:
-  - note: |
-      Choose the county where you will file your forms. 
-      
-      It can be:
-      
-      * the county you live in, or
-      * the county the other person lives in (the "defendant"), or
-      * if you have children with the other person, it should be in the county in which the children spend the most time, or
-      * if you had a civil union, it can be the county where your civil union took place. 
-    
-      
-      Not sure what county? [Check this list of cities and towns to find the county.](https://en.m.wikipedia.org/wiki/List_of_municipalities_in_Vermont#Cities)
-  - County: trial_court_index
-    code: all_courts._load_courts()['address_county'].items()
----
-
-id: jurisdiction kickout
-question: |
-  Stop
-subquestion: |
-  <i class="fas fa-hand-paper fa-3x" aria-hidden="true"></i> **Stop.** In this situation, these are **not** the right forms to fill out. **Do not use this interview.**
-  
-  Contact a lawyer or legal aid organization in the state where you live.
-  
-  If neither of you live in Vermont, a Vermont family court will only take your divorce case if **all these four things are true**:
-  
-  1. You got married or got a civil union in Vermont
-  2. You and your spouse currently live in states where you can't get a divorce or dissolve your civil union
-  3. You don't have minor children (under 18), and
-  4. You and your spouse already have an agreement about how to deal with your property and debts.
-  
-  See the [Divorce Roadmap on the VTLawHelp.org website](https://vtlawhelp.org/roadmap/divorce/step-1) to find out what is required for you to be able to file for a divorce, separation or civil union dissolution in Vermont.
-  
-  [Go to the VTLawHelp.org website.](https://vtlawhelp.org/roadmap/divorce/step-1)
-continue button field: jurisdiction_kickout
-buttons:
-  - DELETE your answers and go to the VTLawHelp website: exit
-    url: https://vtlawhelp.org/roadmap/divorce/step-1
+  set_progress(85)
 ---
 ###################### Main order ######################
 comment: |
@@ -208,13 +166,17 @@ code: |
           "reached_interview_end": True,
       },
   )
-  nav.set_section("review_divorce")
+  nav.set_section("review_answers")
+  trial_court.address.county
   divorce_preview_question
+  
   nav.set_section("sign")
   signature_date
+  set_progress(92)
   al_form_requires_digital_signature = False
   basic_questions_signature_flow    
   nav.set_section("get_docs")
+  set_progress(100)
   divorce_download
 ---
 id: basic questions intro screen
@@ -263,7 +225,48 @@ code: |
   earlier_RFA[i].action_type
   earlier_RFA[i].complete = True
 ---
-
+id: choose a court
+question: |
+  Choose a Family Court
+fields:
+  - note: |
+      Choose the county where you will file your forms. 
+      
+      It can be:
+      
+      * the county you live in, or
+      * the county the other person lives in (the "defendant"), or
+      * if you have children with the other person, it should be in the county in which the children spend the most time, or
+      * if you had a civil union, it can be the county where your civil union took place. 
+    
+      
+      Not sure what county? [Check this list of cities and towns to find the county.](https://en.m.wikipedia.org/wiki/List_of_municipalities_in_Vermont#Cities)
+  - County: trial_court_index
+    code: all_courts._load_courts()['address_county'].items()
+---
+id: jurisdiction kickout
+question: |
+  Stop
+subquestion: |
+  <i class="fas fa-hand-paper fa-3x" aria-hidden="true"></i> **Stop.** In this situation, these are **not** the right forms to fill out. **Do not use this interview.**
+  
+  Contact a lawyer or legal aid organization in the state where you live.
+  
+  If neither of you live in Vermont, a Vermont family court will only take your divorce case if **all these four things are true**:
+  
+  1. You got married or got a civil union in Vermont
+  2. You and your spouse currently live in states where you can't get a divorce or dissolve your civil union
+  3. You don't have minor children (under 18), and
+  4. You and your spouse already have an agreement about how to deal with your property and debts.
+  
+  See the [Divorce Roadmap on the VTLawHelp.org website](https://vtlawhelp.org/roadmap/divorce/step-1) to find out what is required for you to be able to file for a divorce, separation or civil union dissolution in Vermont.
+  
+  [Go to the VTLawHelp.org website.](https://vtlawhelp.org/roadmap/divorce/step-1)
+continue button field: jurisdiction_kickout
+buttons:
+  - DELETE your answers and go to the VTLawHelp website: exit
+    url: https://vtlawhelp.org/roadmap/divorce/step-1
+---
 id: marriage or civil union
 question: |
   Do you and your spouse have a marriage or civil union?
@@ -908,7 +911,7 @@ code: |
   [user.address.address for user in users.complete_elements()]
   addresses_to_search = [user.address for user in users.complete_elements()]
 ---
-id: divorce no kids review screen
+id: divorce review screen
 event: review_divorce
 question: |
   Review your answers
@@ -916,28 +919,55 @@ subquestion: |
   ${ review_screen_instructions }
   
 review:
-  - Edit: docket_number
-    button: |
-      % if defined("docket_number"):
-      **Docket number**:
-      ${ docket_number }
-      % endif
-  - Edit: trial_court
-    button: |
-      % if defined("trial_court"):
-      **Court county**: 
-      ${ trial_court.address.county }
-      % endif
+
+  - note: |
+      ###About you
   - Edit: users.revisit
     button: |
-      **Users**
+      About you (edit your name, birthdate, gender and former name)
 
       % for item in users:
-        * ${ item }
+        - **${ item }**
       % endfor
+  - Edit: users[0].address.address
+    button: |      
+      Your address
+      
+      Address: **${ users[0].address.on_one_line() }**
+      
+      % if users_mailing_address_different:
+      Mailing address: **${ users[0].mailing_address.on_one_line() }**
+      % endif
+  - Edit: users[0].email
+    button: |      
+      Your contact info
+      
+      % if defined("users[0].email"):
+      Email: **${ users[0].email }**
+      % else:
+      Email: **None**
+      % endif
+      
+      % if defined("users[0].daytime_phone_number"):
+      Daytime phone: **${ users[0].daytime_phone_number }**
+      % else:
+      Daytime phone: **None**
+      % endif
+      
+      % if defined("users[0].evening_phone_number"):
+      Evening phone: **${ users[0].evening_phone_number }** 
+      % else:
+      Evening phone: **None**
+      % endif
+  - Edit: user_has_attorney
+    button: |
+      Your lawyer's name: ${ users[0].attorneys[0].name }
+      
+  - note: |
+      ###About the other party
   - Edit: other_parties.revisit
     button: |
-      **Other parties**
+      About the other party (defendant)
 
       % for item in other_parties:
         * ${ item }
@@ -957,7 +987,20 @@ review:
       % if defined("date_defendant_moved_to_VT"):
       * Date they moved to Vermont: ${ format_date(date_defendant_moved_to_VT, format="M/d/yyyy") }
       % endif
-
+  - note: |
+      ###Details about both of you
+  - Edit: license_type
+    button: |
+      % if license_type == "marriage":
+      You were married in:
+      
+      - **${ marriage_city }, ${ marriage_state }, on ${ marriage_date }**
+      % endif
+      % if license_type == "civil_union":
+      You had a civil union in:
+      
+      - **${ civil_union_city }, ${ civil_union_state }, on ${ civil_union_date }**
+      % endif
   - Edit: defendant_des_assistance
     button: |
       Get assistance from Division of Economic Services (DES):
@@ -970,13 +1013,19 @@ review:
       
       * You: **${ word(yesno(plaintiff_military_service)) }**
       * The defendant:** ${ word(yesno(other_parties1_military)) }**
+  - note: |
+      % if children.target_number > 0:
+      ###About the kids
+      % endif
   - Edit: children.revisit
     button: |
+      % if children.target_number > 0:
       Children
       
       % for item in children:
         - **${ item }** 
       % endfor
+      % endif
   - Edit: child_custody 
     button: |
       % if child_custody == "participation":
@@ -993,18 +1042,30 @@ review:
       % elif defined("knowledge_explain"):
       ${ knowledge_explain }
       % endif
-  - Edit: license_type
+
+
+
+  - Edit: earlier_actions.revisit
     button: |
-      % if license_type == "marriage":
-      You were married in:
-      
-      - **${ marriage_city }, ${ marriage_state }, on ${ marriage_date }**
+      % if defined("earlier_actions[0]"):
+        Earlier actions:
+
+      % for item in earlier_actions:
+        - **${ item.action_type }**, in ${ item.year_filed }, filed by ${ item.who_filed }, in this court: ${ item.where_filed }
+      % endfor
       % endif
-      % if license_type == "civil_union":
-      You had a civil union in:
-      
-      - **${ civil_union_city }, ${ civil_union_state }, on ${ civil_union_date }**
+
+  - Edit: earlier_RFA.revisit
+    button: |
+      % if defined("earlier_RFA[0]"):
+        Earlier protection orders:
+
+      % for item in earlier_RFA:
+        - **${ item.action_type }**, in ${ item.year_filed }, filed by ${ item.who_filed }, in this court: ${ item.where_filed }
+      % endfor
       % endif
+  - note: |
+      ###What you want in the order
   - Edit: grant_for
     button: |
       You are seeking a:
@@ -1027,26 +1088,6 @@ review:
       % else:
       - **${ other_ground_explanation}**
       % endif
-  - Edit: earlier_actions.revisit
-    button: |
-      % if defined("earlier_actions[0]"):
-        Earlier actions:
-
-      % for item in earlier_actions:
-        - **${ item.action_type }**, in ${ item.year_filed }, filed by ${ item.who_filed }, in this court: ${ item.where_filed }
-      % endfor
-      % endif
-  - Edit: earlier_RFA.revisit
-    button: |
-      % if defined("earlier_RFA[0]"):
-        Earlier protection orders:
-
-      % for item in earlier_RFA:
-        - **${ item.action_type }**, in ${ item.year_filed }, filed by ${ item.who_filed }, in this court: ${ item.where_filed }
-      % endfor
-      % endif
-  - note: |
-      ###What you want in the order
   - Edit: legal_rights_responsibilities
     button: |
       % if legal_rights_responsibilities:
@@ -1161,10 +1202,26 @@ review:
     button: |
       **Written agreement attached**:
       ${ word(yesno(written_agreement_attached)) }
+  - Edit: 
+    - trial_court_index
+    - recompute:
+      - trial_court
+    button: |
+      % if defined("trial_court"):
+      You are filing in the family court of: **${ trial_court.address.county } County**
+      % endif
+
+  - Edit: docket_number
+    button: |
+      % if defined("docket_number"):
+      Court docket number / case number: **${ docket_number }**
+      % else:
+      Court docket number / case number: **Unknown**
+      % endif
 ---
 continue button field: users.revisit
 question: |
-  Edit users
+  Edit info about you
 subquestion: |
   ${ users.table }
 
@@ -1177,16 +1234,39 @@ columns:
       row_item.name.full() if defined("row_item.name.first") else ""
   - Birthdate: |
       row_item.birthdate if defined("row_item.birthdate") else ""
-  - Address: |
-      row_item.address.block() if defined("row_item.address.state") else ""
-  - Email: |
-      row_item.email if defined("row_item.email") else ""
+  - Gender: |
+      row_item.gender if defined("row_item.gender") else ""
+  - Sex: |
+      row_item.sex if defined("row_item.sex") else ""
+  - Former name: |
+      row_item.last_name_former if defined("row_item.last_name_former") else ""  
 edit:
   - name.first
   - birthdate
-  - address.state
+  - last_name_former
+  - gender
+  - sex
+  - signature
+  - address
+  - mailing_address
   - email
+  - phone_numbers
 confirm: True
+---
+#table: users.table
+#rows: users
+#  - Address: |
+#      row_item.address.block() if defined("row_item.address.city") else ""
+#  - Address: |
+#      row_item.address.block() if defined("row_item.address.state") else ""
+#  - Email: |
+#      row_item.email if defined("row_item.email") else ""
+#edit:
+#  - name.first
+#  - birthdate
+#  - address.state
+#  - email
+#confirm: True
 ---
 continue button field: other_parties.revisit
 question: |
@@ -1395,7 +1475,7 @@ attachment:
       - "divorce": ${ grant_for == "divorce" }
       - "civil_union_dissolution": ${ grant_for == "dissolution" }
       - "legal_separation": ${ grant_for == "legal_separation" }
-      - "trial_court_county1": ${ trial_court.address.block() }
+      - "trial_court_county1": ${ trial_court.address.county } Family Division, ${ trial_court.address.on_one_line() }
       - "signature_date": ${ format_date(signature_date, format='M/d/yyyy') }
       - "users1_signature": ${ users[0].signature_if_final(i) }
       - "users1_address_county": ${ users[0].address.county }
@@ -1418,7 +1498,7 @@ attachment:
       - "divorce1": ${ grant_for == "divorce" }
       - "legal_seeparation1": ${ grant_for == "legal_separation" }
       - "civil_union_dissolution1": ${ grant_for == "dissolution" }
-      - "six_month_separation": ${ grounds["six_month_separation"] }
+      - "six_month_separation": ${ grounds == "six_month_separation" }
       - "separation_date": ${ format_date(separation_date, format='M/d/yyyy') }
       - "other_ground": ${ grounds["other_ground"] }
       - "other_ground_explanation": ${ other_ground_explanation }
@@ -1510,7 +1590,7 @@ attachment:
       - "divorce": ${ grant_for == "divorce" }
       - "civil_union_dissolution": ${ grant_for == "dissolution" }
       - "legal_separation": ${ grant_for == "legal_separation" }
-      - "trial_court_county1": ${ trial_court.address.block() }
+      - "trial_court_county1": ${ trial_court.address.county } Family Division, ${ trial_court.address.on_one_line() }
       - "signature_date": ${ format_date(signature_date, format='M/d/yyyy') }
       - "users1_signature": ${ users[0].signature_if_final(i) }
       - "users1_address_county": ${ users[0].address.county }
@@ -1533,7 +1613,7 @@ attachment:
       - "divorce1": ${ grant_for == "divorce" }
       - "legal_seeparation1": ${ grant_for == "legal_separation" }
       - "civil_union_dissolution1": ${ grant_for == "dissolution" }
-      - "six_month_separation": ${ grounds["six_month_separation"] }
+      - "six_month_separation": ${ grounds == "six_month_separation" }
       - "separation_date": ${ format_date(separation_date, format='M/d/yyyy') }
       - "other_ground": ${ grounds["other_ground"] }
       - "other_ground_explanation": ${ other_ground_explanation }
@@ -1678,7 +1758,7 @@ attachment:
       - "legal_grounds": ${ legal_grounds }
       - "court_manager": ${ court_manager }
       - "no_attorney_involved": |
-          % if not no_attorney_involved:
+          % if not user_has_attorney:
           { True }
           % else:
           { False }
@@ -1730,8 +1810,6 @@ attachment:
       - "marriage_date_day": ${ format_date(marriage_date, format='dd') }
       - "marriage_date_year": ${ format_date(marriage_date, format='yyyy') }
       - "minor_children_number": ${ minor_children_number }
-      - "no_attorney_involved": True
-      - "no_attorney_involved": ${no_attorney_involved == no_attorney_involved}
       - "type_of_decree": True
       - "type1": ${ type_of_decree == "type1" }
       - "type2": ${ type_of_decree == "type2" }
@@ -1747,4 +1825,10 @@ attachment:
       - "separation_date_year": ${ format_date(separation_date, format='yyyy') }
       - "legal_grounds": ${ legal_grounds }
       - "court_manager": ${ court_manager }
+      - "no_attorney_involved": |
+          % if not user_has_attorney:
+          { True }
+          % else:
+          { False }
+          % endif
 
