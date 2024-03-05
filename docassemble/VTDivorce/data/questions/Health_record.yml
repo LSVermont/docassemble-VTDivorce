@@ -117,12 +117,7 @@ code: |
   type_of_decree
   decree_county
   legal_grounds
-    
   court_manager
-  signature_date
-  docket_number
-  
-  other_parties[0].birthdate
 
   interview_order_Health_record = True
 ---
@@ -157,13 +152,14 @@ question:  |
 fields:
   - code: |
       users[0].name_fields()
-  - Last name at birth: users[0].name_former
+  - Your last name at birth: users[0].last_name_former
     required: False
-  - Sex: users[0].sex
+  - Your sex: users[0].sex
+    maxlength: 10
     show if: 
       code: |
         license_type == "civil_union"
-  - Gender: users[0].gender
+  - Your gender (health department offers these two choices): users[0].gender
     input type: radio
     choices:
       - Male: male
@@ -203,13 +199,14 @@ question:  |
 fields:
   - code: |
       other_parties[0].name_fields()
-  - Last name at birth: other_parties[0].name_former
+  - Their last name at birth: other_parties[0].last_name_former
     required: False
-  - Sex: other_parties[0].sex
+  - Their sex: other_parties[0].sex
+    maxlength: 10
     show if: 
       code: |
         license_type == "civil_union"
-  - Gender: other_parties[0].gender
+  - Their gender (health department offers these two choices): other_parties[0].gender
     input type: radio
     choices:
       - Male: male
@@ -399,10 +396,7 @@ event: review_Health_record_civil_union
 question: |
   Review your answers
 review:
-  - Edit: docket_number
-    button: |
-      **Docket number**:
-      ${ docket_number }
+
   - Edit: users.revisit
     button: |
       **Users**
@@ -422,6 +416,7 @@ review:
     button: |
       **Minor children number**:
       ${ minor_children_number }
+      
   - Edit: type1
     button: |
       **Type1**:
@@ -462,9 +457,16 @@ columns:
       row_item.name.full() if defined("row_item.name.first") else ""
   - Address: |
       row_item.address.block() if defined("row_item.address.city") else ""
+  - Gender/sex: |
+      row_item.gender if defined("row_item.gender") else ""  
+  - Former name: |
+      row_item.last_name_former if defined("row_item.last_name_former") else ""  
 edit:
   - name.first
   - address.city
+  - last_name_former
+  - gender
+  - sex
 confirm: True
 ---
 continue button field: other_parties.revisit
