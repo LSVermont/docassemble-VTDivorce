@@ -8,6 +8,10 @@ include:
   - docassemble.VTSharedYMLFile:VTSharedYMLFile.yml
   - Health_record.yml
 ---
+# customized feedback form
+code: |   
+  feedback_form = "docassemble.VTFeedback:VTfeedback.yml"
+---
 metadata:
   title: >-
     Divorce / separation / dissolution
