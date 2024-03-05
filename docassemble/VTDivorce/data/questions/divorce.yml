@@ -1,3 +1,6 @@
+#For this interview, the person filling out the form (user) is always considered to be the plaintiff.
+#The health record yml file is included in this package because it will never be a stand-alone interview.
+#We will soon be "including" other stand-alone interviews.
 ---
 include:
   - docassemble.AssemblyLine:assembly_line.yml
@@ -22,7 +25,6 @@ metadata:
     - https://vtlawhelp.org/roadmap/divorce/step-3
     - https://www.vermontjudiciary.org/sites/default/files/documents/400-00836NoKids_1.pdf
     - https://www.vermontjudiciary.org/sites/default/files/documents/400-00836Children.pdf
-  allowed_courts: []
   typical_role: "plaintiff"
   al_weaver_version: "1.10.1"
   generated_on: "2023-07-25"
@@ -59,6 +61,8 @@ id: interview_order_divorce
 code: |
   nav.set_section("intro")
   user_role = "plaintiff"
+  #users1_role sets the role for the Notice of Appearance form
+  users1_role = "role_plaintiff"
   user_ask_role = "plaintiff"
   nav.set_section("screening")
   plaintiff_VT
@@ -82,7 +86,6 @@ code: |
   users.gather()
   if license_type == "marriage":
     users_role
-  set_parts(subtitle=str(users))
   users[0].birthdate
   users[0].address.address
   users[0].email
@@ -751,18 +754,18 @@ fields:
     required: False
     show if: other_parties_mailing_address_different
 ---
-id: Why are you seeking x from the court
-question: |
-  What is your reason for getting a x?
-fields:
-  - "We have been or will have lived separate and apart for more than 6 months in a row. It is not reasonably probable that we can resume our relationship. (Note - This is the most common reason.)": six_month_separation
-    datatype: yesno
-  - "Date of separation": separation_date
-    datatype: date
-  - "Other grounds (other reason)": other_ground_divorce
-    datatype: yesno
-  - "Explain the other grounds": other_ground_divorce_explanation
-    maxlength: 55
+#id: Why are you seeking x from the court
+#question: |
+#  What is your reason for getting a x?
+#fields:
+#  - "We have been or will have lived separate and apart for more than 6 months in a row. It is not reasonably probable that we can resume our relationship. (Note - This is the most common reason.)": six_month_separation
+#    datatype: yesno
+#  - "Date of separation": separation_date
+#    datatype: date
+#  - "Other grounds (other reason)": other_ground_divorce
+#    datatype: yesno
+#  - "Explain the other grounds": other_ground_divorce_explanation
+#    maxlength: 55
 ---
 id: filing_financial_form
 question: |
@@ -978,75 +981,58 @@ review:
       % for item in children:
         * ${ item } 
       % endfor
+  - Edit: license_type
+    button: |
+      % if license_type == "marriage":
+      You were married in:
+      
+      - **${ marriage_city }, ${ marriage_state }, on ${ marriage_date }**
+      % endif
+      % if license_type == "civil_union":
+      You had a civil union in:
+      
+      - **${ civil_union_city }, ${ civil_union_state }, on ${ civil_union_date }**
+      % endif
+  - Edit: grant_for
+    button: |
+      You are seeking a:
+      
+      % if grant_for == "divorce":
+      - **Divorce**
+      % endif
+      % if grant_for == "legal_separation":
+      - **Legal separation**
+      % endif
+      % if grant_for == "dissolution":
+      - **Civil union dissolution**
+      % endif
+  - Edit: grounds
+    button: |
+      Grounds / reason:
+      
+      % if grounds == "six_month_separation":
+      - **Separated six months or more** -- Date of separation: ${ separation_date }
+      % else:
+      - **${ other_ground_explanation}**
+      % endif
   - Edit: earlier_actions.revisit
     button: |
-      **Earlier Actions**
+      % if defined("earlier_actions[0]"):
+        Earlier actions:
 
       % for item in earlier_actions:
-        * ${ item }
+        - **${ item.action_type }**, in ${ item.year_filed }, filed by ${ item.who_filed }, in this court: ${ item.where_filed }
       % endfor
+      % endif
   - Edit: earlier_RFA.revisit
     button: |
-      **Earlier RFAs**
+      % if defined("earlier_RFA[0]"):
+        Earlier protection orders:
 
       % for item in earlier_RFA:
-        * ${ item }
+        - **${ item.action_type }**, in ${ item.year_filed }, filed by ${ item.who_filed }, in this court: ${ item.where_filed }
       % endfor
-  - Edit: divorce
-    button: |
-      **Divorce**:
-      ${ word(yesno(divorce)) }
-  - Edit: civil_union_dissolution
-    button: |
-      **Civil union dissolution**:
-      ${ word(yesno(civil_union_dissolution)) }
-  - Edit: legal_separation
-    button: |
-      **Legal separation**:
-      ${ word(yesno(legal_separation)) }
-      
-
-  - Edit: marriage
-    button: |
-      **Marriage**:
-      ${ word(yesno(marriage)) }
-  - Edit: marriage_state
-    button: |
-      **Marriage state**:
-      ${ marriage_state }
-  - Edit: marriage_city
-    button: |
-      **Marriage city**:
-      ${ marriage_city }
-  - Edit: marriage_date
-    button: |
-      **Date of marriage**:
-      ${ marriage_date }
-  - Edit: civil_union
-    button: |
-      **Civil union**:
-      ${ word(yesno(civil_union)) }
-  - Edit: civil_union_city
-    button: |
-      **Civil union city**:
-      ${ civil_union_city }
-  - Edit: civil_union_state
-    button: |
-      **Civil union state**:
-      ${ civil_union_state }
-  - Edit: civil_union_date
-    button: |
-      **Date of civil union**:
-      ${ civil_union_date }
-  - Edit: six_month_separation
-    button: |
-      **Six month separation**:
-      ${ word(yesno(six_month_separation)) }
-  - Edit: separation_date
-    button: |
-      **Date of separation**:
-      ${ separation_date }
-      
+      % endif
   - note: |
       ###What you want in the order
   - Edit: legal_rights_responsibilities
@@ -1679,8 +1665,12 @@ attachment:
       - "separation_date_year": ${ format_date(separation_date, format='yyyy') }
       - "legal_grounds": ${ legal_grounds }
       - "court_manager": ${ court_manager }
-      - "no_attorney_involved": True
-      - "no_attorney_involved": ${no_attorney_involved == no_attorney_involved}
+      - "no_attorney_involved": |
+          % if not no_attorney_involved:
+          { True }
+          % else:
+          { False }
+          % endif
 
 ---
 attachment:

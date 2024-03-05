@@ -31,8 +31,8 @@ objects:
 images:
   big_logo: LSV_logo.png 
 ---
-objects:
-  - all_courts: ALCourtLoader.using(file_name='courts_list.xlsx')
+#objects:
+#  - all_courts: ALCourtLoader.using(file_name='courts_list.xlsx')
 ---
 code: |
   trial_court = all_courts.as_court('trial_court', trial_court_index)
