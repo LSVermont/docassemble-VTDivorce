@@ -1,3 +1,6 @@
+#For this interview, the person filling out the form (user) is always considered to be the plaintiff.
+#The health record yml file is included in this package because it will never be a stand-alone interview.
+#We will soon be "including" other stand-alone interviews.
 ---
 include:
   - docassemble.AssemblyLine:assembly_line.yml
@@ -22,7 +25,6 @@ metadata:
     - https://vtlawhelp.org/roadmap/divorce/step-3
     - https://www.vermontjudiciary.org/sites/default/files/documents/400-00836NoKids_1.pdf
     - https://www.vermontjudiciary.org/sites/default/files/documents/400-00836Children.pdf
-  allowed_courts: []
   typical_role: "plaintiff"
   al_weaver_version: "1.10.1"
   generated_on: "2023-07-25"
@@ -59,6 +61,8 @@ id: interview_order_divorce
 code: |
   nav.set_section("intro")
   user_role = "plaintiff"
+  #users1_role sets the role for the Notice of Appearance form
+  users1_role = "role_plaintiff"
   user_ask_role = "plaintiff"
   nav.set_section("screening")
   plaintiff_VT
@@ -1661,8 +1665,12 @@ attachment:
       - "separation_date_year": ${ format_date(separation_date, format='yyyy') }
       - "legal_grounds": ${ legal_grounds }
       - "court_manager": ${ court_manager }
-      - "no_attorney_involved": True
-      - "no_attorney_involved": ${no_attorney_involved == no_attorney_involved}
+      - "no_attorney_involved": |
+          % if not no_attorney_involved:
+          { True }
+          % else:
+          { False }
+          % endif
 
 ---
 attachment:
