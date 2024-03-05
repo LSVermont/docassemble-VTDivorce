@@ -164,20 +164,6 @@ fields:
   - County: trial_court_index
     code: all_courts._load_courts()['address_county'].items()
 ---
-sets:
-  - other_parties[i].name.first
-  - other_parties[i].name.last
-  - other_parties[i].name.middle
-  - other_parties[i].name.suffix
-id: names of opposing parties
-question: |
-  Name of the defendant in this matter
-subquestion: |
-  Because you are starting this court case, you are called the "plaintiff." The other party (your spouse) is called the "defendant."
-fields:
-  - code: |
-      other_parties[i].name_fields(person_or_business='person')
----
 
 id: jurisdiction kickout
 question: |
@@ -395,7 +381,7 @@ id: have school age children
 question: |
   Children
 subquestion: |  
-  Do you and the other party have children together who are either younger than 18 years old, or are 18 years old and still in high school? Include born or adopted children.  
+  Do you and ${ other_parties[0].name } have children together who are either younger than 18 years old, or are 18 years old and still in high school? Include born or adopted children.  
 fields:
   - no label: have_school_age_children
     datatype: yesnoradio
@@ -461,7 +447,7 @@ fields:
     datatype: date
   - End date (or today's date): locations[i].end_date 
     datatype: date
-  - All people that lived with your child/children: locations[i].housemates
+  - All people that lived with your child/children (including you): locations[i].housemates
     maxlength: 30
   - note: |
       Use abbreviated names for the people who lived with them. Use a comma between names. Example: Jane T., John Z. There's not much room on the form!
@@ -505,22 +491,28 @@ fields:
 --- 
 id: earlier actions
 question: |
-  Have you or the defendant filed for divorce, legal separation, dissolution or annulment **before** filing this form? 
+  Past court actions
+subquestion:
+  Have you or ${ other_parties[0].name } filed for divorce, legal separation, dissolution or annulment **before** filing this form? 
 fields:
   - no label: earlier_actions_yes
     datatype: yesnoradio
   - How many of these actions were filed?: earlier_actions.target_number
     datatype: integer
+    min: 1
     show if: earlier_actions_yes
 ---
 id: earlier RFA actions
 question: |
-  Have either you or the defendant filed a complaint for relief from abuse (RFA) or a request for a protective order against each other?
+  Past court actions
+subquestion:
+  Have either you or ${ other_parties[0].name } filed a complaint for relief from abuse (RFA) or a request for a protective order against each other?
 fields:
   - no label: earlier_RFA_yes
     datatype: yesnoradio
-  - How many?: earlier_RFA.target_number
+  - How many of these actions were filed?: earlier_RFA.target_number
     datatype: integer
+    min: 1
     show if: earlier_RFA_yes
 ---
 id: collect earlier actions
@@ -563,7 +555,7 @@ fields:
   - Type of action: earlier_RFA[i].action_type
     datatype: radio
     choices: 
-      - Relief from abuse 
+      - Relief from abuse order
       - Protective order
   - Who filed it?: earlier_RFA[i].who_filed
     datatype: object_radio
@@ -659,13 +651,13 @@ fields:
 ---
 id: military service
 question: |
-   Have you or ${ other_parties } served in the military?
+   Do you or ${ other_parties } serve in the military?
 fields: 
-  - I served in the military: plaintiff_military_service
+  - I serve in the military: plaintiff_military_service
     datatype: yesno
-  - ${ other_parties } served in the military: other_parties1_military
+  - ${ other_parties } serves in the military: other_parties1_military
     datatype: yesno
-  - We have not served in the military: no_military_service
+  - We do not serve in the military: no_military_service
     datatype: yesno  
 ---
 id: other parties attorney info
@@ -976,11 +968,27 @@ review:
       * The defendant:** ${ word(yesno(other_parties1_military)) }**
   - Edit: children.revisit
     button: |
-      **Children**
+      Children
       
       % for item in children:
-        * ${ item } 
+        - **${ item }** 
       % endfor
+  - Edit: child_custody 
+    button: |
+      % if child_custody == "participation":
+      - I have participated as a party, witness, or in some other way in a court case about the custody of this child or these children in Vermont or another state.
+      % elif child_custody == "information":
+      - I have information about a case concerning this child or these children that is now pending in a Vermont court or a court in another state.
+      % elif child_custody == "knowledge":
+      - I have knowledge about a person who is not a party to this case who has physical custody of this child or these children or who claims to have custody of or visitation rights to this child or these children.
+      % endif
+      % if defined("participation_explain"):
+      ${ participation_explain }
+      % elif defined("information_explain"):
+      ${ information_explain }
+      % elif defined("knowledge_explain"):
+      ${ knowledge_explain }
+      % endif
   - Edit: license_type
     button: |
       % if license_type == "marriage":

@@ -152,7 +152,7 @@ question:  |
 fields:
   - code: |
       users[0].name_fields()
-  - Your last name at birth: users[0].last_name_former
+  - Your last name at birth (if different): users[0].last_name_former
     required: False
   - Your sex: users[0].sex
     maxlength: 10
@@ -195,11 +195,13 @@ sets:
     - other_parties[0].name.middle
     - other_parties[0].name.suffix
 question:  |
-  Information about the other party
+  Information about the other party (the defendant)
+subquestion: |
+    Because you are starting this court case, you are called the "plaintiff." The other party (your spouse) is called the "defendant."
 fields:
   - code: |
       other_parties[0].name_fields()
-  - Their last name at birth: other_parties[0].last_name_former
+  - Their last name at birth (if different): other_parties[0].last_name_former
     required: False
   - Their sex: other_parties[0].sex
     maxlength: 10
@@ -261,35 +263,31 @@ id: separation
 question: |
   Information about the separation
 fields:
-  - "Date couple last resided in same household": separation_date
+  - "Date you and ${ other_parties[0].name } last resided in the same household": separation_date
     datatype: date
-  - "As of the specified date, how many children under the age of 18 were in the household?": minor_children_number
+  - "As of that date, how many children under the age of 18 were in the household?": minor_children_number
     datatype: integer
 ---
 id: attorneys_information
 question: |
-  Information about your attorney
+  Information about your attorney (lawyer)
 fields:
-  - "Do you have an attorney": no_attorney_involved
+  - "Do you have an attorney?": no_attorney_involved
     datatype: yesnoradio
     
   - "Attorney's first name": users[0].attorneys[0].name.first
     required: True
     show if: no_attorney_involved
     
-  - "Attorney's last name": users[0].attorneys[0].name.last
+  - "Last name": users[0].attorneys[0].name.last
     required: True
     show if: no_attorney_involved
     
-  - "Attorney's middle name": users[0].attorneys[0].name.middle
+  - "Suffix": users[0].attorneys[0].name.suffix
     required: False
     show if: no_attorney_involved
     
-  - "Attorney's suffix": users[0].attorneys[0].name.suffix
-    required: False
-    show if: no_attorney_involved
-    
-  - "Street Address": users[0].attorneys[0].address.address
+  - "Address": users[0].attorneys[0].address.address
     required: True
     show if: no_attorney_involved
     
@@ -326,9 +324,11 @@ fields:
 ---
 id: other_parties_husband_wife_spouse
 question: |
-  Information about ${ other_parties[0].name }
+  Information about the defendant
+subquestion: |
+  For ${ other_parties[0].name }, which of these would you choose?
 fields:
-  - "For ${ other_parties[0].name }, which of these would you choose. They are the:": other_parties_role
+  - They are the: other_parties_role
     input type: radio
     choices: 
       - "Husband": husband
@@ -338,8 +338,10 @@ fields:
 id: users_husband_wife_spouse
 question: |
   Information about you
+subquestion: |
+  Which of these would you choose to describe you?
 fields:
-  - "For you, which of these would you choose. You are the:": users_role
+  - "You are the:": users_role
     input type: radio
     choices: 
       - "Husband": husband
