@@ -78,6 +78,8 @@ question:  |
   Information about the other party (the defendant)
 subquestion: |
     Because you are starting this court case, you are called the "plaintiff." The other party (your spouse) is called the "defendant."
+    
+    Tell us about the defendant:
 fields:
   - code: |
       other_parties[0].name_fields()
@@ -108,7 +110,7 @@ fields:
 ---
 id: attorneys_information
 question: |
-  Information about your attorney (lawyer)
+  Your attorney (lawyer) for this legal matter
 subquestion: |
   Note: Many people in Vermont get a divorce, separation or civil union dissolution without a lawyer.
 fields:

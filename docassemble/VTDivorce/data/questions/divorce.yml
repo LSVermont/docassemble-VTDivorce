@@ -446,9 +446,11 @@ sets:
   - locations[i].address.state
 question: |
   Where have they lived?
-fields:
+fields:      
+
   - code: |
       locations[i].address_fields(country_code=AL_DEFAULT_COUNTRY, default_state=AL_DEFAULT_STATE)
+
   - Start date: locations[i].start_date
     datatype: date
   - End date (or today's date): locations[i].end_date 
@@ -730,9 +732,8 @@ fields:
     default: ${ AL_DEFAULT_STATE }
   - ${ users[0].address.zip_label}: other_parties[0].address.zip
     required: False      
-  - ${ users[0].address.country_label}: other_parties[0].address.country
-    code: countries_list()
-    default: ${ AL_DEFAULT_COUNTRY }
+  - ${ users[0].address.county_label}: other_parties[0].address.county
+
   - Does ${ other_parties } have a mailing address that is different from their street address?: other_parties_mailing_address_different
     datatype: yesnoradio
   - Mailing address: other_parties[0].mailing_address.address
@@ -789,7 +790,7 @@ fields:
   - Asking for: grant_for
     input type: radio
     choices: 
-      - Dissolution: dissolution
+      - Civil union dissolution: dissolution
     show if: 
       code: |
         license_type == "civil_union"
