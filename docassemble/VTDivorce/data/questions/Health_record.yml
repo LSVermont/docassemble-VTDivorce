@@ -33,11 +33,11 @@ code: |
   separation_date
   minor_children_number  
  
-  decree_date
-  type_of_decree
-  decree_county
-  legal_grounds
-  court_manager
+  #decree_date
+  #type_of_decree
+  #decree_county
+  #legal_grounds
+  #court_manager
 
   interview_order_Health_record = True
 ---
@@ -110,43 +110,43 @@ id: attorneys_information
 question: |
   Information about your attorney (lawyer)
 fields:
-  - "Do you have an attorney?": no_attorney_involved
+  - "Do you have an attorney?": user_has_attorney
     datatype: yesnoradio
     
   - "Attorney's first name": users[0].attorneys[0].name.first
     required: True
-    show if: no_attorney_involved
+    show if: user_has_attorney
     
   - "Last name": users[0].attorneys[0].name.last
     required: True
-    show if: no_attorney_involved
+    show if: user_has_attorney
     
   - "Suffix": users[0].attorneys[0].name.suffix
     required: False
-    show if: no_attorney_involved
+    show if: user_has_attorney
     
   - "Address": users[0].attorneys[0].address.address
     required: True
-    show if: no_attorney_involved
+    show if: user_has_attorney
     
   - "City": users[0].attorneys[0].address.city
     required: True
-    show if: no_attorney_involved
+    show if: user_has_attorney
     
   - "State": users[0].attorneys[0].address.state
     code: |
       states_list()
     default: VT
     required: True
-    show if: no_attorney_involved
+    show if: user_has_attorney
  
   - "Zip": users[0].attorneys[0].address.zip
     required: True
-    show if: no_attorney_involved
+    show if: user_has_attorney
     
   - "Attorney's phone number": users1_attorneys_phone_numer
     datatype: al_international_phone
-    show if: no_attorney_involved
+    show if: user_has_attorney
 ---
 id: marriage
 question: |
@@ -186,121 +186,97 @@ fields:
       - "Wife": wife
       - "Spouse": spouse
 ---
-id: legal_grounds
-question: |
-  Information about the decree
-fields:
-  - "What type of decree was it?": type_of_decree
-    input type: radio
-    choices:
-      - Absolute Dissolution: type1
-      - Annulment: type2
-  - "When did this decree become final?": decree_date
-    datatype: date
-  - "What were the legal grounds for the decree?": legal_grounds
-    datatype: area
-  - "What county is the decree in?": decree_county
-  - "Who was the court manager?": court_manager
-    maxlength: 54
-  - "When was the decree signed?": signature_date
-    datatype: date
+#id: info not needed -- filled in by court clerk
+#question: |
+#  Information about the decree
+#fields:
+#  - "What type of decree was it?": type_of_decree
+#    input type: radio
+#    choices:
+#      - Absolute Dissolution: type1
+#      - Annulment: type2
+#  - "When did this decree become final?": decree_date
+#    datatype: date
+#  - "What were the legal grounds for the decree?": legal_grounds
+#    datatype: area
+#  - "What county is the decree in?": decree_county
+#  - "Who was the court manager?": court_manager
+#    maxlength: 54
+#  - "When was the decree signed?": signature_date
+#    datatype: date
 ---
 id: Health record 
 event: review_Health_record_civil_union
 question: |
   Review your answers
 review:
-
-  - Edit: users.revisit
-    button: |
-      **Users**
-
-      % for item in users:
-        * ${ item }
-      % endfor
-
-  - Edit: other_parties.revisit
-    button: |
-      **Other parties**
-
-      % for item in other_parties:
-        * ${ item }
-      % endfor
+#
+#  - Edit: users.revisit
+#    button: |
+#      **Users**
+#
+#      % for item in users:
+#        * ${ item }
+#      % endfor
+#
+#  - Edit: other_parties.revisit
+#    button: |
+#      **Other parties**
+#
+#      % for item in other_parties:
+#        * ${ item }
+#      % endfor
   - Edit: minor_children_number
     button: |
-      **Minor children number**:
-      ${ minor_children_number }
-      
-  - Edit: type1
-    button: |
-      **Type1**:
-      ${ type1 }
-  - Edit: type2
-    button: |
-      **Type2**:
-      ${ type2 }
-  - Edit: decree_date
-    button: |
-      **decree_date**:
-      ${ decree_date }
-  - Edit: decree_county
-    button: |
-      **decree_county**:
-      ${ decree_county }
-  - Edit: legal_grounds
-    button: |
-      **legal_grounds**:
-      ${ legal_grounds }
-  - Edit: court_manager
-    button: |
-      **court_manager**:
-      ${ court_manager }
----
-continue button field: users.revisit
-question: |
-  Edit users
-subquestion: |
-  ${ users.table }
+      Number of minor children living in your home at time of separation:
+      **${ minor_children_number }**
 
-  ${ users.add_action() }
 ---
-table: users.table
-rows: users
-columns:
-  - Name: |
-      row_item.name.full() if defined("row_item.name.first") else ""
-  - Address: |
-      row_item.address.block() if defined("row_item.address.city") else ""
-  - Gender/sex: |
-      row_item.gender if defined("row_item.gender") else ""  
-  - Former name: |
-      row_item.last_name_former if defined("row_item.last_name_former") else ""  
-edit:
-  - name.first
-  - address.city
-  - last_name_former
-  - gender
-  - sex
-confirm: True
----
-continue button field: other_parties.revisit
-question: |
-  Edit other_parties
-subquestion: |
-  ${ other_parties.table }
-
-  ${ other_parties.add_action() }
----
-table: other_parties.table
-rows: other_parties
-columns:
-  - Name: |
-      row_item.name.full() if defined("row_item.name.first") else ""
-  - Address: |
-      row_item.address.block() if defined("row_item.address.city") else ""
-edit:
-  - name.first
-  - address.city
-confirm: True
+#continue button field: users.revisit
+#question: |
+#  Edit users
+#subquestion: |
+#  ${ users.table }
+#
+#  ${ users.add_action() }
+#---
+#table: users.table
+#rows: users
+#columns:
+#  - Name: |
+#      row_item.name.full() if defined("row_item.name.first") else ""
+#  - Address: |
+#      row_item.address.block() if defined("row_item.address.city") else ""
+#  - Gender/sex: |
+#      row_item.gender if defined("row_item.gender") else ""  
+#  - Former name: |
+#      row_item.last_name_former if defined("row_item.last_name_former") else ""  
+#edit:
+#  - name.first
+#  - address.city
+#  - last_name_former
+#  - gender
+#  - sex
+#confirm: True
+#---
+#continue button field: other_parties.revisit
+#question: |
+#  Edit other_parties
+#subquestion: |
+#  ${ other_parties.table }
+#
+#  ${ other_parties.add_action() }
+#---
+#table: other_parties.table
+#rows: other_parties
+#columns:
+#  - Name: |
+#      row_item.name.full() if defined("row_item.name.first") else ""
+#  - Address: |
+#      row_item.address.block() if defined("row_item.address.city") else ""
+#edit:
+#  - name.first
+#  - address.city
+#confirm: True
 ---
 
