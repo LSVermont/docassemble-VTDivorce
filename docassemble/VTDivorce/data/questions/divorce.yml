@@ -96,6 +96,7 @@ code: |
   if user_has_attorney:
     users[0].attorneys[0].name
 
+
   set_progress(16)
   nav.set_section("defendant")
   other_parties.gather()
@@ -961,11 +962,13 @@ review:
       % endif
   - Edit: user_has_attorney
     button: |
+
       % if defined("users[0].attorneys[0].name"):
       % if defined("users[0].attorneys[0].phone_number"):
       Your lawyer: **${ users[0].attorneys[0].name }** at **${ users[0].attorneys[0].phone_number }**
       % endif
       % endif
+
   - note: |
       ###About the other party
   - Edit: other_parties.revisit
@@ -1814,6 +1817,7 @@ attachment:
       - "marriage_date_day": ${ format_date(marriage_date, format='dd') }
       - "marriage_date_year": ${ format_date(marriage_date, format='yyyy') }
       - "minor_children_number": ${ minor_children_number }
+
       #- "type_of_decree": True
       #- "type1": ${ type_of_decree == "type1" }
       #- "type2": ${ type_of_decree == "type2" }
@@ -1821,14 +1825,19 @@ attachment:
       #- "decree_date": ${ format_date(decree_date, format='dd') }
       #- "decree_date_year": ${ format_date(decree_date, format='yyyy') }
       #- "decree_county": ${ decree_county }
+
+
       - "signature_date_month": ${ format_date(signature_date, format='M') }
       - "signature_date": ${  format_date(signature_date, format='dd') }
       - "signature_date_year": ${ format_date(signature_date, format='yyyy') }
       - "separation_date_month": ${ format_date(separation_date, format='M') }
       - "separation_date_day": ${ format_date(separation_date, format='dd') }
       - "separation_date_year": ${ format_date(separation_date, format='yyyy') }
+
       #- "legal_grounds": ${ legal_grounds }
       #- "court_manager": ${ court_manager }
+
+
       - "no_attorney_involved": |
           % if not user_has_attorney:
           { True }
