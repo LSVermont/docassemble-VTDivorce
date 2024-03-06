@@ -438,7 +438,7 @@ subquestion: |
   If children have lived at different addresses from each other, enter the addresses for each child.
 continue button field: where_children_lived
 ---
-id: children information
+id: children location information
 sets:
   - locations[i].address.address
   - locations[i].address.city
@@ -470,7 +470,7 @@ fields:
   - no label: locations.there_is_another
     datatype: yesnoradio
 ---
-id: child custody
+id: child custody cases
 question: |
   Custody
 subquestion: |  
@@ -961,8 +961,11 @@ review:
       % endif
   - Edit: user_has_attorney
     button: |
-      Your lawyer's name: ${ users[0].attorneys[0].name }
-      
+      % if defined("users[0].attorneys[0].name"):
+      % if defined("users[0].attorneys[0].phone_number"):
+      Your lawyer: **${ users[0].attorneys[0].name }** at **${ users[0].attorneys[0].phone_number }**
+      % endif
+      % endif
   - note: |
       ###About the other party
   - Edit: other_parties.revisit
@@ -970,14 +973,14 @@ review:
       About the other party (defendant)
 
       % for item in other_parties:
-        * ${ item }
+        - **${ item }**
       % endfor
   - Edit: plaintiff_VT
     button: |
       You live in Vermont: **${ word(yesno(plaintiff_VT)) }**
       
       % if defined("date_plaintiff_moved_to_VT"):
-      * Date you moved to Vermont: ${ format_date(date_plaintiff_moved_to_VT, format="M/d/yyyy") }
+      * Date you moved to Vermont: **${ format_date(date_plaintiff_moved_to_VT, format="M/d/yyyy") }**
       % endif
 
   - Edit: defendant_VT
@@ -985,7 +988,7 @@ review:
       Defendant lives in Vermont: **${ word(yesno(defendant_VT)) }**
       
       % if defined("date_defendant_moved_to_VT"):
-      * Date they moved to Vermont: ${ format_date(date_defendant_moved_to_VT, format="M/d/yyyy") }
+      * Date they moved to Vermont: **${ format_date(date_defendant_moved_to_VT, format="M/d/yyyy") }**
       % endif
   - note: |
       ###Details about both of you
@@ -994,12 +997,12 @@ review:
       % if license_type == "marriage":
       You were married in:
       
-      - **${ marriage_city }, ${ marriage_state }, on ${ marriage_date }**
+      - **${ marriage_city }, ${ marriage_state },** on **${ marriage_date }**
       % endif
       % if license_type == "civil_union":
       You had a civil union in:
       
-      - **${ civil_union_city }, ${ civil_union_state }, on ${ civil_union_date }**
+      - **${ civil_union_city }, ${ civil_union_state },** on **${ civil_union_date }**
       % endif
   - Edit: defendant_des_assistance
     button: |
@@ -1730,6 +1733,7 @@ attachment:
       - "other_parties1_sex": ${ other_parties[0].sex }
       - "users1_attorneys_address": ${ users[0].attorneys[0].address.on_one_line() }
       - "users1_attorneys_name": ${users[0].attorneys[0].name}
+      - "users1_attorneys_phone_numer": ${ users[0].attorneys[0].phone_number }
       - "other_parties1_former_name": ${ other_parties[0].last_name_former }
       - "other_parties1_birth_month": ${ format_date(other_parties[0].birthdate, format='M') }
       - "other_parties1_birth_day": ${ format_date(other_parties[0].birthdate, format='dd') }

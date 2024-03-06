@@ -55,7 +55,7 @@ fields:
   - Your last name at birth (if different): users[0].last_name_former
     required: False
   - Your sex: users[0].sex
-    maxlength: 10
+    maxlength: 14
     show if: 
       code: |
         license_type == "civil_union"
@@ -86,7 +86,7 @@ fields:
   - Their last name at birth (if different): other_parties[0].last_name_former
     required: False
   - Their sex: other_parties[0].sex
-    maxlength: 10
+    maxlength: 14
     show if: 
       code: |
         license_type == "civil_union"
@@ -140,7 +140,7 @@ fields:
     required: True
     show if: user_has_attorney
     
-  - "Attorney's phone number": users1_attorneys_phone_numer
+  - "Attorney's phone number": users[0].attorneys[0].phone_number
     datatype: al_international_phone
     show if: user_has_attorney
 ---
