@@ -1500,7 +1500,7 @@ attachment:
       - "civil_union_dissolution1": ${ grant_for == "dissolution" }
       - "six_month_separation": ${ grounds == "six_month_separation" }
       - "separation_date": ${ format_date(separation_date, format='M/d/yyyy') }
-      - "other_ground": ${ grounds["other_ground"] }
+      - "other_ground": ${ grounds == "other_ground" }
       - "other_ground_explanation": ${ other_ground_explanation }
       - "filing_financial_form": ${ filing_financial_form }
       - "not_filing_financial_form": ${ not filing_financial_form }
@@ -1615,7 +1615,7 @@ attachment:
       - "civil_union_dissolution1": ${ grant_for == "dissolution" }
       - "six_month_separation": ${ grounds == "six_month_separation" }
       - "separation_date": ${ format_date(separation_date, format='M/d/yyyy') }
-      - "other_ground": ${ grounds["other_ground"] }
+      - "other_ground": ${ grounds == "other_ground" }
       - "other_ground_explanation": ${ other_ground_explanation }
       
       - "child_name1": ${ children[0].name }
