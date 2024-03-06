@@ -22,9 +22,8 @@ metadata:
   tags:
     - "FA-00-00-00-00"
   authors:
-    - Mia Bonardi
-    - Stavros Constantinou
-    - Legal Services Vermont
+    - M. Bonardi and S. Constantinou, Lemma Legal
+    - K. Surette, Legal Services Vermont
   original_form:
     - https://vtlawhelp.org/roadmap/divorce/step-3
     - https://www.vermontjudiciary.org/sites/default/files/documents/400-00836NoKids_1.pdf
@@ -95,7 +94,7 @@ code: |
   users[0].address.address
   users[0].email
   if user_has_attorney:
-    users[0].attorneys[0].name.last
+    users[0].attorneys[0].name
 
   set_progress(16)
   nav.set_section("defendant")

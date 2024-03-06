@@ -109,20 +109,14 @@ fields:
 id: attorneys_information
 question: |
   Information about your attorney (lawyer)
+subquestion: |
+  Note: Many people in Vermont get a divorce, separation or civil union dissolution without a lawyer.
 fields:
   - "Do you have an attorney?": user_has_attorney
     datatype: yesnoradio
     
-  - "Attorney's first name": users[0].attorneys[0].name.first
+  - "Attorney's name": users[0].attorneys[0].name
     required: True
-    show if: user_has_attorney
-    
-  - "Last name": users[0].attorneys[0].name.last
-    required: True
-    show if: user_has_attorney
-    
-  - "Suffix": users[0].attorneys[0].name.suffix
-    required: False
     show if: user_has_attorney
     
   - "Address": users[0].attorneys[0].address.address
