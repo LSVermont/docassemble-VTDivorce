@@ -33,11 +33,11 @@ code: |
   separation_date
   minor_children_number  
  
-  decree_date
-  type_of_decree
-  decree_county
-  legal_grounds
-  court_manager
+  #decree_date
+  #type_of_decree
+  #decree_county
+  #legal_grounds
+  #court_manager
 
   interview_order_Health_record = True
 ---
@@ -55,7 +55,7 @@ fields:
   - Your last name at birth (if different): users[0].last_name_former
     required: False
   - Your sex: users[0].sex
-    maxlength: 10
+    maxlength: 14
     show if: 
       code: |
         license_type == "civil_union"
@@ -78,13 +78,15 @@ question:  |
   Information about the other party (the defendant)
 subquestion: |
     Because you are starting this court case, you are called the "plaintiff." The other party (your spouse) is called the "defendant."
+    
+    Tell us about the defendant:
 fields:
   - code: |
       other_parties[0].name_fields()
   - Their last name at birth (if different): other_parties[0].last_name_former
     required: False
   - Their sex: other_parties[0].sex
-    maxlength: 10
+    maxlength: 14
     show if: 
       code: |
         license_type == "civil_union"
@@ -108,21 +110,15 @@ fields:
 ---
 id: attorneys_information
 question: |
-  Information about your attorney (lawyer)
+  Your attorney (lawyer) for this legal matter
+subquestion: |
+  Note: Many people in Vermont get a divorce, separation or civil union dissolution without a lawyer.
 fields:
   - "Do you have an attorney?": user_has_attorney
     datatype: yesnoradio
     
-  - "Attorney's first name": users[0].attorneys[0].name.first
+  - "Attorney's name": users[0].attorneys[0].name
     required: True
-    show if: user_has_attorney
-    
-  - "Last name": users[0].attorneys[0].name.last
-    required: True
-    show if: user_has_attorney
-    
-  - "Suffix": users[0].attorneys[0].name.suffix
-    required: False
     show if: user_has_attorney
     
   - "Address": users[0].attorneys[0].address.address
@@ -144,7 +140,7 @@ fields:
     required: True
     show if: user_has_attorney
     
-  - "Attorney's phone number": users1_attorneys_phone_numer
+  - "Attorney's phone number": users[0].attorneys[0].phone_number
     datatype: al_international_phone
     show if: user_has_attorney
 ---
@@ -186,24 +182,24 @@ fields:
       - "Wife": wife
       - "Spouse": spouse
 ---
-id: legal_grounds
-question: |
-  Information about the decree
-fields:
-  - "What type of decree was it?": type_of_decree
-    input type: radio
-    choices:
-      - Absolute Dissolution: type1
-      - Annulment: type2
-  - "When did this decree become final?": decree_date
-    datatype: date
-  - "What were the legal grounds for the decree?": legal_grounds
-    datatype: area
-  - "What county is the decree in?": decree_county
-  - "Who was the court manager?": court_manager
-    maxlength: 54
-  - "When was the decree signed?": signature_date
-    datatype: date
+#id: info not needed -- filled in by court clerk
+#question: |
+#  Information about the decree
+#fields:
+#  - "What type of decree was it?": type_of_decree
+#    input type: radio
+#    choices:
+#      - Absolute Dissolution: type1
+#      - Annulment: type2
+#  - "When did this decree become final?": decree_date
+#    datatype: date
+#  - "What were the legal grounds for the decree?": legal_grounds
+#    datatype: area
+#  - "What county is the decree in?": decree_county
+#  - "Who was the court manager?": court_manager
+#    maxlength: 54
+#  - "When was the decree signed?": signature_date
+#    datatype: date
 ---
 id: Health record 
 event: review_Health_record_civil_union
@@ -228,33 +224,10 @@ review:
 #      % endfor
   - Edit: minor_children_number
     button: |
-      **Minor children number**:
-      ${ minor_children_number }
-      
-  - Edit: type1
-    button: |
-      **Type1**:
-      ${ type1 }
-  - Edit: type2
-    button: |
-      **Type2**:
-      ${ type2 }
-  - Edit: decree_date
-    button: |
-      **decree_date**:
-      ${ decree_date }
-  - Edit: decree_county
-    button: |
-      **decree_county**:
-      ${ decree_county }
-  - Edit: legal_grounds
-    button: |
-      **legal_grounds**:
-      ${ legal_grounds }
-  - Edit: court_manager
-    button: |
-      **court_manager**:
-      ${ court_manager }
+
+      Number of minor children living in your home at time of separation:
+      **${ minor_children_number }**
+
 ---
 #continue button field: users.revisit
 #question: |

@@ -22,9 +22,8 @@ metadata:
   tags:
     - "FA-00-00-00-00"
   authors:
-    - Mia Bonardi
-    - Stavros Constantinou
-    - Legal Services Vermont
+    - M. Bonardi and S. Constantinou, Lemma Legal
+    - K. Surette, Legal Services Vermont
   original_form:
     - https://vtlawhelp.org/roadmap/divorce/step-3
     - https://www.vermontjudiciary.org/sites/default/files/documents/400-00836NoKids_1.pdf
@@ -95,7 +94,8 @@ code: |
   users[0].address.address
   users[0].email
   if user_has_attorney:
-    users[0].attorneys[0].name.last
+    users[0].attorneys[0].name
+
 
   set_progress(16)
   nav.set_section("defendant")
@@ -439,7 +439,7 @@ subquestion: |
   If children have lived at different addresses from each other, enter the addresses for each child.
 continue button field: where_children_lived
 ---
-id: children information
+id: children location information
 sets:
   - locations[i].address.address
   - locations[i].address.city
@@ -447,9 +447,11 @@ sets:
   - locations[i].address.state
 question: |
   Where have they lived?
-fields:
+fields:      
+
   - code: |
       locations[i].address_fields(country_code=AL_DEFAULT_COUNTRY, default_state=AL_DEFAULT_STATE)
+
   - Start date: locations[i].start_date
     datatype: date
   - End date (or today's date): locations[i].end_date 
@@ -469,7 +471,7 @@ fields:
   - no label: locations.there_is_another
     datatype: yesnoradio
 ---
-id: child custody
+id: child custody cases
 question: |
   Custody
 subquestion: |  
@@ -731,9 +733,8 @@ fields:
     default: ${ AL_DEFAULT_STATE }
   - ${ users[0].address.zip_label}: other_parties[0].address.zip
     required: False      
-  - ${ users[0].address.country_label}: other_parties[0].address.country
-    code: countries_list()
-    default: ${ AL_DEFAULT_COUNTRY }
+  - ${ users[0].address.county_label}: other_parties[0].address.county
+
   - Does ${ other_parties } have a mailing address that is different from their street address?: other_parties_mailing_address_different
     datatype: yesnoradio
   - Mailing address: other_parties[0].mailing_address.address
@@ -790,7 +791,7 @@ fields:
   - Asking for: grant_for
     input type: radio
     choices: 
-      - Dissolution: dissolution
+      - Civil union dissolution: dissolution
     show if: 
       code: |
         license_type == "civil_union"
@@ -961,8 +962,13 @@ review:
       % endif
   - Edit: user_has_attorney
     button: |
-      Your lawyer's name: ${ users[0].attorneys[0].name }
-      
+
+      % if defined("users[0].attorneys[0].name"):
+      % if defined("users[0].attorneys[0].phone_number"):
+      Your lawyer: **${ users[0].attorneys[0].name }** at **${ users[0].attorneys[0].phone_number }**
+      % endif
+      % endif
+
   - note: |
       ###About the other party
   - Edit: other_parties.revisit
@@ -970,14 +976,14 @@ review:
       About the other party (defendant)
 
       % for item in other_parties:
-        * ${ item }
+        - **${ item }**
       % endfor
   - Edit: plaintiff_VT
     button: |
       You live in Vermont: **${ word(yesno(plaintiff_VT)) }**
       
       % if defined("date_plaintiff_moved_to_VT"):
-      * Date you moved to Vermont: ${ format_date(date_plaintiff_moved_to_VT, format="M/d/yyyy") }
+      * Date you moved to Vermont: **${ format_date(date_plaintiff_moved_to_VT, format="M/d/yyyy") }**
       % endif
 
   - Edit: defendant_VT
@@ -985,7 +991,7 @@ review:
       Defendant lives in Vermont: **${ word(yesno(defendant_VT)) }**
       
       % if defined("date_defendant_moved_to_VT"):
-      * Date they moved to Vermont: ${ format_date(date_defendant_moved_to_VT, format="M/d/yyyy") }
+      * Date they moved to Vermont: **${ format_date(date_defendant_moved_to_VT, format="M/d/yyyy") }**
       % endif
   - note: |
       ###Details about both of you
@@ -994,12 +1000,12 @@ review:
       % if license_type == "marriage":
       You were married in:
       
-      - **${ marriage_city }, ${ marriage_state }, on ${ marriage_date }**
+      - **${ marriage_city }, ${ marriage_state },** on **${ marriage_date }**
       % endif
       % if license_type == "civil_union":
       You had a civil union in:
       
-      - **${ civil_union_city }, ${ civil_union_state }, on ${ civil_union_date }**
+      - **${ civil_union_city }, ${ civil_union_state },** on **${ civil_union_date }**
       % endif
   - Edit: defendant_des_assistance
     button: |
@@ -1500,7 +1506,7 @@ attachment:
       - "civil_union_dissolution1": ${ grant_for == "dissolution" }
       - "six_month_separation": ${ grounds == "six_month_separation" }
       - "separation_date": ${ format_date(separation_date, format='M/d/yyyy') }
-      - "other_ground": ${ grounds["other_ground"] }
+      - "other_ground": ${ grounds == "other_ground" }
       - "other_ground_explanation": ${ other_ground_explanation }
       - "filing_financial_form": ${ filing_financial_form }
       - "not_filing_financial_form": ${ not filing_financial_form }
@@ -1615,7 +1621,7 @@ attachment:
       - "civil_union_dissolution1": ${ grant_for == "dissolution" }
       - "six_month_separation": ${ grounds == "six_month_separation" }
       - "separation_date": ${ format_date(separation_date, format='M/d/yyyy') }
-      - "other_ground": ${ grounds["other_ground"] }
+      - "other_ground": ${ grounds == "other_ground" }
       - "other_ground_explanation": ${ other_ground_explanation }
       
       - "child_name1": ${ children[0].name }
@@ -1730,6 +1736,7 @@ attachment:
       - "other_parties1_sex": ${ other_parties[0].sex }
       - "users1_attorneys_address": ${ users[0].attorneys[0].address.on_one_line() }
       - "users1_attorneys_name": ${users[0].attorneys[0].name}
+      - "users1_attorneys_phone_numer": ${ users[0].attorneys[0].phone_number }
       - "other_parties1_former_name": ${ other_parties[0].last_name_former }
       - "other_parties1_birth_month": ${ format_date(other_parties[0].birthdate, format='M') }
       - "other_parties1_birth_day": ${ format_date(other_parties[0].birthdate, format='dd') }
@@ -1742,21 +1749,21 @@ attachment:
       - "civil_union_date_day": ${ format_date(civil_union_date, format='dd') }
       - "civil_union_date_year": ${ format_date(civil_union_date, format='yyyy') }
       - "minor_children_number": ${ minor_children_number }
-      - "type_of_decree": True
-      - "type1": ${ type_of_decree == "type1" }
-      - "type2": ${ type_of_decree == "type2" }
-      - "decree_date_month": ${ format_date(decree_date, format='M') }
-      - "decree_date": ${ format_date(decree_date, format='dd') }
-      - "decree_date_year": ${ format_date(decree_date, format='yyyy') }
-      - "decree_county": ${ decree_county }
+      #- "type_of_decree": True
+      #- "type1": ${ type_of_decree == "type1" }
+      #- "type2": ${ type_of_decree == "type2" }
+      #- "decree_date_month": ${ format_date(decree_date, format='M') }
+      #- "decree_date": ${ format_date(decree_date, format='dd') }
+      #- "decree_date_year": ${ format_date(decree_date, format='yyyy') }
+      #- "decree_county": ${ decree_county }
       - "signature_date_month": ${ format_date(signature_date, format='M') }
       - "signature_date": ${  format_date(signature_date, format='dd') }
       - "signature_date_year": ${ format_date(signature_date, format='yyyy') }
       - "separation_date_month": ${ format_date(separation_date, format='M') }
       - "separation_date_day": ${ format_date(separation_date, format='dd') }
       - "separation_date_year": ${ format_date(separation_date, format='yyyy') }
-      - "legal_grounds": ${ legal_grounds }
-      - "court_manager": ${ court_manager }
+      #- "legal_grounds": ${ legal_grounds }
+      #- "court_manager": ${ court_manager }
       - "no_attorney_involved": |
           % if not user_has_attorney:
           { True }
@@ -1810,21 +1817,27 @@ attachment:
       - "marriage_date_day": ${ format_date(marriage_date, format='dd') }
       - "marriage_date_year": ${ format_date(marriage_date, format='yyyy') }
       - "minor_children_number": ${ minor_children_number }
-      - "type_of_decree": True
-      - "type1": ${ type_of_decree == "type1" }
-      - "type2": ${ type_of_decree == "type2" }
-      - "decree_date_month": ${ format_date(decree_date, format='M') }
-      - "decree_date": ${ format_date(decree_date, format='dd') }
-      - "decree_date_year": ${ format_date(decree_date, format='yyyy') }
-      - "decree_county": ${ decree_county }
+
+      #- "type_of_decree": True
+      #- "type1": ${ type_of_decree == "type1" }
+      #- "type2": ${ type_of_decree == "type2" }
+      #- "decree_date_month": ${ format_date(decree_date, format='M') }
+      #- "decree_date": ${ format_date(decree_date, format='dd') }
+      #- "decree_date_year": ${ format_date(decree_date, format='yyyy') }
+      #- "decree_county": ${ decree_county }
+
+
       - "signature_date_month": ${ format_date(signature_date, format='M') }
       - "signature_date": ${  format_date(signature_date, format='dd') }
       - "signature_date_year": ${ format_date(signature_date, format='yyyy') }
       - "separation_date_month": ${ format_date(separation_date, format='M') }
       - "separation_date_day": ${ format_date(separation_date, format='dd') }
       - "separation_date_year": ${ format_date(separation_date, format='yyyy') }
-      - "legal_grounds": ${ legal_grounds }
-      - "court_manager": ${ court_manager }
+
+      #- "legal_grounds": ${ legal_grounds }
+      #- "court_manager": ${ court_manager }
+
+
       - "no_attorney_involved": |
           % if not user_has_attorney:
           { True }

@@ -4,7 +4,6 @@ Divorce
 
 ## Authors
 
-- Mia Bonardi
-- Stavros Constantinou
-- Legal Services Vermont
+- M. Bonardi and S. Constantinou, Lemma Legal
+- K. Surette, Legal Services Vermont
 
