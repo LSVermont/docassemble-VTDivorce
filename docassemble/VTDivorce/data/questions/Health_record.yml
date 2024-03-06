@@ -30,14 +30,7 @@ code: |
   user_role = "plaintiff"
   user_ask_role = "plaintiff"
     
-  separation_date
-  minor_children_number  
- 
-  #decree_date
-  #type_of_decree
-  #decree_county
-  #legal_grounds
-  #court_manager
+  no_longer_living_together_date
 
   interview_order_Health_record = True
 ---
@@ -99,11 +92,11 @@ fields:
       code: |
         license_type == "marriage"
 ---
-id: separation
+id: living apart date and children
 question: |
   Information about the separation
 fields:
-  - "Date you and ${ other_parties[0].name } last resided in the same household": separation_date
+  - "Date you and ${ other_parties[0].name } last lived in the same household": no_longer_living_together_date
     datatype: date
   - "As of that date, how many children under the age of 18 were in the household?": minor_children_number
     datatype: integer
@@ -201,11 +194,11 @@ fields:
 #  - "When was the decree signed?": signature_date
 #    datatype: date
 ---
-id: Health record 
-event: review_Health_record_civil_union
-question: |
-  Review your answers
-review:
+#id: Health record 
+#event: review_Health_record_civil_union
+#question: |
+#  Review your answers
+#review:
 #
 #  - Edit: users.revisit
 #    button: |
@@ -222,11 +215,7 @@ review:
 #      % for item in other_parties:
 #        * ${ item }
 #      % endfor
-  - Edit: minor_children_number
-    button: |
 
-      Number of minor children living in your home at time of separation:
-      **${ minor_children_number }**
 
 ---
 #continue button field: users.revisit

@@ -108,9 +108,9 @@ code: |
   other_parties_has_attorney
   
   set_progress(32)
-        
+  
+  nav.set_section("kids")
   if have_school_age_children: 
-    nav.set_section("kids")
     children.gather()
     #for child in children:
     where_children_lived
@@ -825,7 +825,7 @@ fields:
     show if: name_change
   - I will attach a written agreement signed by me and ${ other_parties }. I ask the court to issue an order that includes the provisions in our written agreement. : written_agreement_attached
     datatype: yesno
-  - note: You must attach the written agreement to the forms that you file with the court. To qualify for the reduced filing fee, the attached agreement must cover all the issues that you seek to have the court resolve.
+  - note: If you have a written agreement, attach it to the forms that you file with the court. To qualify for the reduced filing fee, the attached agreement must cover all the issues that you seek to have the court resolve.
     show if: written_agreement_attached
 ---
 id: ask for custody visitation and child support
@@ -1019,19 +1019,31 @@ review:
       
       * You: **${ word(yesno(plaintiff_military_service)) }**
       * The defendant:** ${ word(yesno(other_parties1_military)) }**
+
+  - Edit: 
+    - have_school_age_children
+    button: |
+      You have children together who are either younger than 18 years old, or are 18 years old and still in high school:
+      **${ word(yesno(have_school_age_children)) }**
+  - Edit: no_longer_living_together_date
+    button: |
+      Date you and ${ other_parties[0].name } last lived in the same household:
+      **${ showifdef("no_longer_living_together_date") }
+      
+      As of that date, number of children under the age of 18 who lived in the household:
+      **${ showifdef("minor_children_number") }**
   - note: |
       % if children.target_number > 0:
       ###About the kids
       % endif
   - Edit: children.revisit
     button: |
-      % if children.target_number > 0:
       Children
-      
+
       % for item in children:
-        - **${ item }** 
+      - **${ item }** 
       % endfor
-      % endif
+
   - Edit: child_custody 
     button: |
       % if child_custody == "participation":
