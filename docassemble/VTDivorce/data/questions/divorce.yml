@@ -930,42 +930,53 @@ review:
       % for item in users:
         - **${ item }**
       % endfor
+  - Edit: plaintiff_VT
+    button: |
+      You live in Vermont: **${ word(yesno(plaintiff_VT)) }**
+      
+      % if defined("date_plaintiff_moved_to_VT"):
+      * Date you moved to Vermont: **${ format_date(date_plaintiff_moved_to_VT, format="M/d/yyyy") }**
+      % endif
   - Edit: users[0].address.address
     button: |      
-      Your address
+      Your address:
       
-      Address: **${ users[0].address.on_one_line() }**
+      - **${ users[0].address.on_one_line() }**
       
       % if users_mailing_address_different:
-      Mailing address: **${ users[0].mailing_address.on_one_line() }**
+      - Mailing address: **${ users[0].mailing_address.on_one_line() }**
       % endif
   - Edit: users[0].email
     button: |      
-      Your contact info
+      Your contact info:
       
       % if defined("users[0].email"):
-      Email: **${ users[0].email }**
+      - Email: **${ users[0].email }**
       % else:
-      Email: **None**
+      - Email: **None**
       % endif
       
       % if defined("users[0].daytime_phone_number"):
-      Daytime phone: **${ users[0].daytime_phone_number }**
+      - Daytime phone: **${ users[0].daytime_phone_number }**
       % else:
-      Daytime phone: **None**
+      - Daytime phone: **None**
       % endif
       
       % if defined("users[0].evening_phone_number"):
-      Evening phone: **${ users[0].evening_phone_number }** 
+      - Evening phone: **${ users[0].evening_phone_number }** 
       % else:
-      Evening phone: **None**
+      - Evening phone: **None**
       % endif
   - Edit: user_has_attorney
     button: |
-
+      % if defined("user_has_attorney"):
+      You have a lawyer:
+      **${ word(yesno(user_has_attorney)) }**
+      % endif
+      
       % if defined("users[0].attorneys[0].name"):
       % if defined("users[0].attorneys[0].phone_number"):
-      Your lawyer: **${ users[0].attorneys[0].name }** at **${ users[0].attorneys[0].phone_number }**
+      - Your lawyer: **${ users[0].attorneys[0].name }** at **${ users[0].attorneys[0].phone_number }**
       % endif
       % endif
 
@@ -978,13 +989,6 @@ review:
       % for item in other_parties:
         - **${ item }**
       % endfor
-  - Edit: plaintiff_VT
-    button: |
-      You live in Vermont: **${ word(yesno(plaintiff_VT)) }**
-      
-      % if defined("date_plaintiff_moved_to_VT"):
-      * Date you moved to Vermont: **${ format_date(date_plaintiff_moved_to_VT, format="M/d/yyyy") }**
-      % endif
 
   - Edit: defendant_VT
     button: |
@@ -1046,19 +1050,34 @@ review:
 
   - Edit: child_custody 
     button: |
-      % if child_custody == "participation":
-      - I have participated as a party, witness, or in some other way in a court case about the custody of this child or these children in Vermont or another state.
-      % elif child_custody == "information":
-      - I have information about a case concerning this child or these children that is now pending in a Vermont court or a court in another state.
-      % elif child_custody == "knowledge":
-      - I have knowledge about a person who is not a party to this case who has physical custody of this child or these children or who claims to have custody of or visitation rights to this child or these children.
+      % if child_custody["participation"]:
+      You participated as a party, witness, or in some other way in a court case about custody: **Yes**
+      % else:
+      You participated as a party, witness, or in some other way in a court case about custody: **No**
       % endif
+      
       % if defined("participation_explain"):
-      ${ participation_explain }
-      % elif defined("information_explain"):
-      ${ information_explain }
-      % elif defined("knowledge_explain"):
-      ${ knowledge_explain }
+      - ${ participation_explain }
+      % endif
+      
+      % if child_custody["information"]:
+      You have information about a case concerning this child or these children that is now pending in a Vermont court or a court in another state: **Yes**
+      % else:
+      You have information about a case concerning this child or these children that is now pending in a Vermont court or a court in another state: **No**
+      % endif
+      
+      % if defined("information_explain"):
+      - ${ information_explain }
+      % endif
+      
+      % if child_custody["knowledge"]:
+      You have knowledge about a person who is not a party to this case who has physical custody or who claims to have custody of or visitation rights: **Yes**
+      % else:
+      You have knowledge about a person who is not a party to this case who has physical custody or who claims to have custody of or visitation rights: **No**
+      % endif
+      
+      % if defined("knowledge_explain"):
+      - ${ knowledge_explain }
       % endif
 
 
@@ -1083,7 +1102,7 @@ review:
       % endfor
       % endif
   - note: |
-      ###What you want in the order
+      ###What you want in the court order
   - Edit: grant_for
     button: |
       You are seeking a:
@@ -1097,8 +1116,7 @@ review:
       % if grant_for == "dissolution":
       - **Civil union dissolution**
       % endif
-  - Edit: grounds
-    button: |
+
       Grounds / reason:
       
       % if grounds == "six_month_separation":
@@ -1106,6 +1124,28 @@ review:
       % else:
       - **${ other_ground_explanation}**
       % endif
+
+      You would like:
+      
+      - Property maintenance:
+      **${ word(yesno(property_maintenance)) }**
+
+      - Spousal maintenancee:
+      **${ word(yesno(spousal_maintenancee)) }**
+
+      - Court costs:
+      **${ word(yesno(court_costs)) }**
+
+      - Attorney fees:
+      **${ word(yesno(attorney_fees)) }**
+
+      - Name change:
+      **${ word(yesno(name_change)) }**
+
+      - Include written agreement:
+      **${ word(yesno(written_agreement_attached)) }**
+
+
   - Edit: legal_rights_responsibilities
     button: |
       % if legal_rights_responsibilities:
@@ -1150,7 +1190,7 @@ review:
     button: |
       % if defined("contact_for_myself") and contact_for_myself:
         % if defined("contact_for_defendant") and contact_for_defendant:
-        Parent-Child Contact:
+        Parent-child contact:
         
         - **Contact for myself**
         - **Contact for the defendant**
@@ -1174,52 +1214,26 @@ review:
       Child support, medical support and/or maintenance supplement:
       
       - **${yesno(child_medical_support)}**
+
   - Edit: filing_financial_form
     button: |
-      **Filing financial form**:
-      ${ word(yesno(filing_financial_form)) }
+      You are filing financial form 400-00813B now:
+      **${ word(yesno(filing_financial_form)) }**
 
       
-  - Edit: divorce_decree
-    button: |
-      **Divorce decree**:
-      ${ word(yesno(divorce_decree)) }
-  - Edit: legal_separation_decree
-    button: |
-      **Legal separation decree**:
-      ${ word(yesno(legal_separation_decree)) }
-  - Edit: dissolution_decree
-    button: |
-      **Dissolution decree**:
-      ${ word(yesno(dissolution_decree)) }
-  - Edit: property_maintenance
-    button: |
-      **Property maintenance**:
-      ${ word(yesno(property_maintenance)) }
-  - Edit: spousal_maintenancee
-    button: |
-      **Spousal maintenancee**:
-      ${ word(yesno(spousal_maintenancee)) }
-  - Edit: court_costs
-    button: |
-      **Court costs**:
-      ${ word(yesno(court_costs)) }
-  - Edit: attorney_fees
-    button: |
-      **Attorney fees**:
-      ${ word(yesno(attorney_fees)) }
-  - Edit: name_change
-    button: |
-      **Name change**:
-      ${ word(yesno(name_change)) }
-  - Edit: plaintiff_former_name
-    button: |
-      **Plaintiff former name**:
-      ${ plaintiff_former_name }
-  - Edit: written_agreement_attached
-    button: |
-      **Written agreement attached**:
-      ${ word(yesno(written_agreement_attached)) }
+#  - Edit: divorce_decree
+#    button: |
+#      **Divorce decree**:
+#      ${ word(yesno(divorce_decree)) }
+#  - Edit: legal_separation_decree
+#    button: |
+#      **Legal separation decree**:
+#      ${ word(yesno(legal_separation_decree)) }
+#  - Edit: dissolution_decree
+#    button: |
+#      **Dissolution decree**:
+#      ${ word(yesno(dissolution_decree)) }
+
   - Edit: 
     - trial_court_index
     - recompute:
