@@ -100,6 +100,8 @@ fields:
     datatype: date
   - "As of that date, how many children under the age of 18 were in the household?": minor_children_number
     datatype: integer
+  - note: |
+      ${ after_last_question_we_will_generate_your_forms }
 ---
 id: attorneys_information
 question: |
@@ -175,94 +177,9 @@ fields:
       - "Wife": wife
       - "Spouse": spouse
 ---
-#id: info not needed -- filled in by court clerk
-#question: |
-#  Information about the decree
-#fields:
-#  - "What type of decree was it?": type_of_decree
-#    input type: radio
-#    choices:
-#      - Absolute Dissolution: type1
-#      - Annulment: type2
-#  - "When did this decree become final?": decree_date
-#    datatype: date
-#  - "What were the legal grounds for the decree?": legal_grounds
-#    datatype: area
-#  - "What county is the decree in?": decree_county
-#  - "Who was the court manager?": court_manager
-#    maxlength: 54
-#  - "When was the decree signed?": signature_date
-#    datatype: date
----
 #id: Health record 
 #event: review_Health_record_civil_union
 #question: |
 #  Review your answers
 #review:
-#
-#  - Edit: users.revisit
-#    button: |
-#      **Users**
-#
-#      % for item in users:
-#        * ${ item }
-#      % endfor
-#
-#  - Edit: other_parties.revisit
-#    button: |
-#      **Other parties**
-#
-#      % for item in other_parties:
-#        * ${ item }
-#      % endfor
-
-
 ---
-#continue button field: users.revisit
-#question: |
-#  Edit users
-#subquestion: |
-#  ${ users.table }
-#
-#  ${ users.add_action() }
-#---
-#table: users.table
-#rows: users
-#columns:
-#  - Name: |
-#      row_item.name.full() if defined("row_item.name.first") else ""
-#  - Address: |
-#      row_item.address.block() if defined("row_item.address.city") else ""
-#  - Gender/sex: |
-#      row_item.gender if defined("row_item.gender") else ""  
-#  - Former name: |
-#      row_item.last_name_former if defined("row_item.last_name_former") else ""  
-#edit:
-#  - name.first
-#  - address.city
-#  - last_name_former
-#  - gender
-#  - sex
-#confirm: True
-#---
-#continue button field: other_parties.revisit
-#question: |
-#  Edit other_parties
-#subquestion: |
-#  ${ other_parties.table }
-#
-#  ${ other_parties.add_action() }
-#---
-#table: other_parties.table
-#rows: other_parties
-#columns:
-#  - Name: |
-#      row_item.name.full() if defined("row_item.name.first") else ""
-#  - Address: |
-#      row_item.address.block() if defined("row_item.address.city") else ""
-#edit:
-#  - name.first
-#  - address.city
-#confirm: True
----
-

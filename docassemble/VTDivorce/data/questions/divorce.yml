@@ -912,6 +912,7 @@ code: |
   [user.address.address for user in users.complete_elements()]
   addresses_to_search = [user.address for user in users.complete_elements()]
 ---
+###################### Review screen ######################
 id: divorce review screen
 event: review_divorce
 question: |
@@ -984,7 +985,7 @@ review:
       ###About the other party
   - Edit: other_parties.revisit
     button: |
-      About the other party (defendant)
+      About the other party / defendant (edit name, birthdate, gender and former name)
 
       % for item in other_parties:
         - **${ item }**
@@ -997,6 +998,52 @@ review:
       % if defined("date_defendant_moved_to_VT"):
       * Date they moved to Vermont: **${ format_date(date_defendant_moved_to_VT, format="M/d/yyyy") }**
       % endif
+      
+      
+      
+  - Edit: other_parties[0].address.address
+    button: |      
+      Their address:
+      
+      - **${ other_parties[0].address.on_one_line() }**
+      
+      % if other_parties_mailing_address_different:
+      - Mailing address: **${ other_parties[0].mailing_address.on_one_line() }**
+      % endif
+  - Edit: other_parties[0].email
+    button: |      
+      Their contact info:
+      
+      % if defined("other_parties[0].email"):
+      - Email: **${ other_parties[0].email }**
+      % else:
+      - Email: **None**
+      % endif
+      
+      % if defined("other_parties[0].daytime_phone_number"):
+      - Daytime phone: **${ other_parties[0].daytime_phone_number }**
+      % else:
+      - Daytime phone: **None**
+      % endif
+      
+      % if defined("other_parties[0].evening_phone_number"):
+      - Evening phone: **${ other_parties[0].evening_phone_number }** 
+      % else:
+      - Evening phone: **None**
+      % endif
+  - Edit: other_parties_has_attorney
+    button: |
+      % if defined("other_parties_has_attorney"):
+      They have a lawyer:
+      **${ word(yesno(other_parties_has_attorney)) }**
+      % endif
+      
+      % if defined("other_parties1_attorneys_name"):
+      % if defined("other_parties1_attorneys_phone_number"):
+      - Their lawyer: **${ other_parties1_attorneys_name }** at **${ other_parties1_attorneys_phone_number }**
+      % endif
+      % endif      
+      
   - note: |
       ###Details about both of you
   - Edit: license_type
@@ -1220,20 +1267,6 @@ review:
       You are filing financial form 400-00813B now:
       **${ word(yesno(filing_financial_form)) }**
 
-      
-#  - Edit: divorce_decree
-#    button: |
-#      **Divorce decree**:
-#      ${ word(yesno(divorce_decree)) }
-#  - Edit: legal_separation_decree
-#    button: |
-#      **Legal separation decree**:
-#      ${ word(yesno(legal_separation_decree)) }
-#  - Edit: dissolution_decree
-#    button: |
-#      **Dissolution decree**:
-#      ${ word(yesno(dissolution_decree)) }
-
   - Edit: 
     - trial_court_index
     - recompute:
@@ -1273,36 +1306,15 @@ columns:
   - Former name: |
       row_item.last_name_former if defined("row_item.last_name_former") else ""  
 edit:
-  - name.first
-  - birthdate
-  - last_name_former
   - gender
   - sex
+  - birthdate
   - signature
-  - address
-  - mailing_address
-  - email
-  - phone_numbers
 confirm: True
----
-#table: users.table
-#rows: users
-#  - Address: |
-#      row_item.address.block() if defined("row_item.address.city") else ""
-#  - Address: |
-#      row_item.address.block() if defined("row_item.address.state") else ""
-#  - Email: |
-#      row_item.email if defined("row_item.email") else ""
-#edit:
-#  - name.first
-#  - birthdate
-#  - address.state
-#  - email
-#confirm: True
 ---
 continue button field: other_parties.revisit
 question: |
-  Edit other_parties
+  Edit info about the defendant
 subquestion: |
   ${ other_parties.table }
 
@@ -1315,15 +1327,16 @@ columns:
       row_item.name.full() if defined("row_item.name.first") else ""
   - Birthdate: |
       row_item.birthdate if defined("row_item.birthdate") else ""
-  - Address: |
-      row_item.address.block() if defined("row_item.address.state") else ""
-  - Email: |
-      row_item.email if defined("row_item.email") else ""
+  - Gender: |
+      row_item.gender if defined("row_item.gender") else ""
+  - Sex: |
+      row_item.sex if defined("row_item.sex") else ""
+  - Former name: |
+      row_item.last_name_former if defined("row_item.last_name_former") else ""  
 edit:
-  - name.first
+  - gender
+  - sex
   - birthdate
-  - address.state
-  - email
 confirm: True
 ---
 continue button field: earlier_actions.revisit
@@ -1378,6 +1391,7 @@ edit:
   - year_filed
 confirm: True
 ---
+###################### Download screen ######################
 id: download divorce
 event: divorce_download
 question: |
@@ -1400,13 +1414,14 @@ subquestion: |
 
 progress: 100
 ---
+###################### Attachments ######################
 # ALDocument objects specify the metadata for each template
 objects:
-  - divorce_no_kids_Post_interview_instructions: ALDocument.using(title="Instructions", filename="divorce_no_kids_next_steps.docx", enabled=True, has_addendum=False)
-  - divorce_no_kids_attachment: ALDocument.using(title="Divorce (no kids)", filename="divorce_no_kids", has_addendum=True, )
-  - divorce_with_kids_attachment: ALDocument.using(title="Divorce (with kids)", filename="divorce_with_kids", has_addendum=True)
-  - Health_record_divorce_annulment_attachment: ALDocument.using(title="Health record divorce annulment", filename="Health_record_divorce_annulment", has_addendum=False, )
-  - Health_record_civil_union_attachment: ALDocument.using(title="Health record civil union", filename="Health_record_civil_union", has_addendum=False, )
+  - divorce_no_kids_Post_interview_instructions: ALDocument.using(title="Next Steps instructions", filename="divorce_no_kids_next_steps.docx", enabled=True, has_addendum=False)
+  - divorce_no_kids_attachment: ALDocument.using(title="Complaint for divorce, separation, dissolution (no kids)", filename="divorce_no_kids", has_addendum=True, )
+  - divorce_with_kids_attachment: ALDocument.using(title="Complaint for divorce, separation, dissolution (with kids)", filename="divorce_with_kids", has_addendum=True)
+  - Health_record_divorce_annulment_attachment: ALDocument.using(title="Health department form", filename="Health_record_divorce_annulment", has_addendum=False, )
+  - Health_record_civil_union_attachment: ALDocument.using(title="Health department form", filename="Health_record_civil_union", has_addendum=False, )
 ---
 attachment:
   variable name: divorce_no_kids_attachment.addendum
@@ -1775,9 +1790,6 @@ attachment:
       - "civil_union_date_day": ${ format_date(civil_union_date, format='dd') }
       - "civil_union_date_year": ${ format_date(civil_union_date, format='yyyy') }
       - "minor_children_number": ${ minor_children_number }
-      - "signature_date_month": ${ format_date(signature_date, format='M') }
-      - "signature_date": ${  format_date(signature_date, format='dd') }
-      - "signature_date_year": ${ format_date(signature_date, format='yyyy') }
       - "separation_date_month": ${ format_date(no_longer_living_together_date, format='M') }
       - "separation_date_day": ${ format_date(no_longer_living_together_date, format='dd') }
       - "separation_date_year": ${ format_date(no_longer_living_together_date, format='yyyy') }
@@ -1834,9 +1846,6 @@ attachment:
       - "marriage_date_day": ${ format_date(marriage_date, format='dd') }
       - "marriage_date_year": ${ format_date(marriage_date, format='yyyy') }
       - "minor_children_number": ${ minor_children_number }
-      - "signature_date_month": ${ format_date(signature_date, format='M') }
-      - "signature_date": ${  format_date(signature_date, format='dd') }
-      - "signature_date_year": ${ format_date(signature_date, format='yyyy') }
       - "separation_date_month": ${ format_date(no_longer_living_together_date, format='M') }
       - "separation_date_day": ${ format_date(no_longer_living_together_date, format='dd') }
       - "separation_date_year": ${ format_date(no_longer_living_together_date, format='yyyy') }
