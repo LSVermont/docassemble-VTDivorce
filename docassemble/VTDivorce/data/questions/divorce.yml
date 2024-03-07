@@ -984,7 +984,7 @@ review:
       ###About the other party
   - Edit: other_parties.revisit
     button: |
-      About the other party (defendant)
+      About the other party / defendant (edit name, birthdate, gender and former name)
 
       % for item in other_parties:
         - **${ item }**
@@ -997,6 +997,68 @@ review:
       % if defined("date_defendant_moved_to_VT"):
       * Date they moved to Vermont: **${ format_date(date_defendant_moved_to_VT, format="M/d/yyyy") }**
       % endif
+      
+      
+      
+  - Edit: other_parties[0].address.address
+    button: |      
+      Their address:
+      
+      - **${ other_parties[0].address.on_one_line() }**
+      
+      % if other_parties_mailing_address_different:
+      - Mailing address: **${ other_parties[0].mailing_address.on_one_line() }**
+      % endif
+  - Edit: other_parties[0].email
+    button: |      
+      Their contact info:
+      
+      % if defined("other_parties[0].email"):
+      - Email: **${ other_parties[0].email }**
+      % else:
+      - Email: **None**
+      % endif
+      
+      % if defined("other_parties[0].daytime_phone_number"):
+      - Daytime phone: **${ other_parties[0].daytime_phone_number }**
+      % else:
+      - Daytime phone: **None**
+      % endif
+      
+      % if defined("other_parties[0].evening_phone_number"):
+      - Evening phone: **${ other_parties[0].evening_phone_number }** 
+      % else:
+      - Evening phone: **None**
+      % endif
+  - Edit: other_parties_has_attorney
+    button: |
+      % if defined("other_parties_has_attorney"):
+      They have a lawyer:
+      **${ word(yesno(other_parties_has_attorney)) }**
+      % endif
+      
+      % if defined("other_parties1_attorneys_name"):
+      % if defined("other_parties1_attorneys_phone_number"):
+      - Their lawyer: **${ other_parties1_attorneys_name }** at **${ other_parties1_attorneys_phone_number }**
+      % endif
+      % endif      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
   - note: |
       ###Details about both of you
   - Edit: license_type
@@ -1273,16 +1335,10 @@ columns:
   - Former name: |
       row_item.last_name_former if defined("row_item.last_name_former") else ""  
 edit:
-  - name.first
-  - birthdate
-  - last_name_former
   - gender
   - sex
+  - birthdate
   - signature
-  - address
-  - mailing_address
-  - email
-  - phone_numbers
 confirm: True
 ---
 #table: users.table
@@ -1302,7 +1358,7 @@ confirm: True
 ---
 continue button field: other_parties.revisit
 question: |
-  Edit other_parties
+  Edit info about the defendant
 subquestion: |
   ${ other_parties.table }
 
@@ -1315,15 +1371,16 @@ columns:
       row_item.name.full() if defined("row_item.name.first") else ""
   - Birthdate: |
       row_item.birthdate if defined("row_item.birthdate") else ""
-  - Address: |
-      row_item.address.block() if defined("row_item.address.state") else ""
-  - Email: |
-      row_item.email if defined("row_item.email") else ""
+  - Gender: |
+      row_item.gender if defined("row_item.gender") else ""
+  - Sex: |
+      row_item.sex if defined("row_item.sex") else ""
+  - Former name: |
+      row_item.last_name_former if defined("row_item.last_name_former") else ""  
 edit:
-  - name.first
+  - gender
+  - sex
   - birthdate
-  - address.state
-  - email
 confirm: True
 ---
 continue button field: earlier_actions.revisit
