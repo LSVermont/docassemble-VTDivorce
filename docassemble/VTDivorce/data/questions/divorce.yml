@@ -1029,12 +1029,12 @@ review:
     button: |
       You have children together who are either younger than 18 years old, or are 18 years old and still in high school:
       **${ word(yesno(have_school_age_children)) }**
-  - Edit: no_longer_living_together_date
+  - Edit: minor_children_number
     button: |
       Date you and ${ other_parties[0].name } last lived in the same household:
-      **${ showifdef("no_longer_living_together_date") }
+      **${ showifdef("no_longer_living_together_date") }**
       
-      As of that date, number of children under the age of 18 who lived in the household:
+      As of that date, number of children under age 18 who lived in the household:
       **${ showifdef("minor_children_number") }**
   - note: |
       % if children.target_number > 0:
@@ -1775,21 +1775,12 @@ attachment:
       - "civil_union_date_day": ${ format_date(civil_union_date, format='dd') }
       - "civil_union_date_year": ${ format_date(civil_union_date, format='yyyy') }
       - "minor_children_number": ${ minor_children_number }
-      #- "type_of_decree": True
-      #- "type1": ${ type_of_decree == "type1" }
-      #- "type2": ${ type_of_decree == "type2" }
-      #- "decree_date_month": ${ format_date(decree_date, format='M') }
-      #- "decree_date": ${ format_date(decree_date, format='dd') }
-      #- "decree_date_year": ${ format_date(decree_date, format='yyyy') }
-      #- "decree_county": ${ decree_county }
       - "signature_date_month": ${ format_date(signature_date, format='M') }
       - "signature_date": ${  format_date(signature_date, format='dd') }
       - "signature_date_year": ${ format_date(signature_date, format='yyyy') }
-      - "separation_date_month": ${ format_date(separation_date, format='M') }
-      - "separation_date_day": ${ format_date(separation_date, format='dd') }
-      - "separation_date_year": ${ format_date(separation_date, format='yyyy') }
-      #- "legal_grounds": ${ legal_grounds }
-      #- "court_manager": ${ court_manager }
+      - "separation_date_month": ${ format_date(no_longer_living_together_date, format='M') }
+      - "separation_date_day": ${ format_date(no_longer_living_together_date, format='dd') }
+      - "separation_date_year": ${ format_date(no_longer_living_together_date, format='yyyy') }
       - "no_attorney_involved": |
           % if not user_has_attorney:
           { True }
@@ -1843,27 +1834,12 @@ attachment:
       - "marriage_date_day": ${ format_date(marriage_date, format='dd') }
       - "marriage_date_year": ${ format_date(marriage_date, format='yyyy') }
       - "minor_children_number": ${ minor_children_number }
-
-      #- "type_of_decree": True
-      #- "type1": ${ type_of_decree == "type1" }
-      #- "type2": ${ type_of_decree == "type2" }
-      #- "decree_date_month": ${ format_date(decree_date, format='M') }
-      #- "decree_date": ${ format_date(decree_date, format='dd') }
-      #- "decree_date_year": ${ format_date(decree_date, format='yyyy') }
-      #- "decree_county": ${ decree_county }
-
-
       - "signature_date_month": ${ format_date(signature_date, format='M') }
       - "signature_date": ${  format_date(signature_date, format='dd') }
       - "signature_date_year": ${ format_date(signature_date, format='yyyy') }
-      - "separation_date_month": ${ format_date(separation_date, format='M') }
-      - "separation_date_day": ${ format_date(separation_date, format='dd') }
-      - "separation_date_year": ${ format_date(separation_date, format='yyyy') }
-
-      #- "legal_grounds": ${ legal_grounds }
-      #- "court_manager": ${ court_manager }
-
-
+      - "separation_date_month": ${ format_date(no_longer_living_together_date, format='M') }
+      - "separation_date_day": ${ format_date(no_longer_living_together_date, format='dd') }
+      - "separation_date_year": ${ format_date(no_longer_living_together_date, format='yyyy') }
       - "no_attorney_involved": |
           % if not user_has_attorney:
           { True }
