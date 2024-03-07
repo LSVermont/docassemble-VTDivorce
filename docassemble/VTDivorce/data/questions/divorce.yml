@@ -912,6 +912,7 @@ code: |
   [user.address.address for user in users.complete_elements()]
   addresses_to_search = [user.address for user in users.complete_elements()]
 ---
+###################### Review screen ######################
 id: divorce review screen
 event: review_divorce
 question: |
@@ -1042,22 +1043,6 @@ review:
       - Their lawyer: **${ other_parties1_attorneys_name }** at **${ other_parties1_attorneys_phone_number }**
       % endif
       % endif      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
       
   - note: |
       ###Details about both of you
@@ -1282,20 +1267,6 @@ review:
       You are filing financial form 400-00813B now:
       **${ word(yesno(filing_financial_form)) }**
 
-      
-#  - Edit: divorce_decree
-#    button: |
-#      **Divorce decree**:
-#      ${ word(yesno(divorce_decree)) }
-#  - Edit: legal_separation_decree
-#    button: |
-#      **Legal separation decree**:
-#      ${ word(yesno(legal_separation_decree)) }
-#  - Edit: dissolution_decree
-#    button: |
-#      **Dissolution decree**:
-#      ${ word(yesno(dissolution_decree)) }
-
   - Edit: 
     - trial_court_index
     - recompute:
@@ -1340,21 +1311,6 @@ edit:
   - birthdate
   - signature
 confirm: True
----
-#table: users.table
-#rows: users
-#  - Address: |
-#      row_item.address.block() if defined("row_item.address.city") else ""
-#  - Address: |
-#      row_item.address.block() if defined("row_item.address.state") else ""
-#  - Email: |
-#      row_item.email if defined("row_item.email") else ""
-#edit:
-#  - name.first
-#  - birthdate
-#  - address.state
-#  - email
-#confirm: True
 ---
 continue button field: other_parties.revisit
 question: |
@@ -1435,6 +1391,7 @@ edit:
   - year_filed
 confirm: True
 ---
+###################### Download screen ######################
 id: download divorce
 event: divorce_download
 question: |
@@ -1457,13 +1414,14 @@ subquestion: |
 
 progress: 100
 ---
+###################### Attachments ######################
 # ALDocument objects specify the metadata for each template
 objects:
-  - divorce_no_kids_Post_interview_instructions: ALDocument.using(title="Instructions", filename="divorce_no_kids_next_steps.docx", enabled=True, has_addendum=False)
-  - divorce_no_kids_attachment: ALDocument.using(title="Divorce (no kids)", filename="divorce_no_kids", has_addendum=True, )
-  - divorce_with_kids_attachment: ALDocument.using(title="Divorce (with kids)", filename="divorce_with_kids", has_addendum=True)
-  - Health_record_divorce_annulment_attachment: ALDocument.using(title="Health record divorce annulment", filename="Health_record_divorce_annulment", has_addendum=False, )
-  - Health_record_civil_union_attachment: ALDocument.using(title="Health record civil union", filename="Health_record_civil_union", has_addendum=False, )
+  - divorce_no_kids_Post_interview_instructions: ALDocument.using(title="Next Steps instructions", filename="divorce_no_kids_next_steps.docx", enabled=True, has_addendum=False)
+  - divorce_no_kids_attachment: ALDocument.using(title="Complaint for divorce, separation, dissolution (no kids)", filename="divorce_no_kids", has_addendum=True, )
+  - divorce_with_kids_attachment: ALDocument.using(title="Complaint for divorce, separation, dissolution (with kids)", filename="divorce_with_kids", has_addendum=True)
+  - Health_record_divorce_annulment_attachment: ALDocument.using(title="Health department form", filename="Health_record_divorce_annulment", has_addendum=False, )
+  - Health_record_civil_union_attachment: ALDocument.using(title="Health department form", filename="Health_record_civil_union", has_addendum=False, )
 ---
 attachment:
   variable name: divorce_no_kids_attachment.addendum
@@ -1832,9 +1790,6 @@ attachment:
       - "civil_union_date_day": ${ format_date(civil_union_date, format='dd') }
       - "civil_union_date_year": ${ format_date(civil_union_date, format='yyyy') }
       - "minor_children_number": ${ minor_children_number }
-      - "signature_date_month": ${ format_date(signature_date, format='M') }
-      - "signature_date": ${  format_date(signature_date, format='dd') }
-      - "signature_date_year": ${ format_date(signature_date, format='yyyy') }
       - "separation_date_month": ${ format_date(no_longer_living_together_date, format='M') }
       - "separation_date_day": ${ format_date(no_longer_living_together_date, format='dd') }
       - "separation_date_year": ${ format_date(no_longer_living_together_date, format='yyyy') }
@@ -1891,9 +1846,6 @@ attachment:
       - "marriage_date_day": ${ format_date(marriage_date, format='dd') }
       - "marriage_date_year": ${ format_date(marriage_date, format='yyyy') }
       - "minor_children_number": ${ minor_children_number }
-      - "signature_date_month": ${ format_date(signature_date, format='M') }
-      - "signature_date": ${  format_date(signature_date, format='dd') }
-      - "signature_date_year": ${ format_date(signature_date, format='yyyy') }
       - "separation_date_month": ${ format_date(no_longer_living_together_date, format='M') }
       - "separation_date_day": ${ format_date(no_longer_living_together_date, format='dd') }
       - "separation_date_year": ${ format_date(no_longer_living_together_date, format='yyyy') }
