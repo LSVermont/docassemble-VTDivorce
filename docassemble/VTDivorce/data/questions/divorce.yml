@@ -1283,6 +1283,7 @@ review:
       % else:
       Court docket number / case number: **Unknown**
       % endif
+
 ---
 continue button field: users.revisit
 question: |
@@ -1523,7 +1524,6 @@ attachment:
       - "civil_union_dissolution": ${ grant_for == "dissolution" }
       - "legal_separation": ${ grant_for == "legal_separation" }
       - "trial_court_county1": ${ trial_court.address.county } Family Division, ${ trial_court.address.on_one_line() }
-      - "signature_date": ${ format_date(signature_date, format='M/d/yyyy') }
       - "users1_signature": ${ users[0].signature_if_final(i) }
       - "users1_address_county": ${ users[0].address.county }
       - "users1_address_state": ${ users[0].address.state }
@@ -1638,7 +1638,6 @@ attachment:
       - "civil_union_dissolution": ${ grant_for == "dissolution" }
       - "legal_separation": ${ grant_for == "legal_separation" }
       - "trial_court_county1": ${ trial_court.address.county } Family Division, ${ trial_court.address.on_one_line() }
-      - "signature_date": ${ format_date(signature_date, format='M/d/yyyy') }
       - "users1_signature": ${ users[0].signature_if_final(i) }
       - "users1_address_county": ${ users[0].address.county }
       - "users1_address_state": ${ users[0].address.state }
