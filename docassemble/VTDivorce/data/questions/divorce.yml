@@ -45,6 +45,7 @@ objects:
   - other_parties: ALPeopleList.using(ask_number=True,target_number=1)
   - earlier_actions: DAList.using(object_type=Thing, ask_number=True, complete_attribute='complete')
   - earlier_RFA: DAList.using(object_type=Thing, ask_number=True, complete_attribute='complete')
+  - participation: ALPeopleList.using(ask_number=True,target_number=1,complete_attribute="complete")
 ---
 sections:
   - intro: Introduction
@@ -116,6 +117,10 @@ code: |
     where_children_lived
     locations.gather()
     child_custody
+    #if (child_custody["participation"] or child_custody["information"] or child_custody["knowledge"]):
+      #participation.gather()
+    #else:
+      #participation.target_number = 0
     child_medical_support
   else: 
     children.target_number = 0
@@ -224,6 +229,10 @@ code: |
 code: |
   earlier_RFA[i].action_type
   earlier_RFA[i].complete = True
+---
+code: |
+  participation[i].explanation
+  participation[i].complete = True
 ---
 id: choose a court
 question: |
@@ -484,15 +493,15 @@ fields:
       - A. I have participated as a party, witness, or in some other way in a court case about the custody of this child or these children in Vermont or another state.: participation
       - B. I have information about a case concerning this child or these children that is now pending in a Vermont court or a court in another state.: information
       - C. I have knowledge about a person who is not a party to this case who has physical custody of this child or these children or who claims to have custody of or visitation rights to this child or these children.: knowledge
-  - Statement A -- Please briefly explain: participation_explain
+  - Statement A -- Please briefly explain: participation[0].explanation
     show if: child_custody["participation"]
     input type: area
     maxlength: 300
-  - Statement B -- Please briefly explain: information_explain
+  - Statement B -- Please briefly explain: participation[1].explanation
     show if: child_custody["information"]
     input type: area
     maxlength: 300
-  - Statement C -- Please briefly explain: knowledge_explain
+  - Statement C -- Please briefly explain: participation[2].explanation
     show if: child_custody["knowledge"]
     input type: area
     maxlength: 300
@@ -1440,6 +1449,8 @@ attachment:
   docx template file: divorce_with_kids_addendum.docx
 ---
 code: |
+  divorce_with_kids_attachment.overflow_fields['participation'].overflow_trigger = 0
+  divorce_with_kids_attachment.overflow_fields['participation'].label = "Participation"
   divorce_with_kids_attachment.overflow_fields['earlier_actions'].overflow_trigger = 3
   divorce_with_kids_attachment.overflow_fields['earlier_actions'].label = "Other earlier actions"
   divorce_with_kids_attachment.overflow_fields['earlier_RFA'].overflow_trigger = 3
