@@ -7,6 +7,8 @@ include:
   - docassemble.ALToolbox:phone-number-validation.yml
   - docassemble.VTSharedYMLFile:VTSharedYMLFile.yml
   - Health_record.yml
+  - docassemble.VTCertificateOfService:VTCertificateOfService_to_include.yml
+  - customized_screens.yml
 ---
 # customized feedback form
 code: |   
@@ -24,6 +26,7 @@ metadata:
   authors:
     - M. Bonardi and S. Constantinou, Lemma Legal
     - K. Surette, Legal Services Vermont
+    - Q. Steenhuis, Lemma Legal
   original_form:
     - https://vtlawhelp.org/roadmap/divorce/step-3
     - https://www.vermontjudiciary.org/sites/default/files/documents/400-00836NoKids_1.pdf
@@ -42,7 +45,7 @@ objects:
   - children: ALPeopleList.using(ask_number=True, complete_attribute="complete")
   - locations: ALPeopleList.using(there_are_any=True,complete_attribute="complete") 
   - users: ALPeopleList.using(ask_number=True,target_number=1)
-  - other_parties: ALPeopleList.using(ask_number=True,target_number=1)
+  - other_parties: ALPeopleList.using(ask_number=True,target_number=1,)
   - earlier_actions: DAList.using(object_type=Thing, ask_number=True, complete_attribute='complete')
   - earlier_RFA: DAList.using(object_type=Thing, ask_number=True, complete_attribute='complete')
   - child_custody: ALPeopleList.using(ask_number=True,target_number=1,complete_attribute="complete")
@@ -145,9 +148,7 @@ code: |
   set_progress(75)
   docket_number
   trial_court
-  
-  interview_order_Health_record
-  
+    
   interview_order_divorce = True
   set_progress(85)
 ---
@@ -159,6 +160,11 @@ mandatory: True
 code: |
   al_intro_screen
   interview_order_divorce
+  interview_order_Health_record
+  interview_order_VTCertificateOfService
+  for party in other_parties:
+    party.served
+
   # Store anonymous data for analytics / statistics
   store_variables_snapshot(
       persistent=True,
@@ -1466,9 +1472,25 @@ code: |
 ---
 # Bundles group the ALDocuments into separate downloads, such as for court and for the user
 objects:
-  - al_user_bundle: ALDocumentBundle.using(elements=[divorce_Post_interview_instructions, divorce_with_kids_attachment,  divorce_no_kids_attachment,Health_record_civil_union_attachment, Health_record_divorce_annulment_attachment], filename="divorce_with_kids", title="All forms to download for your records", enabled=True)
+  - al_user_bundle: ALDocumentBundle.using(elements=[
+          divorce_Post_interview_instructions, 
+          divorce_with_kids_attachment,
+          divorce_no_kids_attachment,
+          Health_record_civil_union_attachment, 
+          Health_record_divorce_annulment_attachment,
+          VTCertificateOfService_attachment,
+        ], filename="divorce_with_kids", title="All forms to download for your records", enabled=True)
   
-  - al_court_bundle: ALDocumentBundle.using(elements=[divorce_with_kids_attachment, divorce_no_kids_attachment,Health_record_civil_union_attachment, Health_record_divorce_annulment_attachment],  filename="divorce_with_kids", title="All forms to deliver to court", enabled=True)
+  - al_court_bundle: ALDocumentBundle.using(elements=[
+          divorce_with_kids_attachment,
+          divorce_no_kids_attachment,
+          Health_record_civil_union_attachment,
+          Health_record_divorce_annulment_attachment,
+          VTCertificateOfService_attachment,
+        ],  filename="divorce_with_kids", title="All forms to deliver to court", enabled=True)
+---
+code: |
+  VTCertificateOfService_attachment.enabled = True # always needed for a new petition
 ---
 code: |
   if have_school_age_children:
