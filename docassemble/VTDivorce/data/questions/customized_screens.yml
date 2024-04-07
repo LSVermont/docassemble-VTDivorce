@@ -1,0 +1,19 @@
+---
+### Questions overriding defaults from included YAML files from other packages ############
+---
+########### Overrides for VTCertificateOfService #############################
+---
+code: |
+  users1_role = "plaintiff"
+---
+code: |
+  trial_court_division = trial_court.division
+---
+code: |
+  if have_school_age_children:
+    divorcesc = False
+    divorcesckids = True
+  else:
+    divorcesc = True # Marks the Divorce form as one to be served
+  document1_name = "" # skip the questions about supplemental documents to file
+  
