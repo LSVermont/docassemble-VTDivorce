@@ -16,4 +16,3 @@ code: |
   else:
     divorcesc = True # Marks the Divorce form as one to be served
   document1_name = "" # skip the questions about supplemental documents to file
-  
