@@ -620,6 +620,8 @@ fields:
   - Zip or postal code: users[0].address.zip
     required: False
   - County: users[0].address.county
+  - note: |
+      Not sure what county? [Check this list of cities and towns to find the county.](https://en.m.wikipedia.org/wiki/List_of_municipalities_in_Vermont#Cities)
   - Do you have a mailing address that is different from your street address?: users_mailing_address_different
     datatype: yesnoradio
   - Mailing address: users[0].mailing_address.address
@@ -756,7 +758,8 @@ fields:
   - ${ users[0].address.zip_label}: other_parties[0].address.zip
     required: False      
   - ${ users[0].address.county_label}: other_parties[0].address.county
-
+  - note: |
+      Not sure what county? [Check this list of cities and towns to find the county.](https://en.m.wikipedia.org/wiki/List_of_municipalities_in_Vermont#Cities)
   - Does ${ other_parties } have a mailing address that is different from their street address?: other_parties_mailing_address_different
     datatype: yesnoradio
   - Mailing address: other_parties[0].mailing_address.address
