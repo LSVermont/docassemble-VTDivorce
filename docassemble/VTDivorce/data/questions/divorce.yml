@@ -838,7 +838,7 @@ fields:
   - note: Other things you are asking the court for. Check all that apply.
   - Divide our property, assets and debts: property_maintenance
     datatype: yesno
-  - Spousal maintenancee (alimony): spousal_maintenancee
+  - Spousal maintenance (alimony): spousal_maintenance
     datatype: yesno
   - Court costs: court_costs
     datatype: yesno
@@ -1203,7 +1203,7 @@ review:
       **${ word(yesno(property_maintenance)) }**
 
       - Spousal maintenancee:
-      **${ word(yesno(spousal_maintenancee)) }**
+      **${ word(yesno(spousal_maintenance)) }**
 
       - Court costs:
       **${ word(yesno(court_costs)) }**
@@ -1644,7 +1644,7 @@ attachment:
       - "legal_separation_decree": ${ grant_for == "legal_separation" }
       - "dissolution_decree": ${ grant_for == "dissolution" }
       - "property_maintenance": ${ property_maintenance }
-      - "spousal_maintenancee": ${ spousal_maintenancee }
+      - "spousal_maintenancee": ${ spousal_maintenance }
       - "court_costs": ${ court_costs }
       - "attorney_fees": ${ attorney_fees }
       - "name_change": ${ name_change }
@@ -1802,7 +1802,7 @@ attachment:
       - "legal_separation_decree": ${ grant_for == "legal_separation" }
       - "dissolution_decree": ${ grant_for == "dissolution" }
       - "property_maintenance": ${ property_maintenance }
-      - "spousal_maintenancee": ${ spousal_maintenancee }
+      - "spousal_maintenancee": ${ spousal_maintenance }
       - "court_costs": ${ court_costs }
       - "attorney_fees": ${ attorney_fees }
       - "name_change": ${ name_change }
