@@ -31,8 +31,6 @@ metadata:
     - Q. Steenhuis, Lemma Legal
   original_form:
     - https://vtlawhelp.org/roadmap/divorce/step-3
-    - https://www.vermontjudiciary.org/sites/default/files/documents/400-00836NoKids_1.pdf
-    - https://www.vermontjudiciary.org/sites/default/files/documents/400-00836Children.pdf
   typical_role: "plaintiff"
   al_weaver_version: "1.10.1"
   generated_on: "2023-07-25"
@@ -228,7 +226,7 @@ subquestion: |
   * Family Court Information Form - form 800
   * Department of Health Record of Divorce or Dissolution
   
-  Everyone fills out these forms when asking for a divorce, separation, or civil union dissolution. However, you may need to fill out **more forms** depending if you and your spouse have an agreement about kids, property, debts and kids (if you have them). Also, if you are asking for a civil union dissolution, you will need to fill out more forms.
+  Everyone fills out these forms when asking for a divorce, separation, or civil union dissolution. However, you may need to fill out **more forms** depending if you and your spouse have an agreement about property, debts and kids (if you have them). Also, if you are asking for a civil union dissolution, you will need to fill out more forms.
   
   When you give these forms to the court, it is **only the first step** in the process to getting a divorce, separation, or civil union dissolution.
   
@@ -239,7 +237,7 @@ subquestion: |
   <p>${ intro_vtcourtforms_created_by }</p>
 
 fields:
-  - To continue, please accept our [terms of use](https://vtlawhelp.org/vlh-privacy).: acknowledged_information_use
+  - To continue, please accept our [terms of use](https://vtlawhelp.org/vtcourtforms/terms-of-use).: acknowledged_information_use
     datatype: checkboxes
     none of the above: False    
     minlength: 1
@@ -860,19 +858,19 @@ fields:
       is: other_ground
     maxlength: 60
   - note: Other things you are asking the court for. Check all that apply.
-  - Divide our property, assets and debts: property_maintenance
+  - I want a fair division of our property, assets and debts: property_maintenance
     datatype: yesno
-  - Spousal maintenance (alimony): spousal_maintenance
+  - I want ${ other_parties[0] } to pay me spousal maintenance (alimony): spousal_maintenance
     datatype: yesno
-  - Court costs: court_costs
+  - I want ${ other_parties[0] } to reimburse my court costs: court_costs
     datatype: yesno
-  - Attorney fees: attorney_fees
+  - I want ${ other_parties[0] } to pay my attorney fees: attorney_fees
     datatype: yesno
-  - Name change: name_change
+  - I want to change my name: name_change
     datatype: yesno
-  - I would like to go back to my former full name: plaintiff_former_name
+  - I want to go back to my former full name: plaintiff_former_name
     show if: name_change
-  - I will attach a written agreement signed by me and ${ other_parties }. I ask the court to issue an order that includes the provisions in our written agreement. : written_agreement_attached
+  - I have a written agreement signed by me and ${ other_parties }. I will include it with these forms. I ask the court to issue an order that includes the provisions in our written agreement. : written_agreement_attached
     datatype: yesno
   - note: |
       If you have a written agreement, attach it to the forms that you file with the court. The written agreement must include:
@@ -883,11 +881,42 @@ fields:
       
       3. a child support order (if you have kids).
       
-      See our [Divorce Roadmap on VTLawHelp.org](https://vtlawhelp.org/roadmap/divorce/step-3) for more details about the agreements and agreement forms you can use.
+      See our [Divorce Roadmap on VTLawHelp.org](https://vtlawhelp.org/roadmap/divorce/step-3) for agreement forms you can use.
       
       To qualify for a reduced court filing fee, the attached agreement must cover all the issues that you want to have the court resolve.
     show if: written_agreement_attached
 ---
+#Add these templates to sharedYMLfile
+template: what_is_legal_parental_rights
+subject: |
+  What is legal responsibility?
+content: |
+  Legal responsibility is who has the right to make major decisions about the child’s life. The major decisions tend to be about religion, education, medical care and travel outside of Vermont. Learn more on [VTLawHelp.org](https://vtlawhelp.org/custody-visitation).
+---
+template: what_is_physical_parental_rights
+subject: |
+  What is physical responsibility?
+content: |
+  Physical responsibility means who has the responsibility to provide routine daily care and control of the child and to make day-to-day decisions. Where the child physically lives is included in physical responsibility. Learn more on [VTLawHelp.org](https://vtlawhelp.org/custody-visitation).
+---
+template: what_is_parent_child_contact
+subject: |
+  What is parent-child contact?
+content: |
+  In Vermont, the courts call visitation "parent-child contact." If you want the child to live with you, be sure to also check parent-child for yourself. Generally, the courts prefer that children can spend as much time as possible with both of their parents. Learn more on [VTLawHelp.org](https://vtlawhelp.org/custody-visitation).
+---
+template: what_is_child_medical_and_maintenance_support
+subject: |
+  What do these mean?
+content: |
+  * Child support -- It is paid by one parent to the other for the support of children. Parents who are able to are expected to support their children.
+  * Medical support -- Money for child medical care.
+  * Maintenance supplement -- 
+---
+
+
+
+
 id: ask for custody visitation and child support
 question: |  
   Custody, visitation and child support
@@ -895,56 +924,67 @@ subquestion: |
   **I ask that the court grant me the following.** Check all that apply.
 fields:
   - note: |
-      Parental rights and responsibilities:
+      ---
+  - note: |
+      **Parental rights and responsibilities:**
+  - note: |
+      ${ collapse_template(what_is_legal_parental_rights) }
+      ${ collapse_template(what_is_physical_parental_rights) }
   #- Parental rights and responsibilities: parental_rights
     #datatype: yesno
     #required: False
   - Legal parental rights and responsibilities: legal_rights_responsibilities
     datatype: yesno
     required: False
+    default: True
   - Choose one: lrr_choice
     choices:
     - Shared jointly: legal_shared_jointly
     - Given only to myself: legal_myself
-    - Given only to the defendant: legal_defendant
+    - Given only to ${ other_parties[0] }: legal_defendant
     input type: radio
-    css class: indent-me
+
     show if: legal_rights_responsibilities
+
   - Physical parental rights and responsibilities: physical_rights_responsibilities
     datatype: yesno
     required: False
+    default: True
   - Choose one: prr_choice
     choices:
     - Shared jointly: physical_shared_jointly
     - Given only to myself: physical_myself
-    - Given only to the defendant: physical_defendant
+    - Given only to ${ other_parties[0] }: physical_defendant
     input type: radio
-    css class: indent-me
+
     show if: physical_rights_responsibilities
   - note: |
       ---
   - note: |
-      Parent-child contact:  
+      **Parent-child contact:**  
+  - note: |
+      ${ collapse_template(what_is_parent_child_contact) }
   #- Parent-child contact: contact_for
     #datatype: yesno
-  - Contact for myself: contact_for_myself
-    datatype: yesno
-    css class: indent-me
-    #show if: contact_for
-    required: False
-  - Contact for the defendant: contact_for_defendant
-    datatype: yesno
-    css class: indent-me
-    #show if: contact_for
-    required: False
+  - Choose at least one: contact_for
+    choices:
+    - Contact for myself: contact_for_myself
+    - Contact for ${ other_parties[0] }: contact_for_defendant
+    datatype: checkboxes
+    none of the above: False    
+    minlength: 1
+
   - note: |
       ---
   - note: |
-      Support:
-  - Child support, medical support and/or maintenance supplement: child_medical_support
+      **Support:**
+  - note: |
+      ${ collapse_template(what_is_child_medical_and_maintenance_support) }
+  - I would like child support, medical support and/or maintenance supplement: child_medical_support
     datatype: yesno
   - note: |
-      Learn what these terms mean on the [VTLawHelp website.](https://vtlawhelp.org/custody-visitation)
+    
+      **Keep in mind**: If you and your spouse can’t agree about something -- including custody and parent-child contact -- the court will decide for you.
 ---
 id: preview divorce
 question: |
@@ -1797,9 +1837,9 @@ attachment:
           % endif
       - "physical_myself": ${ prr_choice == "physical_myself" }
       - "physical_defendant": ${ prr_choice == "physical_defendant" }
-      - "contact_for": ${ contact_for_myself or contact_for_defendant }
-      - "contact_for_myself": ${contact_for_myself}
-      - "contact_for_defendant": ${ contact_for_defendant }
+      - "contact_for": True
+      - "contact_for_myself": ${ contact_for["contact_for_myself"] }
+      - "contact_for_defendant": ${ contact_for["contact_for_defendant"] }
       - "child_medical_support": ${ child_medical_support }
       - "filing_financial_form": ${ filing_financial_form }
       - "not_filing_financial_form": ${ not filing_financial_form }
