@@ -8,6 +8,7 @@ include:
   - docassemble.VTSharedYMLFile:VTSharedYMLFile.yml
   - Health_record.yml
   - docassemble.VTCertificateOfService:VTCertificateOfService_to_include.yml
+  - docassemble.VTFamilyCourtInfoSheet:family_court_info_sheet_to_include.yml
   - customized_screens.yml
 ---
 # customized feedback form
@@ -161,6 +162,9 @@ code: |
   al_intro_screen
   interview_order_divorce
   interview_order_Health_record
+  interview_order_b_info_sheet_family_court
+
+  # Certificate of service comes at the end
   interview_order_VTCertificateOfService
   for party in other_parties:
     party.served
@@ -1473,7 +1477,8 @@ code: |
 # Bundles group the ALDocuments into separate downloads, such as for court and for the user
 objects:
   - al_user_bundle: ALDocumentBundle.using(elements=[
-          divorce_Post_interview_instructions, 
+          divorce_Post_interview_instructions,
+          b_info_sheet_family_court_attachment,
           divorce_with_kids_attachment,
           divorce_no_kids_attachment,
           Health_record_civil_union_attachment, 
@@ -1482,6 +1487,7 @@ objects:
         ], filename="divorce_with_kids", title="All forms to download for your records", enabled=True)
   
   - al_court_bundle: ALDocumentBundle.using(elements=[
+          b_info_sheet_family_court_attachment,
           divorce_with_kids_attachment,
           divorce_no_kids_attachment,
           Health_record_civil_union_attachment,
