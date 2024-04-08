@@ -59,7 +59,8 @@ sections:
   - defendant: About the defendant
   - kids: About children
   - what_want: What you want in the order
-  - past_actions: Earlier court actions
+  - past_actions: Other court actions
+  - serving_other_side: Serving the other side
   - review_answers: Edit your answers
   - sign: Signature
   - get_docs: Get your documents
@@ -70,19 +71,10 @@ code: |
   al_intro_screen
   # run the main interview order block
   interview_order_divorce
-  # fields for health record
-  users[0].last_name_former
-  other_parties[0].last_name_former
-  no_longer_living_together_date
-
   # fields for family court info sheet
-  OCS_filing_form
-  users1_gets_public_assistance
-  other_parties[0].birthdate
-  other_parties1_gets_child_support
-  other_parties1_has_attorney
   other_family_juv_probate_proceedings
 
+  nav.set_section("serving_other_side")
   # Fields for notice of appearance
   email_consent
 
@@ -148,10 +140,14 @@ code: |
   
   initial_screening_continue 
   license_type
-  
+  no_longer_living_together_date
+
   nav.set_section("about")
 
+  OCS_filing_form
   users.gather()
+  # fields for health record
+  users[0].last_name_former
   if license_type == "marriage":
     users_role
   users[0].birthdate
@@ -159,15 +155,17 @@ code: |
   users[0].email
   if user_has_attorney:
     users[0].attorneys[0].name
-
+  users1_gets_public_assistance
 
   set_progress(16)
   nav.set_section("defendant")
   other_parties.gather()
+  other_parties[0].last_name_former
   if license_type == "marriage":
     other_parties_role
   other_parties[0].birthdate
   other_parties[0].address.address
+  other_parties1_gets_child_support
   other_parties[0].email
   other_parties_has_attorney
   
