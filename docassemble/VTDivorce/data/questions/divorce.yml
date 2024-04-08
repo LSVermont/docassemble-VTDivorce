@@ -9,7 +9,7 @@ include:
   - Health_record.yml
   - docassemble.VTCertificateOfService:VTCertificateOfService_to_include.yml
   - docassemble.VTFamilyCourtInfoSheet:family_court_info_sheet_to_include.yml
-  - docassemble.VTNoticeOfAppearance:notice_of_appearance_to_include.yml
+  - docassemble.VTNoticeOfAppearance:VTNoticeOfAppearance_to_include.yml
   - customized_screens.yml
 ---
 # customized feedback form
