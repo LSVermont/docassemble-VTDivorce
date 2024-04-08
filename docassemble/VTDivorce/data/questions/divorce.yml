@@ -864,6 +864,37 @@ fields:
       To qualify for a reduced court filing fee, the attached agreement must cover all the issues that you want to have the court resolve.
     show if: written_agreement_attached
 ---
+#Add these templates to sharedYMLfile
+template: what_is_legal_parental_rights
+subject: |
+  What is legal responsibility?
+content: |
+  Legal responsibility is who has the right to make major decisions about the child’s life. The major decisions tend to be about religion, education, medical care and travel outside of Vermont. Learn more on [VTLawHelp.org](https://vtlawhelp.org/custody-visitation).
+---
+template: what_is_physical_parental_rights
+subject: |
+  What is physical responsibility?
+content: |
+  Physical responsibility means who has the responsibility to provide routine daily care and control of the child and to make day-to-day decisions. Where the child physically lives is included in physical responsibility. Learn more on [VTLawHelp.org](https://vtlawhelp.org/custody-visitation).
+---
+template: what_is_parent_child_contact
+subject: |
+  What is parent-child contact?
+content: |
+  In Vermont, the courts call visitation "parent-child contact." If you want the child to live with you, be sure to also check parent-child for yourself. Generally, the courts prefer that children can spend as much time as possible with both of their parents. Learn more on [VTLawHelp.org](https://vtlawhelp.org/custody-visitation).
+---
+template: what_is_child_medical_and_maintenance_support
+subject: |
+  What do these mean?
+content: |
+  * Child support -- It is paid by one parent to the other for the support of children. Parents who are able to are expected to support their children.
+  * Medical support -- Money for child medical care.
+  * Maintenance supplement -- 
+---
+
+
+
+
 id: ask for custody visitation and child support
 question: |  
   Custody, visitation and child support
@@ -871,7 +902,12 @@ subquestion: |
   **I ask that the court grant me the following.** Check all that apply.
 fields:
   - note: |
-      Parental rights and responsibilities:
+      ---
+  - note: |
+      **Parental rights and responsibilities:**
+  - note: |
+      ${ collapse_template(what_is_legal_parental_rights) }
+      ${ collapse_template(what_is_physical_parental_rights) }
   #- Parental rights and responsibilities: parental_rights
     #datatype: yesno
     #required: False
@@ -885,8 +921,9 @@ fields:
     - Given only to myself: legal_myself
     - Given only to ${ other_parties[0] }: legal_defendant
     input type: radio
-    css class: indent-me
+
     show if: legal_rights_responsibilities
+
   - Physical parental rights and responsibilities: physical_rights_responsibilities
     datatype: yesno
     required: False
@@ -897,12 +934,14 @@ fields:
     - Given only to myself: physical_myself
     - Given only to ${ other_parties[0] }: physical_defendant
     input type: radio
-    css class: indent-me
+
     show if: physical_rights_responsibilities
   - note: |
       ---
   - note: |
-      Parent-child contact:  
+      **Parent-child contact:**  
+  - note: |
+      ${ collapse_template(what_is_parent_child_contact) }
   #- Parent-child contact: contact_for
     #datatype: yesno
   - Choose at least one: contact_for
@@ -912,15 +951,18 @@ fields:
     datatype: checkboxes
     none of the above: False    
     minlength: 1
-    css class: indent-me
+
   - note: |
       ---
   - note: |
-      Support:
+      **Support:**
+  - note: |
+      ${ collapse_template(what_is_child_medical_and_maintenance_support) }
   - I would like child support, medical support and/or maintenance supplement: child_medical_support
     datatype: yesno
   - note: |
-      Learn what these terms mean on the [VTLawHelp website.](https://vtlawhelp.org/custody-visitation)
+    
+      **Keep in mind**: If you and your spouse can’t agree about something -- including custody and parent-child contact -- the court will decide for you.
 ---
 id: preview divorce
 question: |
@@ -1769,9 +1811,9 @@ attachment:
           % endif
       - "physical_myself": ${ prr_choice == "physical_myself" }
       - "physical_defendant": ${ prr_choice == "physical_defendant" }
-      - "contact_for": ${ contact_for_myself or contact_for_defendant }
-      - "contact_for_myself": ${contact_for_myself}
-      - "contact_for_defendant": ${ contact_for_defendant }
+      - "contact_for": True
+      - "contact_for_myself": ${ contact_for["contact_for_myself"] }
+      - "contact_for_defendant": ${ contact_for["contact_for_defendant"] }
       - "child_medical_support": ${ child_medical_support }
       - "filing_financial_form": ${ filing_financial_form }
       - "not_filing_financial_form": ${ not filing_financial_form }
