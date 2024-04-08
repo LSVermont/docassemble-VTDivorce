@@ -836,19 +836,19 @@ fields:
       is: other_ground
     maxlength: 60
   - note: Other things you are asking the court for. Check all that apply.
-  - Divide our property, assets and debts: property_maintenance
+  - I want a fair division of our property, assets and debts: property_maintenance
     datatype: yesno
-  - Spousal maintenance (alimony): spousal_maintenance
+  - I want ${ other_parties[0] } to pay me spousal maintenance (alimony): spousal_maintenance
     datatype: yesno
-  - Court costs: court_costs
+  - I want ${ other_parties[0] } to reimburse my court costs: court_costs
     datatype: yesno
-  - Attorney fees: attorney_fees
+  - I want ${ other_parties[0] } to pay my attorney fees: attorney_fees
     datatype: yesno
-  - Name change: name_change
+  - I want to change my name: name_change
     datatype: yesno
-  - I would like to go back to my former full name: plaintiff_former_name
+  - I want to go back to my former full name: plaintiff_former_name
     show if: name_change
-  - I will attach a written agreement signed by me and ${ other_parties }. I ask the court to issue an order that includes the provisions in our written agreement. : written_agreement_attached
+  - I have a written agreement signed by me and ${ other_parties }. I will include it with these forms. I ask the court to issue an order that includes the provisions in our written agreement. : written_agreement_attached
     datatype: yesno
   - note: |
       If you have a written agreement, attach it to the forms that you file with the court. The written agreement must include:
@@ -859,7 +859,7 @@ fields:
       
       3. a child support order (if you have kids).
       
-      See our [Divorce Roadmap on VTLawHelp.org](https://vtlawhelp.org/roadmap/divorce/step-3) for more details about the agreements and agreement forms you can use.
+      See our [Divorce Roadmap on VTLawHelp.org](https://vtlawhelp.org/roadmap/divorce/step-3) for agreement forms you can use.
       
       To qualify for a reduced court filing fee, the attached agreement must cover all the issues that you want to have the court resolve.
     show if: written_agreement_attached
