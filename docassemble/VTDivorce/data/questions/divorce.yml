@@ -796,7 +796,7 @@ id: filing_financial_form
 question: |
   Are you also filing a completed financial form 400-00813B now?
 subquestion: |
-  On that form you will list all of the property, assets, and debts that you and ${ other_parties[0] } own together or separately that are known to you. You can file it now with the Complaint form, or file it at a later date. ([See the paper version of the form.](https://www.vermontjudiciary.org/media/926))
+  Everyone completes financial form 400-00813B -- either now or later. On that form you will list all of the property, assets, and debts that you and ${ other_parties[0] } own together or separately that are known to you. You can file it now with the Complaint form, or file it at a later date. ([See the paper version of the form.](https://www.vermontjudiciary.org/media/926))
 fields:
   - "Are you filing form 400-00813B now?": filing_financial_form
     datatype: yesnoradio
@@ -850,7 +850,18 @@ fields:
     show if: name_change
   - I will attach a written agreement signed by me and ${ other_parties }. I ask the court to issue an order that includes the provisions in our written agreement. : written_agreement_attached
     datatype: yesno
-  - note: If you have a written agreement, attach it to the forms that you file with the court. To qualify for the reduced filing fee, the attached agreement must cover all the issues that you seek to have the court resolve.
+  - note: |
+      If you have a written agreement, attach it to the forms that you file with the court. The written agreement must include:
+      
+      1. a property, debt and spousal support agreement (which is called a "stipulation")
+      
+      2. a parenting plan agreement / stipulation (if you have kids),  and
+      
+      3. a child support order (if you have kids).
+      
+      See our [Divorce Roadmap on VTLawHelp.org](https://vtlawhelp.org/roadmap/divorce/step-3) for more details about the agreements and agreement forms you can use.
+      
+      To qualify for a reduced court filing fee, the attached agreement must cover all the issues that you want to have the court resolve.
     show if: written_agreement_attached
 ---
 id: ask for custody visitation and child support
