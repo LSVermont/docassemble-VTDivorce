@@ -204,6 +204,8 @@ subquestion: |
   * Family Court Information Form - form 800
   * Department of Health Record of Divorce or Dissolution
   
+  Everyone fills out these forms when asking for a divorce, separation, or civil union dissolution. However, you may need to fill out **more forms** depending if you and your spouse have an agreement about kids, property, debts and kids (if you have them). Also, if you are asking for a civil union dissolution, you will need to fill out more forms.
+  
   When you give these forms to the court, it is **only the first step** in the process to getting a divorce, separation, or civil union dissolution.
   
   <i class="fas fa-clock fa-2x"></i> It may take you over 1 hour to complete this interview.
@@ -446,6 +448,8 @@ question: |
   Where have your children lived in the past 5 years, and who did they live with?
 subquestion: |
   On the next screen, start with the most recent address. You'll be able to add other addresses as needed.
+  
+  Tip: It's OK to estimate the dates.
   
   If children have lived at different addresses from each other, enter the addresses for each child.
 continue button field: where_children_lived
