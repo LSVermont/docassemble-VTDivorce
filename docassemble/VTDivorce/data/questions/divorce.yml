@@ -878,22 +878,24 @@ fields:
   - Legal parental rights and responsibilities: legal_rights_responsibilities
     datatype: yesno
     required: False
+    default: True
   - Choose one: lrr_choice
     choices:
     - Shared jointly: legal_shared_jointly
     - Given only to myself: legal_myself
-    - Given only to the defendant: legal_defendant
+    - Given only to ${ other_parties[0] }: legal_defendant
     input type: radio
     css class: indent-me
     show if: legal_rights_responsibilities
   - Physical parental rights and responsibilities: physical_rights_responsibilities
     datatype: yesno
     required: False
+    default: True
   - Choose one: prr_choice
     choices:
     - Shared jointly: physical_shared_jointly
     - Given only to myself: physical_myself
-    - Given only to the defendant: physical_defendant
+    - Given only to ${ other_parties[0] }: physical_defendant
     input type: radio
     css class: indent-me
     show if: physical_rights_responsibilities
@@ -903,21 +905,19 @@ fields:
       Parent-child contact:  
   #- Parent-child contact: contact_for
     #datatype: yesno
-  - Contact for myself: contact_for_myself
-    datatype: yesno
+  - Choose at least one: contact_for
+    choices:
+    - Contact for myself: contact_for_myself
+    - Contact for ${ other_parties[0] }: contact_for_defendant
+    datatype: checkboxes
+    none of the above: False    
+    minlength: 1
     css class: indent-me
-    #show if: contact_for
-    required: False
-  - Contact for the defendant: contact_for_defendant
-    datatype: yesno
-    css class: indent-me
-    #show if: contact_for
-    required: False
   - note: |
       ---
   - note: |
       Support:
-  - Child support, medical support and/or maintenance supplement: child_medical_support
+  - I would like child support, medical support and/or maintenance supplement: child_medical_support
     datatype: yesno
   - note: |
       Learn what these terms mean on the [VTLawHelp website.](https://vtlawhelp.org/custody-visitation)
