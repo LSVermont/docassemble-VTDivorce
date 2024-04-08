@@ -1,6 +1,6 @@
 #For this interview, the person filling out the form (user) is always considered to be the plaintiff.
 #The health record yml file is included in this package because it will never be a stand-alone interview.
-#We will soon be "including" other stand-alone interviews.
+#We will be "including" other stand-alone interviews.
 ---
 include:
   - docassemble.AssemblyLine:assembly_line.yml
@@ -227,6 +227,8 @@ subquestion: |
   * Certificate of Service - form 600-00264
   * Family Court Information Form - form 800
   * Department of Health Record of Divorce or Dissolution
+  
+  Everyone fills out these forms when asking for a divorce, separation, or civil union dissolution. However, you may need to fill out **more forms** depending if you and your spouse have an agreement about kids, property, debts and kids (if you have them). Also, if you are asking for a civil union dissolution, you will need to fill out more forms.
   
   When you give these forms to the court, it is **only the first step** in the process to getting a divorce, separation, or civil union dissolution.
   
@@ -471,6 +473,8 @@ question: |
 subquestion: |
   On the next screen, start with the most recent address. You'll be able to add other addresses as needed.
   
+  Tip: It's OK to estimate the dates.
+  
   If children have lived at different addresses from each other, enter the addresses for each child.
 continue button field: where_children_lived
 ---
@@ -488,13 +492,13 @@ fields:
       locations[i].address_fields(country_code=AL_DEFAULT_COUNTRY, default_state=AL_DEFAULT_STATE)
 
   - Start date: locations[i].start_date
-    datatype: date
+    maxlength: 10
   - End date (or today's date): locations[i].end_date 
-    datatype: date
+    maxlength: 10
   - All people that lived with your child/children (including you): locations[i].housemates
     maxlength: 30
   - note: |
-      Use abbreviated names for the people who lived with them. Use a comma between names. Example: Jane T., John Z. There's not much room on the form!
+      You can say things like: mom, dad, brother, sister, grandma. You can also use abbreviated names for the people who lived with them, like Jane D. (There's not much room on the form!)
 ---
 generic object: ALPeopleList
 id: any other locations
@@ -640,6 +644,8 @@ fields:
   - Zip or postal code: users[0].address.zip
     required: False
   - County: users[0].address.county
+  - note: |
+      Not sure what county? [Check this list of cities and towns to find the county.](https://en.m.wikipedia.org/wiki/List_of_municipalities_in_Vermont#Cities)
   - Do you have a mailing address that is different from your street address?: users_mailing_address_different
     datatype: yesnoradio
   - Mailing address: users[0].mailing_address.address
@@ -776,7 +782,8 @@ fields:
   - ${ users[0].address.zip_label}: other_parties[0].address.zip
     required: False      
   - ${ users[0].address.county_label}: other_parties[0].address.county
-
+  - note: |
+      Not sure what county? [Check this list of cities and towns to find the county.](https://en.m.wikipedia.org/wiki/List_of_municipalities_in_Vermont#Cities)
   - Does ${ other_parties } have a mailing address that is different from their street address?: other_parties_mailing_address_different
     datatype: yesnoradio
   - Mailing address: other_parties[0].mailing_address.address
@@ -813,7 +820,7 @@ id: filing_financial_form
 question: |
   Are you also filing a completed financial form 400-00813B now?
 subquestion: |
-  On that form you will list all of the property, assets, and debts that you and ${ other_parties[0] } own together or separately that are known to you. You can file it now with the Complaint form, or file it at a later date. ([See the paper version of the form.](https://www.vermontjudiciary.org/media/926))
+  Everyone completes financial form 400-00813B -- either now or later. On that form you will list all of the property, assets, and debts that you and ${ other_parties[0] } own together or separately that are known to you. You can file it now with the Complaint form, or file it at a later date. ([See the paper version of the form.](https://www.vermontjudiciary.org/media/926))
 fields:
   - "Are you filing form 400-00813B now?": filing_financial_form
     datatype: yesnoradio
@@ -855,7 +862,7 @@ fields:
   - note: Other things you are asking the court for. Check all that apply.
   - Divide our property, assets and debts: property_maintenance
     datatype: yesno
-  - Spousal maintenancee (alimony): spousal_maintenancee
+  - Spousal maintenance (alimony): spousal_maintenance
     datatype: yesno
   - Court costs: court_costs
     datatype: yesno
@@ -867,7 +874,18 @@ fields:
     show if: name_change
   - I will attach a written agreement signed by me and ${ other_parties }. I ask the court to issue an order that includes the provisions in our written agreement. : written_agreement_attached
     datatype: yesno
-  - note: If you have a written agreement, attach it to the forms that you file with the court. To qualify for the reduced filing fee, the attached agreement must cover all the issues that you seek to have the court resolve.
+  - note: |
+      If you have a written agreement, attach it to the forms that you file with the court. The written agreement must include:
+      
+      1. a property, debt and spousal support agreement (which is called a "stipulation")
+      
+      2. a parenting plan agreement / stipulation (if you have kids),  and
+      
+      3. a child support order (if you have kids).
+      
+      See our [Divorce Roadmap on VTLawHelp.org](https://vtlawhelp.org/roadmap/divorce/step-3) for more details about the agreements and agreement forms you can use.
+      
+      To qualify for a reduced court filing fee, the attached agreement must cover all the issues that you want to have the court resolve.
     show if: written_agreement_attached
 ---
 id: ask for custody visitation and child support
@@ -1220,7 +1238,7 @@ review:
       **${ word(yesno(property_maintenance)) }**
 
       - Spousal maintenancee:
-      **${ word(yesno(spousal_maintenancee)) }**
+      **${ word(yesno(spousal_maintenance)) }**
 
       - Court costs:
       **${ word(yesno(court_costs)) }**
@@ -1491,7 +1509,7 @@ code: |
   divorce_with_kids_attachment.overflow_fields['children'].overflow_trigger = 5
   divorce_with_kids_attachment.overflow_fields['children'].label = "Other children"
   divorce_with_kids_attachment.overflow_fields['locations'].overflow_trigger = 3
-  divorce_with_kids_attachment.overflow_fields['locations'].label = "More information of the children's housing situation"
+  divorce_with_kids_attachment.overflow_fields['locations'].label = "More information about the children's housing situation"
   divorce_with_kids_attachment.overflow_fields.gathered = True 
 ---
 # Bundles group the ALDocuments into separate downloads, such as for court and for the user
@@ -1665,7 +1683,7 @@ attachment:
       - "legal_separation_decree": ${ grant_for == "legal_separation" }
       - "dissolution_decree": ${ grant_for == "dissolution" }
       - "property_maintenance": ${ property_maintenance }
-      - "spousal_maintenancee": ${ spousal_maintenancee }
+      - "spousal_maintenancee": ${ spousal_maintenance }
       - "court_costs": ${ court_costs }
       - "attorney_fees": ${ attorney_fees }
       - "name_change": ${ name_change }
@@ -1752,13 +1770,13 @@ attachment:
       - "child_birthdate5": ${ children[4].birthdate }
      
       - "child_address1": ${ locations[0].address } 
-      - "child_date1": ${ format_date(locations[0].start_date, format='M/d/yyyy') }-${ format_date(locations[0].end_date, format='M/d/yyyy') }
+      - "child_date1": ${ locations[0].start_date } to ${ locations[0].end_date }
       - "child_housemate1": ${ locations[0].housemates }
       - "child_address2": ${ locations[1].address } 
-      - "child_date2": ${ format_date(locations[1].start_date, format='M/d/yyyy') }-${ format_date(locations[1].end_date, format='M/d/yyyy') }
+      - "child_date2": ${ locations[1].start_date } to ${ locations[1].end_date }
       - "child_housemate2": ${ locations[1].housemates }
       - "child_address3": ${ locations[2].address } 
-      - "child_date3": ${ format_date(locations[2].start_date, format='M/d/yyyy') }-${ format_date(locations[2].end_date, format='M/d/yyyy') }
+      - "child_date3": ${ locations[2].start_date } to ${ locations[2].end_date }
       - "child_housemate3": ${ locations[2].housemates }
    
       - "participated_custody_child": ${ participations }
@@ -1823,7 +1841,7 @@ attachment:
       - "legal_separation_decree": ${ grant_for == "legal_separation" }
       - "dissolution_decree": ${ grant_for == "dissolution" }
       - "property_maintenance": ${ property_maintenance }
-      - "spousal_maintenancee": ${ spousal_maintenancee }
+      - "spousal_maintenancee": ${ spousal_maintenance }
       - "court_costs": ${ court_costs }
       - "attorney_fees": ${ attorney_fees }
       - "name_change": ${ name_change }
