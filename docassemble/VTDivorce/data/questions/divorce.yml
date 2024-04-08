@@ -29,9 +29,8 @@ metadata:
   tags:
     - "FA-00-00-00-00"
   authors:
-    - M. Bonardi and S. Constantinou, Lemma Legal
     - K. Surette, Legal Services Vermont
-    - Q. Steenhuis, Lemma Legal
+    - Q. Steenhuis, M. Bonardi and S. Constantinou, Lemma Legal
   original_form:
     - https://vtlawhelp.org/roadmap/divorce/step-3
   typical_role: "plaintiff"
