@@ -29,8 +29,6 @@ metadata:
     - Q. Steenhuis, Lemma Legal
   original_form:
     - https://vtlawhelp.org/roadmap/divorce/step-3
-    - https://www.vermontjudiciary.org/sites/default/files/documents/400-00836NoKids_1.pdf
-    - https://www.vermontjudiciary.org/sites/default/files/documents/400-00836Children.pdf
   typical_role: "plaintiff"
   al_weaver_version: "1.10.1"
   generated_on: "2023-07-25"
@@ -215,7 +213,7 @@ subquestion: |
   <p>${ intro_vtcourtforms_created_by }</p>
 
 fields:
-  - To continue, please accept our [terms of use](https://vtlawhelp.org/vlh-privacy).: acknowledged_information_use
+  - To continue, please accept our [terms of use](https://vtlawhelp.org/vtcourtforms/terms-of-use).: acknowledged_information_use
     datatype: checkboxes
     none of the above: False    
     minlength: 1
