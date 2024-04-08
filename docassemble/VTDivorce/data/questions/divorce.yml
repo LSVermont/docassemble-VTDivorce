@@ -1,6 +1,6 @@
 #For this interview, the person filling out the form (user) is always considered to be the plaintiff.
 #The health record yml file is included in this package because it will never be a stand-alone interview.
-#We will soon be "including" other stand-alone interviews.
+#We will be "including" other stand-alone interviews.
 ---
 include:
   - docassemble.AssemblyLine:assembly_line.yml
@@ -468,13 +468,13 @@ fields:
       locations[i].address_fields(country_code=AL_DEFAULT_COUNTRY, default_state=AL_DEFAULT_STATE)
 
   - Start date: locations[i].start_date
-    datatype: date
+    maxlength: 10
   - End date (or today's date): locations[i].end_date 
-    datatype: date
+    maxlength: 10
   - All people that lived with your child/children (including you): locations[i].housemates
     maxlength: 30
   - note: |
-      Use abbreviated names for the people who lived with them. Use a comma between names. Example: Jane T., John Z. There's not much room on the form!
+      You can say things like: mom, dad, brother, sister, grandma. You can also use abbreviated names for the people who lived with them, like Jane D. (There's not much room on the form!)
 ---
 generic object: ALPeopleList
 id: any other locations
@@ -1471,7 +1471,7 @@ code: |
   divorce_with_kids_attachment.overflow_fields['children'].overflow_trigger = 5
   divorce_with_kids_attachment.overflow_fields['children'].label = "Other children"
   divorce_with_kids_attachment.overflow_fields['locations'].overflow_trigger = 3
-  divorce_with_kids_attachment.overflow_fields['locations'].label = "More information of the children's housing situation"
+  divorce_with_kids_attachment.overflow_fields['locations'].label = "More information about the children's housing situation"
   divorce_with_kids_attachment.overflow_fields.gathered = True 
 ---
 # Bundles group the ALDocuments into separate downloads, such as for court and for the user
@@ -1728,13 +1728,13 @@ attachment:
       - "child_birthdate5": ${ children[4].birthdate }
      
       - "child_address1": ${ locations[0].address } 
-      - "child_date1": ${ format_date(locations[0].start_date, format='M/d/yyyy') }-${ format_date(locations[0].end_date, format='M/d/yyyy') }
+      - "child_date1": ${ locations[0].start_date } to ${ locations[0].end_date }
       - "child_housemate1": ${ locations[0].housemates }
       - "child_address2": ${ locations[1].address } 
-      - "child_date2": ${ format_date(locations[1].start_date, format='M/d/yyyy') }-${ format_date(locations[1].end_date, format='M/d/yyyy') }
+      - "child_date2": ${ locations[1].start_date } to ${ locations[1].end_date }
       - "child_housemate2": ${ locations[1].housemates }
       - "child_address3": ${ locations[2].address } 
-      - "child_date3": ${ format_date(locations[2].start_date, format='M/d/yyyy') }-${ format_date(locations[2].end_date, format='M/d/yyyy') }
+      - "child_date3": ${ locations[2].start_date } to ${ locations[2].end_date }
       - "child_housemate3": ${ locations[2].housemates }
    
       - "participated_custody_child": ${ participations }
