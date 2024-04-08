@@ -137,17 +137,20 @@ code: |
       jurisdiction_kickout
   
   initial_screening_continue 
-  license_type
-  no_longer_living_together_date
-
+  
   nav.set_section("about")
+    
+  license_type
 
   OCS_filing_form
-  users.gather()
+  #users.gather()
   # fields for health record
-  users[0].last_name_former
+  if license_type == "civil_union":
+    users[0].sex
   if license_type == "marriage":
+    users[0].gender
     users_role
+    
   users[0].birthdate
   users[0].address.address
   users[0].email
@@ -157,10 +160,11 @@ code: |
 
   set_progress(16)
   nav.set_section("defendant")
-  other_parties.gather()
-  other_parties[0].last_name_former
+  #other_parties.gather()
+  if license_type == "civil_union":
+    other_parties[0].sex
   if license_type == "marriage":
-    other_parties_role
+    other_parties[0].gender
   other_parties[0].birthdate
   other_parties[0].address.address
   other_parties1_gets_child_support
@@ -200,6 +204,7 @@ code: |
   
   plaintiff_des_assistance
   plaintiff_military_service
+  no_longer_living_together_date
   
   set_progress(75)
   docket_number
