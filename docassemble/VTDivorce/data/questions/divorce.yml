@@ -9,6 +9,7 @@ include:
   - Health_record.yml
   - docassemble.VTCertificateOfService:VTCertificateOfService_to_include.yml
   - docassemble.VTFamilyCourtInfoSheet:family_court_info_sheet_to_include.yml
+  - docassemble.VTNoticeOfAppearance:notice_of_appearance_to_include.yml
   - customized_screens.yml
 ---
 # customized feedback form
@@ -62,6 +63,64 @@ sections:
   - review_answers: Edit your answers
   - sign: Signature
   - get_docs: Get your documents
+---
+###################### Main order ######################
+mandatory: True
+code: |
+  al_intro_screen
+  # run the main interview order block
+  interview_order_divorce
+  # fields for health record
+  users[0].last_name_former
+  other_parties[0].last_name_former
+  no_longer_living_together_date
+
+  # fields for family court info sheet
+  OCS_filing_form
+  users1_gets_public_assistance
+  other_parties[0].birthdate
+  other_parties1_gets_child_support
+  other_parties1_has_attorney
+  other_family_juv_probate_proceedings
+
+  # Fields for notice of appearance
+  email_consent
+
+  # Fields for certificate of service
+  users1_role
+  user_has_attorney
+  other_people_receiving_service.gather()
+  for party in other_parties:
+    party.served
+  trial_court_division
+  divorcesc
+  document1_name
+
+
+
+  # Store anonymous data for analytics / statistics
+  store_variables_snapshot(
+      persistent=True,
+      data={
+          "zip": showifdef("users[0].address.zip"),
+          "marriage_or_civil_union_VT": showifdef("marriage_or_civil_union_VT"),
+          "have_school_age_children": showifdef("have_school_age_children"),
+          "reached_interview_end": True,
+      },
+  )
+  nav.set_section("review_answers")
+  trial_court.address.county
+  divorce_preview_question
+  
+  nav.set_section("sign")
+  signature_date
+  set_progress(92)
+  al_form_requires_digital_signature = False
+  basic_questions_signature_flow    
+  nav.set_section("get_docs")
+  set_progress(100)
+  divorce_download
+
 ---
 #################### Interview order #####################
 comment: |
@@ -152,43 +211,6 @@ code: |
     
   interview_order_divorce = True
   set_progress(85)
----
-###################### Main order ######################
-comment: |
-  This block includes the logic for standalone interviews.
-  Delete mandatory: True to include in another interview
-mandatory: True
-code: |
-  al_intro_screen
-  interview_order_divorce
-  interview_order_Health_record
-  interview_order_b_info_sheet_family_court
-
-  # Certificate of service comes at the end
-  interview_order_VTCertificateOfService
-  for party in other_parties:
-    party.served
-
-  # Store anonymous data for analytics / statistics
-  store_variables_snapshot(
-      persistent=True,
-      data={
-          "zip": showifdef("users[0].address.zip"),
-          "reached_interview_end": True,
-      },
-  )
-  nav.set_section("review_answers")
-  trial_court.address.county
-  divorce_preview_question
-  
-  nav.set_section("sign")
-  signature_date
-  set_progress(92)
-  al_form_requires_digital_signature = False
-  basic_questions_signature_flow    
-  nav.set_section("get_docs")
-  set_progress(100)
-  divorce_download
 ---
 id: basic questions intro screen
 decoration: form-lineal
@@ -1478,15 +1500,17 @@ code: |
 objects:
   - al_user_bundle: ALDocumentBundle.using(elements=[
           divorce_Post_interview_instructions,
+          a_notice_of_appearance_self_rep_attachment,
           b_info_sheet_family_court_attachment,
           divorce_with_kids_attachment,
           divorce_no_kids_attachment,
-          Health_record_civil_union_attachment, 
+          Health_record_civil_union_attachment,
           Health_record_divorce_annulment_attachment,
           VTCertificateOfService_attachment,
         ], filename="divorce_with_kids", title="All forms to download for your records", enabled=True)
   
   - al_court_bundle: ALDocumentBundle.using(elements=[
+          a_notice_of_appearance_self_rep_attachment,
           b_info_sheet_family_court_attachment,
           divorce_with_kids_attachment,
           divorce_no_kids_attachment,
