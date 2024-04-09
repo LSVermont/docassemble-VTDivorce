@@ -715,7 +715,7 @@ fields:
     datatype: yesno
   - ${ other_parties } gets DES assistance: defendant_des_assistance
     datatype: yesno
-  - We don't get DES assistance: no_des_assistance
+  - We don't get DES assistance, or I'm not sure: no_des_assistance
     datatype: yesno  
 ---
 id: military service
@@ -726,7 +726,7 @@ fields:
     datatype: yesno
   - ${ other_parties } serves in the military: other_parties1_military
     datatype: yesno
-  - We do not serve in the military: no_military_service
+  - We do not serve in the military, or I'm not sure: no_military_service
     datatype: yesno  
 ---
 id: other parties attorney info
