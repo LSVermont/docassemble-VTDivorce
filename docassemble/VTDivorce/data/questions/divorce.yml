@@ -1205,7 +1205,7 @@ review:
       Children
 
       % for item in children:
-      - **${ item }** 
+      - **${ item }** -- Birthdate: ${ item.birthdate }
       % endfor
 
   - Edit: participation 
