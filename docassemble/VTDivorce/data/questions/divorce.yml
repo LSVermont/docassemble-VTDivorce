@@ -437,7 +437,7 @@ id: have school age children
 question: |
   Children
 subquestion: |  
-  Do you and ${ other_parties[0].name } have children together who are either younger than 18 years old, or are 18 years old and still in high school? Include born or adopted children.  
+  Do you and your spouse/other party have children together who are either younger than 18 years old, or are 18 years old and still in high school? Include born or adopted children.  
 fields:
   - no label: have_school_age_children
     datatype: yesnoradio
