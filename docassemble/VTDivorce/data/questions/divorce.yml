@@ -1554,7 +1554,7 @@ attachment:
 ---
 code: |
   divorce_with_kids_attachment.overflow_fields['child_custody'].overflow_trigger = 0
-  divorce_with_kids_attachment.overflow_fields['child_custody'].label = "Child Custody"
+  divorce_with_kids_attachment.overflow_fields['child_custody'].label = "Information about child custody"
   divorce_with_kids_attachment.overflow_fields['earlier_actions'].overflow_trigger = 3
   divorce_with_kids_attachment.overflow_fields['earlier_actions'].label = "Other earlier actions"
   divorce_with_kids_attachment.overflow_fields['earlier_RFA'].overflow_trigger = 3
