@@ -437,7 +437,7 @@ id: have school age children
 question: |
   Children
 subquestion: |  
-  Do you and ${ other_parties[0].name } have children together who are either younger than 18 years old, or are 18 years old and still in high school? Include born or adopted children.  
+  Do you and your spouse/other party have children together who are either younger than 18 years old, or are 18 years old and still in high school? Include born or adopted children.  
 fields:
   - no label: have_school_age_children
     datatype: yesnoradio
@@ -715,7 +715,7 @@ fields:
     datatype: yesno
   - ${ other_parties } gets DES assistance: defendant_des_assistance
     datatype: yesno
-  - We don't get DES assistance: no_des_assistance
+  - We don't get DES assistance, or I'm not sure: no_des_assistance
     datatype: yesno  
 ---
 id: military service
@@ -726,7 +726,7 @@ fields:
     datatype: yesno
   - ${ other_parties } serves in the military: other_parties1_military
     datatype: yesno
-  - We do not serve in the military: no_military_service
+  - We do not serve in the military, or I'm not sure: no_military_service
     datatype: yesno  
 ---
 id: other parties attorney info
