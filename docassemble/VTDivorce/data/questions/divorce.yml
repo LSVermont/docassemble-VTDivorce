@@ -12,6 +12,9 @@ include:
   - docassemble.VTNoticeOfAppearance:VTNoticeOfAppearance_to_include.yml
   - customized_screens.yml
 ---
+modules:
+  - docassemble.demo.accordion
+---
 # customized feedback form
 code: |   
   feedback_form = "docassemble.VTFeedback:VTfeedback.yml"
@@ -26,9 +29,8 @@ metadata:
   tags:
     - "FA-00-00-00-00"
   authors:
-    - M. Bonardi and S. Constantinou, Lemma Legal
     - K. Surette, Legal Services Vermont
-    - Q. Steenhuis, Lemma Legal
+    - Q. Steenhuis, M. Bonardi and S. Constantinou, Lemma Legal
   original_form:
     - https://vtlawhelp.org/roadmap/divorce/step-3
   typical_role: "plaintiff"
@@ -71,19 +73,25 @@ code: |
   interview_order_divorce
   # fields for family court info sheet
   other_family_juv_probate_proceedings
-
+  set_progress(80)
+  
   nav.set_section("serving_other_side")
   # Fields for notice of appearance
   email_consent
-
+  
+  set_progress(85)
   # Fields for certificate of service
   users1_role
   user_has_attorney
-  other_people_receiving_service.gather()
+
   for party in other_parties:
     party.served
+  other_people_receiving_service.gather()
+  
   trial_court_division
-  divorcesc
+  
+  set_progress(90)
+  faminfo
   document1_name
 
 
@@ -104,7 +112,7 @@ code: |
   
   nav.set_section("sign")
   signature_date
-  set_progress(92)
+  set_progress(95)
   al_form_requires_digital_signature = False
   basic_questions_signature_flow    
   nav.set_section("get_docs")
@@ -137,17 +145,20 @@ code: |
       jurisdiction_kickout
   
   initial_screening_continue 
-  license_type
-  no_longer_living_together_date
-
+  
   nav.set_section("about")
+    
+  license_type
 
   OCS_filing_form
-  users.gather()
+  #users.gather()
   # fields for health record
-  users[0].last_name_former
+  if license_type == "civil_union":
+    users[0].sex
   if license_type == "marriage":
+    users[0].gender
     users_role
+    
   users[0].birthdate
   users[0].address.address
   users[0].email
@@ -157,16 +168,19 @@ code: |
 
   set_progress(16)
   nav.set_section("defendant")
-  other_parties.gather()
-  other_parties[0].last_name_former
+  #other_parties.gather()
+  if license_type == "civil_union":
+    other_parties[0].sex
   if license_type == "marriage":
-    other_parties_role
+    other_parties[0].gender
   other_parties[0].birthdate
   other_parties[0].address.address
   other_parties1_gets_child_support
   other_parties[0].email
   other_parties_has_attorney
   
+  plaintiff_des_assistance
+  plaintiff_military_service
   set_progress(32)
   
   nav.set_section("kids")
@@ -196,17 +210,17 @@ code: |
   else: 
     earlier_RFA.target_number = 0
     
-  set_progress(64)
+  set_progress(60)
+
   
-  plaintiff_des_assistance
-  plaintiff_military_service
-  
-  set_progress(75)
+
   docket_number
   trial_court
+  set_progress(70)
+  no_longer_living_together_date
     
   interview_order_divorce = True
-  set_progress(85)
+
 ---
 id: basic questions intro screen
 decoration: form-lineal
@@ -546,7 +560,7 @@ id: earlier actions
 question: |
   Past court actions
 subquestion:
-  Have you or ${ other_parties[0].name } filed for divorce, legal separation, dissolution or annulment **before** filing this form? 
+  Have you or ${ other_parties[0].name } filed for **divorce, legal separation, dissolution or annulment BEFORE** filing this form? 
 fields:
   - no label: earlier_actions_yes
     datatype: yesnoradio
@@ -559,7 +573,7 @@ id: earlier RFA actions
 question: |
   Past court actions
 subquestion:
-  Have either you or ${ other_parties[0].name } filed a complaint for relief from abuse (RFA) or a request for a protective order against each other?
+  Have either you or ${ other_parties[0].name } filed a complaint for **relief from abuse (RFA) or a request for a protective order** against each other?
 fields:
   - no label: earlier_RFA_yes
     datatype: yesnoradio
