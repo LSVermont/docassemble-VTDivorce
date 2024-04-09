@@ -60,7 +60,7 @@ sections:
   - kids: About children
   - what_want: What you want in the order
   - past_actions: Other court actions
-  - serving_other_side: Serving the other side
+  - serving_other_side: Serving the other party
   - review_answers: Edit your answers
   - sign: Signature
   - get_docs: Get your documents
@@ -71,7 +71,7 @@ code: |
   al_intro_screen
   # run the main interview order block
   interview_order_divorce
-  # fields for family court info sheet
+  # Fields for family court info sheet
   other_family_juv_probate_proceedings
   set_progress(80)
   
@@ -92,7 +92,7 @@ code: |
   
   set_progress(90)
   faminfo
-  document1_name
+  other_documents_to_serve
 
 
 
@@ -215,7 +215,7 @@ code: |
   
 
   docket_number
-  trial_court
+  #trial_court
   set_progress(70)
   no_longer_living_together_date
     
@@ -935,10 +935,9 @@ id: ask for custody visitation and child support
 question: |  
   Custody, visitation and child support
 subquestion: |     
-  **I ask that the court grant me the following.** Check all that apply.
+  <h2 class="h4">I ask that the court grant me the following. Check all that apply.</h2>
 fields:
-  - note: |
-      ---
+
   - note: |
       **Parental rights and responsibilities:**
   - note: |
@@ -957,7 +956,7 @@ fields:
     - Given only to myself: legal_myself
     - Given only to ${ other_parties[0] }: legal_defendant
     input type: radio
-
+    css class: indent-me
     show if: legal_rights_responsibilities
 
   - Physical parental rights and responsibilities: physical_rights_responsibilities
@@ -970,7 +969,7 @@ fields:
     - Given only to myself: physical_myself
     - Given only to ${ other_parties[0] }: physical_defendant
     input type: radio
-
+    css class: indent-me
     show if: physical_rights_responsibilities
   - note: |
       ---
