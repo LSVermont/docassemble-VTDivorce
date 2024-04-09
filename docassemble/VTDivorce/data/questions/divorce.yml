@@ -1589,24 +1589,24 @@ code: |
 objects:
   - al_user_bundle: ALDocumentBundle.using(elements=[
           divorce_Post_interview_instructions,
-          a_notice_of_appearance_self_rep_attachment,
-          b_info_sheet_family_court_attachment,
           divorce_with_kids_attachment,
           divorce_no_kids_attachment,
+          a_notice_of_appearance_self_rep_attachment,
+          b_info_sheet_family_court_attachment,
           Health_record_civil_union_attachment,
           Health_record_divorce_annulment_attachment,
           VTCertificateOfService_attachment,
-        ], filename="divorce_with_kids", title="All forms to download for your records", enabled=True)
+        ], filename="divorce_forms", title="All forms to download for your records", enabled=True)
   
   - al_court_bundle: ALDocumentBundle.using(elements=[
-          a_notice_of_appearance_self_rep_attachment,
-          b_info_sheet_family_court_attachment,
           divorce_with_kids_attachment,
           divorce_no_kids_attachment,
+          a_notice_of_appearance_self_rep_attachment,
+          b_info_sheet_family_court_attachment,
           Health_record_civil_union_attachment,
           Health_record_divorce_annulment_attachment,
           VTCertificateOfService_attachment,
-        ],  filename="divorce_with_kids", title="All forms to deliver to court", enabled=True)
+        ],  filename="divorce_forms", title="All forms to deliver to court", enabled=True)
 ---
 code: |
   VTCertificateOfService_attachment.enabled = True # always needed for a new petition
