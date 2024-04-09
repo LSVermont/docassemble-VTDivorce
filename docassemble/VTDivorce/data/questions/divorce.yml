@@ -1184,6 +1184,26 @@ review:
       * You: **${ word(yesno(plaintiff_military_service)) }**
       * The defendant:** ${ word(yesno(other_parties1_military)) }**
 
+  - Edit: earlier_actions.revisit
+    button: |
+      % if defined("earlier_actions[0]"):
+        Earlier actions:
+
+      % for item in earlier_actions:
+        - **${ item.action_type }**, in ${ item.year_filed }, filed by ${ item.who_filed }, in this court: ${ item.where_filed }
+      % endfor
+      % endif
+
+  - Edit: earlier_RFA.revisit
+    button: |
+      % if defined("earlier_RFA[0]"):
+        Earlier protection orders:
+
+      % for item in earlier_RFA:
+        - **${ item.action_type }**, in ${ item.year_filed }, filed by ${ item.who_filed }, in this court: ${ item.where_filed }
+      % endfor
+      % endif
+      
   - Edit: 
     - have_school_age_children
     button: |
@@ -1241,26 +1261,6 @@ review:
       % endif
 
 
-
-  - Edit: earlier_actions.revisit
-    button: |
-      % if defined("earlier_actions[0]"):
-        Earlier actions:
-
-      % for item in earlier_actions:
-        - **${ item.action_type }**, in ${ item.year_filed }, filed by ${ item.who_filed }, in this court: ${ item.where_filed }
-      % endfor
-      % endif
-
-  - Edit: earlier_RFA.revisit
-    button: |
-      % if defined("earlier_RFA[0]"):
-        Earlier protection orders:
-
-      % for item in earlier_RFA:
-        - **${ item.action_type }**, in ${ item.year_filed }, filed by ${ item.who_filed }, in this court: ${ item.where_filed }
-      % endfor
-      % endif
   - note: |
       ###What you want in the court order
   - Edit: grant_for
@@ -1450,6 +1450,26 @@ columns:
 edit:
   - gender
   - sex
+  - birthdate
+confirm: True
+---
+continue button field: children.revisit
+question: |
+  Edit info about the children
+subquestion: |
+  ${ children.table }
+
+  ${ children.add_action() }
+---
+table: children.table
+rows: children
+columns:
+  - Name: |
+      row_item.name.full() if defined("row_item.name.first") else ""
+  - Birthdate: |
+      row_item.birthdate if defined("row_item.birthdate") else "" 
+edit:
+  - name.first
   - birthdate
 confirm: True
 ---
