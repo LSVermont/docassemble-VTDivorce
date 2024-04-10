@@ -120,7 +120,7 @@ code: |
   divorce_download
 
 ---
-#################### Interview order #####################
+#################### Interview order - divorce #####################
 comment: |
   Controls order and branching logic for questions specific to this form
 id: interview_order_divorce
@@ -162,8 +162,7 @@ code: |
   users[0].birthdate
   users[0].address.address
   users[0].email
-  if user_has_attorney:
-    users[0].attorneys[0].name
+  user_has_attorney
   users1_gets_public_assistance
 
   set_progress(16)
@@ -711,7 +710,7 @@ question: |
 subquestion: |
   Examples: Food stamps and Reach Up.
 fields: 
-  - I get DES assistance: plaintiff_des_assistance
+  - You get DES assistance: plaintiff_des_assistance
     datatype: yesno
   - ${ other_parties } gets DES assistance: defendant_des_assistance
     datatype: yesno
@@ -722,7 +721,7 @@ id: military service
 question: |
    Do you or ${ other_parties } serve in the military?
 fields: 
-  - I serve in the military: plaintiff_military_service
+  - You serve in the military: plaintiff_military_service
     datatype: yesno
   - ${ other_parties } serves in the military: other_parties1_military
     datatype: yesno

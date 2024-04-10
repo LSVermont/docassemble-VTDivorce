@@ -1,7 +1,7 @@
 ---
 ### Questions overriding defaults from included YAML files from other packages ############
 ---
-########### Overrides for VTCertificateOfService #############################
+########### Overrides for VTCertificateOfService ##############
 ---
 code: |
   users1_role = "plaintiff"
@@ -16,3 +16,70 @@ code: |
   else:
     divorcesc = True # Marks the Divorce form as one to be served
   document1_name = "" # skip the questions about supplemental documents to file
+---  
+########### Overrides for VTFamilyCourtInfoSheet ##############
+#The following are customized to say 'you' instead of the user name
+---
+id: user birthdate question
+question: |
+  When were you born?
+fields:
+  - Birthdate: users[0].birthdate
+    required: True
+    datatype: BirthDate
+---
+id: users lawyer
+question: |
+  Lawyer
+fields:
+  - "Do you have an attorney working with you on this case?": user_has_attorney
+    datatype: yesnoradio
+  - note: |
+      Usually, the people who use this guided interview do not have a lawyer. If you are represented by a lawyer, the lawyer usually files court paperwork for you. Ask them about this.    
+  - "Attorney's name": users1_attorneys_name
+    required: True
+    maxlength: 38
+    show if: user_has_attorney
+    
+  - "Address": users[0].attorneys[0].address.address
+    required: True
+    show if: user_has_attorney
+    
+  - "City": users[0].attorneys[0].address.city
+    required: True
+    show if: user_has_attorney
+    
+  - "State": users[0].attorneys[0].address.state
+    code: |
+      states_list()
+    default: VT
+    required: True
+    show if: user_has_attorney
+ 
+  - "Zip": users[0].attorneys[0].address.zip
+    required: True
+    show if: user_has_attorney
+    
+  - "Attorney's phone number": users1_attorneys_phone_number
+    datatype: al_international_phone
+    show if: user_has_attorney
+---
+id: users benefits or child support
+question: |
+  Do you get any benefits or child support?
+fields:
+  - note: |      
+      Public assistance can include help from Vermont's Department of Economic Services such as Reach-Up, Dr. Dynasaur, Medicaid, or Post Secondary Education Stipend (PSE).
+      
+      Check all that apply.
+
+  - "You get public assistance": users1_gets_public_assistance
+    datatype: yesno
+    
+  - "You get child support": users1_gets_child_support
+    datatype: yesno
+
+  - note: |
+      ${ collapse_template(office_of_child_support_contact) }
+---
+
