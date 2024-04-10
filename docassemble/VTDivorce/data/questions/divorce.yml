@@ -141,7 +141,7 @@ code: |
       jurisdiction_kickout
     if not have_property_agreement:
       jurisdiction_kickout
-    if have_school_age_children:
+    if school_age_kids:
       jurisdiction_kickout
   
   initial_screening_continue 
@@ -407,6 +407,16 @@ fields:
   - no label: both_cant_divorce_current_state
     datatype: yesnoradio
 ---
+id: screen for school age kids
+question: |
+  Have kids?
+subquestion: |  
+  Do you and your spouse/other party have children together who are either younger than 18 years old, or are 18 years old and still in high school? Include born or adopted children.  
+fields:
+  - no label: school_age_kids
+    datatype: yesnoradio
+
+---
 id: property agreement
 question: |
   See if this interview is right for your situation
@@ -436,7 +446,7 @@ id: have school age children
 question: |
   Children
 subquestion: |  
-  Do you and your spouse/other party have children together who are either younger than 18 years old, or are 18 years old and still in high school? Include born or adopted children.  
+  Do you and ${ other_parties[0].name } have children together who are either younger than 18 years old, or are 18 years old and still in high school? Include born or adopted children.  
 fields:
   - no label: have_school_age_children
     datatype: yesnoradio
@@ -509,7 +519,7 @@ fields:
   - All people that lived with your child/children (including you): locations[i].housemates
     maxlength: 30
   - note: |
-      You can say things like: mom, dad, brother, sister, grandma. You can also use abbreviated names for the people who lived with them, like Jane D. (There's not much room on the form!)
+      You can say things like: mom, dad, step-brother, grandma. You can also use abbreviated names for the people who lived with them, like Jane D. (There's not much room on the form!)
 ---
 generic object: ALPeopleList
 id: any other locations
@@ -864,7 +874,7 @@ fields:
     datatype: date
     show if: 
       variable: grounds
-      is: six_month_separation
+      is: six_month_separation  
   - Describe the other grounds (different reason): other_ground_explanation
     show if: 
       variable: grounds

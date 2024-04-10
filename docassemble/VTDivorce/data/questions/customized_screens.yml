@@ -18,7 +18,7 @@ code: |
   document1_name = "" # skip the questions about supplemental documents to file
 ---  
 ########### Overrides for VTFamilyCourtInfoSheet ##############
-#The following are customized to say 'you' instead of the user name
+#Some of the following are customized to say 'you' instead of the user name
 ---
 id: user birthdate question
 question: |
@@ -35,7 +35,7 @@ fields:
   - "Do you have an attorney working with you on this case?": user_has_attorney
     datatype: yesnoradio
   - note: |
-      Usually, the people who use this guided interview do not have a lawyer. If you are represented by a lawyer, the lawyer usually files court paperwork for you. Ask them about this.    
+      Usually, the people who use this guided interview do **not** have a lawyer. If you are represented by a lawyer, the lawyer usually files court paperwork for you. Ask them about this.    
   - "Attorney's name": users1_attorneys_name
     required: True
     maxlength: 38
@@ -82,4 +82,80 @@ fields:
   - note: |
       ${ collapse_template(office_of_child_support_contact) }
 ---
-
+id: other court proceedings
+question: |
+  Other court proceedings
+subquestion: |
+  Are there other Family court, Probate court or Juvenile court cases involving you, ${ other_parties[0].name } and/or your children?
+fields:
+  - "Other court cases?": other_family_juv_probate_proceedings
+    datatype: yesnoradio
+  - "In what state?": trial_court_state_other_filing1
+    code: |
+      states_list()
+    show if: other_family_juv_probate_proceedings
+  - "In what county?": trial_court_county_other_filing1
+    choices:
+      - Addison
+      - Bennington
+      - Caledonia
+      - Chittenden
+      - Essex
+      - Franklin
+      - Grand Isle
+      - Lamoille
+      - Orange
+      - Orleans
+      - Rutland
+      - Washington
+      - Windham
+      - Windsor
+      - Other
+    show if: other_family_juv_probate_proceedings
+  - "What county?": trial_court_other_county_other_filing1
+    maxlength: 22
+    show if:
+      variable: trial_court_county_other_filing1
+      is: Other
+  - "In what court division?": trial_court_division_other_filing1
+    choices:
+      - Family court
+      - Probate court
+      - Juvenile court
+    show if: other_family_juv_probate_proceedings
+  - "I have another to list": other_family_juv_probate_proceedings2
+    datatype: yesno
+    show if: other_family_juv_probate_proceedings
+  - "In what state?": trial_court_state_other_filing2
+    code: |
+      states_list()
+    show if: other_family_juv_probate_proceedings2
+  - "In what county?": trial_court_county_other_filing2
+    choices:
+      - Addison
+      - Bennington
+      - Caledonia
+      - Chittenden
+      - Essex
+      - Franklin
+      - Grand Isle
+      - Lamoille
+      - Orange
+      - Orleans
+      - Rutland
+      - Washington
+      - Windham
+      - Windsor
+      - Other
+    show if: other_family_juv_probate_proceedings2
+  - "What county?": trial_court_other_county_other_filing2
+    maxlength: 22
+    show if:
+      variable: trial_court_county_other_filing2
+      is: Other
+  - "In what court division?": trial_court_division_other_filing2
+    choices:
+      - Family court
+      - Probate court
+      - Juvenile court
+    show if: other_family_juv_probate_proceedings2
