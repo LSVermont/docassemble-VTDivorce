@@ -1727,8 +1727,8 @@ attachment:
       - "other_ground_explanation": ${ other_ground_explanation }
       - "filing_financial_form": ${ filing_financial_form }
       - "not_filing_financial_form": ${ not filing_financial_form }
-      - "plaintiff_des_assistance": ${ plaintiff_des_assistance }
-      - "defendant_des_assistance": ${ defendant_des_assistance }
+      - "plaintiff_des_assistance": ${ des['plaintiff_des_assistance'] }
+      - "defendant_des_assistance": ${ des['defendant_des_assistance'] }
       - "earlier_actions_no": ${ not earlier_actions_yes }
       - "earlier_actions_yes": ${ earlier_actions_yes }
       - "earlier_actions_where_filed1": ${ earlier_actions[0].where_filed }
@@ -1757,10 +1757,10 @@ attachment:
       - "earlier_RFA_filer3": ${ earlier_RFA[2].who_filed }
       - "earlier_RFA_actions_type3": ${ earlier_RFA[2].action_type }
       - "earlier_RFA_year_filed3": ${ earlier_RFA[2].year_filed }
-      - "defendant_military_service": ${ other_parties1_military }
-      - "defendant_no_military_service": ${ not other_parties1_military }
-      - "plaintiff_military_service": ${ plaintiff_military_service }
-      - "plaintiff_no_military_service": ${ not plaintiff_military_service }
+      - "defendant_military_service": ${ military["other_parties1_military"] }
+      - "defendant_no_military_service": ${ not military["other_parties1_military"] }
+      - "plaintiff_military_service": ${ military["plaintiff_military_service"] }
+      - "plaintiff_no_military_service": ${ not military["plaintiff_military_service"] }
       - "divorce_decree": ${ grant_for == "divorce" }
       - "legal_separation_decree": ${ grant_for == "legal_separation" }
       - "dissolution_decree": ${ grant_for == "dissolution" }
@@ -1885,8 +1885,8 @@ attachment:
       - "child_medical_support": ${ child_medical_support }
       - "filing_financial_form": ${ filing_financial_form }
       - "not_filing_financial_form": ${ not filing_financial_form }
-      - "plaintiff_des_assistance": ${ plaintiff_des_assistance }
-      - "defendant_des_assistance": ${ defendant_des_assistance }
+      - "plaintiff_des_assistance": ${ des['plaintiff_des_assistance'] }
+      - "defendant_des_assistance": ${ des['defendant_des_assistance'] }
       - "earlier_actions_no": ${ not earlier_actions_yes }
       - "earlier_actions_yes": ${ earlier_actions_yes }
       - "earlier_actions_where_filed1": ${ earlier_actions[0].where_filed }
@@ -1915,10 +1915,10 @@ attachment:
       - "earlier_RFA_filer3": ${ earlier_RFA[2].who_filed }
       - "earlier_RFA_actions_type3": ${ earlier_RFA[2].action_type }
       - "earlier_RFA_year_filed3": ${ earlier_RFA[2].year_filed }
-      - "defendant_military_service": ${ other_parties1_military }
-      - "defendant_no_military_service": ${ not other_parties1_military }
-      - "plaintiff_military_service": ${ plaintiff_military_service }
-      - "plaintiff_no_military_service": ${ not plaintiff_military_service }
+      - "defendant_military_service": ${ military["other_parties1_military"] }
+      - "defendant_no_military_service": ${ not military["other_parties1_military"] }
+      - "plaintiff_military_service": ${ military["plaintiff_military_service"] }
+      - "plaintiff_no_military_service": ${ not military["plaintiff_military_service"] }
       - "divorce_decree": ${ grant_for == "divorce" }
       - "legal_separation_decree": ${ grant_for == "legal_separation" }
       - "dissolution_decree": ${ grant_for == "dissolution" }
