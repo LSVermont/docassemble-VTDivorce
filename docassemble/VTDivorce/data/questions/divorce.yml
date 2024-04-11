@@ -318,7 +318,7 @@ buttons:
 ---
 id: marriage or civil union
 question: |
-  Do you and your spouse have a marriage or civil union?
+  Are you asking to end a marriage or end a civil union?
 fields:
   - no label: license_type
     input type: radio
@@ -897,7 +897,9 @@ fields:
   - I have a written agreement signed by me and ${ other_parties }. I will include it with these forms. I ask the court to issue an order that includes the provisions in our written agreement. : written_agreement_attached
     datatype: yesno
   - note: |
-      If you have a written agreement, attach it to the forms that you file with the court. The written agreement must include:
+      **If you and your spouse are not residents of Vermont**, but you had a civil union or marriage in Vermont, you need to submit a signed agreement about how to deal with your property and debts. The court will not grant the divorce or dissolution without an agreement. See [VTLawHelp for more details and a form.](https://vtlawhelp.org/roadmap/divorce/step-1)
+  - note: |      
+      **If you have a written agreement**, attach it to the forms that you file with the court. The written agreement must include:
       
       1. a property, debt and spousal support agreement (which is called a "stipulation")
       
@@ -907,7 +909,7 @@ fields:
       
       See our [Divorce Roadmap on VTLawHelp.org](https://vtlawhelp.org/roadmap/divorce/step-3) for agreement forms you can use.
       
-      To qualify for a reduced court filing fee, the attached agreement must cover all the issues that you want to have the court resolve.
+      **To qualify for a reduced court filing fee**, the attached agreement must cover all the issues that you want to have the court resolve.
     show if: written_agreement_attached
 ---
 id: ask for custody visitation and child support
