@@ -16,7 +16,52 @@ code: |
   else:
     divorcesc = True # Marks the Divorce form as one to be served
   document1_name = "" # skip the questions about supplemental documents to file
----  
+---
+
+id: documents serving to other party
+question: |
+  Documents you are serving to the other party
+subquestion: |
+  You need the Certificate of Service form to show the court that you served documents to the other party. The form will include a list of the documents you served.
+  
+  Below are some common Family Court documents. Choose any that you want to appear on the Certificate of Service form. Select Next to have the chance to enter the names of other forms and documents you may be serving.
+ 
+fields:      
+  - Summons and Complaint for Divorce/Separation/Dissolution **without** Children - form 400-00836: divorcesc
+    datatype: yesno
+    required: False
+  - Summons and Complaint for Divorce/Separation/Dissolution **with** Children - form 400-00836: divorcesckids
+    datatype: yesno
+    required: False
+  - Notice of Appearance for Self-Represented Party - form 400-00831: noa
+    datatype: yesno
+    required: False
+  - Family Court Information Sheet - form 800: faminfo
+    datatype: yesno
+    required: False
+  - Divorce / Dissolution stipulation (agreement): divorcestip
+    datatype: yesno
+    required: False
+  - Motion to Modify Child Support and/or Maintenance Supplement - form 400-00803: modchildsup
+    datatype: yesno
+    required: False
+  - Motion to Enforce Child Support and/or Maintenance Supplement - form 400-00823: enfchildsup 
+    datatype: yesno
+    required: False    
+  - Motion to Modify Parental Rights & Responsibilities & Parent Child Contact - form 400-00843: modprr
+    datatype: yesno
+    required: False    
+  - Motion to Enforce - form 400-00905: motionenforce
+    datatype: yesno
+    required: False    
+  - Affidavit - Family Division - form 400-00804: familyaffidavit
+    datatype: yesno
+    required: False   
+  - Application to Waive Filing Fees and Service Costs - form 600-00228: feewaiver
+    datatype: yesno
+    required: False
+---    
+ 
 ########### Overrides for VTFamilyCourtInfoSheet ##############
 #Some of the following are customized to say 'you' instead of the user name
 ---
@@ -159,3 +204,23 @@ fields:
       - Probate court
       - Juvenile court
     show if: other_family_juv_probate_proceedings2
+---
+########### Overrides for VTNoticeOfAppearance ##############
+---
+id: email communications
+question: |
+  Email communications
+subquestion: |
+  The other party in the case must send you a copy of all documents they file with the court. If you check the box below, the other party may send you the documents **only by email.** 
+  If you select this option, be sure to check your email often.
+fields:
+  - "I agree to get documents about this case by email only": email_consent
+    datatype: yesno
+  - Email: users[0].email    
+    datatype: email
+    show if: email_consent
+validation code: |
+  if (showifdef('email_consent')) and not (showifdef('users[0].email')):
+    validation_error(word("You need to provide an email."), field="users[0].email")
+---
+
