@@ -177,8 +177,8 @@ code: |
   other_parties[0].email
   other_parties_has_attorney
   
-  plaintiff_des_assistance
-  plaintiff_military_service
+  des
+  military
   set_progress(32)
   
   nav.set_section("kids")
@@ -719,25 +719,29 @@ id: DES assistance
 question: |
    Do you or ${ other_parties } get assistance from the Vermont Division of Economic Services (DES)?
 subquestion: |
-  Examples: Food stamps and Reach Up.
-fields: 
-  - You get DES assistance: plaintiff_des_assistance
-    datatype: yesno
-  - ${ other_parties } gets DES assistance: defendant_des_assistance
-    datatype: yesno
-  - We don't get DES assistance, or I'm not sure: no_des_assistance
-    datatype: yesno  
+  Examples: 3SquaresVT/food stamps and Reach Up.
+fields:
+  - "Choose at least one": des
+    datatype: checkboxes
+    none of the above: False    
+    minlength: 1
+    choices:
+    - You get DES assistance: plaintiff_des_assistance
+    - ${ other_parties } gets DES assistance: defendant_des_assistance
+    - We don't get DES assistance, or I'm not sure: no_des_assistance
 ---
 id: military service
 question: |
    Do you or ${ other_parties } serve in the military?
-fields: 
-  - You serve in the military: plaintiff_military_service
-    datatype: yesno
-  - ${ other_parties } serves in the military: other_parties1_military
-    datatype: yesno
-  - We do not serve in the military, or I'm not sure: no_military_service
-    datatype: yesno  
+fields:
+  - "Choose at least one": military
+    datatype: checkboxes
+    none of the above: False    
+    minlength: 1
+    choices:
+    - You serve in the military: plaintiff_military_service
+    - ${ other_parties } serves in the military: other_parties1_military
+    - We do not serve in the military, or I'm not sure: no_military_service
 ---
 id: other parties attorney info
 question: |
@@ -1150,18 +1154,44 @@ review:
       
       - **${ civil_union_city }, ${ civil_union_state },** on **${ civil_union_date }**
       % endif
-  - Edit: defendant_des_assistance
+  - Edit: des
     button: |
       Get assistance from Division of Economic Services (DES):
       
-      * You: **${ word(yesno(plaintiff_des_assistance)) }**
-      * The other party: **${ word(yesno(defendant_des_assistance)) }**
-  - Edit: other_parties1_military
-    button: |
-      Military service:
+      * You: 
+      % if des['plaintiff_des_assistance']:
+      **Yes**
+      % endif
+      % if not des['plaintiff_des_assistance']:
+      **No**
+      % endif
       
-      * You: **${ word(yesno(plaintiff_military_service)) }**
-      * The other party:** ${ word(yesno(other_parties1_military)) }**
+      * The other party:
+      % if des['defendant_des_assistance']:
+      **Yes**
+      % endif
+      % if not des['defendant_des_assistance']:
+      **No**
+      % endif
+  - Edit: military
+    button: |
+      In the military:
+
+      * You: 
+      % if military['plaintiff_military_service']:
+      **Yes**
+      % endif
+      % if not military['plaintiff_military_service']:
+      **No**
+      % endif
+
+      * The other party:
+      % if military['other_parties1_military']:
+      **Yes**
+      % endif
+      % if not military['other_parties1_military']:
+      **No**
+      % endif      
 
   - Edit: earlier_actions.revisit
     button: |
