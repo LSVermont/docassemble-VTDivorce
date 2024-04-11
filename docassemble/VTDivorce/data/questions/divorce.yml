@@ -74,6 +74,7 @@ code: |
   interview_order_divorce
   
   # Fields for family court info sheet
+  users[0].attorneys[0].name = users1_attorneys_name
   other_family_juv_probate_proceedings
   set_progress(80)
   
