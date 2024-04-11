@@ -1851,15 +1851,46 @@ attachment:
       - "child_name5": ${ children[4].name }
       - "child_birthdate5": ${ children[4].birthdate }
      
-      - "child_address1": ${ locations[0].address } 
+      - "child_address1": |
+          ${ locations[0].address.address } 
+          % if defined("locations[0].address.unit"):
+          Unit ${ locations[0].address.unit } 
+          % endif
+          ${ locations[0].address.city }, ${ locations[0].address.state } 
       - "child_date1": ${ locations[0].start_date } to ${ locations[0].end_date }
       - "child_housemate1": ${ locations[0].housemates }
-      - "child_address2": ${ locations[1].address } 
+      - "child_address2": |
+          ${ locations[1].address.address } 
+          % if defined("locations[1].address.unit"):
+          Unit ${ locations[1].address.unit } 
+          % endif
+          ${ locations[1].address.city }, ${ locations[1].address.state } 
       - "child_date2": ${ locations[1].start_date } to ${ locations[1].end_date }
       - "child_housemate2": ${ locations[1].housemates }
-      - "child_address3": ${ locations[2].address } 
+      - "child_address3": |          
+          ${ locations[2].address.address } 
+          % if defined("locations[2].address.unit"):
+          Unit ${ locations[2].address.unit } 
+          % endif
+          ${ locations[2].address.city }, ${ locations[2].address.state } 
       - "child_date3": ${ locations[2].start_date } to ${ locations[2].end_date }
       - "child_housemate3": ${ locations[2].housemates }
+      - "child_address4": |          
+          ${ locations[3].address.address } 
+          % if defined("locations[3].address.unit"):
+          Unit ${ locations[3].address.unit } 
+          % endif
+          ${ locations[3].address.city }, ${ locations[3].address.state } 
+      - "child_date4": ${ locations[3].start_date } to ${ locations[3].end_date }
+      - "child_housemate4": ${ locations[3].housemates }
+      - "child_address5": |          
+          ${ locations[4].address.address } 
+          % if defined("locations[4].address.unit"):
+          Unit ${ locations[4].address.unit } 
+          % endif
+          ${ locations[4].address.city }, ${ locations[4].address.state } 
+      - "child_date5": ${ locations[4].start_date } to ${ locations[4].end_date }
+      - "child_housemate5": ${ locations[4].housemates }
    
       - "participated_custody_child": ${ participations }
       - "information_child": ${ information }
