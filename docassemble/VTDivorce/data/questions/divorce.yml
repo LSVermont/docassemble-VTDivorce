@@ -1071,9 +1071,9 @@ review:
       **${ word(yesno(user_has_attorney)) }**
       % endif
       
-      % if defined("users[0].attorneys[0].name"):
-      % if defined("users[0].attorneys[0].phone_number"):
-      - Your lawyer: **${ users[0].attorneys[0].name }** at **${ users[0].attorneys[0].phone_number }**
+      % if defined("users1_attorneys_name"):
+      % if defined("users1_attorneys_phone_number"):
+      - Your lawyer: **${ users1_attorneys_name }** at **${ users1_attorneys_phone_number }**
       % endif
       % endif
 
@@ -1680,8 +1680,8 @@ attachment:
       - "users1_email": ${ users[0].email }
       - "users1_evening_phone_number": ${ users[0].evening_phone_number }
       - "users1_daytime_phone_number": ${ users[0].daytime_phone_number }
-      - "users1_attorneys_name": ${ users[0].attorneys[0].name }
-      - "users1_attorneys_phone_numer": ${ users[0].attorneys[0].phone_number }
+      - "users1_attorneys_name": ${ users1_attorneys_name }
+      - "users1_attorneys_phone_numer": ${ users1_attorneys_phone_number }
       - "other_parties1_name1": ${ other_parties[0].name }
       - "other_parties1_birthdate": ${ format_date(other_parties[0].birthdate, format='M/d/yyyy') }
       - "other_parties1_address_line_one": ${ other_parties[0].address.line_one() }
@@ -1794,8 +1794,8 @@ attachment:
       - "users1_email": ${ users[0].email }
       - "users1_evening_phone_number": ${ users[0].evening_phone_number }
       - "users1_daytime_phone_number": ${ users[0].daytime_phone_number }
-      - "users1_attorneys_name": ${ users[0].attorneys[0].name }
-      - "users1_attorneys_phone_numer": ${ users[0].attorneys[0].phone_number }
+      - "users1_attorneys_name": ${ users1_attorneys_name }
+      - "users1_attorneys_phone_numer": ${ users1_attorneys_phone_number }
       - "other_parties1_name1": ${ other_parties[0].name }
       - "other_parties1_birthdate": ${ format_date(other_parties[0].birthdate, format='M/d/yyyy') }
       - "other_parties1_address_line_one": ${ other_parties[0].address.line_one() }
@@ -1982,8 +1982,8 @@ attachment:
       - "other_parties1_name": ${ other_parties[0].name }
       - "other_parties1_sex": ${ other_parties[0].sex }
       - "users1_attorneys_address": ${ users[0].attorneys[0].address.on_one_line() }
-      - "users1_attorneys_name": ${users[0].attorneys[0].name}
-      - "users1_attorneys_phone_numer": ${ users[0].attorneys[0].phone_number }
+      - "users1_attorneys_name": ${ users1_attorneys_name }
+      - "users1_attorneys_phone_numer": ${ users1_attorneys_phone_number }
       - "other_parties1_former_name": ${ other_parties[0].last_name_former }
       - "other_parties1_birth_month": ${ format_date(other_parties[0].birthdate, format='M') }
       - "other_parties1_birth_day": ${ format_date(other_parties[0].birthdate, format='dd') }
@@ -2039,7 +2039,7 @@ attachment:
       - "other_parties1_name": ${ other_parties[0].name }
       - "other_parties1_sex": ${ other_parties[0].sex }
       - "users1_attorneys_address": ${ users[0].attorneys[0].address.on_one_line() }
-      - "users1_attorneys_name": ${users[0].attorneys[0].name}
+      - "users1_attorneys_name": ${ users1_attorneys_name }
       - "other_parties1_former_name": ${ other_parties[0].last_name_former }
       - "other_parties1_birth_month": ${ format_date(other_parties[0].birthdate, format='M') }
       - "other_parties1_birth_day": ${ format_date(other_parties[0].birthdate, format='dd') }
