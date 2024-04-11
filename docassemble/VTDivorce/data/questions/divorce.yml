@@ -177,8 +177,8 @@ code: |
   other_parties[0].email
   other_parties_has_attorney
   
-  plaintiff_des_assistance
-  plaintiff_military_service
+  des
+  military
   set_progress(32)
   
   nav.set_section("kids")
@@ -318,7 +318,7 @@ buttons:
 ---
 id: marriage or civil union
 question: |
-  Do you and your spouse have a marriage or civil union?
+  Are you asking to end a marriage or end a civil union?
 fields:
   - no label: license_type
     input type: radio
@@ -719,25 +719,29 @@ id: DES assistance
 question: |
    Do you or ${ other_parties } get assistance from the Vermont Division of Economic Services (DES)?
 subquestion: |
-  Examples: Food stamps and Reach Up.
-fields: 
-  - You get DES assistance: plaintiff_des_assistance
-    datatype: yesno
-  - ${ other_parties } gets DES assistance: defendant_des_assistance
-    datatype: yesno
-  - We don't get DES assistance, or I'm not sure: no_des_assistance
-    datatype: yesno  
+  Examples: 3SquaresVT/food stamps and Reach Up.
+fields:
+  - "Choose at least one": des
+    datatype: checkboxes
+    none of the above: False    
+    minlength: 1
+    choices:
+    - You get DES assistance: plaintiff_des_assistance
+    - ${ other_parties } gets DES assistance: defendant_des_assistance
+    - We don't get DES assistance, or I'm not sure: no_des_assistance
 ---
 id: military service
 question: |
    Do you or ${ other_parties } serve in the military?
-fields: 
-  - You serve in the military: plaintiff_military_service
-    datatype: yesno
-  - ${ other_parties } serves in the military: other_parties1_military
-    datatype: yesno
-  - We do not serve in the military, or I'm not sure: no_military_service
-    datatype: yesno  
+fields:
+  - "Choose at least one": military
+    datatype: checkboxes
+    none of the above: False    
+    minlength: 1
+    choices:
+    - You serve in the military: plaintiff_military_service
+    - ${ other_parties } serves in the military: other_parties1_military
+    - We do not serve in the military, or I'm not sure: no_military_service
 ---
 id: other parties attorney info
 question: |
@@ -897,7 +901,9 @@ fields:
   - I have a written agreement signed by me and ${ other_parties }. I will include it with these forms. I ask the court to issue an order that includes the provisions in our written agreement. : written_agreement_attached
     datatype: yesno
   - note: |
-      If you have a written agreement, attach it to the forms that you file with the court. The written agreement must include:
+      **If you and your spouse are not residents of Vermont**, but you had a civil union or marriage in Vermont, you need to submit a signed agreement about how to deal with your property and debts. The court will not grant the divorce or dissolution without an agreement. See [VTLawHelp for more details and a form.](https://vtlawhelp.org/roadmap/divorce/step-1)
+  - note: |      
+      **If you have a written agreement**, attach it to the forms that you file with the court. The written agreement must include:
       
       1. a property, debt and spousal support agreement (which is called a "stipulation")
       
@@ -907,7 +913,7 @@ fields:
       
       See our [Divorce Roadmap on VTLawHelp.org](https://vtlawhelp.org/roadmap/divorce/step-3) for agreement forms you can use.
       
-      To qualify for a reduced court filing fee, the attached agreement must cover all the issues that you want to have the court resolve.
+      **To qualify for a reduced court filing fee**, the attached agreement must cover all the issues that you want to have the court resolve.
     show if: written_agreement_attached
 ---
 id: ask for custody visitation and child support
@@ -1148,18 +1154,44 @@ review:
       
       - **${ civil_union_city }, ${ civil_union_state },** on **${ civil_union_date }**
       % endif
-  - Edit: defendant_des_assistance
+  - Edit: des
     button: |
       Get assistance from Division of Economic Services (DES):
       
-      * You: **${ word(yesno(plaintiff_des_assistance)) }**
-      * The other party: **${ word(yesno(defendant_des_assistance)) }**
-  - Edit: other_parties1_military
-    button: |
-      Military service:
+      * You: 
+      % if des['plaintiff_des_assistance']:
+      **Yes**
+      % endif
+      % if not des['plaintiff_des_assistance']:
+      **No**
+      % endif
       
-      * You: **${ word(yesno(plaintiff_military_service)) }**
-      * The other party:** ${ word(yesno(other_parties1_military)) }**
+      * The other party:
+      % if des['defendant_des_assistance']:
+      **Yes**
+      % endif
+      % if not des['defendant_des_assistance']:
+      **No**
+      % endif
+  - Edit: military
+    button: |
+      In the military:
+
+      * You: 
+      % if military['plaintiff_military_service']:
+      **Yes**
+      % endif
+      % if not military['plaintiff_military_service']:
+      **No**
+      % endif
+
+      * The other party:
+      % if military['other_parties1_military']:
+      **Yes**
+      % endif
+      % if not military['other_parties1_military']:
+      **No**
+      % endif      
 
   - Edit: earlier_actions.revisit
     button: |
@@ -1695,8 +1727,8 @@ attachment:
       - "other_ground_explanation": ${ other_ground_explanation }
       - "filing_financial_form": ${ filing_financial_form }
       - "not_filing_financial_form": ${ not filing_financial_form }
-      - "plaintiff_des_assistance": ${ plaintiff_des_assistance }
-      - "defendant_des_assistance": ${ defendant_des_assistance }
+      - "plaintiff_des_assistance": ${ des['plaintiff_des_assistance'] }
+      - "defendant_des_assistance": ${ des['defendant_des_assistance'] }
       - "earlier_actions_no": ${ not earlier_actions_yes }
       - "earlier_actions_yes": ${ earlier_actions_yes }
       - "earlier_actions_where_filed1": ${ earlier_actions[0].where_filed }
@@ -1725,10 +1757,10 @@ attachment:
       - "earlier_RFA_filer3": ${ earlier_RFA[2].who_filed }
       - "earlier_RFA_actions_type3": ${ earlier_RFA[2].action_type }
       - "earlier_RFA_year_filed3": ${ earlier_RFA[2].year_filed }
-      - "defendant_military_service": ${ other_parties1_military }
-      - "defendant_no_military_service": ${ not other_parties1_military }
-      - "plaintiff_military_service": ${ plaintiff_military_service }
-      - "plaintiff_no_military_service": ${ not plaintiff_military_service }
+      - "defendant_military_service": ${ military["other_parties1_military"] }
+      - "defendant_no_military_service": ${ not military["other_parties1_military"] }
+      - "plaintiff_military_service": ${ military["plaintiff_military_service"] }
+      - "plaintiff_no_military_service": ${ not military["plaintiff_military_service"] }
       - "divorce_decree": ${ grant_for == "divorce" }
       - "legal_separation_decree": ${ grant_for == "legal_separation" }
       - "dissolution_decree": ${ grant_for == "dissolution" }
@@ -1819,15 +1851,46 @@ attachment:
       - "child_name5": ${ children[4].name }
       - "child_birthdate5": ${ children[4].birthdate }
      
-      - "child_address1": ${ locations[0].address } 
+      - "child_address1": |
+          ${ locations[0].address.address } 
+          % if defined("locations[0].address.unit"):
+          Unit ${ locations[0].address.unit } 
+          % endif
+          ${ locations[0].address.city }, ${ locations[0].address.state } 
       - "child_date1": ${ locations[0].start_date } to ${ locations[0].end_date }
       - "child_housemate1": ${ locations[0].housemates }
-      - "child_address2": ${ locations[1].address } 
+      - "child_address2": |
+          ${ locations[1].address.address } 
+          % if defined("locations[1].address.unit"):
+          Unit ${ locations[1].address.unit } 
+          % endif
+          ${ locations[1].address.city }, ${ locations[1].address.state } 
       - "child_date2": ${ locations[1].start_date } to ${ locations[1].end_date }
       - "child_housemate2": ${ locations[1].housemates }
-      - "child_address3": ${ locations[2].address } 
+      - "child_address3": |          
+          ${ locations[2].address.address } 
+          % if defined("locations[2].address.unit"):
+          Unit ${ locations[2].address.unit } 
+          % endif
+          ${ locations[2].address.city }, ${ locations[2].address.state } 
       - "child_date3": ${ locations[2].start_date } to ${ locations[2].end_date }
       - "child_housemate3": ${ locations[2].housemates }
+      - "child_address4": |          
+          ${ locations[3].address.address } 
+          % if defined("locations[3].address.unit"):
+          Unit ${ locations[3].address.unit } 
+          % endif
+          ${ locations[3].address.city }, ${ locations[3].address.state } 
+      - "child_date4": ${ locations[3].start_date } to ${ locations[3].end_date }
+      - "child_housemate4": ${ locations[3].housemates }
+      - "child_address5": |          
+          ${ locations[4].address.address } 
+          % if defined("locations[4].address.unit"):
+          Unit ${ locations[4].address.unit } 
+          % endif
+          ${ locations[4].address.city }, ${ locations[4].address.state } 
+      - "child_date5": ${ locations[4].start_date } to ${ locations[4].end_date }
+      - "child_housemate5": ${ locations[4].housemates }
    
       - "participated_custody_child": ${ participations }
       - "information_child": ${ information }
@@ -1853,8 +1916,8 @@ attachment:
       - "child_medical_support": ${ child_medical_support }
       - "filing_financial_form": ${ filing_financial_form }
       - "not_filing_financial_form": ${ not filing_financial_form }
-      - "plaintiff_des_assistance": ${ plaintiff_des_assistance }
-      - "defendant_des_assistance": ${ defendant_des_assistance }
+      - "plaintiff_des_assistance": ${ des['plaintiff_des_assistance'] }
+      - "defendant_des_assistance": ${ des['defendant_des_assistance'] }
       - "earlier_actions_no": ${ not earlier_actions_yes }
       - "earlier_actions_yes": ${ earlier_actions_yes }
       - "earlier_actions_where_filed1": ${ earlier_actions[0].where_filed }
@@ -1883,10 +1946,10 @@ attachment:
       - "earlier_RFA_filer3": ${ earlier_RFA[2].who_filed }
       - "earlier_RFA_actions_type3": ${ earlier_RFA[2].action_type }
       - "earlier_RFA_year_filed3": ${ earlier_RFA[2].year_filed }
-      - "defendant_military_service": ${ other_parties1_military }
-      - "defendant_no_military_service": ${ not other_parties1_military }
-      - "plaintiff_military_service": ${ plaintiff_military_service }
-      - "plaintiff_no_military_service": ${ not plaintiff_military_service }
+      - "defendant_military_service": ${ military["other_parties1_military"] }
+      - "defendant_no_military_service": ${ not military["other_parties1_military"] }
+      - "plaintiff_military_service": ${ military["plaintiff_military_service"] }
+      - "plaintiff_no_military_service": ${ not military["plaintiff_military_service"] }
       - "divorce_decree": ${ grant_for == "divorce" }
       - "legal_separation_decree": ${ grant_for == "legal_separation" }
       - "dissolution_decree": ${ grant_for == "dissolution" }
