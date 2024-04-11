@@ -668,24 +668,24 @@ fields:
   - County: users[0].address.county
   - note: |
       Not sure what county? [Check this list of cities and towns to find the county.](https://en.m.wikipedia.org/wiki/List_of_municipalities_in_Vermont#Cities)
-  - Do you have a mailing address that is different from your street address?: users_mailing_address_different
+  - Do you have a mailing address that is different from your street address?: users1_mailing_address_different
     datatype: yesnoradio
   - Mailing address: users[0].mailing_address.address
     address autocomplete: True
-    show if: users_mailing_address_different
+    show if: users1_mailing_address_different
   - Unit: users[0].mailing_address.unit
     required: False
-    show if: users_mailing_address_different
+    show if: users1_mailing_address_different
   - City: users[0].mailing_address.city
-    show if: users_mailing_address_different
+    show if: users1_mailing_address_different
   - State: users[0].mailing_address.state
     code: |
       states_list()
     default: VT
-    show if: users_mailing_address_different
+    show if: users1_mailing_address_different
   - Zip or postal code: users[0].mailing_address.zip
     required: False
-    show if: users_mailing_address_different
+    show if: users1_mailing_address_different
 ---
 id: Gather users contact information
 question: |
@@ -810,24 +810,24 @@ fields:
   - ${ users[0].address.county_label}: other_parties[0].address.county
   - note: |
       Not sure what county? [Check this list of cities and towns to find the county.](https://en.m.wikipedia.org/wiki/List_of_municipalities_in_Vermont#Cities)
-  - Does ${ other_parties } have a mailing address that is different from their street address?: other_parties_mailing_address_different
+  - Does ${ other_parties } have a mailing address that is different from their street address?: other_parties1_mailing_address_different
     datatype: yesnoradio
   - Mailing address: other_parties[0].mailing_address.address
     address autocomplete: True
-    show if: other_parties_mailing_address_different
+    show if: other_parties1_mailing_address_different
   - Unit: other_parties[0].mailing_address.unit
     required: False
-    show if: other_parties_mailing_address_different
+    show if: other_parties1_mailing_address_different
   - City: other_parties[0].mailing_address.city
-    show if: other_parties_mailing_address_different
+    show if: other_parties1_mailing_address_different
   - State: other_parties[0].mailing_address.state
     code: |
       states_list()
     default: VT
-    show if: other_parties_mailing_address_different
+    show if: other_parties1_mailing_address_different
   - Zip or postal code: other_parties[0].mailing_address.zip
     required: False
-    show if: other_parties_mailing_address_different
+    show if: other_parties1_mailing_address_different
 ---
 #id: Why are you seeking x from the court
 #question: |
@@ -901,7 +901,7 @@ fields:
   - I have a written agreement signed by me and ${ other_parties }. I will include it with these forms. I ask the court to issue an order that includes the provisions in our written agreement. : written_agreement_attached
     datatype: yesno
   - note: |
-      **If you and your spouse are not residents of Vermont**, but you had a civil union or marriage in Vermont, you need to submit a signed agreement about how to deal with your property and debts. The court will not grant the divorce or dissolution without an agreement. See [VTLawHelp for more details and a form.](https://vtlawhelp.org/roadmap/divorce/step-1)
+      **If you and your spouse are not residents of Vermont**, but you had a civil union or marriage in Vermont, you need to submit a signed agreement about how to deal with your property and debts. In your situation, the court will not grant the divorce or dissolution without an agreement. See [VTLawHelp for more details and a form.](https://vtlawhelp.org/roadmap/divorce/step-1)
   - note: |      
       **If you have a written agreement**, attach it to the forms that you file with the court. The written agreement must include:
       
@@ -1040,7 +1040,7 @@ review:
       
       - **${ users[0].address.on_one_line() }**
       
-      % if users_mailing_address_different:
+      % if users1_mailing_address_different:
       - Mailing address: **${ users[0].mailing_address.on_one_line() }**
       % endif
   - Edit: users[0].email
@@ -1103,7 +1103,7 @@ review:
       
       - **${ other_parties[0].address.on_one_line() }**
       
-      % if other_parties_mailing_address_different:
+      % if other_parties1_mailing_address_different:
       - Mailing address: **${ other_parties[0].mailing_address.on_one_line() }**
       % endif
   - Edit: other_parties[0].email
@@ -1675,8 +1675,14 @@ attachment:
       - "users1_birthdate": ${ format_date(users[0].birthdate, format='M/d/yyyy') }
       - "users1_address_line_one": ${ users[0].address.line_one() }
       - "users1_address_line_two": ${ users[0].address.line_two() }
-      - "users1_address_mailing_line_one": ${ users[0].mailing_address.line_one() }
-      - "users1_address_mailing_line_two": ${ users[0].mailing_address.line_two() }
+      - "users1_address_mailing_line_one": |
+          % if users1_mailing_address_different:
+          ${ users[0].mailing_address.line_one() }
+          % endif
+      - "users1_address_mailing_line_two": |
+          % if users1_mailing_address_different:
+          ${ users[0].mailing_address.line_two() }
+          % endif
       - "users1_email": ${ users[0].email }
       - "users1_evening_phone_number": ${ users[0].evening_phone_number }
       - "users1_daytime_phone_number": ${ users[0].daytime_phone_number }
@@ -1686,8 +1692,14 @@ attachment:
       - "other_parties1_birthdate": ${ format_date(other_parties[0].birthdate, format='M/d/yyyy') }
       - "other_parties1_address_line_one": ${ other_parties[0].address.line_one() }
       - "other_parties1_address_line_two": ${ other_parties[0].address.line_two() }
-      - "other_parties1__mailing_address_line_one": ${ other_parties[0].mailing_address.line_one() }
-      - "other_parties1__mailing_address_line_two": ${ other_parties[0].mailing_address.line_two() }
+      - "other_parties1__mailing_address_line_one": |
+          % if other_parties1_mailing_address_different:
+          ${ other_parties[0].mailing_address.line_one() }
+          % endif
+      - "other_parties1__mailing_address_line_two": |
+          % if other_parties1_mailing_address_different:
+          ${ other_parties[0].mailing_address.line_two() }
+          % endif
       - "other_parties1_email": ${ other_parties[0].email }
       - "other_parties1_evening_phone_number": ${ other_parties[0].evening_phone_number }
       - "other_parties1_daytime_phone_number": ${ other_parties[0].daytime_phone_number }
@@ -1789,8 +1801,14 @@ attachment:
       - "users1_birthdate": ${ format_date(users[0].birthdate, format='M/d/yyyy') }
       - "users1_address_line_one": ${ users[0].address.line_one() }
       - "users1_address_line_two": ${ users[0].address.line_two() }
-      - "users1_address_mailing_line_one": ${ users[0].mailing_address.line_one() }
-      - "users1_address_mailing_line_two": ${ users[0].mailing_address.line_two() }
+      - "users1_address_mailing_line_one": |
+          % if users1_mailing_address_different:
+          ${ users[0].mailing_address.line_one() }
+          % endif
+      - "users1_address_mailing_line_two": |
+          % if users1_mailing_address_different:
+          ${ users[0].mailing_address.line_two() }
+          % endif
       - "users1_email": ${ users[0].email }
       - "users1_evening_phone_number": ${ users[0].evening_phone_number }
       - "users1_daytime_phone_number": ${ users[0].daytime_phone_number }
@@ -1800,8 +1818,14 @@ attachment:
       - "other_parties1_birthdate": ${ format_date(other_parties[0].birthdate, format='M/d/yyyy') }
       - "other_parties1_address_line_one": ${ other_parties[0].address.line_one() }
       - "other_parties1_address_line_two": ${ other_parties[0].address.line_two() }
-      - "other_parties1__mailing_address_line_one": ${ other_parties[0].mailing_address.line_one() }
-      - "other_parties1__mailing_address_line_two": ${ other_parties[0].mailing_address.line_two() }
+      - "other_parties1__mailing_address_line_one": |
+          % if other_parties1_mailing_address_different:
+          ${ other_parties[0].mailing_address.line_one() }
+          % endif
+      - "other_parties1__mailing_address_line_two": |
+          % if other_parties1_mailing_address_different:
+          ${ other_parties[0].mailing_address.line_two() }
+          % endif
       - "other_parties1_email": ${ other_parties[0].email }
       - "other_parties1_evening_phone_number": ${ other_parties[0].evening_phone_number }
       - "other_parties1_daytime_phone_number": ${ other_parties[0].daytime_phone_number }

@@ -223,4 +223,26 @@ validation code: |
   if (showifdef('email_consent')) and not (showifdef('users[0].email')):
     validation_error(word("You need to provide an email."), field="users[0].email")
 ---
-
+#####################Other#####################
+id: docket number
+question: |
+  Case number / docket number
+subquestion: |
+  % if grant_for == "divorce":
+  Do you have a case number yet to track this divorce case in court?
+  % endif
+  % if grant_for == "legal_separation":
+  Do you have a case number yet to track this legal separation case in court?
+  % endif
+  % if grant_for == "dissolution":
+  Do you have a case number yet to track this civil union dissolution case in court?
+  % endif
+fields:
+  - I don't know the case number: dont_know_docket_number
+    datatype: yesno    
+  - Case number: docket_number
+    hide if: dont_know_docket_number
+validation code: |
+  # This should be safe too
+  if dont_know_docket_number:
+    docket_number = ''   
