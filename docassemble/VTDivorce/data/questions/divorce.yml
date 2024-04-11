@@ -69,15 +69,16 @@ sections:
 mandatory: True
 code: |
   al_intro_screen
+  
   # run the main interview order block
   interview_order_divorce
+  
   # Fields for family court info sheet
   other_family_juv_probate_proceedings
   set_progress(80)
   
   nav.set_section("serving_other_side")
   # Fields for notice of appearance
-  email_consent
   
   set_progress(85)
   # Fields for certificate of service
@@ -88,13 +89,9 @@ code: |
     party.served
   other_people_receiving_service.gather()
   
-  trial_court_division
-  
   set_progress(90)
   faminfo
   other_documents_to_serve
-
-
 
   # Store anonymous data for analytics / statistics
   store_variables_snapshot(
@@ -120,7 +117,7 @@ code: |
   divorce_download
 
 ---
-#################### Interview order #####################
+#################### Interview order - divorce #####################
 comment: |
   Controls order and branching logic for questions specific to this form
 id: interview_order_divorce
@@ -141,7 +138,7 @@ code: |
       jurisdiction_kickout
     if not have_property_agreement:
       jurisdiction_kickout
-    if have_school_age_children:
+    if school_age_kids:
       jurisdiction_kickout
   
   initial_screening_continue 
@@ -161,9 +158,9 @@ code: |
     
   users[0].birthdate
   users[0].address.address
-  users[0].email
-  if user_has_attorney:
-    users[0].attorneys[0].name
+  users[0].daytime_phone_number
+  email_consent
+  user_has_attorney
   users1_gets_public_assistance
 
   set_progress(16)
@@ -186,7 +183,6 @@ code: |
   nav.set_section("kids")
   if have_school_age_children: 
     children.gather()
-    #for child in children:
     where_children_lived
     locations.gather()
     participations
@@ -215,6 +211,7 @@ code: |
   
 
   docket_number
+  trial_court_division
   #trial_court
   set_progress(70)
   no_longer_living_together_date
@@ -246,7 +243,9 @@ subquestion: |
   
   <i class="fas fa-clock fa-2x"></i> It may take you over 45 minutes to complete this interview.
   
-  <i class="fas fa-circle-info fa-2x"></i> It is free to use this program. This site is not a lawyer. Visit our [VTLawHelp.org website](https://vtlawhelp.org/roadmap/divorce/step-1) for more information about divorce, separation, or civil union dissolution.
+  <i class="fas fa-circle-info fa-2x"></i> It is free to use this program. This site is not a lawyer.
+  
+  **Visit our [VTLawHelp.org website](https://vtlawhelp.org/roadmap/divorce/step-1) for step-by-step information about divorce, separation, and civil union dissolution.**
 
   <p>${ intro_vtcourtforms_created_by }</p>
 
@@ -408,6 +407,16 @@ fields:
   - no label: both_cant_divorce_current_state
     datatype: yesnoradio
 ---
+id: screen for school age kids
+question: |
+  Have kids?
+subquestion: |  
+  Do you and your spouse/other party have children together who are either younger than 18 years old, or are 18 years old and still in high school? Include born or adopted children.  
+fields:
+  - no label: school_age_kids
+    datatype: yesnoradio
+
+---
 id: property agreement
 question: |
   See if this interview is right for your situation
@@ -437,7 +446,7 @@ id: have school age children
 question: |
   Children
 subquestion: |  
-  Do you and your spouse/other party have children together who are either younger than 18 years old, or are 18 years old and still in high school? Include born or adopted children.  
+  Do you and ${ other_parties[0].name } have children together who are either younger than 18 years old, or are 18 years old and still in high school? Include born or adopted children.  
 fields:
   - no label: have_school_age_children
     datatype: yesnoradio
@@ -510,7 +519,7 @@ fields:
   - All people that lived with your child/children (including you): locations[i].housemates
     maxlength: 30
   - note: |
-      You can say things like: mom, dad, brother, sister, grandma. You can also use abbreviated names for the people who lived with them, like Jane D. (There's not much room on the form!)
+      You can say things like: mom, dad, step-brother, grandma. You can also use abbreviated names for the people who lived with them, like Jane D. (There's not much room on the form!)
 ---
 generic object: ALPeopleList
 id: any other locations
@@ -711,7 +720,7 @@ question: |
 subquestion: |
   Examples: Food stamps and Reach Up.
 fields: 
-  - I get DES assistance: plaintiff_des_assistance
+  - You get DES assistance: plaintiff_des_assistance
     datatype: yesno
   - ${ other_parties } gets DES assistance: defendant_des_assistance
     datatype: yesno
@@ -722,7 +731,7 @@ id: military service
 question: |
    Do you or ${ other_parties } serve in the military?
 fields: 
-  - I serve in the military: plaintiff_military_service
+  - You serve in the military: plaintiff_military_service
     datatype: yesno
   - ${ other_parties } serves in the military: other_parties1_military
     datatype: yesno
@@ -865,7 +874,7 @@ fields:
     datatype: date
     show if: 
       variable: grounds
-      is: six_month_separation
+      is: six_month_separation  
   - Describe the other grounds (different reason): other_ground_explanation
     show if: 
       variable: grounds
@@ -946,8 +955,6 @@ fields:
       **Parent-child contact:**  
   - note: |
       ${ collapse_template(what_is_parent_child_contact) }
-  #- Parent-child contact: contact_for
-    #datatype: yesno
   - Choose at least one: contact_for
     choices:
     - Contact for myself: contact_for_myself

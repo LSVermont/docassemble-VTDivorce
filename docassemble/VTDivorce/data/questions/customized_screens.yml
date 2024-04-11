@@ -1,7 +1,7 @@
 ---
 ### Questions overriding defaults from included YAML files from other packages ############
 ---
-########### Overrides for VTCertificateOfService #############################
+########### Overrides for VTCertificateOfService ##############
 ---
 code: |
   users1_role = "plaintiff"
@@ -16,3 +16,211 @@ code: |
   else:
     divorcesc = True # Marks the Divorce form as one to be served
   document1_name = "" # skip the questions about supplemental documents to file
+---
+
+id: documents serving to other party
+question: |
+  Documents you are serving to the other party
+subquestion: |
+  You need the Certificate of Service form to show the court that you served documents to the other party. The form will include a list of the documents you served.
+  
+  Below are some common Family Court documents. Choose any that you want to appear on the Certificate of Service form. Select Next to have the chance to enter the names of other forms and documents you may be serving.
+ 
+fields:      
+  - Summons and Complaint for Divorce/Separation/Dissolution **without** Children - form 400-00836: divorcesc
+    datatype: yesno
+    required: False
+  - Summons and Complaint for Divorce/Separation/Dissolution **with** Children - form 400-00836: divorcesckids
+    datatype: yesno
+    required: False
+  - Notice of Appearance for Self-Represented Party - form 400-00831: noa
+    datatype: yesno
+    required: False
+  - Family Court Information Sheet - form 800: faminfo
+    datatype: yesno
+    required: False
+  - Divorce / Dissolution stipulation (agreement): divorcestip
+    datatype: yesno
+    required: False
+  - Motion to Modify Child Support and/or Maintenance Supplement - form 400-00803: modchildsup
+    datatype: yesno
+    required: False
+  - Motion to Enforce Child Support and/or Maintenance Supplement - form 400-00823: enfchildsup 
+    datatype: yesno
+    required: False    
+  - Motion to Modify Parental Rights & Responsibilities & Parent Child Contact - form 400-00843: modprr
+    datatype: yesno
+    required: False    
+  - Motion to Enforce - form 400-00905: motionenforce
+    datatype: yesno
+    required: False    
+  - Affidavit - Family Division - form 400-00804: familyaffidavit
+    datatype: yesno
+    required: False   
+  - Application to Waive Filing Fees and Service Costs - form 600-00228: feewaiver
+    datatype: yesno
+    required: False
+---    
+ 
+########### Overrides for VTFamilyCourtInfoSheet ##############
+#Some of the following are customized to say 'you' instead of the user name
+---
+id: user birthdate question
+question: |
+  When were you born?
+fields:
+  - Birthdate: users[0].birthdate
+    required: True
+    datatype: BirthDate
+---
+id: users lawyer
+question: |
+  Lawyer
+fields:
+  - "Do you have an attorney working with you on this case?": user_has_attorney
+    datatype: yesnoradio
+  - note: |
+      Usually, the people who use this guided interview do **not** have a lawyer. If you are represented by a lawyer, the lawyer usually files court paperwork for you. Ask them about this.    
+  - "Attorney's name": users1_attorneys_name
+    required: True
+    maxlength: 38
+    show if: user_has_attorney
+    
+  - "Address": users[0].attorneys[0].address.address
+    required: True
+    show if: user_has_attorney
+    
+  - "City": users[0].attorneys[0].address.city
+    required: True
+    show if: user_has_attorney
+    
+  - "State": users[0].attorneys[0].address.state
+    code: |
+      states_list()
+    default: VT
+    required: True
+    show if: user_has_attorney
+ 
+  - "Zip": users[0].attorneys[0].address.zip
+    required: True
+    show if: user_has_attorney
+    
+  - "Attorney's phone number": users1_attorneys_phone_number
+    datatype: al_international_phone
+    show if: user_has_attorney
+---
+id: users benefits or child support
+question: |
+  Do you get any benefits or child support?
+fields:
+  - note: |      
+      Public assistance can include help from Vermont's Department of Economic Services such as Reach-Up, Dr. Dynasaur, Medicaid, or Post Secondary Education Stipend (PSE).
+      
+      Check all that apply.
+
+  - "You get public assistance": users1_gets_public_assistance
+    datatype: yesno
+    
+  - "You get child support": users1_gets_child_support
+    datatype: yesno
+
+  - note: |
+      ${ collapse_template(office_of_child_support_contact) }
+---
+id: other court proceedings
+question: |
+  Other court proceedings
+subquestion: |
+  Are there other Family court, Probate court or Juvenile court cases involving you, ${ other_parties[0].name } and/or your children?
+fields:
+  - "Other court cases?": other_family_juv_probate_proceedings
+    datatype: yesnoradio
+  - "In what state?": trial_court_state_other_filing1
+    code: |
+      states_list()
+    show if: other_family_juv_probate_proceedings
+  - "In what county?": trial_court_county_other_filing1
+    choices:
+      - Addison
+      - Bennington
+      - Caledonia
+      - Chittenden
+      - Essex
+      - Franklin
+      - Grand Isle
+      - Lamoille
+      - Orange
+      - Orleans
+      - Rutland
+      - Washington
+      - Windham
+      - Windsor
+      - Other
+    show if: other_family_juv_probate_proceedings
+  - "What county?": trial_court_other_county_other_filing1
+    maxlength: 22
+    show if:
+      variable: trial_court_county_other_filing1
+      is: Other
+  - "In what court division?": trial_court_division_other_filing1
+    choices:
+      - Family court
+      - Probate court
+      - Juvenile court
+    show if: other_family_juv_probate_proceedings
+  - "I have another to list": other_family_juv_probate_proceedings2
+    datatype: yesno
+    show if: other_family_juv_probate_proceedings
+  - "In what state?": trial_court_state_other_filing2
+    code: |
+      states_list()
+    show if: other_family_juv_probate_proceedings2
+  - "In what county?": trial_court_county_other_filing2
+    choices:
+      - Addison
+      - Bennington
+      - Caledonia
+      - Chittenden
+      - Essex
+      - Franklin
+      - Grand Isle
+      - Lamoille
+      - Orange
+      - Orleans
+      - Rutland
+      - Washington
+      - Windham
+      - Windsor
+      - Other
+    show if: other_family_juv_probate_proceedings2
+  - "What county?": trial_court_other_county_other_filing2
+    maxlength: 22
+    show if:
+      variable: trial_court_county_other_filing2
+      is: Other
+  - "In what court division?": trial_court_division_other_filing2
+    choices:
+      - Family court
+      - Probate court
+      - Juvenile court
+    show if: other_family_juv_probate_proceedings2
+---
+########### Overrides for VTNoticeOfAppearance ##############
+---
+id: email communications
+question: |
+  Email communications
+subquestion: |
+  The other party in the case must send you a copy of all documents they file with the court. If you check the box below, the other party may send you the documents **only by email.** 
+  If you select this option, be sure to check your email often.
+fields:
+  - "I agree to get documents about this case by email only": email_consent
+    datatype: yesno
+  - Email: users[0].email    
+    datatype: email
+    show if: email_consent
+validation code: |
+  if (showifdef('email_consent')) and not (showifdef('users[0].email')):
+    validation_error(word("You need to provide an email."), field="users[0].email")
+---
+
