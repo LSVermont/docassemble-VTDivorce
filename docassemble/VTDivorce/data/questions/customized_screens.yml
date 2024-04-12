@@ -4,18 +4,12 @@
 ########### Overrides for VTCertificateOfService ##############
 ---
 code: |
-  users1_role = "plaintiff"
+  users1_role = "role_plaintiff"
 ---
 code: |
   trial_court_division = trial_court.division
 ---
-code: |
-  if have_school_age_children:
-    divorcesc = False
-    divorcesckids = True
-  else:
-    divorcesc = True # Marks the Divorce form as one to be served
-  document1_name = "" # skip the questions about supplemental documents to file
+
 ---
 
 id: documents serving to other party
@@ -30,15 +24,29 @@ fields:
   - Summons and Complaint for Divorce/Separation/Dissolution **without** Children - form 400-00836: divorcesc
     datatype: yesno
     required: False
+    default: |
+       % if not have_school_age_children:
+       ${ True }
+       % endif        
   - Summons and Complaint for Divorce/Separation/Dissolution **with** Children - form 400-00836: divorcesckids
     datatype: yesno
     required: False
+    default: |
+       % if have_school_age_children:
+       ${ True }
+       % endif    
   - Notice of Appearance for Self-Represented Party - form 400-00831: noa
     datatype: yesno
     required: False
+    default: True
   - Family Court Information Sheet - form 800: faminfo
     datatype: yesno
     required: False
+    default: True
+  - Department of Health Record of Divorce or Dissolution: healthform
+    datatype: yesno
+    required: False
+    default: True
   - Divorce / Dissolution stipulation (agreement): divorcestip
     datatype: yesno
     required: False
@@ -121,7 +129,7 @@ fields:
   - "You get public assistance": users1_gets_public_assistance
     datatype: yesno
     
-  - "You get child support": users1_gets_child_support
+  - "You get child support (from any relationship)": users1_gets_child_support
     datatype: yesno
 
   - note: |
