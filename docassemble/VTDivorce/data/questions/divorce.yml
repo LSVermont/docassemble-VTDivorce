@@ -74,7 +74,7 @@ code: |
   interview_order_divorce
   
   # Fields for family court info sheet
-  users[0].attorneys[0].name = users1_attorneys_name
+  #users[0].attorneys[0].name = users1_attorneys_name
   other_family_juv_probate_proceedings
   set_progress(80)
   
@@ -829,19 +829,6 @@ fields:
     required: False
     show if: other_parties1_mailing_address_different
 ---
-#id: Why are you seeking x from the court
-#question: |
-#  What is your reason for getting a x?
-#fields:
-#  - "We have been or will have lived separate and apart for more than 6 months in a row. It is not reasonably probable that we can resume our relationship. (Note - This is the most common reason.)": six_month_separation
-#    datatype: yesno
-#  - "Date of separation": separation_date
-#    datatype: date
-#  - "Other grounds (other reason)": other_ground_divorce
-#    datatype: yesno
-#  - "Explain the other grounds": other_ground_divorce_explanation
-#    maxlength: 55
----
 id: filing_financial_form
 question: |
   Are you also filing a completed financial form 400-00813B now?
@@ -1020,6 +1007,7 @@ review:
 
   - note: |
       ###About you
+      
   - Edit: users.revisit
     button: |
       About you (edit your name, birthdate, gender and former name)
@@ -1236,39 +1224,15 @@ review:
       % for item in children:
       - **${ item }** -- Birthdate: ${ item.birthdate }
       % endfor
-
-  - Edit: participation 
+  - Edit: locations.revisit
     button: |
-      % if participation:
-      You participated as a party, witness, or in some other way in a court case about custody: **Yes**
-      % else:
-      You participated as a party, witness, or in some other way in a court case about custody: **No**
-      % endif
-      
-      % if defined("child_custody[0].explain"):
-      - ${ child_custody[0].explain }
-      % endif
-      
-      % if information:
-      You have information about a case concerning this child or these children that is now pending in a Vermont court or a court in another state: **Yes**
-      % else:
-      You have information about a case concerning this child or these children that is now pending in a Vermont court or a court in another state: **No**
-      % endif
-      
-      % if defined("child_custody[1].explain"):
-      - ${ child_custody[1].explain  }
-      % endif
-      
-      % if knowledge:
-      You have knowledge about a person who is not a party to this case who has physical custody or who claims to have custody of or visitation rights: **Yes**
-      % else:
-      You have knowledge about a person who is not a party to this case who has physical custody or who claims to have custody of or visitation rights: **No**
-      % endif
-      
-      % if defined("child_custody[2].explain"):
-      - ${ child_custody[2].explain }
-      % endif
+      Where the children lived
 
+      % for item in locations:
+      **${ item.address.on_one_line() }**
+      
+      - From: ${ item.start_date } to ${ item.end_date }. With: ${ item.housemates }
+      % endfor
 
   - note: |
       ###What you want in the court order
@@ -1355,10 +1319,10 @@ review:
       - **None**
       % endif
   
-  - Edit: contact_for_myself
+  - Edit: contact_for
     button: |
-      % if defined("contact_for_myself") and contact_for_myself:
-        % if defined("contact_for_defendant") and contact_for_defendant:
+      % if contact_for["contact_for_myself"]:
+        % if contact_for["contact_for_defendant"]:
         Parent-child contact:
         
         - **Contact for myself**
@@ -1368,14 +1332,10 @@ review:
       
         - **Contact for myself**
         % endif
-      % elif defined("contact_for_defendant") and contact_for_defendant:
+      % elif contact_for["contact_for_defendant"]:
       Parent-Child Contact:
       
-      - **Contact for ${ other_parties[0] }**
-      % else:
-      Parent-Child Contact:
-      
-      - **None**      
+      - **Contact for ${ other_parties[0] }**     
       % endif
       
   - Edit: child_medical_support
@@ -1383,6 +1343,27 @@ review:
       Child support, medical support and/or maintenance supplement:
       
       - **${yesno(child_medical_support)}**
+
+  -  Edit: participations
+     button: |
+       You have participated as a party, witness, or in some other way in a court case about the custody of this child or these children in Vermont or another state.: **${ word(yesno(participations)) }**
+       
+       % if defined("child_custody[0].explanation"):
+       - ${ child_custody[0].explanation }
+       % endif
+       
+       You have information about a case concerning this child or these children that is now pending in a Vermont court or a court in another state.: **${ word(yesno(information)) }**
+       
+       % if defined("child_custody[1].explanation"):
+       - ${ child_custody[1].explanation }
+       % endif
+       
+       You have knowledge about a person who is not a party to this case who has physical custody of this child or these children or who claims to have custody of or visitation rights to this child or these children.: **${ word(yesno(knowledge)) }**
+        
+       % if defined("child_custody[2].explanation"):
+       - ${ child_custody[2].explanation }
+       % endif
+
 
   - Edit: filing_financial_form
     button: |
@@ -1429,8 +1410,7 @@ columns:
   - Former name: |
       row_item.last_name_former if defined("row_item.last_name_former") else ""  
 edit:
-  - gender
-  - sex
+  - name.first
   - birthdate
   - signature
 confirm: True
@@ -1457,8 +1437,7 @@ columns:
   - Former name: |
       row_item.last_name_former if defined("row_item.last_name_former") else ""  
 edit:
-  - gender
-  - sex
+  - name.first
   - birthdate
 confirm: True
 ---
@@ -1480,6 +1459,30 @@ columns:
 edit:
   - name.first
   - birthdate
+confirm: True
+---
+continue button field: locations.revisit
+question: |
+  Edit info about the children
+subquestion: |
+  ${ locations.table }
+
+  ${ locations.add_action() }
+---
+table: locations.table
+rows: locations
+columns:
+  - Address: |
+      row_item.address.on_one_line() if defined("row_item.address.address") else ""
+  - Start date: |
+      row_item.start_date if defined("row_item.start_date") else "" 
+  - End date: |
+      row_item.end_date if defined("row_item.end_date") else "" 
+  - Lived with: |
+      row_item.housemates if defined("row_item.housemates") else ""       
+edit:
+  - address.address
+  - start_date
 confirm: True
 ---
 continue button field: earlier_actions.revisit
@@ -1549,6 +1552,8 @@ subquestion: |
   
 
   ${ al_user_bundle.send_button_html(show_editable_checkbox=False) }
+
+  You may also want to send a blank [Acceptance of Service form](https://www.vermontjudiciary.org/media/8307) to the other party when you serve your documents to them. They will fill it out and send it back to the court.
   
   ${ download_screen_bottom_instructions }
   
