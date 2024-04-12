@@ -1553,7 +1553,7 @@ subquestion: |
 
   ${ al_user_bundle.send_button_html(show_editable_checkbox=False) }
 
-  You may also want to send a blank [Acceptance of Service form](https://www.vermontjudiciary.org/media/8307) to the other party when you serve your documents to them. They will fill it out and send it back to the court.
+  NOTE: You may also want to send a blank [Acceptance of Service form](https://www.vermontjudiciary.org/media/8307) to the other party when you serve your documents to them. They will fill it out and send it back to the court.
   
   ${ download_screen_bottom_instructions }
   
