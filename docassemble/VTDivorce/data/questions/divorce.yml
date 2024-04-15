@@ -74,7 +74,6 @@ code: |
   interview_order_divorce
   
   # Fields for family court info sheet
-  #users[0].attorneys[0].name = users1_attorneys_name
   other_family_juv_probate_proceedings
   set_progress(80)
   
@@ -538,7 +537,7 @@ fields:
     label above field: True
     datatype: yesno
   
-  - Statement A -- Please briefly explain: child_custody[0].explanation
+  - Please briefly explain: child_custody[0].explanation
     show if: participations
     input type: area
     maxlength: 300
@@ -903,7 +902,7 @@ id: ask for custody visitation and child support
 question: |  
   Custody, visitation and child support
 subquestion: |     
-  <h2 class="h4">I ask that the court grant me the following. Check all that apply.</h2>
+  <h2 class="h4">I ask that the court grant me the following. (Check all that apply.)</h2>
 fields:
 
   - note: |
@@ -1055,10 +1054,8 @@ review:
       **${ word(yesno(user_has_attorney)) }**
       % endif
       
-      % if defined("users1_attorneys_name"):
-      % if defined("users1_attorneys_phone_number"):
+      % if defined("user_has_attorney") and user_has_attorney:
       - Your lawyer: **${ users1_attorneys_name }** at **${ users1_attorneys_phone_number }**
-      % endif
       % endif
 
   - note: |
@@ -1118,10 +1115,8 @@ review:
       **${ word(yesno(other_parties_has_attorney)) }**
       % endif
       
-      % if defined("other_parties1_attorneys_name"):
-      % if defined("other_parties1_attorneys_phone_number"):
+      % if defined("other_parties_has_attorney") and other_parties_has_attorney:
       - Their lawyer: **${ other_parties1_attorneys_name }** at **${ other_parties1_attorneys_phone_number }**
-      % endif
       % endif      
       
   - note: |
@@ -1687,8 +1682,14 @@ attachment:
       - "users1_email": ${ users[0].email }
       - "users1_evening_phone_number": ${ users[0].evening_phone_number }
       - "users1_daytime_phone_number": ${ users[0].daytime_phone_number }
-      - "users1_attorneys_name": ${ users1_attorneys_name }
-      - "users1_attorneys_phone_numer": ${ users1_attorneys_phone_number }
+      - "users1_attorneys_name": |
+          % if defined("user_has_attorney") and user_has_attorney:
+          ${ users1_attorneys_name }
+          % endif
+      - "users1_attorneys_phone_numer": |
+          % if defined("user_has_attorney") and user_has_attorney:
+          ${ users1_attorneys_phone_number }
+          % endif
       - "other_parties1_name1": ${ other_parties[0].name }
       - "other_parties1_birthdate": ${ format_date(other_parties[0].birthdate, format='M/d/yyyy') }
       - "other_parties1_address_line_one": ${ other_parties[0].address.line_one() }
@@ -1813,8 +1814,14 @@ attachment:
       - "users1_email": ${ users[0].email }
       - "users1_evening_phone_number": ${ users[0].evening_phone_number }
       - "users1_daytime_phone_number": ${ users[0].daytime_phone_number }
-      - "users1_attorneys_name": ${ users1_attorneys_name }
-      - "users1_attorneys_phone_numer": ${ users1_attorneys_phone_number }
+      - "users1_attorneys_name": |
+          % if defined("user_has_attorney") and user_has_attorney:
+          ${ users1_attorneys_name }
+          % endif
+      - "users1_attorneys_phone_numer": |
+          % if defined("user_has_attorney") and user_has_attorney:
+          ${ users1_attorneys_phone_number }
+          % endif
       - "other_parties1_name1": ${ other_parties[0].name }
       - "other_parties1_birthdate": ${ format_date(other_parties[0].birthdate, format='M/d/yyyy') }
       - "other_parties1_address_line_one": ${ other_parties[0].address.line_one() }
@@ -2006,9 +2013,18 @@ attachment:
       - "users1_address_city": ${ users[0].address.city }
       - "other_parties1_name": ${ other_parties[0].name }
       - "other_parties1_sex": ${ other_parties[0].sex }
-      - "users1_attorneys_address": ${ users[0].attorneys[0].address.on_one_line() }
-      - "users1_attorneys_name": ${ users1_attorneys_name }
-      - "users1_attorneys_phone_numer": ${ users1_attorneys_phone_number }
+      - "users1_attorneys_address": |
+          % if defined("user_has_attorney") and user_has_attorney:
+          ${ users[0].attorneys[0].address.on_one_line() }
+          % endif
+      - "users1_attorneys_name": |
+          % if defined("user_has_attorney") and user_has_attorney:
+          ${ users1_attorneys_name }
+          % endif
+      - "users1_attorneys_phone_numer": |
+          % if defined("user_has_attorney") and user_has_attorney:
+          ${ users1_attorneys_phone_number }
+          % endif
       - "other_parties1_former_name": ${ other_parties[0].last_name_former }
       - "other_parties1_birth_month": ${ format_date(other_parties[0].birthdate, format='M') }
       - "other_parties1_birth_day": ${ format_date(other_parties[0].birthdate, format='dd') }
@@ -2025,10 +2041,8 @@ attachment:
       - "separation_date_day": ${ format_date(no_longer_living_together_date, format='dd') }
       - "separation_date_year": ${ format_date(no_longer_living_together_date, format='yyyy') }
       - "no_attorney_involved": |
-          % if not user_has_attorney:
-          { True }
-          % else:
-          { False }
+          % if defined("user_has_attorney") and not user_has_attorney:
+          ${ True }
           % endif
 
 ---
@@ -2063,8 +2077,14 @@ attachment:
       - "users1_address_city": ${ users[0].address.city }
       - "other_parties1_name": ${ other_parties[0].name }
       - "other_parties1_sex": ${ other_parties[0].sex }
-      - "users1_attorneys_address": ${ users[0].attorneys[0].address.on_one_line() }
-      - "users1_attorneys_name": ${ users1_attorneys_name }
+      - "users1_attorneys_address": |
+          % if defined("user_has_attorney") and user_has_attorney:
+          ${ users[0].attorneys[0].address.on_one_line() }
+          % endif
+      - "users1_attorneys_name": |
+          % if defined("user_has_attorney") and user_has_attorney:
+          ${ users1_attorneys_name }
+          % endif
       - "other_parties1_former_name": ${ other_parties[0].last_name_former }
       - "other_parties1_birth_month": ${ format_date(other_parties[0].birthdate, format='M') }
       - "other_parties1_birth_day": ${ format_date(other_parties[0].birthdate, format='dd') }
@@ -2081,9 +2101,7 @@ attachment:
       - "separation_date_day": ${ format_date(no_longer_living_together_date, format='dd') }
       - "separation_date_year": ${ format_date(no_longer_living_together_date, format='yyyy') }
       - "no_attorney_involved": |
-          % if not user_has_attorney:
-          { True }
-          % else:
-          { False }
+          % if defined("user_has_attorney") and not user_has_attorney:
+          ${ True }
           % endif
 
