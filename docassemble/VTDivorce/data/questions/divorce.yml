@@ -236,7 +236,11 @@ subquestion: |
   * Notice of Appearance for Self-Represented Party - form 400-00831
   * Family Court Information Form - form 800
   * Department of Health Record of Divorce or Dissolution
+  
+  As well as one of the forms you **might** use to show you served papers to your spouse:
+  
   * Certificate of Service - form 600-00264
+  * (note to testers: we could add the Acceptance of Service form, too, since we will have all the info needed for it) 
   
   <i class="fas fa-clock fa-2x"></i> It may take you over 45 minutes to complete this interview.
   
