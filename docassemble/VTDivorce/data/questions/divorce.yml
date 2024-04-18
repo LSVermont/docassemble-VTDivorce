@@ -79,7 +79,7 @@ code: |
   
   nav.set_section("serving_other_side")
   # Fields for notice of appearance
-  users1_role = "role_plaintiff"
+  users1_role == "role_plaintiff"
   
   set_progress(85)
   # Fields for certificate of service
