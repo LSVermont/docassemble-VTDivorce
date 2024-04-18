@@ -4,7 +4,7 @@
 ########### Overrides for VTCertificateOfService ##############
 ---
 code: |
-  users1_role = "role_plaintiff"
+  users1_role == "role_plaintiff"
 ---
 code: |
   trial_court_division = trial_court.division
