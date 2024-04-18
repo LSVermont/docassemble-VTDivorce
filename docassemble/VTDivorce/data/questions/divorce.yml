@@ -79,10 +79,11 @@ code: |
   
   nav.set_section("serving_other_side")
   # Fields for notice of appearance
+  users1_role = "role_plaintiff"
   
   set_progress(85)
   # Fields for certificate of service
-  users1_role
+  users1_role = "role_plaintiff"
   user_has_attorney
 
   for party in other_parties:
@@ -1012,7 +1013,7 @@ review:
       % endfor
   - Edit: plaintiff_VT
     button: |
-      You live in Vermont: **${ word(yesno(plaintiff_VT)) }**
+      You have lived in Vermont for past 6 months: **${ word(yesno(plaintiff_VT)) }**
       
       % if defined("date_plaintiff_moved_to_VT"):
       * Date you moved to Vermont: **${ format_date(date_plaintiff_moved_to_VT, format="M/d/yyyy") }**
@@ -1070,7 +1071,7 @@ review:
 
   - Edit: defendant_VT
     button: |
-      Other party lives in Vermont: **${ word(yesno(defendant_VT)) }**
+      They have lived in Vermont for past 6 months: **${ word(yesno(defendant_VT)) }**
       
       % if defined("date_defendant_moved_to_VT"):
       * Date they moved to Vermont: **${ format_date(date_defendant_moved_to_VT, format="M/d/yyyy") }**
