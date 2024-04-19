@@ -230,14 +230,14 @@ subquestion: |
   
   <i class="fas fa-file-text fa-2x"></i> This guided interview will produce an initial package of forms needed to ask the court for a divorce, legal separation, or civil union dissolution.
   
-  This interview produces the following forms:
+  This interview produces the following forms to give to the court:
   
   * Summons and Complaint for a Divorce / Separation / Dissolution - form 400-00836
   * Notice of Appearance for Self-Represented Party - form 400-00831
   * Family Court Information Form - form 800
   * Department of Health Record of Divorce or Dissolution
   
-  As well as one of the forms you **might** use to show you served papers to your spouse:
+  As well as forms you **might** use to show you sent copies of the forms to your spouse:
   
   * Certificate of Service - form 600-00264
   * (note to testers: we could add the Acceptance of Service form, too, since we will have all the info needed for it) 
@@ -1552,7 +1552,6 @@ subquestion: |
 
   ${ al_user_bundle.send_button_html(show_editable_checkbox=False) }
 
-  NOTE: You may also want to send a blank [Acceptance of Service form](https://www.vermontjudiciary.org/media/8307) to the other party when you serve your documents to them. They will fill it out and send it back to the court.
   
   ${ download_screen_bottom_instructions }
   

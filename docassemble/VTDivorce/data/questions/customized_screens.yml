@@ -14,11 +14,13 @@ code: |
 
 id: documents serving to other party
 question: |
-  Documents you are serving to the other party
+  Documents you are "serving" (sending or delivering to) the other party
 subquestion: |
-  You need the Certificate of Service form to show the court that you served documents to the other party. The form will include a list of the documents you served.
+  Depending on your situation, you may need the Certificate of Service form **OR** the Acceptance of Service form to show the court that you served documents to the other party. These commonly used forms will include a list of the documents you served.
   
-  Below are some common Family Court documents. Choose any that you want to appear on the Certificate of Service form. Select Next to have the chance to enter the names of other forms and documents you may be serving.
+  When you file your forms with the court, talk to the court clerk to decide on the best way to serve the other party. There are other forms and methods you might use. If you have children, the court may serve the other party for you. Be sure to download our Next Steps instructions sheet at the end of this guided interview.
+  
+  Below are some common Family Court documents. Choose those that you want to appear on the service form. Select Next to have the chance to enter the names of other forms and documents you may be serving.
  
 fields:      
   - Summons and Complaint for Divorce/Separation/Dissolution **without** Children - form 400-00836: divorcesc
