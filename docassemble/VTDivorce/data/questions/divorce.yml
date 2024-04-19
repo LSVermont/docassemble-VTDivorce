@@ -86,13 +86,13 @@ code: |
   users1_role = "role_plaintiff"
   user_has_attorney
 
+  faminfo
+  other_documents_to_serve
+
+  set_progress(90)
   for party in other_parties:
     party.served
   other_people_receiving_service.gather()
-  
-  set_progress(90)
-  faminfo
-  other_documents_to_serve
 
   # Store anonymous data for analytics / statistics
   store_variables_snapshot(
