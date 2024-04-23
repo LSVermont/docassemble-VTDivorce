@@ -70,6 +70,12 @@ fields:
   - Application to Waive Filing Fees and Service Costs - form 600-00228: feewaiver
     datatype: yesno
     required: False
+  - Financial Affidavit - form 400-813A: financial813A
+    datatype: yesno
+    required: False  
+  - Financial Affidavit - form 400-813B - Property and Assets: financial813B
+    datatype: yesno
+    required: False
 ---    
  
 ########### Overrides for VTFamilyCourtInfoSheet ##############
