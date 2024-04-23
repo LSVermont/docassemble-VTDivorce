@@ -565,6 +565,9 @@ fields:
     input type: area
     maxlength: 300
 
+  - "None of the above": custody_none_apply
+    label above field: True
+    datatype: yesno
 --- 
 id: earlier actions
 question: |

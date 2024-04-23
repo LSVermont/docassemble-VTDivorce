@@ -16,6 +16,8 @@ id: documents serving to other party
 question: |
   Documents you are "serving" (sending or delivering to) the other party
 subquestion: |
+  As part of the court process, you must “serve” copies of all the forms you file with the court on your spouse (or their lawyer, if they have one). To serve means to send or deliver documents. You also need to provide proof to the court that the forms were sent or delivered to your spouse. There are different ways to do that. See the [Vermont Judiciary website](https://www.vermontjudiciary.org/family/divorce/serving-papers) for full details.
+  
   Depending on your situation, you **may** need the Certificate of Service form **or** the Acceptance of Service form to show the court that you served documents to the other party. These commonly used forms will include a list of the documents you served.
   
   When you file your forms with the court, talk to the court clerk to decide on the best way to serve the other party. **There are other forms and methods you might use.** If you have children, the court may serve the other party for you. Be sure to download our Next Steps instructions sheet at the end of this guided interview.
@@ -68,6 +70,12 @@ fields:
     datatype: yesno
     required: False   
   - Application to Waive Filing Fees and Service Costs - form 600-00228: feewaiver
+    datatype: yesno
+    required: False
+  - Financial Affidavit - form 400-813A: financial813A
+    datatype: yesno
+    required: False  
+  - Financial Affidavit - form 400-813B - Property and Assets: financial813B
     datatype: yesno
     required: False
 ---    
