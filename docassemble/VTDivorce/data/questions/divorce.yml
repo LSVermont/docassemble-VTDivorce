@@ -723,18 +723,18 @@ fields:
 ---
 id: DES assistance
 question: |
-   Do you or ${ other_parties } get assistance from the Vermont Division of Economic Services (DES)?
+   Do you or ${ other_parties } get assistance from the Vermont Economic Services Division?
 subquestion: |
-  Examples: 3SquaresVT/food stamps and Reach Up.
+  Examples: 3SquaresVT/food stamps, Reach Up and [others listed on the state's website.](https://dcf.vermont.gov/esd/applicants/benefits)
 fields:
   - "Choose at least one": des
     datatype: checkboxes
     none of the above: False    
     minlength: 1
     choices:
-    - You get DES assistance: plaintiff_des_assistance
-    - ${ other_parties } gets DES assistance: defendant_des_assistance
-    - We don't get DES assistance, or I'm not sure: no_des_assistance
+    - You get Economic Services assistance: plaintiff_des_assistance
+    - ${ other_parties } gets Economic Services assistance: defendant_des_assistance
+    - We don't get Economic Services assistance, or I'm not sure: no_des_assistance
 ---
 id: military service
 question: |
@@ -973,7 +973,7 @@ fields:
     datatype: yesno
   - note: |
     
-      **Keep in mind**: If you and your spouse can’t agree about something -- including custody and parent-child contact -- the court will decide for you.
+      **Keep in mind**: If you and your spouse can’t agree about something -- including custody and parent-child contact -- the court will decide for you as part of the court process.
 ---
 id: preview divorce
 question: |
@@ -1146,7 +1146,7 @@ review:
       % endif
   - Edit: des
     button: |
-      Get assistance from Division of Economic Services (DES):
+      Get assistance from Economic Services Division:
       
       * You: 
       % if des['plaintiff_des_assistance']:
