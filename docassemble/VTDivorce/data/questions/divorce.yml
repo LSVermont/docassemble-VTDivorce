@@ -1182,21 +1182,40 @@ review:
       % if not military['other_parties1_military']:
       **No**
       % endif      
-
+  - Edit: 
+    - earlier_actions_yes   
+    button: |
+      % if defined("earlier_actions_yes"):
+        Earlier actions:
+      % if earlier_actions_yes:
+        **Yes**
+      % else:
+        **No**
+      % endif
+      % endif
   - Edit: earlier_actions.revisit
     button: |
-      % if defined("earlier_actions[0]"):
-        Earlier actions:
-
+      % if defined("earlier_actions_yes") and earlier_actions_yes:
+        Earlier actions were:
       % for item in earlier_actions:
         - **${ item.action_type }**, in ${ item.year_filed }, filed by ${ item.who_filed }, in this court: ${ item.where_filed }
       % endfor
       % endif
-
+  - Edit: 
+    - earlier_RFA_yes   
+    button: |
+      % if defined("earlier_RFA_yes"):
+        Earlier protection orders:
+      % if earlier_RFA_yes:
+        **Yes**
+      % else:
+        **No**
+      % endif
+      % endif
   - Edit: earlier_RFA.revisit
     button: |
       % if defined("earlier_RFA[0]"):
-        Earlier protection orders:
+        Earlier protection orders were:
 
       % for item in earlier_RFA:
         - **${ item.action_type }**, in ${ item.year_filed }, filed by ${ item.who_filed }, in this court: ${ item.where_filed }
