@@ -1412,7 +1412,7 @@ columns:
   - Former name: |
       row_item.last_name_former if defined("row_item.last_name_former") else ""  
 edit:
-  - name.first
+  - last_name_former
   - birthdate
   - signature
 confirm: True
@@ -1439,7 +1439,7 @@ columns:
   - Former name: |
       row_item.last_name_former if defined("row_item.last_name_former") else ""  
 edit:
-  - name.first
+  - last_name_former
   - birthdate
 confirm: True
 ---
