@@ -2,6 +2,15 @@
 #The health record yml file is included in this package because it will never be a stand-alone interview.
 #We will be "including" other stand-alone interviews.
 ---
+#This code added temporarily so people can test it on vtcourtforms and see the screen id numbers
+default screen parts:
+  pre: |
+    % if not url_args.get("hide_hud", "").lower() in ["1", "on", "true", "yes"]:
+    `id: ${ user_info().question_id }`[BR]
+    `Variable: ${ user_info().variable }`[BR]
+    `Version: ${ user_info().package.replace("docassemble.", "") + " " if not user_info().package.startswith("docassemble.playground") else "" }${ package_version_number }; ${ al_version }`
+    % endif
+---
 include:
   - docassemble.AssemblyLine:assembly_line.yml
   - docassemble.ALToolbox:phone-number-validation.yml
