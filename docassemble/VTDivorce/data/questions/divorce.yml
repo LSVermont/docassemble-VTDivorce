@@ -114,7 +114,6 @@ code: |
       },
   )
   nav.set_section("review_answers")
-  revisit_rfa = True
   trial_court.address.county
 
   divorce_preview_question
@@ -1210,21 +1209,27 @@ review:
         - **${ item.action_type }**, in ${ item.year_filed }, filed by ${ item.who_filed }, in this court: ${ item.where_filed }
       % endfor
       % endif
-  - Edit: 
+  #- label: Edit
+  #  fields:
+  #    - earlier_RFA.there_are_any
+  #    - revisit_rfa
+  #  button: |
+  #    Yes or no
+  - Edit:
       - earlier_RFA.there_are_any
       - revisit_rfa
+      - follow up:
+        - earlier_RFA.revisit
     button: |
-      Yes or no
-  - Edit: earlier_RFA.revisit
-    button: |
-      % if defined("earlier_RFA[0]"):
-        Earlier protection orders:
-
+      Earlier protection orders:
+      
+      % if earlier_RFA.there_are_any:
       % for item in earlier_RFA:
         - **${ item.action_type }**, in ${ item.year_filed }, filed by ${ item.who_filed }, in this court: ${ item.where_filed }
       % endfor
+      % else:
+      There were no earlier protection orders
       % endif
-      
   - Edit: 
     - have_school_age_children
     button: |
@@ -1536,6 +1541,7 @@ edit:
 confirm: True
 ---
 continue button field: earlier_RFA.revisit
+if: earlier_RFA.there_are_any
 question: |
   Edit earlier RFA
 subquestion: |
@@ -1561,10 +1567,10 @@ edit:
   - year_filed
 confirm: True
 ---
-
 code: |
-  if earlier_RFA.there_are_any:
-    earlier_RFA.gather()
+  if not earlier_RFA.there_are_any:
+    earlier_RFA.clear()
+    earlier_RFA.target_number = 0
   revisit_rfa = True
 ---
 
