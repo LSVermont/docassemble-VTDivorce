@@ -2,15 +2,6 @@
 #The health record yml file is included in this package because it will never be a stand-alone interview.
 #We will be "including" other stand-alone interviews.
 ---
-#This code added temporarily so people can test it on vtcourtforms and see the screen id numbers
-default screen parts:
-  pre: |
-    % if not url_args.get("hide_hud", "").lower() in ["1", "on", "true", "yes"]:
-    `id: ${ user_info().question_id }`[BR]
-    `Variable: ${ user_info().variable }`[BR]
-    `Version: ${ user_info().package.replace("docassemble.", "") + " " if not user_info().package.startswith("docassemble.playground") else "" }${ package_version_number }; ${ al_version }`
-    % endif
----
 include:
   - docassemble.AssemblyLine:assembly_line.yml
   - docassemble.ALToolbox:phone-number-validation.yml
@@ -20,6 +11,15 @@ include:
   - docassemble.VTFamilyCourtInfoSheet:family_court_info_sheet_to_include.yml
   - docassemble.VTNoticeOfAppearance:VTNoticeOfAppearance_to_include.yml
   - customized_screens.yml
+---
+#This code added temporarily so people can test it on vtcourtforms and see the screen id numbers
+default screen parts:
+  pre: |
+    % if not url_args.get("hide_hud", "").lower() in ["1", "on", "true", "yes"]:
+    `id: ${ user_info().question_id }`[BR]
+    `Variable: ${ user_info().variable }`[BR]
+    `Version: ${ user_info().package.replace("docassemble.", "") + " " if not user_info().package.startswith("docassemble.playground") else "" }${ package_version_number }; ${ al_version }`
+    % endif
 ---
 #modules:
   #- docassemble.demo.accordion
@@ -114,7 +114,9 @@ code: |
       },
   )
   nav.set_section("review_answers")
+  revisit_rfa = True
   trial_court.address.county
+
   divorce_preview_question
   
   nav.set_section("sign")
@@ -210,8 +212,9 @@ code: |
     earlier_actions.gather()
   else: 
     earlier_actions.target_number = 0
-    
-  if earlier_RFA_yes:
+  
+  
+  if earlier_RFA.there_are_any:
     earlier_RFA.gather()
   else: 
     earlier_RFA.target_number = 0
@@ -597,12 +600,12 @@ question: |
 subquestion:
   Have either you or ${ other_parties[0].name } filed a complaint for **relief from abuse (RFA) or a request for a protective order** against each other?
 fields:
-  - no label: earlier_RFA_yes
+  - no label: earlier_RFA.there_are_any
     datatype: yesnoradio
   - How many of these actions were filed?: earlier_RFA.target_number
     datatype: integer
     min: 1
-    show if: earlier_RFA_yes
+    show if: earlier_RFA.there_are_any
 ---
 id: collect earlier actions
 generic object: DAList
@@ -1207,7 +1210,11 @@ review:
         - **${ item.action_type }**, in ${ item.year_filed }, filed by ${ item.who_filed }, in this court: ${ item.where_filed }
       % endfor
       % endif
-
+  - Edit: 
+      - earlier_RFA.there_are_any
+      - revisit_rfa
+    button: |
+      Yes or no
   - Edit: earlier_RFA.revisit
     button: |
       % if defined("earlier_RFA[0]"):
@@ -1554,6 +1561,13 @@ edit:
   - year_filed
 confirm: True
 ---
+
+code: |
+  if earlier_RFA.there_are_any:
+    earlier_RFA.gather()
+  revisit_rfa = True
+---
+
 ###################### Download screen ######################
 id: download divorce
 event: divorce_download
