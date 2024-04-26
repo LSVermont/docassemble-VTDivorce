@@ -247,10 +247,9 @@ subquestion: |
   * Family Court Information Form - form 800
   * Department of Health Record of Divorce or Dissolution
   
-  As well as forms you **might** use to show you sent copies of the forms to your spouse:
+
+  * (Note to testers: This version of the guided interview also includes a Certificate of Service - form 600-00264 so you can see how we would go about collecting that kind of information. We're coming up with a plan where in addition to offering the three service forms on their own, we'd also incorporate them in the divorce interview for people without minor children who say they have read the Judiciary page about service and know how they want to serve their spouse.) 
   
-  * Certificate of Service - form 600-00264
-  * (note to testers: we could add the Acceptance of Service form, too, since we will have all the info needed for it) 
   
   <i class="fas fa-clock fa-2x"></i> It may take you over 45 minutes to complete this interview.
   
