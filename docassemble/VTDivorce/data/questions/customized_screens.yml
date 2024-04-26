@@ -264,3 +264,57 @@ validation code: |
   # This should be safe too
   if dont_know_docket_number:
     docket_number = ''   
+
+---
+attachment:
+  name: a notice of appearance self rep
+  filename: a_notice_of_appearance_self_rep
+  variable name: a_notice_of_appearance_self_rep_attachment[i]
+  skip undefined: True
+  pdf template file: docassemble.VTNoticeOfAppearance:a_notice_of_appearance_self_rep.pdf
+  fields:
+      - "docket_number": ${ docket_number }
+      - "trial_court_county": ${ trial_court.address.county }
+      - "users1_name": ${ users[0] }
+      - "case_plaintiff_name": |
+          ${ users[0].name_full() }
+      - "case_defendant_name": |
+          ${ other_parties[0].name_full() }
+      - "role_plaintiff": True
+      - "role_defendant": False
+      - "role_other": False
+      - "user1_other_role": ""
+      - "email_consent_yes": ${ email_consent }
+      - "email_consent_no": ${ not email_consent }
+      - "users1_address_mailing": |
+          % if users1_mailing_address_different:
+            ${ users[0].mailing_address.address }
+          % else:
+            % if users[0].address.unit != '':
+            ${ users[0].address.address }, Unit ${ showifdef("users[0].address.unit") }
+            % else:
+            ${ users[0].address.address }
+            % endif
+          % endif
+      - "users1_address_city": |
+          % if users1_mailing_address_different:
+            ${ users[0].mailing_address.city }
+          % else:
+            ${ users[0].address.city }
+          % endif
+      - "users1_address_state": |
+          % if users1_mailing_address_different:
+            ${ users[0].mailing_address.state }
+          % else:
+            ${ users[0].address.state }
+          % endif
+      - "users1_address_zip": |
+          % if users1_mailing_address_different:
+            ${ users[0].mailing_address.zip }
+          % else:
+            ${ users[0].address.zip }
+          % endif
+      - "users1_phone_number": ${ users[0].daytime_phone_number }
+      - "users1_email": ${ users[0].email }
+      - "signature_date": ${ format_date(signature_date, format='M/d/yyyy') }
+      - "users1_signature": ${ users[0].signature_if_final(i) }
