@@ -59,7 +59,7 @@ objects:
   - other_parties: ALPeopleList.using(ask_number=True,target_number=1,)
   - earlier_actions: DAList.using(object_type=Thing, ask_number=True, complete_attribute='complete')
   - earlier_RFA: DAList.using(object_type=Thing, ask_number=True, complete_attribute='complete')
-  - child_custody: ALPeopleList.using(ask_number=True,target_number=1,complete_attribute="complete")
+  - child_custody: DADict.using(object_type=DAObject, auto_gather=False, gathered=True,complete_attribute="complete")
 ---
 sections:
   - intro: Introduction
@@ -577,6 +577,8 @@ fields:
   - "None of the above": custody_none_apply
     label above field: True
     datatype: yesno
+    uncheck others: True
+
 --- 
 id: earlier actions
 question: |
@@ -1597,7 +1599,7 @@ attachment:
   docx template file: divorce_with_kids_addendum.docx
 ---
 code: |
-  divorce_with_kids_attachment.overflow_fields['child_custody'].overflow_trigger = 0
+  divorce_with_kids_attachment.overflow_fields['child_custody'].overflow_trigger = any([participations, information, knowledge])
   divorce_with_kids_attachment.overflow_fields['child_custody'].label = "Information about child custody"
   divorce_with_kids_attachment.overflow_fields['earlier_actions'].overflow_trigger = 3
   divorce_with_kids_attachment.overflow_fields['earlier_actions'].label = "Other earlier actions"
