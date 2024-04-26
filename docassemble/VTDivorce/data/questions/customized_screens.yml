@@ -273,9 +273,9 @@ attachment:
       - "trial_court_county": ${ trial_court.address.county }
       - "users1_name": ${ users[0] }
       - "case_plaintiff_name": |
-          ${ users[0].name_full() }
+          ${ users[0] }
       - "case_defendant_name": |
-          ${ other_parties[0].name_full() }
+          ${ other_parties[0] }
       - "role_plaintiff": True
       - "role_defendant": False
       - "role_other": False
