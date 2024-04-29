@@ -1385,7 +1385,11 @@ review:
       
       - **${yesno(child_medical_support)}**
 
-  -  Edit: participations
+  -  Edit: 
+      - participations
+      - recompute:
+        - divorce_with_kids_attachment.overflow_fields
+    
      button: |
        You have participated as a party, witness, or in some other way in a court case about the custody of this child or these children in Vermont or another state.: **${ word(yesno(participations)) }**
        
@@ -1626,6 +1630,10 @@ attachment:
   variable name: divorce_with_kids_attachment.addendum
   docx template file: divorce_with_kids_addendum.docx
 ---
+depends on:
+  - participations
+  - information
+  - knowledge
 code: |
   divorce_with_kids_attachment.overflow_fields['child_custody'].overflow_trigger = any([participations, information, knowledge])
   divorce_with_kids_attachment.overflow_fields['child_custody'].label = "Information about child custody"
