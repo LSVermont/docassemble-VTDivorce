@@ -315,12 +315,16 @@ subquestion: |
   1. You got married or got a civil union in Vermont
   2. You and your spouse currently live in states where you can't get a divorce or dissolve your civil union
   3. You don't have minor children (under 18), and
-  4. You and your spouse already have an agreement about how to deal with your property and debts. You and your spouse must file a signed agreement about how to deal with your property and debts (Final Stipulation Property, Debt and Spousal Support). The court will not grant the divorce or dissolution without an agreement. Visit [VTLawHelp to download the Final Stipulation form.] (https://vtlawhelp.org/roadmap/divorce/step-3) It is not part of this interview at this time.
+  4. You and your spouse already have an agreement about how to deal with your property and debts. You and your spouse must file a signed agreement about how to deal with your property and debts (Final Stipulation Property, Debt and Spousal Support). The court will not grant the divorce or dissolution without an agreement. Visit [VTLawHelp to download the Final Stipulation form.](https://vtlawhelp.org/roadmap/divorce/step-3) It is not part of this interview at this time.
   
   See the [Divorce Roadmap on the VTLawHelp.org website](https://vtlawhelp.org/roadmap/divorce/step-1) to find out what is required for you to be able to file for a divorce, separation or civil union dissolution in Vermont.
   
   [Go to the VTLawHelp.org website.](https://vtlawhelp.org/roadmap/divorce/step-1)
+  
 continue button field: jurisdiction_kickout
+buttons:
+  - DELETE answers and EXIT to legal help site: exit
+    url: https://vtlawhelp.org/roadmap/divorce/step-1
 ---
 id: remind_non_VTers_about_needing_stipulation
 question: |
@@ -1033,7 +1037,7 @@ id: preview divorce
 question: |
   Preview your form before you sign it
 subquestion: |
-  Here is a preview of the form you will sign on the next page.   
+  Here is a preview of the forms you will sign on the next page.   
   
   ${ al_court_bundle.as_pdf(key='preview') }
 
