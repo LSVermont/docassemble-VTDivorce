@@ -1,7 +1,7 @@
 #For this interview, the person filling out the form (user) is always considered to be the plaintiff.
 #The health record yml file is included in this package because it will never be a stand-alone interview.
 #We will be "including" other stand-alone interviews.
-#On May 2 2024 we removed VTCertificateOfService from this interview until we're ready to add all service forms to this interview
+#On May 2 2024 we removed VTCertificateOfService from this interview until we're ready to add all service forms to this interview -- we commented out things
 ---
 include:
   - docassemble.AssemblyLine:assembly_line.yml
@@ -502,7 +502,7 @@ question: |
 subquestion: |
   On the next screen, start with the most recent address. You'll be able to add other addresses as needed.
   
-  Tip: It's OK to estimate the dates.
+  Tip: It's OK to estimate the dates. Example: Dec. 2021.
   
   If children have lived at different addresses from each other, enter the addresses for each child.
 continue button field: where_children_lived
@@ -602,7 +602,7 @@ fields:
 id: earlier actions
 question: |
   Past court actions
-subquestion:
+subquestion: |
   Have you or ${ other_parties[0].name } filed for **divorce, legal separation, dissolution or annulment BEFORE** filing this form? 
 fields:
   - no label: earlier_actions_yes
@@ -615,10 +615,11 @@ fields:
 id: earlier RFA actions
 question: |
   Past court actions
-subquestion:
+subquestion: |
   Have either you or ${ other_parties[0].name } filed a complaint for **relief from abuse (RFA) or a request for a protective order** against each other?
   
   (In Vermont, an order for protection is called a Relief from Abuse (RFA) order. In other states it probably has another name.)
+  
 fields:
   - no label: earlier_RFA_yes
     datatype: yesnoradio
@@ -670,7 +671,7 @@ fields:
   - Type of action: earlier_RFA[i].action_type
     datatype: radio
     choices: 
-      - Relief from abuse order
+      - Relief from abuse order (Vermont)
       - Protective order
   - Who filed it?: earlier_RFA[i].who_filed
     datatype: object_radio

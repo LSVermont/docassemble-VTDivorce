@@ -100,6 +100,9 @@ fields:
     datatype: date
   - "As of that date, how many children under the age of 18 were in the household?": minor_children_number
     datatype: integer
+    
+  - note: |
+      ${ after_last_question_we_will_generate_your_forms }
 ---
 id: attorneys_information
 question: |
@@ -174,10 +177,3 @@ fields:
       - "Husband": husband
       - "Wife": wife
       - "Spouse": spouse
----
-#id: Health record 
-#event: review_Health_record_civil_union
-#question: |
-#  Review your answers
-#review:
----
