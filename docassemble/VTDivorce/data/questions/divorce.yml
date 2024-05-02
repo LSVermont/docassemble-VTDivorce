@@ -1,13 +1,14 @@
 #For this interview, the person filling out the form (user) is always considered to be the plaintiff.
 #The health record yml file is included in this package because it will never be a stand-alone interview.
 #We will be "including" other stand-alone interviews.
+#On May 2 2024 we removed VTCertificateOfService from this interview until we're ready to add all service forms to this interview
 ---
 include:
   - docassemble.AssemblyLine:assembly_line.yml
   - docassemble.ALToolbox:phone-number-validation.yml
   - docassemble.VTSharedYMLFile:VTSharedYMLFile.yml
   - Health_record.yml
-  - docassemble.VTCertificateOfService:VTCertificateOfService_to_include.yml
+  #- docassemble.VTCertificateOfService:VTCertificateOfService_to_include.yml
   - docassemble.VTFamilyCourtInfoSheet:family_court_info_sheet_to_include.yml
   - docassemble.VTNoticeOfAppearance:VTNoticeOfAppearance_to_include.yml
   - customized_screens.yml
@@ -69,7 +70,7 @@ sections:
   - kids: About children
   - what_want: What you want in the order
   - past_actions: Other court actions
-  - serving_other_side: Serving the other party
+  #- serving_other_side: Serving the other party
   - review_answers: Edit your answers
   - sign: Signature
   - get_docs: Get your documents
@@ -86,22 +87,23 @@ code: |
   other_family_juv_probate_proceedings
   set_progress(80)
   
-  nav.set_section("serving_other_side")
+
   # Fields for notice of appearance
   users1_role == "role_plaintiff"
-  
-  set_progress(85)
-  # Fields for certificate of service
-  users1_role = "role_plaintiff"
-  user_has_attorney
-
-  faminfo
-  other_documents_to_serve
-
   set_progress(90)
-  for party in other_parties:
-    party.served
-  other_people_receiving_service.gather()
+
+
+  ########### Fields for certificate of service whenever we add it back in
+  #nav.set_section("serving_other_side")
+  #users1_role = "role_plaintiff"
+  #user_has_attorney
+  #faminfo
+  #other_documents_to_serve
+  #for party in other_parties:
+    #party.served
+  #other_people_receiving_service.gather()
+  ###########
+  
 
   # Store anonymous data for analytics / statistics
   store_variables_snapshot(
@@ -246,10 +248,6 @@ subquestion: |
   * Notice of Appearance for Self-Represented Party - form 400-00831
   * Family Court Information Form - form 800
   * Department of Health Record of Divorce or Dissolution
-  
-
-  * (Note to testers: This version of the guided interview also includes a Certificate of Service - form 600-00264 so you can see how we would go about collecting that kind of information. We're coming up with a plan where in addition to offering the three service forms on their own, we'd also incorporate them in the divorce interview for people without minor children who say they have read the Judiciary page about service and know how they want to serve their spouse.) 
-  
   
   <i class="fas fa-clock fa-2x"></i> It may take you over 45 minutes to complete this interview.
   
@@ -1657,7 +1655,6 @@ objects:
           b_info_sheet_family_court_attachment,
           Health_record_civil_union_attachment,
           Health_record_divorce_annulment_attachment,
-          VTCertificateOfService_attachment,
         ], filename="divorce_forms", title="All forms to download for your records", enabled=True)
   
   - al_court_bundle: ALDocumentBundle.using(elements=[
@@ -1667,11 +1664,12 @@ objects:
           b_info_sheet_family_court_attachment,
           Health_record_civil_union_attachment,
           Health_record_divorce_annulment_attachment,
-          VTCertificateOfService_attachment,
         ],  filename="divorce_forms", title="All forms to deliver to court", enabled=True)
 ---
-code: |
-  VTCertificateOfService_attachment.enabled = True # always needed for a new petition
+# Removed this from al user bundle and al court bundle -- VTCertificateOfService_attachment, -- until we're ready to add all service forms to this interview
+---
+#code: |
+  #VTCertificateOfService_attachment.enabled = True # always needed for a new petition
 ---
 code: |
   if have_school_age_children:

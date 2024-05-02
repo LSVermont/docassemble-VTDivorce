@@ -44,7 +44,7 @@ def find_package_data(where='.', package='', exclude=standard_exclude, exclude_d
     return out
 
 setup(name='docassemble.VTDivorce',
-      version='1.1',
+      version='1.2',
       description=('Fill out initial forms to get a divorce, separation or civil union dissolution in Vermont'),
       long_description='# docassemble.VTDivorce\r\n\r\nDivorce\r\n\r\n## Authors\r\n\r\n- Q. Steenhuis, M. Bonardi and S. Constantinou, Lemma Legal\r\n- K. Surette, Legal Services Vermont\r\n\r\n',
       long_description_content_type='text/markdown',
@@ -54,7 +54,7 @@ setup(name='docassemble.VTDivorce',
       url='legalservicesvt.org',
       packages=find_packages(),
       namespace_packages=['docassemble'],
-      install_requires=['docassemble.ALToolbox>=0.10.1', 'docassemble.AssemblyLine>=2.27.2', 'docassemble.VTSharedYMLFile', 'docassemble.demo>=1.4.102'],
+      install_requires=['docassemble.ALToolbox>=0.10.1', 'docassemble.AssemblyLine>=2.28.1', 'docassemble.VTSharedYMLFile', 'docassemble.demo>=1.4.103'],
       zip_safe=False,
       package_data=find_package_data(where='docassemble/VTDivorce/', package='docassemble.VTDivorce'),
      )

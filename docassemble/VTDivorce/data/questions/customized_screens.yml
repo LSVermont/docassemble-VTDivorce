@@ -1,15 +1,15 @@
 ---
 ### Questions overriding defaults from included YAML files from other packages ############
 ---
-########### Overrides for VTCertificateOfService ##############
+########### Overrides for VTCertificateOfService whenever we put that back in ##############
 ---
-code: |
-  users1_role == "role_plaintiff"
+#code: |
+  #users1_role == "role_plaintiff"
 ---
 code: |
   trial_court_division = trial_court.division
 ---
-
+###########
 ---
 
 id: documents serving to other party
