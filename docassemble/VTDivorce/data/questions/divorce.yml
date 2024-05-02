@@ -563,10 +563,8 @@ fields:
     maxlength: 10
   - End date (or today's date): locations[i].end_date 
     maxlength: 10
-  - All people that lived with your child/children (including you): locations[i].housemates
-    maxlength: 30
-  - note: |
-      You can say things like: mom, dad, step-brother, grandma. You can also use abbreviated names for the people who lived with them, like Jane D. (There's not much room on the form!)
+  - All people that lived with your child/children (including you) during that time: locations[i].housemates
+    maxlength: 400
 ---
 generic object: ALPeopleList
 id: any other locations
