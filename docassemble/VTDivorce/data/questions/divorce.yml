@@ -308,20 +308,17 @@ subquestion: |
   
   Contact a lawyer or legal aid organization in the state where you live.
   
-  If neither of you live in Vermont, a Vermont family court will only take your divorce case if **all these four things are true**:
+  If neither of you live in Vermont, a Vermont family court will only take your divorce case or civil union dissolution case if **all these four things are true**:
   
   1. You got married or got a civil union in Vermont
   2. You and your spouse currently live in states where you can't get a divorce or dissolve your civil union
   3. You don't have minor children (under 18), and
-  4. You and your spouse already have an agreement about how to deal with your property and debts.
+  4. You and your spouse already have an agreement about how to deal with your property and debts. You and your spouse must file a signed agreement about how to deal with your property and debts (Final Stipulation Property, Debt and Spousal Support). The court will not grant the divorce or dissolution without an agreement. Visit [VTLawHelp to download the Final Stipulation form.] (https://vtlawhelp.org/roadmap/divorce/step-3) It is not part of this interview at this time.
   
   See the [Divorce Roadmap on the VTLawHelp.org website](https://vtlawhelp.org/roadmap/divorce/step-1) to find out what is required for you to be able to file for a divorce, separation or civil union dissolution in Vermont.
   
   [Go to the VTLawHelp.org website.](https://vtlawhelp.org/roadmap/divorce/step-1)
 continue button field: jurisdiction_kickout
-buttons:
-  - DELETE your answers and go to the VTLawHelp website: exit
-    url: https://vtlawhelp.org/roadmap/divorce/step-1
 ---
 id: marriage or civil union
 question: |
@@ -929,7 +926,7 @@ fields:
   - I have a written agreement signed by me and ${ other_parties }. I will include it with these forms. I ask the court to issue an order that includes the provisions in our written agreement. : written_agreement_attached
     datatype: yesno
   - note: |
-      **If you and your spouse are not residents of Vermont**, but you had a civil union or marriage in Vermont, you need to submit a signed agreement about how to deal with your property and debts. In your situation, the court will not grant the divorce or dissolution without an agreement. 
+      **Reminder: If you and your spouse are not residents of Vermont**, but you had a civil union or marriage in Vermont, you must file a signed agreement about how to deal with your property and debts (Final Stipulation Property, Debt and Spousal Support). In your situation, the court will not grant the divorce or dissolution without an agreement. 
       
       See [VTLawHelp for more details and forms.](https://vtlawhelp.org/roadmap/divorce/step-1)
       
