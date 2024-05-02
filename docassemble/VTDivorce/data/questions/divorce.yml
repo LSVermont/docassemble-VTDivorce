@@ -617,6 +617,8 @@ question: |
   Past court actions
 subquestion:
   Have either you or ${ other_parties[0].name } filed a complaint for **relief from abuse (RFA) or a request for a protective order** against each other?
+  
+  (In Vermont, an order for protection is called a Relief from Abuse (RFA) order. In other states it probably has another name.)
 fields:
   - no label: earlier_RFA_yes
     datatype: yesnoradio
@@ -700,7 +702,6 @@ fields:
       states_list()
     default: VT
   - Zip or postal code: users[0].address.zip
-    required: False
   - County: users[0].address.county
   - note: |
       Not sure what county? [Check this list of cities and towns to find the county.](https://en.m.wikipedia.org/wiki/List_of_municipalities_in_Vermont#Cities)
@@ -720,7 +721,6 @@ fields:
     default: VT
     show if: users1_mailing_address_different
   - Zip or postal code: users[0].mailing_address.zip
-    required: False
     show if: users1_mailing_address_different
 ---
 id: Gather users contact information
@@ -762,7 +762,7 @@ fields:
     none of the above: False    
     minlength: 1
     choices:
-    - You get Economic Services assistance: plaintiff_des_assistance
+    - I get Economic Services assistance: plaintiff_des_assistance
     - ${ other_parties } gets Economic Services assistance: defendant_des_assistance
     - We don't get Economic Services assistance, or I'm not sure: no_des_assistance
 ---
@@ -775,7 +775,7 @@ fields:
     none of the above: False    
     minlength: 1
     choices:
-    - You serve in the military: plaintiff_military_service
+    - I serve in the military: plaintiff_military_service
     - ${ other_parties } serves in the military: other_parties1_military
     - We do not serve in the military, or I'm not sure: no_military_service
 ---
@@ -847,8 +847,7 @@ fields:
     code: |
       states_list(country_code=AL_DEFAULT_COUNTRY)
     default: ${ AL_DEFAULT_STATE }
-  - ${ users[0].address.zip_label}: other_parties[0].address.zip
-    required: False      
+  - ${ users[0].address.zip_label}: other_parties[0].address.zip    
   - ${ users[0].address.county_label}: other_parties[0].address.county
   - note: |
       Not sure what county? [Check this list of cities and towns to find the county.](https://en.m.wikipedia.org/wiki/List_of_municipalities_in_Vermont#Cities)
@@ -868,7 +867,6 @@ fields:
     default: VT
     show if: other_parties1_mailing_address_different
   - Zip or postal code: other_parties[0].mailing_address.zip
-    required: False
     show if: other_parties1_mailing_address_different
 ---
 id: filing_financial_form
@@ -902,7 +900,7 @@ fields:
   - On what grounds (for what reason)?: grounds
     input type: radio
     choices: 
-      - We have been or will have lived separate and apart for more than 6 months in a row. It is not reasonably probable that we can resume our relationship. (Note - This is the most common reason.): six_month_separation
+      - We have or will have lived separate and apart for more than 6 months in a row. It is not reasonably probable that we can resume our relationship. (Note - Also known as a "no-fault" divorce. This is the most common reason.): six_month_separation
       - Other grounds (a different reason): other_ground
   - Date of separation: separation_date
     datatype: date
@@ -930,15 +928,20 @@ fields:
   - I have a written agreement signed by me and ${ other_parties }. I will include it with these forms. I ask the court to issue an order that includes the provisions in our written agreement. : written_agreement_attached
     datatype: yesno
   - note: |
-      **If you and your spouse are not residents of Vermont**, but you had a civil union or marriage in Vermont, you need to submit a signed agreement about how to deal with your property and debts. In your situation, the court will not grant the divorce or dissolution without an agreement. See [VTLawHelp for more details and a form.](https://vtlawhelp.org/roadmap/divorce/step-1)
+      **If you and your spouse are not residents of Vermont**, but you had a civil union or marriage in Vermont, you need to submit a signed agreement about how to deal with your property and debts. In your situation, the court will not grant the divorce or dissolution without an agreement. 
+      
+      See [VTLawHelp for more details and forms.](https://vtlawhelp.org/roadmap/divorce/step-1)
+      
   - note: |      
       **If you have a written agreement**, attach it to the forms that you file with the court. The written agreement must include:
+
+      1. Final Stipulation Property, Debt and Spousal Support (an agreement about property, debt and spousal support)
       
-      1. a property, debt and spousal support agreement (which is called a "stipulation")
+      And if you have kids you also need:
       
-      2. a parenting plan agreement / stipulation (if you have kids),  and
+      2. Agreement on Parental Rights & Responsibilities, Parent Child Contact and Provisions Relating to Children, and
       
-      3. a child support order (if you have kids).
+      3. Child Support Order.
       
       See our [Divorce Roadmap on VTLawHelp.org](https://vtlawhelp.org/roadmap/divorce/step-3) for agreement forms you can use.
       
@@ -1005,7 +1008,7 @@ fields:
       **Support:**
   - note: |
       ${ collapse_template(what_is_child_medical_and_maintenance_support) }
-  - I would like child support, medical support and/or maintenance supplement: child_medical_support
+  - I request child support, medical support and/or maintenance supplement: child_medical_support
     datatype: yesno
   - note: |
     
@@ -1094,6 +1097,11 @@ review:
       % else:
       - Evening phone: **None**
       % endif
+  - Edit: email_consent
+    button: |
+      You consent to getting documents from other party via email:
+      **${ word(yesno(email_consent)) }**
+   
   - Edit: user_has_attorney
     button: |
       % if defined("user_has_attorney"):
