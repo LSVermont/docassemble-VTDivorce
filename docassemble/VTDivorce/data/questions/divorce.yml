@@ -1456,6 +1456,8 @@ review:
       Court docket number / case number: **Unknown**
       % endif
 
+  - note: |
+      ${ review_screen_select_resume_will_take_moment }
 ---
 continue button field: users.revisit
 question: |
