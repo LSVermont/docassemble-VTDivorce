@@ -635,7 +635,7 @@ question: |
 subquestion: |
   Have either you or ${ other_parties[0].name } filed a complaint for **relief from abuse (RFA) or a request for a protective order** against each other?
   
-  (In Vermont, an order for protection is called a Relief from Abuse (RFA) order. In other states it probably has another name.)
+  (In Vermont, an order for protection is called a Relief from Abuse (RFA) order. They are handled by the family courts. In other states protective orders have other names.)
   
 fields:
   - no label: earlier_RFA_yes

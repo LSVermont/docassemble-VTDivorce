@@ -130,12 +130,15 @@ fields:
   - note: |      
       Public assistance can include help from Vermont's Department of Economic Services such as Reach-Up, Dr. Dynasaur, Medicaid, or Post Secondary Education Stipend (PSE).
       
-      Check all that apply.
+      Check any that apply.
 
-  - "You get public assistance": users1_gets_public_assistance
+  - "I get public assistance": users1_gets_public_assistance
     datatype: yesno
     
-  - "You get child support (from any relationship)": users1_gets_child_support
+  - "I get child support (from any relationship)": users1_gets_child_support
+    datatype: yesno
+   
+  - "I don't get any of these": users1_no_benefits_or_support
     datatype: yesno
 
   - note: |
