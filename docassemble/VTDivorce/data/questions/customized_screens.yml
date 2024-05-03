@@ -155,6 +155,7 @@ fields:
   - "In what state?": trial_court_state_other_filing1
     code: |
       states_list()
+    default: VT
     show if: other_family_juv_probate_proceedings
   - "In what county?": trial_court_county_other_filing1
     choices:
@@ -191,6 +192,7 @@ fields:
   - "In what state?": trial_court_state_other_filing2
     code: |
       states_list()
+    default: VT
     show if: other_family_juv_probate_proceedings2
   - "In what county?": trial_court_county_other_filing2
     choices:
@@ -221,6 +223,8 @@ fields:
       - Probate court
       - Juvenile court
     show if: other_family_juv_probate_proceedings2
+  - note: |
+      ${ after_last_question_we_will_generate_your_forms }
 ---
 ########### Overrides for VTNoticeOfAppearance ##############
 ---

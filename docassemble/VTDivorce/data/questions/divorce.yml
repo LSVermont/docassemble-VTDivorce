@@ -565,7 +565,7 @@ fields:
     maxlength: 10
   - Names of all people that lived with your child/children (including you) during that time: locations[i].housemates
     input type: area
-    maxlength: 144
+    maxlength: 135
 ---
 generic object: ALPeopleList
 id: any other locations
