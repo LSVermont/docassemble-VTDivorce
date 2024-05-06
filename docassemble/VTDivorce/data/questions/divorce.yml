@@ -1678,6 +1678,12 @@ code: |
   divorce_with_kids_attachment.overflow_fields['children'].label = "Other children"
   divorce_with_kids_attachment.overflow_fields['locations'].overflow_trigger = 1
   divorce_with_kids_attachment.overflow_fields['locations'].label = "More information about the children's housing locations and housemates"
+  divorce_with_kids_attachment.overflow_fields['locations'].headers = [
+    {'address': "Address"},
+    {'housemates': "Housemates"},
+    {'start_date': "Start date"},
+    {'end_date': "End date"},
+  ]
   divorce_with_kids_attachment.overflow_fields.gathered = True 
 ---
 # Bundles group the ALDocuments into separate downloads, such as for court and for the user
