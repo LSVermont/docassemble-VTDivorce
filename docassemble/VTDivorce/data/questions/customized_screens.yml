@@ -236,7 +236,7 @@ subquestion: |
   
   If you agree to be served by email, be sure to check both your mail and email often. You will likely still get documents from the court through U.S. Mail.
 fields:
-  - "I agree to get documents about this case by email only": email_consent
+  - "I agree to get documents about this case by email": email_consent
     datatype: yesno
   - Email: users[0].email    
     datatype: email
