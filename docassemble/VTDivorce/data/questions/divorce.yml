@@ -890,12 +890,18 @@ fields:
 ---
 id: filing_financial_form
 question: |
-  Are you also filing a completed financial form 400-00813B now?
+  Are you also filing financial form 400-00813B now?
 subquestion: |
-  Everyone completes financial form 400-00813B -- either now or later. On that form you will list all of the property, assets, and debts that you and ${ other_parties[0] } own together or separately that are known to you. You can file it now with the Complaint form, or file it at a later date. ([See the paper version of the form.](https://www.vermontjudiciary.org/media/926))
+  Both you and your spouse need to complete a Financial Affidavit Property and Assets form (form 400-00813B) -- either now or later. On that form you will list all of the property, assets and debts that you and ${ other_parties[0] } own together or separately that are known to you.
+  You can fill it out on your own and file it with the initial divorce documents from this interview. Or you can file it at a later date. ([See the paper version of the form.](https://www.vermontjudiciary.org/media/926)) It takes quite a bit of time to fill it out.
+  This interview does **not** help you fill this form out, but the court wants to know when you plan to fill it out and file it with them.
+
 fields:
-  - "Are you filing form 400-00813B now?": filing_financial_form
-    datatype: yesnoradio
+  - no label: when_filing_financial_form
+    input type: radio
+    choices: 
+      - I am going to file form 400-00813B **with** these initial divorce documents: now
+      - I am going to file form 400-00813B later: later
 ---
 id: what asking court for and grounds
 question: |
@@ -1680,9 +1686,9 @@ code: |
   divorce_with_kids_attachment.overflow_fields['locations'].label = "More information about the children's housing locations and housemates"
   divorce_with_kids_attachment.overflow_fields['locations'].headers = [
     {'address': "Address"},
-    {'housemates': "Housemates"},
     {'start_date': "Start date"},
     {'end_date': "End date"},
+    {'housemates': "Housemates"},
   ]
   divorce_with_kids_attachment.overflow_fields.gathered = True 
 ---
