@@ -1821,7 +1821,12 @@ attachment:
       - "divorce": ${ grant_for == "divorce" }
       - "civil_union_dissolution": ${ grant_for == "dissolution" }
       - "legal_separation": ${ grant_for == "legal_separation" }
-      - "trial_court_county1": ${ trial_court.address.county } Family Division, ${ trial_court.address.on_one_line() }
+      - "trial_court_county1": | 
+          % if defined("trial_court.arbitrary_attribute"):
+          ${ trial_court.address.county } Family Division, ${ trial_court.arbitrary_attribute }
+          % else:
+          ${ trial_court.address.county } Family Division, ${ trial_court.address.on_one_line() }
+          % endif
       - "users1_signature": ${ users[0].signature_if_final(i) }
       - "users1_address_county": ${ users[0].address.county }
       - "users1_address_state": ${ users[0].address.state }
@@ -1953,7 +1958,12 @@ attachment:
       - "divorce": ${ grant_for == "divorce" }
       - "civil_union_dissolution": ${ grant_for == "dissolution" }
       - "legal_separation": ${ grant_for == "legal_separation" }
-      - "trial_court_county1": ${ trial_court.address.county } Family Division, ${ trial_court.address.on_one_line() }
+      - "trial_court_county1": | 
+          % if defined("trial_court.arbitrary_attribute"):
+          ${ trial_court.address.county } Family Division, ${ trial_court.arbitrary_attribute }
+          % else:
+          ${ trial_court.address.county } Family Division, ${ trial_court.address.on_one_line() }
+          % endif
       - "users1_signature": ${ users[0].signature_if_final(i) }
       - "users1_address_county": ${ users[0].address.county }
       - "users1_address_state": ${ users[0].address.state }
