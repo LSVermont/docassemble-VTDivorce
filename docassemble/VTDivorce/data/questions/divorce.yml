@@ -320,12 +320,12 @@ subquestion: |
   
   See the [Divorce Roadmap on the VTLawHelp.org website](https://vtlawhelp.org/roadmap/divorce/step-1) to find out what is required for you to be able to file for a divorce, separation or civil union dissolution in Vermont.
   
-  [Go to the VTLawHelp.org website.](https://vtlawhelp.org/roadmap/divorce/step-1)
+  [**Go to the VTLawHelp.org website.**](https://vtlawhelp.org/roadmap/divorce/step-1)
   
 continue button field: jurisdiction_kickout
 buttons:
-  - DELETE answers and EXIT to legal help site: exit
-    url: https://vtlawhelp.org/roadmap/divorce/step-1
+  - DELETE your answers: restart
+
 ---
 id: remind_non_VTers_about_needing_stipulation
 question: |
