@@ -517,11 +517,11 @@ code: |
 ---
 id: instructions for where children lived
 question: |
-  Where have your children lived in the past 5 years, and who did they live with?
+  Where have your children lived in the past 5 years?
 subquestion: |
   On the next screen, start with the most recent address. You'll be able to add other addresses as needed.
   
-  Tip: It's OK to estimate the dates. Example: Dec. 2021.
+  Tip: It's OK to estimate the dates. Example: Dec. 2020 to Dec. 2022
   
   If children have lived at different addresses from each other, enter the addresses for each child.
 continue button field: where_children_lived
@@ -573,7 +573,7 @@ id: any other locations
 question: |
   Do you have any other locations to tell us about?
 subquestion: |
-  The court needs to know where they lived over the last 5 years.
+  The court needs to know where they lived over the last 5 years. Do you have another address to list?
 fields:
   - no label: locations.there_is_another
     datatype: yesnoradio
@@ -893,7 +893,9 @@ question: |
   Are you also filing financial form 400-00813B now?
 subquestion: |
   Both you and your spouse need to complete a Financial Affidavit Property and Assets form (form 400-00813B) -- either now or later. On that form you will list all of the property, assets and debts that you and ${ other_parties[0] } own together or separately that are known to you.
+  
   You can fill it out on your own and file it with the initial divorce documents from this interview. Or you can file it at a later date. ([See the paper version of the form.](https://www.vermontjudiciary.org/media/926)) It takes quite a bit of time to fill it out.
+  
   This interview does **not** help you fill this form out, but the court wants to know when you plan to fill it out and file it with them.
 
 fields:
@@ -953,7 +955,7 @@ fields:
   - I have a written agreement signed by me and ${ other_parties }. I will include it with these forms. I ask the court to issue an order that includes the provisions in our written agreement. : written_agreement_attached
     datatype: yesno
   - note: |
-      **Reminder: If you and your spouse are not residents of Vermont**, but you had a civil union or marriage in Vermont, you must file a signed agreement about how to deal with your property and debts (Final Stipulation Property, Debt and Spousal Support). In your situation, the court will not grant the divorce or dissolution without an agreement. 
+      **Reminder: If you and your spouse are not residents of Vermont**, but you had a civil union or marriage in Vermont, you must file a signed agreement about how to deal with your property and debts (called a Final Stipulation Property, Debt and Spousal Support). In your situation, the court will not grant the divorce or dissolution without an agreement. 
       
       See [VTLawHelp for more details and forms.](https://vtlawhelp.org/roadmap/divorce/step-1)
       
