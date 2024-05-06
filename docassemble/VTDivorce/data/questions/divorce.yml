@@ -210,7 +210,7 @@ code: |
   grant_for
   set_progress(48)
   
-  filing_financial_form
+  when_filing_financial_form
   nav.set_section("past_actions")
   if earlier_actions_yes: 
     earlier_actions.gather()
@@ -888,7 +888,7 @@ fields:
   - Zip or postal code: other_parties[0].mailing_address.zip
     show if: other_parties1_mailing_address_different
 ---
-id: filing_financial_form
+id: when filing financial form
 question: |
   Are you also filing financial form 400-00813B now?
 subquestion: |
@@ -1447,11 +1447,14 @@ review:
        % endif
 
 
-  - Edit: filing_financial_form
+  - Edit: when_filing_financial_form
     button: |
-      You are filing financial form 400-00813B now:
-      **${ word(yesno(filing_financial_form)) }**
-
+      % if when_filing_financial_form == "now":
+      **I am going to file form 400-00813B **with** these initial divorce documents**
+      % endif
+      % if when_filing_financial_form == "later":
+      **I am going to file form 400-00813B later**
+      % endif
   - Edit: 
     - trial_court_index
     - recompute:
@@ -1841,8 +1844,8 @@ attachment:
       - "separation_date": ${ format_date(separation_date, format='M/d/yyyy') }
       - "other_ground": ${ grounds == "other_ground" }
       - "other_ground_explanation": ${ other_ground_explanation }
-      - "filing_financial_form": ${ filing_financial_form }
-      - "not_filing_financial_form": ${ not filing_financial_form }
+      - "filing_financial_form": ${ when_filing_financial_form['now'] }
+      - "not_filing_financial_form": ${ when_filing_financial_form['later'] }
       - "plaintiff_des_assistance": ${ des['plaintiff_des_assistance'] }
       - "defendant_des_assistance": ${ des['defendant_des_assistance'] }
       - "earlier_actions_no": ${ not earlier_actions_yes }
@@ -2044,8 +2047,8 @@ attachment:
       - "contact_for_myself": ${ contact_for["contact_for_myself"] }
       - "contact_for_defendant": ${ contact_for["contact_for_defendant"] }
       - "child_medical_support": ${ child_medical_support }
-      - "filing_financial_form": ${ filing_financial_form }
-      - "not_filing_financial_form": ${ not filing_financial_form }
+      - "filing_financial_form": ${ when_filing_financial_form['now'] }
+      - "not_filing_financial_form": ${ when_filing_financial_form['later'] }
       - "plaintiff_des_assistance": ${ des['plaintiff_des_assistance'] }
       - "defendant_des_assistance": ${ des['defendant_des_assistance'] }
       - "earlier_actions_no": ${ not earlier_actions_yes }
