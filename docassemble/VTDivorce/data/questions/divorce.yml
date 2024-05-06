@@ -564,7 +564,7 @@ fields:
     maxlength: 10
   - End date (or today's date): locations[i].end_date 
     maxlength: 10
-  - Names of all people that lived with your child/children (including you) during that time: locations[i].housemates
+  - Names of all people who lived with your child/children (including you) during that time. Separate the names with a comma.: locations[i].housemates
     input type: area
     maxlength: 135
 ---
@@ -1233,7 +1233,7 @@ review:
       **No**
       % endif
       
-      * The other party:
+      * ${ other_parties[0] }:
       % if des['defendant_des_assistance']:
       **Yes**
       % endif
@@ -1252,7 +1252,7 @@ review:
       **No**
       % endif
 
-      * The other party:
+      * ${ other_parties[0] }:
       % if military['other_parties1_military']:
       **Yes**
       % endif
@@ -1451,6 +1451,7 @@ review:
 
   - Edit: when_filing_financial_form
     button: |
+      Form 813B: 
       % if when_filing_financial_form == "now":
       **I am going to file form 400-00813B **with** these initial divorce documents**
       % endif
@@ -1463,7 +1464,7 @@ review:
       - trial_court
     button: |
       % if defined("trial_court"):
-      You are filing in the family court of: **${ trial_court.address.county } County**
+      Filing in the family court of: **${ trial_court.address.county } County**
       % endif
 
   - Edit: docket_number
@@ -1846,8 +1847,8 @@ attachment:
       - "separation_date": ${ format_date(separation_date, format='M/d/yyyy') }
       - "other_ground": ${ grounds == "other_ground" }
       - "other_ground_explanation": ${ other_ground_explanation }
-      - "filing_financial_form": ${ when_filing_financial_form['now'] }
-      - "not_filing_financial_form": ${ when_filing_financial_form['later'] }
+      - "filing_financial_form": ${ when_filing_financial_form == "now" }
+      - "not_filing_financial_form": ${ when_filing_financial_form == "later" }
       - "plaintiff_des_assistance": ${ des['plaintiff_des_assistance'] }
       - "defendant_des_assistance": ${ des['defendant_des_assistance'] }
       - "earlier_actions_no": ${ not earlier_actions_yes }
@@ -2049,8 +2050,8 @@ attachment:
       - "contact_for_myself": ${ contact_for["contact_for_myself"] }
       - "contact_for_defendant": ${ contact_for["contact_for_defendant"] }
       - "child_medical_support": ${ child_medical_support }
-      - "filing_financial_form": ${ when_filing_financial_form['now'] }
-      - "not_filing_financial_form": ${ when_filing_financial_form['later'] }
+      - "filing_financial_form": ${ when_filing_financial_form == "now" }
+      - "not_filing_financial_form": ${ when_filing_financial_form == "later" }
       - "plaintiff_des_assistance": ${ des['plaintiff_des_assistance'] }
       - "defendant_des_assistance": ${ des['defendant_des_assistance'] }
       - "earlier_actions_no": ${ not earlier_actions_yes }
