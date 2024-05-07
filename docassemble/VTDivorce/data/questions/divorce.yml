@@ -1087,6 +1087,11 @@ review:
       % for item in users:
         - **${ item }**
       % endfor
+  - Edit: users_role
+    button: |
+      % if license_type == "marriage":
+      Your role: **${ users_role|capitalize }**
+      % endif    
   - Edit: plaintiff_VT
     button: |
       You have lived in Vermont for past 6 months: **${ word(yesno(plaintiff_VT)) }**
@@ -1150,15 +1155,19 @@ review:
         - **${ item }**
       % endfor
 
+  - Edit: other_parties_role
+    button: |
+      % if license_type == "marriage":
+      Their role: **${ other_parties_role|capitalize }**
+      % endif    
+      
   - Edit: defendant_VT
     button: |
       They have lived in Vermont for past 6 months: **${ word(yesno(defendant_VT)) }**
       
       % if defined("date_defendant_moved_to_VT"):
       * Date they moved to Vermont: **${ format_date(date_defendant_moved_to_VT, format="M/d/yyyy") }**
-      % endif
-      
-      
+      % endif  
       
   - Edit: other_parties[0].address.address
     button: |      
