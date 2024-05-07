@@ -409,6 +409,12 @@ validation code: |
   if plaintiff_VT and date_plaintiff_moved_to_VT >= today().minus(months=6):
     validation_error("To get a divorce in Vermont, this date needs to be 6 months ago or more.", field="date_plaintiff_moved_to_VT")    
 ---
+# adding Edit my answers to the system dropdown menu
+---
+mandatory: True
+code: |
+  menu_items = [ action_menu_item('Edit my answers', 'review_divorce') ]
+---
 id: defendant VT 6 months
 question: |
   See if this interview is right for your situation
