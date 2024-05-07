@@ -1486,14 +1486,14 @@ review:
 
   - Edit: docket_number
     button: |
-      % if defined("docket_number"):
-      Court docket number / case number: **${ docket_number }**
+      Court docket number / case number: 
+      % if dont_know_docket_number:
+      **Unknown**      
       % else:
-      Court docket number / case number: **Unknown**
+      **${ showifdef("docket_number") }**
       % endif
-
   - note: |
-      ${ review_screen_select_resume_will_take_moment }
+      **Select Resume, below, when you are done. It will take a moment to generate your form(s) again.**
 ---
 continue button field: users.revisit
 question: |
