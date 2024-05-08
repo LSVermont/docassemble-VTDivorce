@@ -29,6 +29,15 @@ default screen parts:
 code: |   
   feedback_form = "docassemble.VTFeedback:VTfeedback.yml"
 ---
+# Adding Edit my answers to dropdown menu
+---
+variable name: al_menu_items_custom_items
+data from code:
+  - url: |
+      url_action('review_divorce')
+    label: |
+       "Edit my answers"
+---
 metadata:
   title: >-
     Divorce / separation / dissolution
@@ -408,12 +417,6 @@ fields:
 validation code: |
   if plaintiff_VT and date_plaintiff_moved_to_VT >= today().minus(months=6):
     validation_error("To get a divorce in Vermont, this date needs to be 6 months ago or more.", field="date_plaintiff_moved_to_VT")    
----
-# adding Edit my answers to the system dropdown menu
----
-mandatory: True
-code: |
-  menu_items = [ action_menu_item('Edit my answers', 'review_divorce') ]
 ---
 id: defendant VT 6 months
 question: |
