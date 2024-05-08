@@ -77,6 +77,17 @@ sections:
 ###################### Main order ######################
 mandatory: True
 code: |
+  # For testing earleir_RFA review screens
+  dont_know_docket_number = True
+  trial_court_index = 0
+  no_longer_living_together_date = '01/01/2024'
+  minor_children_number = 0
+  other_family_juv_probate_proceedings = False
+  other_documents_to_serve = True
+  other_parties[0].served = False
+  other_people_receiving_service.target_number = 0
+  # Ends testing earleir_RFA review screens
+
   al_intro_screen
   
   # run the main interview order block
@@ -217,6 +228,7 @@ code: |
     earlier_RFA.gather()
   else: 
     earlier_RFA.target_number = 0
+    earlier_RFA.gathered = True
     
   set_progress(60)
 
@@ -1223,12 +1235,12 @@ review:
     button: |
       Earlier protection orders:
       
-      % if earlier_RFA.there_are_any:
-      % for item in earlier_RFA:
+      % if earlier_RFA.number_gathered() > 0:
+      % for item in earlier_RFA.complete_elements():
         - **${ item.action_type }**, in ${ item.year_filed }, filed by ${ item.who_filed }, in this court: ${ item.where_filed }
       % endfor
       % else:
-      There were no earlier protection orders
+      None
       % endif
   - Edit: 
     - have_school_age_children
@@ -1571,6 +1583,9 @@ code: |
   if not earlier_RFA.there_are_any:
     earlier_RFA.clear()
     earlier_RFA.target_number = 0
+    earlier_RFA.gathered = True
+  else:
+    earlier_RFA.gather()
   revisit_rfa = True
 ---
 
