@@ -77,16 +77,16 @@ sections:
 ###################### Main order ######################
 mandatory: True
 code: |
-  # For testing earleir_RFA review screens
-  dont_know_docket_number = True
-  trial_court_index = 0
-  no_longer_living_together_date = '01/01/2024'
-  minor_children_number = 0
-  other_family_juv_probate_proceedings = False
-  other_documents_to_serve = True
-  other_parties[0].served = False
-  other_people_receiving_service.target_number = 0
-  # Ends testing earleir_RFA review screens
+  ## For testing earleir_RFA review screens
+  #dont_know_docket_number = True
+  #trial_court_index = 0
+  #no_longer_living_together_date = '01/01/2024'
+  #minor_children_number = 0
+  #other_family_juv_probate_proceedings = False
+  #other_documents_to_serve = True
+  #other_parties[0].served = False
+  #other_people_receiving_service.target_number = 0
+  ## Ends testing earleir_RFA review screens
 
   al_intro_screen
   
