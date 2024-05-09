@@ -121,18 +121,6 @@ code: |
   #other_people_receiving_service.gather()
   ###########
   
-
-  # Store anonymous data for analytics / statistics
-  store_variables_snapshot(
-      persistent=True,
-      data={
-          "zip": showifdef("users[0].address.zip"),
-          "marriage_or_civil_union_VT": showifdef("marriage_or_civil_union_VT"),
-          "have_school_age_children": showifdef("have_school_age_children"),
-          "reached_interview_end": True,
-          "num_forms": len(al_user_bundle.enabled_documents()),
-      },
-  )
   nav.set_section("review_answers")
   trial_court.address.county
   divorce_preview_question
@@ -141,7 +129,22 @@ code: |
   signature_date
   set_progress(95)
   al_form_requires_digital_signature = False
-  basic_questions_signature_flow    
+  basic_questions_signature_flow
+  
+    # Store anonymous data for analytics / statistics
+  store_variables_snapshot(
+      persistent=True,
+      data={
+          "zip": showifdef("users[0].address.zip"),
+          "county_where_filing": showifdef("trial_court.address.county"),
+          "license_type": showifdef("license_type"),
+          "have_school_age_children": showifdef("have_school_age_children"),
+          "have_written_agreement": showifdef("written_agreement_attached"),
+          "reached_interview_end": True,
+          "number_of_forms": len(al_user_bundle.enabled_documents()),
+      },
+  )
+  
   nav.set_section("get_docs")
   set_progress(100)
   divorce_download
@@ -1734,7 +1737,7 @@ objects:
           b_info_sheet_family_court_attachment,
           Health_record_civil_union_attachment,
           Health_record_divorce_annulment_attachment,
-        ], filename="divorce_forms", title="All forms to download for your records", enabled=True)
+        ], filename="divorce_forms", title="Download all forms", enabled=True)
   
   - al_court_bundle: ALDocumentBundle.using(elements=[
           divorce_with_kids_attachment,
