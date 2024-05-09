@@ -234,7 +234,7 @@ question: |
 subquestion: |
   The other party in the case must send you a copy of all documents they file with the court. If you check the box below, you give the other party the option to send you documents using the email address you provide. They may not always choose to send you documents by email.
   
-  If you agree to be served by email, be sure to check both your mail and email often. You will likely still get documents from the court through U.S. Mail.
+  If you agree to be served by email, be sure to check **both** your mail and email often.
 fields:
   - "I agree to get documents about this case by email": email_consent
     datatype: yesno
@@ -260,7 +260,7 @@ subquestion: |
   Do you have a case number yet to track this civil union dissolution case in court?
   % endif
 fields:
-  - I don't know the case number: dont_know_docket_number
+  - I don't have a case number yet or I don't know the case number: dont_know_docket_number
     datatype: yesno    
   - Case number: docket_number
     hide if: dont_know_docket_number
