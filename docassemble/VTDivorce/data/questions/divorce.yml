@@ -237,10 +237,11 @@ code: |
   else: 
     earlier_actions.target_number = 0
     
-  if earlier_RFA_yes:
+  if earlier_RFA.there_are_any:
     earlier_RFA.gather()
   else: 
     earlier_RFA.target_number = 0
+    earlier_RFA.gathered = True
     
   set_progress(60)
 
@@ -659,12 +660,12 @@ subquestion: |
   (In Vermont, an order for protection is called a Relief from Abuse (RFA) order. They are handled by the family courts. In other states protective orders have other names.)
   
 fields:
-  - no label: earlier_RFA_yes
+  - no label: earlier_RFA.there_are_any
     datatype: yesnoradio
   - How many of these actions were filed?: earlier_RFA.target_number
     datatype: integer
     min: 1
-    show if: earlier_RFA_yes
+    show if: earlier_RFA.there_are_any
 ---
 id: collect earlier actions
 generic object: DAList
@@ -1299,14 +1300,20 @@ review:
       % endfor
       % endif
 
-  - Edit: earlier_RFA.revisit
+  - Edit: 
+    - earlier_RFA.there_are_any
+    - revisit_rfa
+    - follow up:
+      - earlier_RFA.revisit
     button: |
-      % if defined("earlier_RFA[0]"):
-        Earlier protection orders:
-
-      % for item in earlier_RFA:
+      Earlier protection orders:
+      
+      % if earlier_RFA.there_are_any:
+      % for item in earlier_RFA.complete_elements():
         - **${ item.action_type }**, in ${ item.year_filed }, filed by ${ item.who_filed }, in this court: ${ item.where_filed }
       % endfor
+      % else:
+      **None**
       % endif
       
   - Edit: 
@@ -1631,6 +1638,7 @@ edit:
 confirm: True
 ---
 continue button field: earlier_RFA.revisit
+if: earlier_RFA.there_are_any
 question: |
   Edit earlier RFA
 subquestion: |
@@ -1655,6 +1663,15 @@ edit:
   - action_type
   - year_filed
 confirm: True
+---
+code: |
+  if not earlier_RFA.there_are_any:
+    earlier_RFA.clear()
+    earlier_RFA.target_number = 0
+    earlier_RFA.gathered = True
+  else:
+    earlier_RFA.gather()
+  revisit_rfa = True
 ---
 ###################### Download screen ######################
 id: download divorce
