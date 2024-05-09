@@ -639,9 +639,9 @@ fields:
 --- 
 id: earlier actions
 question: |
-  Past court actions
+  Past court actions between you and ${ other_parties[0].name }
 subquestion: |
-  Have you or ${ other_parties[0].name } filed for **divorce, legal separation, dissolution or annulment BEFORE** filing this form? 
+  During your relationship with ${ other_parties[0].name }, have you or ${ other_parties[0].name } filed for **divorce, legal separation, dissolution or annulment BEFORE** filing this form? 
 fields:
   - no label: earlier_actions_yes
     datatype: yesnoradio
@@ -652,9 +652,9 @@ fields:
 ---
 id: earlier RFA actions
 question: |
-  Past court actions
+  Past court actions between you and ${ other_parties[0].name }
 subquestion: |
-  Have either you or ${ other_parties[0].name } filed a complaint for **relief from abuse (RFA) or a request for a protective order** against each other?
+  During your relationship with ${ other_parties[0].name }, have you or ${ other_parties[0].name } filed a complaint for **relief from abuse (RFA) or a request for a protective order** against each other?
   
   (In Vermont, an order for protection is called a Relief from Abuse (RFA) order. They are handled by the family courts. In other states protective orders have other names.)
   
