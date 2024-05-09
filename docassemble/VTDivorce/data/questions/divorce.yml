@@ -493,7 +493,7 @@ id: have school age children
 question: |
   Children
 subquestion: |  
-  Do you and ${ other_parties[0].name } have children together who are either younger than 18 years old, or are 18 years old and still in high school? Include born or adopted children.  
+  Do you and ${ other_parties[0].name } have children together who are either younger than 18 years old, **or** are 18 years old **and** still in high school? Include born or adopted children.  
 fields:
   - no label: have_school_age_children
     datatype: yesnoradio
@@ -529,7 +529,11 @@ question: |
   What is ${children[i].name}'s date of birth?
 fields:
   - Birthdate: children[i].birthdate
-    datatype: Birthdate
+    datatype: BirthDate
+validation code: |
+  if children[i].age_in_years() >= 19:
+    validation_error("Check the birthdate you entered. This child is too old to be a 'minor.'", field="children[i].birthdate")    
+
 ---
 code: |
   locations[i].housemates
@@ -824,6 +828,8 @@ question: |
 fields:
   - no label: other_parties_has_attorney
     datatype: yesnomaybe
+  - note: |
+      Select “I don’t know” if they have a lawyer but you don’t know the lawyer's name and phone number. 
   - Attorney (lawyer) name: other_parties1_attorneys_name
     show if: other_parties_has_attorney
   - Attorney phone number: other_parties1_attorneys_phone_number
