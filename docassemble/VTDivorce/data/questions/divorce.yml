@@ -137,7 +137,7 @@ code: |
       data={
           "zip": showifdef("users[0].address.zip"),
           "county_where_filing": showifdef("trial_court.address.county"),
-          "license_type": showifdef("marriage_or_civil_union_VT"),
+          "license_type": showifdef("license_type"),
           "have_school_age_children": showifdef("have_school_age_children"),
           "have_written_agreement": showifdef("written_agreement_attached"),
           "reached_interview_end": True,
@@ -1737,7 +1737,7 @@ objects:
           b_info_sheet_family_court_attachment,
           Health_record_civil_union_attachment,
           Health_record_divorce_annulment_attachment,
-        ], filename="divorce_forms", title="All forms to download for your records", enabled=True)
+        ], filename="divorce_forms", title="Download all forms", enabled=True)
   
   - al_court_bundle: ALDocumentBundle.using(elements=[
           divorce_with_kids_attachment,
