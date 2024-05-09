@@ -196,7 +196,7 @@ code: |
   users[0].daytime_phone_number
   email_consent
   user_has_attorney
-  users1_gets_public_assistance
+  users1_benefits_support
 
   set_progress(16)
   nav.set_section("defendant")
@@ -1049,8 +1049,8 @@ fields:
       ${ collapse_template(what_is_parent_child_contact) }
   - Choose at least one: contact_for
     choices:
-    - Contact for myself: contact_for_myself
-    - Contact for ${ other_parties[0] }: contact_for_defendant
+    - Parent-child contact for myself: contact_for_myself
+    - Parent-child contact for ${ other_parties[0] }: contact_for_defendant
     datatype: checkboxes
     none of the above: False    
     minlength: 1

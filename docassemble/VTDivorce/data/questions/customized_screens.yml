@@ -123,23 +123,21 @@ fields:
     datatype: al_international_phone
     show if: user_has_attorney
 ---
-id: users benefits or child support
+id: users benefits or child support customized
 question: |
   Do you get any benefits or child support?
 fields:
   - note: |      
       Public assistance can include help from Vermont's Department of Economic Services such as Reach-Up, Dr. Dynasaur, Medicaid, or Post Secondary Education Stipend (PSE).
       
-      Check any that apply.
-
-  - "I get public assistance": users1_gets_public_assistance
-    datatype: yesno
-    
-  - "I get child support (from any relationship)": users1_gets_child_support
-    datatype: yesno
-   
-  - "I don't get any of these": users1_no_benefits_or_support
-    datatype: yesno
+  - "Choose at least one": users1_benefits_support
+    datatype: checkboxes
+    none of the above: False    
+    minlength: 1
+    choices:
+    - I get public assistance: users1_gets_public_assistance
+    - I get child support (from any relationship): users1_gets_child_support
+    - I don't get any of these: users1_no_benefits_or_support
 
   - note: |
       ${ collapse_template(office_of_child_support_contact) }
