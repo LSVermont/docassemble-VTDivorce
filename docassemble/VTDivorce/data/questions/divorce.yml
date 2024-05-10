@@ -591,6 +591,8 @@ fields:
   - Names of all people who lived with your child/children (including you) during that time. Separate the names with a comma.: locations[i].housemates
     input type: area
     maxlength: 135
+  - note: |
+      If the current address of one of the people listed is different from the address listed, include the current address for that person in parenthesis next to their name. Example: Jane Test (1 Main Street, Sampletown, VT 05000).
 ---
 generic object: ALPeopleList
 id: any other locations
