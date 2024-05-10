@@ -196,7 +196,7 @@ code: |
   users[0].daytime_phone_number
   email_consent
   user_has_attorney
-  users1_gets_public_assistance
+  users1_benefits_support
 
   set_progress(16)
   nav.set_section("defendant")
@@ -1049,8 +1049,8 @@ fields:
       ${ collapse_template(what_is_parent_child_contact) }
   - Choose at least one: contact_for
     choices:
-    - Contact for myself: contact_for_myself
-    - Contact for ${ other_parties[0] }: contact_for_defendant
+    - Parent-child contact for myself: contact_for_myself
+    - Parent-child contact for ${ other_parties[0] }: contact_for_defendant
     datatype: checkboxes
     none of the above: False    
     minlength: 1
@@ -1171,6 +1171,22 @@ review:
       - Your lawyer: **${ users1_attorneys_name }** at **${ users1_attorneys_phone_number }**
       % endif
 
+  - Edit: users1_benefits_support
+    button: |
+      % if defined("users1_benefits_support"): 
+      % if users1_benefits_support["users1_gets_public_assistance"]:
+      You get public assistance: **Yes**
+      % else:
+      You get public assistance: **No**
+      % endif
+      
+      % if users1_benefits_support["users1_gets_child_support"]:
+      You get child support: **Yes**
+      % else:
+      You get child support: **No**
+      % endif
+      % endif
+      
   - note: |
       ###About the other party
   - Edit: other_parties.revisit
@@ -1241,6 +1257,15 @@ review:
       % if defined("other_parties_has_attorney") and other_parties_has_attorney:
       - Their lawyer: **${ other_parties1_attorneys_name }** at **${ other_parties1_attorneys_phone_number }**
       % endif      
+      
+  - Edit: other_parties1_gets_child_support
+    button: |
+      They get child support:
+      % if other_parties1_gets_child_support == None:
+      **Unknown**
+      % else:
+      **${ word(yesno(other_parties1_gets_child_support)) }**
+      % endif
       
   - note: |
       ###Details about both of you
@@ -1483,7 +1508,42 @@ review:
        - ${ child_custody[2].explanation }
        % endif
 
+  - note: |
+      ###Other proceedings
+  - Edit: other_family_juv_probate_proceedings
+    button: |
+      Other court proceedings?:
+      **${ word(yesno(other_family_juv_probate_proceedings)) }**
+  - Edit: trial_court_state_other_filing1
+    button: |
+      * In this state:
+      **${ trial_court_state_other_filing1 }**
 
+      * In this county:
+      % if trial_court_county_other_filing1 == 'Other':
+      **${ trial_court_other_county_other_filing1 }**
+      % else:
+      **${ trial_court_county_other_filing1 }**
+      % endif
+      
+      * In this court division:
+      **${ trial_court_division_other_filing1 }**
+  - Edit: trial_court_state_other_filing2
+    button: |
+      * In this state:
+      **${ trial_court_state_other_filing2 }**
+
+      * In this county:
+      % if trial_court_county_other_filing2 == 'Other':
+      **${ trial_court_other_county_other_filing2 }**
+      % else:
+      **${ trial_court_county_other_filing2 }**
+      % endif
+
+      * In this court division:
+      **${ trial_court_division_other_filing2 }**
+  - note: |
+      ###Filing this case
   - Edit: when_filing_financial_form
     button: |
       Form 813B: 
