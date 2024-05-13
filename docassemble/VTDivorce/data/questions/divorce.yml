@@ -1489,7 +1489,7 @@ review:
   -  Edit: 
       - participations
       - recompute:
-        - divorce_with_kids_attachment.overflow_fields
+        - divorce_with_kids_attachment.overflow_fields.gathered
     
      button: |
        You have participated as a party, witness, or in some other way in a court case about the custody of this child or these children in Vermont or another state.: **${ word(yesno(participations)) }**
