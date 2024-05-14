@@ -1596,7 +1596,7 @@ confirm: True
 ---
 continue button field: locations.revisit
 question: |
-  Edit info about the children
+  Edit info about where the children lived
 subquestion: |
   ${ locations.table }
 
