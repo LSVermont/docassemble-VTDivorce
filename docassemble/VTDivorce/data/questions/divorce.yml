@@ -232,7 +232,7 @@ code: |
   
   when_filing_financial_form
   nav.set_section("past_actions")
-  if earlier_actions_yes: 
+  if earlier_action.there_are_any: 
     earlier_actions.gather()
   else: 
     earlier_actions.target_number = 0
@@ -644,12 +644,12 @@ question: |
 subquestion: |
   Have you or ${ other_parties[0].name } filed for **divorce, legal separation, dissolution or annulment BEFORE** filing this form? 
 fields:
-  - no label: earlier_actions_yes
+  - no label: earlier_actions.there_are_any
     datatype: yesnoradio
   - How many of these actions were filed?: earlier_actions.target_number
     datatype: integer
     min: 1
-    show if: earlier_actions_yes
+    show if: earlier_actions.there_are_any
 ---
 id: earlier RFA actions
 question: |
@@ -1289,17 +1289,24 @@ review:
       % if not military['other_parties1_military']:
       **No**
       % endif      
-
-  - Edit: earlier_actions.revisit
+      
+  - Edit: 
+    - earlier_actions.there_are_any
+    - follow up:
+      - revisit_earlier_actions
+      - earlier_actions.revisit
     button: |
-      % if defined("earlier_actions[0]"):
-        Earlier actions:
-
-      % for item in earlier_actions:
+      Earlier court actions:
+      
+      % if earlier_actions.there_are_any:
+      % for item in earlier_actions.complete_elements():
         - **${ item.action_type }**, in ${ item.year_filed }, filed by ${ item.who_filed }, in this court: ${ item.where_filed }
       % endfor
+      % else:
+      - **None**
       % endif
-
+      
+      
   - Edit: 
     - earlier_RFA.there_are_any
     - follow up:
@@ -1313,7 +1320,7 @@ review:
         - **${ item.action_type }**, in ${ item.year_filed }, filed by ${ item.who_filed }, in this court: ${ item.where_filed }
       % endfor
       % else:
-      **None**
+      - **None**
       % endif
       
   - Edit: 
@@ -1665,6 +1672,15 @@ edit:
 confirm: True
 ---
 code: |
+  if not earlier_actions.there_are_any:
+    earlier_actions.clear()
+    earlier_actions.target_number = 0
+    earlier_actions.gathered = True
+  else:
+    earlier_actions.gather()
+  revisit_earlier_actions = True
+---
+code: |
   if not earlier_RFA.there_are_any:
     earlier_RFA.clear()
     earlier_RFA.target_number = 0
@@ -1902,8 +1918,8 @@ attachment:
       - "not_filing_financial_form": ${ when_filing_financial_form == "later" }
       - "plaintiff_des_assistance": ${ des['plaintiff_des_assistance'] }
       - "defendant_des_assistance": ${ des['defendant_des_assistance'] }
-      - "earlier_actions_no": ${ not earlier_actions_yes }
-      - "earlier_actions_yes": ${ earlier_actions_yes }
+      - "earlier_actions_no": ${ not earlier_actions.there_are_any }
+      - "earlier_actions_yes": ${ earlier_actions.there_are_any }
       - "earlier_actions_where_filed1": ${ earlier_actions[0].where_filed }
       - "earlier_actions_filer1": ${ earlier_actions[0].who_filed }
       - "earlier_actions_type1": ${ earlier_actions[0].action_type }
@@ -1916,8 +1932,8 @@ attachment:
       - "earlier_actions_filer3": ${ earlier_actions_filer[2].who_filed }
       - "earlier_actions_type3": ${ earlier_actions[2].action_type }
       - "earlier_actions_year_filed3": ${ earlier_actions[2].year_filed }
-      - "earlier_RFA_no": ${ not earlier_RFA_yes }
-      - "earlier_RFA_yes": ${ earlier_RFA_yes }
+      - "earlier_RFA_no": ${ not earlier_RFA.there_are_any }
+      - "earlier_RFA_yes": ${ earlier_RFA.there_are_any }
       - "earlier_RFA_where_filed1": ${ earlier_RFA[0].where_filed }
       - "earlier_RFA_filer1": ${ earlier_RFA[0].who_filed }
       - "earlier_RFA_actions_type1": ${ earlier_RFA[0].action_type }
@@ -2110,8 +2126,8 @@ attachment:
       - "not_filing_financial_form": ${ when_filing_financial_form == "later" }
       - "plaintiff_des_assistance": ${ des['plaintiff_des_assistance'] }
       - "defendant_des_assistance": ${ des['defendant_des_assistance'] }
-      - "earlier_actions_no": ${ not earlier_actions_yes }
-      - "earlier_actions_yes": ${ earlier_actions_yes }
+      - "earlier_actions_no": ${ not earlier_actions.there_are_any }
+      - "earlier_actions_yes": ${ earlier_actions.there_are_any }
       - "earlier_actions_where_filed1": ${ earlier_actions[0].where_filed }
       - "earlier_actions_filer1": ${ earlier_actions[0].who_filed }
       - "earlier_actions_type1": ${ earlier_actions[0].action_type }
@@ -2124,8 +2140,8 @@ attachment:
       - "earlier_actions_filer3": ${ earlier_actions_filer[2].who_filed }
       - "earlier_actions_type3": ${ earlier_actions[2].action_type }
       - "earlier_actions_year_filed3": ${ earlier_actions[2].year_filed }
-      - "earlier_RFA_no": ${ not earlier_RFA_yes }
-      - "earlier_RFA_yes": ${ earlier_RFA_yes }
+      - "earlier_RFA_no": ${ not earlier_RFA.there_are_any }
+      - "earlier_RFA_yes": ${ earlier_RFA.there_are_any }
       - "earlier_RFA_where_filed1": ${ earlier_RFA[0].where_filed }
       - "earlier_RFA_filer1": ${ earlier_RFA[0].who_filed }
       - "earlier_RFA_actions_type1": ${ earlier_RFA[0].action_type }
