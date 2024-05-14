@@ -232,7 +232,7 @@ code: |
   
   when_filing_financial_form
   nav.set_section("past_actions")
-  if earlier_action.there_are_any: 
+  if earlier_actions.there_are_any: 
     earlier_actions.gather()
   else: 
     earlier_actions.target_number = 0
