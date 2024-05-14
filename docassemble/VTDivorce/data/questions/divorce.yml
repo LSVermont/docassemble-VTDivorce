@@ -1302,8 +1302,8 @@ review:
 
   - Edit: 
     - earlier_RFA.there_are_any
-    - revisit_rfa
     - follow up:
+      - revisit_rfa
       - earlier_RFA.revisit
     button: |
       Earlier protection orders:
