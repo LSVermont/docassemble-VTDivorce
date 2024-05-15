@@ -236,6 +236,7 @@ code: |
     earlier_actions.gather()
   else: 
     earlier_actions.target_number = 0
+    earlier_actions.gathered = True
     
   if earlier_RFA.there_are_any:
     earlier_RFA.gather()
