@@ -333,14 +333,16 @@ subquestion: |
   
   Contact a lawyer or legal aid organization in the state where you live.
   
-  If neither of you live in Vermont, a Vermont family court will only take your divorce case or civil union dissolution case if **all these four things are true**:
+  You can only start a divorce in Vermont if one or both of you has lived in Vermont for at least the past six months.
   
-  1. You got married or got a civil union in Vermont
-  2. You and your spouse currently live in states where you can't get a divorce or dissolve your civil union
+  If you had a civil union and neither of you live in Vermont, a Vermont family court will only take your civil union dissolution case if **all these four things are true**:
+  
+  1. You got the civil union in Vermont
+  2. You and your spouse currently live in states where you can't dissolve your civil union
   3. You don't have minor children (under 18), and
-  4. You and your spouse already have an agreement about how to deal with your property and debts. You and your spouse must file a signed agreement about how to deal with your property and debts (Final Stipulation Property, Debt and Spousal Support). The court will not grant the divorce or dissolution without an agreement. Visit [VTLawHelp to download the Final Stipulation form.](https://vtlawhelp.org/roadmap/divorce/step-3) It is not part of this interview at this time.
+  4. You and your spouse have a written agreement (a "stipulation") about how to deal with your property and debts. You and your spouse must file a signed agreement about how to deal with your property and debts (Final Stipulation Property, Debt and Spousal Support). If you go ahead with this interview, you must file the stipulation form at the same time as you file the forms produced by this interview. The court will not grant the dissolution without an agreement. Visit [VTLawHelp to download the Final Stipulation form.](https://vtlawhelp.org/roadmap/divorce/step-3) It is not part of this interview at this time.
   
-  See the [Divorce Roadmap on the VTLawHelp.org website](https://vtlawhelp.org/roadmap/divorce/step-1) to find out what is required for you to be able to file for a divorce, separation or civil union dissolution in Vermont.
+  See the [Divorce Roadmap on the VTLawHelp.org website](https://vtlawhelp.org/roadmap/divorce/step-1) to learn more about divorce, separation and civil union dissolution in Vermont.
   
   [**Go to the VTLawHelp.org website.**](https://vtlawhelp.org/roadmap/divorce/step-1)
   
@@ -349,20 +351,20 @@ buttons:
   - DELETE your answers: restart
 
 ---
-id: remind_non_VTers_about_needing_stipulation
-question: |
-  Important
-subquestion: |
-  <i class="fa-solid fa-circle-exclamation fa-3x"></i>  Keep in mind: **If neither of you live in Vermont**, a Vermont family court will only take your divorce case or civil union dissolution case if **all these four things are true**:
-  
-  1. You got married or got a civil union in Vermont
-  2. You and your spouse currently live in states where you can't get a divorce or dissolve your civil union
-  3. You don't have minor children (under 18), and
-  4. You and your spouse must file a signed agreement about how to deal with your property and debts (Final Stipulation Property, Debt and Spousal Support). In your situation, the court will **not** grant the divorce or dissolution without an agreement.
-  
-  Visit [VTLawHelp to download the Final Stipulation form.](https://vtlawhelp.org/roadmap/divorce/step-3) It is not part of this interview at this time.
-  
-continue button field: remind_non_VTers_about_needing_stipulation
+#id: remind_non_VTers_about_needing_stipulation
+#question: |
+#  Important
+#subquestion: |
+#  <i class="fa-solid fa-circle-exclamation fa-3x"></i>  Keep in mind: **If neither of you live in Vermont**, a Vermont family court will only take your divorce case or civil union dissolution case if **all these four things are true**:
+#  
+#  1. You got married or got a civil union in Vermont
+#  2. You and your spouse currently live in states where you can't get a divorce or dissolve your civil union
+#  3. You don't have minor children (under 18), and
+#  4. You and your spouse must file a signed agreement about how to deal with your property and debts (Final Stipulation Property, Debt and Spousal Support). In your situation, the court will **not** grant the divorce or dissolution without an agreement.
+#  
+#  Visit [VTLawHelp to download the Final Stipulation form.](https://vtlawhelp.org/roadmap/divorce/step-3) It is not part of this interview at this time.
+#  
+#continue button field: remind_non_VTers_about_needing_stipulation
 ---
 id: marriage or civil union
 question: |
@@ -442,7 +444,7 @@ id: marriage_or_civil_union_VT
 question: |
   See if this interview is right for your situation
 subquestion: |
-  Did you and your spouse get your marriage or civil union in Vermont?
+  Did you and your spouse get a civil union in Vermont?
 fields:
   - no label: marriage_or_civil_union_VT
     datatype: yesnoradio
@@ -451,7 +453,7 @@ id: both_cant_divorce_current_state
 question: |
   See if this interview is right for your situation
 subquestion: |
-  Do you and your spouse currently live in states where you can't get a divorce or dissolve your civil union?
+  Do you and your spouse currently live in states where you can't dissolve your civil union?
 fields:
   - no label: both_cant_divorce_current_state
     datatype: yesnoradio
@@ -470,7 +472,7 @@ id: property agreement
 question: |
   See if this interview is right for your situation
 subquestion: |
-  Do you and your spouse already have an agreement about how to deal with your property and debts?
+  Do you and your spouse have an agreement (a "stipulation") about how to deal with your property and debts?
 fields:
   - no label: have_property_agreement
     datatype: yesnoradio
@@ -982,10 +984,8 @@ fields:
     datatype: yesno
   - I want to go back to my former full name: plaintiff_former_name
     show if: name_change
-  - I have a written agreement signed by me and ${ other_parties }. I will include it with these forms. I ask the court to issue an order that includes the provisions in our written agreement. : written_agreement_attached
+  - I have a written agreement (stipulation) signed by me and ${ other_parties }. I will include it with these forms. I ask the court to issue an order that includes the provisions in our written agreement. : written_agreement_attached
     datatype: yesno
-  - note: |
-      **Reminder: If you and your spouse are not residents of Vermont**, but you had a civil union or marriage in Vermont, you must file a signed agreement about how to deal with your property and debts (called a Final Stipulation Property, Debt and Spousal Support). In your situation, the court will not grant the divorce or dissolution without an agreement. 
       
       See [VTLawHelp for more details and forms.](https://vtlawhelp.org/roadmap/divorce/step-1)
       
