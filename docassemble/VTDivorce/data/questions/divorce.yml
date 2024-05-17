@@ -1080,19 +1080,30 @@ fields:
 ---
 id: preview divorce
 question: |
-  Preview your form before you sign it
-subquestion: |
-  Here is a preview of the forms you will sign on the next page.   
+  Preview your forms before you sign them
+subquestion: |  
   
-  ${ al_court_bundle.as_pdf(key='preview') }
+  Tap the button below to see a preview of your documents in a new tab.
+  
+  ${ action_button_html(al_court_bundle.as_pdf(key='preview').url_for(), label="View the PDF", color="primary") }
 
-  Click the image to open it in a new tab. Click the "Edit your answers" button
+  Tap the "Edit your answers" button
   to edit your answers.
 
   ${ action_button_html(url_action('review_divorce'), label='Edit your answers', color='info') }
   
-  Remember to come back to this window to continue and sign your form.
+  Remember to come back to this window to continue and sign your forms.
 continue button field: divorce_preview_question    
+---
+id: signature date
+question: |
+  Signature date
+fields:
+  - "Date of your signature for these forms": signature_date
+    datatype: date
+    required: False
+    default: |
+      ${ today() }
 ---
 code: |
   signature_fields = ['users[0].signature']
