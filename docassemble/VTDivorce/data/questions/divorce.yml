@@ -816,13 +816,12 @@ subquestion: |
   Examples: 3SquaresVT/food stamps, Reach Up and [others listed on the state's website.](https://dcf.vermont.gov/esd/applicants/benefits)
 fields:
   - "Choose at least one": des
-    datatype: checkboxes
-    none of the above: False    
-    minlength: 1
+    datatype: checkboxes 
     choices:
     - I get Economic Services assistance: plaintiff_des_assistance
     - ${ other_parties } gets Economic Services assistance: defendant_des_assistance
-    - We don't get Economic Services assistance, or I'm not sure: no_des_assistance
+    none of the above: |
+        We don't get Economic Services assistance, or I'm not sure
 ---
 id: military service
 question: |
@@ -830,12 +829,11 @@ question: |
 fields:
   - "Choose at least one": military
     datatype: checkboxes
-    none of the above: False    
-    minlength: 1
     choices:
     - I serve in the military: plaintiff_military_service
     - ${ other_parties } serves in the military: other_parties1_military
-    - We do not serve in the military, or I'm not sure: no_military_service
+    none of the above: |
+      We do not serve in the military, or I'm not sure
 ---
 id: other parties attorney info
 question: |
