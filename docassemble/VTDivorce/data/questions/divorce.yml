@@ -390,7 +390,7 @@ fields:
     datatype: date
     show if: 
       variable: license_type
-      is: marriage
+      is: marriage 
   - Civil Union city: civil_union_city
     show if: 
       variable: license_type
@@ -407,6 +407,11 @@ fields:
     show if: 
       variable: license_type
       is: civil_union
+validation code: |
+  if license_type == "marriage" and marriage_date >= today():
+    validation_error("This date must be in the past")
+  if license_type == "civil_union" and civil_union_date >= today():
+    validation_error("This date must be in the past")
 ---
 id: plaintiff VT 6 months
 question: |
@@ -612,7 +617,7 @@ id: child custody cases
 question: |
   Custody
 subquestion: |  
-  The court needs to know if you are aware of any child custody issues.
+  The court needs to know about other custody cases involving your kids.
   
   Check all statements that apply to you.
 fields: 
