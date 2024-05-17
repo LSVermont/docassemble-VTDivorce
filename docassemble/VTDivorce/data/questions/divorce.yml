@@ -248,7 +248,7 @@ code: |
 
   
 
-  docket_number
+  docket_number = ''
   trial_court_division
   #trial_court
   set_progress(70)
@@ -612,6 +612,8 @@ id: child custody cases
 question: |
   Custody
 subquestion: |  
+  The court needs to know if you are aware of any child custody issues.
+  
   Check all statements that apply to you.
 fields: 
   - "I have participated as a party, witness, or in some other way in a court case about the custody of this child or these children in Vermont or another state.": participations
@@ -771,6 +773,8 @@ fields:
     show if: users1_mailing_address_different
   - Zip or postal code: users[0].mailing_address.zip
     show if: users1_mailing_address_different
+  - note: |
+      If you are afraid for your safety, you can file a motion to ask the court to keep your address confidential from your spouse. Ask an advocate for help at [Vermont Network](https://www.vtnetwork.org/get-help/) or [Legal Services Vermont and Vermont Legal Aid.](https://vtlawhelp.org/victims-of-crime) Or ask the court clerk for the forms.
 ---
 id: Gather users contact information
 question: |
@@ -984,10 +988,8 @@ fields:
     datatype: yesno
   - I want to go back to my former full name: plaintiff_former_name
     show if: name_change
-  - I have a written agreement (stipulation) signed by me and ${ other_parties }. I will include it with these forms. I ask the court to issue an order that includes the provisions in our written agreement. : written_agreement_attached
+  - I have a written agreement (stipulation) signed by me and ${ other_parties }. I will include it when I file these forms. I ask the court to issue an order that includes the provisions in our written agreement. : written_agreement_attached
     datatype: yesno
-      
-      See [VTLawHelp for more details and forms.](https://vtlawhelp.org/roadmap/divorce/step-1)
       
   - note: |      
       **If you have a written agreement**, attach it to the forms that you file with the court. The written agreement must include:
@@ -1002,7 +1004,7 @@ fields:
       
       See our [Divorce Roadmap on VTLawHelp.org](https://vtlawhelp.org/roadmap/divorce/step-3) for agreement forms you can use.
       
-      **To qualify for a reduced court filing fee**, the attached agreement must cover all the issues that you want to have the court resolve.
+      **To qualify for a reduced court filing fee**, the written agreement must cover all the issues that you want to have the court resolve.
     show if: written_agreement_attached
 ---
 id: ask for custody visitation and child support
@@ -1579,14 +1581,6 @@ review:
       Filing in the family court of: **${ trial_court.address.county } County**
       % endif
 
-  - Edit: docket_number
-    button: |
-      Court docket number / case number: 
-      % if dont_know_docket_number:
-      **Unknown**      
-      % else:
-      **${ showifdef("docket_number") }**
-      % endif
   - note: |
       **Select Resume, below, when you are done. It will take a moment to generate your form(s) again.**
 ---
