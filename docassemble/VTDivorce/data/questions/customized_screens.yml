@@ -132,12 +132,11 @@ fields:
       
   - "Choose at least one": users1_benefits_support
     datatype: checkboxes
-    none of the above: False    
-    minlength: 1
     choices:
     - I get public assistance: users1_gets_public_assistance
     - I get child support (from any relationship): users1_gets_child_support
-    - I don't get any of these: users1_no_benefits_or_support
+    none of the above: |
+      I don't get any of these
 
   - note: |
       ${ collapse_template(office_of_child_support_contact) }
