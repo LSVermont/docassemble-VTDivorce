@@ -248,7 +248,7 @@ code: |
 
   
 
-  docket_number
+  docket_number = ''
   trial_court_division
   #trial_court
   set_progress(70)
@@ -390,7 +390,7 @@ fields:
     datatype: date
     show if: 
       variable: license_type
-      is: marriage
+      is: marriage 
   - Civil Union city: civil_union_city
     show if: 
       variable: license_type
@@ -407,6 +407,11 @@ fields:
     show if: 
       variable: license_type
       is: civil_union
+validation code: |
+  if license_type == "marriage" and marriage_date >= today():
+    validation_error("This date must be in the past")
+  if license_type == "civil_union" and civil_union_date >= today():
+    validation_error("This date must be in the past")
 ---
 id: plaintiff VT 6 months
 question: |
@@ -612,6 +617,8 @@ id: child custody cases
 question: |
   Custody
 subquestion: |  
+  The court needs to know about other custody cases involving your kids.
+  
   Check all statements that apply to you.
 fields: 
   - "I have participated as a party, witness, or in some other way in a court case about the custody of this child or these children in Vermont or another state.": participations
@@ -771,6 +778,8 @@ fields:
     show if: users1_mailing_address_different
   - Zip or postal code: users[0].mailing_address.zip
     show if: users1_mailing_address_different
+  - note: |
+      If you are afraid for your safety, you can file a motion to ask the court to keep your address confidential from your spouse. Ask an advocate for help at [Vermont Network](https://www.vtnetwork.org/get-help/) or [Legal Services Vermont and Vermont Legal Aid.](https://vtlawhelp.org/victims-of-crime) Or ask the court clerk for the forms.
 ---
 id: Gather users contact information
 question: |
@@ -984,10 +993,8 @@ fields:
     datatype: yesno
   - I want to go back to my former full name: plaintiff_former_name
     show if: name_change
-  - I have a written agreement (stipulation) signed by me and ${ other_parties }. I will include it with these forms. I ask the court to issue an order that includes the provisions in our written agreement. : written_agreement_attached
+  - I have a written agreement (stipulation) signed by me and ${ other_parties }. I will include it when I file these forms. I ask the court to issue an order that includes the provisions in our written agreement. : written_agreement_attached
     datatype: yesno
-      
-      See [VTLawHelp for more details and forms.](https://vtlawhelp.org/roadmap/divorce/step-1)
       
   - note: |      
       **If you have a written agreement**, attach it to the forms that you file with the court. The written agreement must include:
@@ -1002,7 +1009,7 @@ fields:
       
       See our [Divorce Roadmap on VTLawHelp.org](https://vtlawhelp.org/roadmap/divorce/step-3) for agreement forms you can use.
       
-      **To qualify for a reduced court filing fee**, the attached agreement must cover all the issues that you want to have the court resolve.
+      **To qualify for a reduced court filing fee**, the written agreement must cover all the issues that you want to have the court resolve.
     show if: written_agreement_attached
 ---
 id: ask for custody visitation and child support
@@ -1073,19 +1080,30 @@ fields:
 ---
 id: preview divorce
 question: |
-  Preview your form before you sign it
-subquestion: |
-  Here is a preview of the forms you will sign on the next page.   
+  Preview your forms before you sign them
+subquestion: |  
   
-  ${ al_court_bundle.as_pdf(key='preview') }
+  Tap the button below to see a preview of your documents in a new tab.
+  
+  ${ action_button_html(al_court_bundle.as_pdf(key='preview').url_for(), label="View the PDF", color="primary") }
 
-  Click the image to open it in a new tab. Click the "Edit your answers" button
+  Tap the "Edit your answers" button
   to edit your answers.
 
   ${ action_button_html(url_action('review_divorce'), label='Edit your answers', color='info') }
   
-  Remember to come back to this window to continue and sign your form.
+  Remember to come back to this window to continue and sign your forms.
 continue button field: divorce_preview_question    
+---
+id: signature date
+question: |
+  Signature date
+fields:
+  - "Date of your signature for these forms": signature_date
+    datatype: date
+    required: False
+    default: |
+      ${ today() }
 ---
 code: |
   signature_fields = ['users[0].signature']
@@ -1579,14 +1597,6 @@ review:
       Filing in the family court of: **${ trial_court.address.county } County**
       % endif
 
-  - Edit: docket_number
-    button: |
-      Court docket number / case number: 
-      % if dont_know_docket_number:
-      **Unknown**      
-      % else:
-      **${ showifdef("docket_number") }**
-      % endif
   - note: |
       **Select Resume, below, when you are done. It will take a moment to generate your form(s) again.**
 ---
