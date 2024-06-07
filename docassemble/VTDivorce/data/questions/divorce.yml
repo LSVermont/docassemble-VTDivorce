@@ -1798,6 +1798,7 @@ objects:
   - divorce_with_kids_attachment: ALDocument.using(title="Complaint for divorce, separation, dissolution (with kids)", filename="divorce_with_kids", has_addendum=True)
   - Health_record_divorce_annulment_attachment: ALDocument.using(title="Health department form", filename="Health_record_divorce_annulment", has_addendum=False, )
   - Health_record_civil_union_attachment: ALDocument.using(title="Health department form", filename="Health_record_civil_union", has_addendum=False, )
+  - confidential_info_form_attachment: ALDocument.using(title="Statement of confidential information form", filename="confidential_info_form", has_addendum=False, )
 ---
 attachment:
   variable name: divorce_no_kids_attachment.addendum
@@ -1845,6 +1846,7 @@ objects:
           divorce_no_kids_attachment,
           a_notice_of_appearance_self_rep_attachment,
           b_info_sheet_family_court_attachment,
+          confidential_info_form_attachment,
           Health_record_civil_union_attachment,
           Health_record_divorce_annulment_attachment,
         ], filename="divorce_forms", title="Download all forms", enabled=True)
@@ -1854,6 +1856,7 @@ objects:
           divorce_no_kids_attachment,
           a_notice_of_appearance_self_rep_attachment,
           b_info_sheet_family_court_attachment,
+          confidential_info_form_attachment,
           Health_record_civil_union_attachment,
           Health_record_divorce_annulment_attachment,
         ],  filename="divorce_forms", title="All forms to deliver to court", enabled=True)
@@ -2255,11 +2258,14 @@ attachment:
   skip undefined: True
   pdf template file: confidential_info_form.pdf
   fields:
+      - "trial_court_county_sci": ${ trial_court.address.county }
       - "docket_number": ${ docket_number }
       - "users1_name_sci": ${ users[0] }
       - "users1_birthdate_sci": ${ users[0].birthdate }
       - "other_parties1_name_sci": ${ other_parties[0].name }
       - "other_parties1_birthdate_sci": ${ other_parties[0].birthdate }
+      - "role_plaintiff_sci": ${ users1_role["role_plaintiff"] }
+      - "role_defendant_sci": ${ users1_role["role_defendant"] }
       - "child_name1_sci": ${ children[0].name }
       - "child_name2_sci": ${ children[1].name }
       - "child_name3_sci": ${ children[2].name }
