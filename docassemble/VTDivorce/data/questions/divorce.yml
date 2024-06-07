@@ -995,6 +995,11 @@ fields:
     datatype: yesno
   - I want to go back to my former full name: plaintiff_former_name
     show if: name_change
+  - note: |
+      **Agreements / "stipulations"**: Sometimes, spouses cannot agree on property, debt, support, and child issues before filing for divorce or civil union dissolution. Other times, they may have discussed all of these things and filled out the court’s stipulation (agreement) forms. Learn more about these forms, and the benefits of having these written agreements, on our [Divorce Roadmap on VTLawHelp.org.](https://vtlawhelp.org/roadmap/divorce/step-3)
+      
+      In the next question, the court wants to know if you and your spouse are including these agreement forms as you ask for a divorce or dissolution.
+
   - I have a written agreement (stipulation) signed by me and ${ other_parties }. I will include it when I file these forms. I ask the court to issue an order that includes the provisions in our written agreement. : written_agreement_attached
     datatype: yesno
       
@@ -1007,7 +1012,7 @@ fields:
       
       2. Agreement on Parental Rights & Responsibilities, Parent Child Contact and Provisions Relating to Children, and
       
-      3. Child Support Order.
+      3. Child Support Order. (You would fill out just the first page of this form.)
       
       See our [Divorce Roadmap on VTLawHelp.org](https://vtlawhelp.org/roadmap/divorce/step-3) for agreement forms you can use.
       
