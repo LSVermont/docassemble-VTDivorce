@@ -1,5 +1,5 @@
 #For this interview, the person filling out the form (user) is always considered to be the plaintiff.
-#The health record yml file is included in this package because it will never be a stand-alone interview.
+#The statement of confidential info form (SSNs) and health record form are included in this package because they will never be stand-alone interviews. Note that for security reasons we are not actually collecting the Social Security numbers in this interview. People will fill those in on their own.
 #We will be "including" other stand-alone interviews.
 #On May 2 2024 we removed VTCertificateOfService from this interview until we're ready to add all service forms to this interview -- we commented out things
 ---
@@ -44,7 +44,7 @@ metadata:
   short title: >-
     Divorce
   description: |-
-    This interview helps someone in Vermont ask the court for a divorce, separation, or civil union dissolution. Based on paper versions of divorce complaint forms 400-00836Children (06/2023) and 400-00836NoChildren (02/2022), and health department forms VDH-VR-DISS-2/2007 and VDH-VR-DIV-9/2009.
+    This interview helps someone in Vermont ask the court for a divorce, separation, or civil union dissolution. Based on paper versions of divorce complaint forms 400-00836Children (06/2023) and 400-00836NoChildren (02/2022), Statement of Confidential Information form 400-00849 (07/2013), and health department forms VDH-VR-DISS-2/2007 and VDH-VR-DIV-9/2009.
   tags:
     - "FA-00-00-00-00"
   authors:
@@ -107,6 +107,7 @@ code: |
 
   # Fields for notice of appearance
   users1_role == "role_plaintiff"
+  
   set_progress(90)
 
 
@@ -272,6 +273,7 @@ subquestion: |
   * Summons and Complaint for a Divorce / Separation / Dissolution - form 400-00836
   * Notice of Appearance for Self-Represented Party - form 400-00831
   * Family Court Information Form - form 800
+  * Statement of Confidential Information - form 400-00849
   * Department of Health Record of Divorce or Dissolution
   
   <i class="fas fa-clock fa-2x"></i> It may take you over 45 minutes to complete this interview.
@@ -1121,6 +1123,8 @@ question: |
 subquestion: |  
   ${ review_screen_instructions }
   
+  Please note: For security reasons, this interview does **not** collect your Social Security number(s). You will need to fill in those numbers on your own later on the Statement of Confidential Information form that you will get at the end of this interview.
+  
 review:
 
   - note: |
@@ -1798,6 +1802,7 @@ objects:
   - divorce_with_kids_attachment: ALDocument.using(title="Complaint for divorce, separation, dissolution (with kids)", filename="divorce_with_kids", has_addendum=True)
   - Health_record_divorce_annulment_attachment: ALDocument.using(title="Health department form", filename="Health_record_divorce_annulment", has_addendum=False, )
   - Health_record_civil_union_attachment: ALDocument.using(title="Health department form", filename="Health_record_civil_union", has_addendum=False, )
+  - confidential_info_form_attachment: ALDocument.using(title="Statement of confidential information form", filename="confidential_info_form", enabled=True, has_addendum=False, )
 ---
 attachment:
   variable name: divorce_no_kids_attachment.addendum
@@ -1845,6 +1850,7 @@ objects:
           divorce_no_kids_attachment,
           a_notice_of_appearance_self_rep_attachment,
           b_info_sheet_family_court_attachment,
+          confidential_info_form_attachment,
           Health_record_civil_union_attachment,
           Health_record_divorce_annulment_attachment,
         ], filename="divorce_forms", title="Download all forms", enabled=True)
@@ -1854,6 +1860,7 @@ objects:
           divorce_no_kids_attachment,
           a_notice_of_appearance_self_rep_attachment,
           b_info_sheet_family_court_attachment,
+          confidential_info_form_attachment,
           Health_record_civil_union_attachment,
           Health_record_divorce_annulment_attachment,
         ],  filename="divorce_forms", title="All forms to deliver to court", enabled=True)
@@ -2247,7 +2254,28 @@ attachment:
       - "written_agreement_attached": ${ written_agreement_attached }
       # It's a signature: test which file version this is; leave empty unless it's the final version)
       - "signature_date1": ${ signature_date }
----      
+---  
+attachment:
+  name: Confidential info form
+  filename: confidential_info_form
+  variable name: confidential_info_form_attachment[i]
+  skip undefined: True
+  pdf template file: confidential_info_form.pdf
+  fields:
+      - "trial_court_county_sci": ${ trial_court.address.county }
+      - "docket_number": ${ docket_number }
+      - "users1_name_sci": ${ users[0] }
+      - "users1_birthdate_sci": ${ format_date(users[0].birthdate, format="M/d/yyyy") }
+      - "other_parties1_name_sci": ${ other_parties[0].name }
+      - "other_parties1_birthdate_sci": ${ format_date(other_parties[0].birthdate, format="M/d/yyyy") }
+      - "role_plaintiff_sci": ${ True }
+      - "child_name1_sci": ${ children[0].name }
+      - "child_name2_sci": ${ children[1].name }
+      - "child_name3_sci": ${ children[2].name }
+      - "child_name4_sci": ${ children[3].name }
+      - "child_name5_sci": ${ children[4].name }
+
+---
 attachment:
   name: Health record civil union
   filename: Health_record_civil_union
