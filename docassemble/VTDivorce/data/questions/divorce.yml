@@ -1,5 +1,5 @@
 #For this interview, the person filling out the form (user) is always considered to be the plaintiff.
-#The health record yml file is included in this package because it will never be a stand-alone interview.
+#The statement of confidential info form (SSNs) and health record form are included in this package because they will never be stand-alone interviews.
 #We will be "including" other stand-alone interviews.
 #On May 2 2024 we removed VTCertificateOfService from this interview until we're ready to add all service forms to this interview -- we commented out things
 ---
@@ -2247,7 +2247,26 @@ attachment:
       - "written_agreement_attached": ${ written_agreement_attached }
       # It's a signature: test which file version this is; leave empty unless it's the final version)
       - "signature_date1": ${ signature_date }
----      
+---  
+attachment:
+  name: Confidential info form
+  filename: confidential_info_form
+  variable name: confidential_info_form_attachment[i]
+  skip undefined: True
+  pdf template file: confidential_info_form.pdf
+  fields:
+      - "docket_number": ${ docket_number }
+      - "users1_name_sci": ${ users[0] }
+      - "users1_birthdate_sci": ${ users[0].birthdate }
+      - "other_parties1_name_sci": ${ other_parties[0].name }
+      - "other_parties1_birthdate_sci": ${ other_parties[0].birthdate }
+      - "child_name1_sci": ${ children[0].name }
+      - "child_name2_sci": ${ children[1].name }
+      - "child_name3_sci": ${ children[2].name }
+      - "child_name4_sci": ${ children[3].name }
+      - "child_name5_sci": ${ children[4].name }
+
+---
 attachment:
   name: Health record civil union
   filename: Health_record_civil_union

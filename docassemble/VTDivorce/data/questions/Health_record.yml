@@ -12,7 +12,6 @@ metadata:
     Health record 
   tags: []
   authors:
-    - Stavros Constantinou / Lemma Legal
     - Legal Services Vermont
   typical_role: "unknown"
   al_weaver_version: "1.10.2"
