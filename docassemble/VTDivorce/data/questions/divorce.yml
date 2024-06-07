@@ -44,7 +44,7 @@ metadata:
   short title: >-
     Divorce
   description: |-
-    This interview helps someone in Vermont ask the court for a divorce, separation, or civil union dissolution. Based on paper versions of divorce complaint forms 400-00836Children (06/2023) and 400-00836NoChildren (02/2022), and health department forms VDH-VR-DISS-2/2007 and VDH-VR-DIV-9/2009.
+    This interview helps someone in Vermont ask the court for a divorce, separation, or civil union dissolution. Based on paper versions of divorce complaint forms 400-00836Children (06/2023) and 400-00836NoChildren (02/2022), Statement of Confidential Information form 400-00849 (07/2013), and health department forms VDH-VR-DISS-2/2007 and VDH-VR-DIV-9/2009.
   tags:
     - "FA-00-00-00-00"
   authors:
@@ -107,6 +107,7 @@ code: |
 
   # Fields for notice of appearance
   users1_role == "role_plaintiff"
+  
   set_progress(90)
 
 
@@ -1798,7 +1799,7 @@ objects:
   - divorce_with_kids_attachment: ALDocument.using(title="Complaint for divorce, separation, dissolution (with kids)", filename="divorce_with_kids", has_addendum=True)
   - Health_record_divorce_annulment_attachment: ALDocument.using(title="Health department form", filename="Health_record_divorce_annulment", has_addendum=False, )
   - Health_record_civil_union_attachment: ALDocument.using(title="Health department form", filename="Health_record_civil_union", has_addendum=False, )
-  - confidential_info_form_attachment: ALDocument.using(title="Statement of confidential information form", filename="confidential_info_form", has_addendum=False, )
+  - confidential_info_form_attachment: ALDocument.using(title="Statement of confidential information form", filename="confidential_info_form", enabled=True, has_addendum=False, )
 ---
 attachment:
   variable name: divorce_no_kids_attachment.addendum
@@ -2261,11 +2262,10 @@ attachment:
       - "trial_court_county_sci": ${ trial_court.address.county }
       - "docket_number": ${ docket_number }
       - "users1_name_sci": ${ users[0] }
-      - "users1_birthdate_sci": ${ users[0].birthdate }
+      - "users1_birthdate_sci": ${ format_date(users[0].birthdate, format="M/d/yyyy") }
       - "other_parties1_name_sci": ${ other_parties[0].name }
-      - "other_parties1_birthdate_sci": ${ other_parties[0].birthdate }
-      - "role_plaintiff_sci": ${ users1_role["role_plaintiff"] }
-      - "role_defendant_sci": ${ users1_role["role_defendant"] }
+      - "other_parties1_birthdate_sci": ${ format_date(other_parties[0].birthdate, format="M/d/yyyy") }
+      - "role_plaintiff_sci": ${ True }
       - "child_name1_sci": ${ children[0].name }
       - "child_name2_sci": ${ children[1].name }
       - "child_name3_sci": ${ children[2].name }
