@@ -722,14 +722,16 @@ question: |
 subquestion: |
   If you got a court order, attach a copy of it to the forms that you file with the court.
   
-  Note: If you have experienced domestic violence or abuse, you can call us to ask for advice about safely getting a divorce, separation or dissolution. Find out how to [get help from Legal Services Vermont and Vermont Legal Aid.](https://vtlawhelp.org/victims-of-crime) You can save your progress in this program by creating a free account. Choose “sign up” in the menu at the top of the VTCourtForms pages, or “register” at the bottom.
+  **Note**: If you have experienced domestic violence or abuse, you can call us to ask for advice about safely getting a divorce, separation or dissolution. Find out how to [get help from Legal Services Vermont and Vermont Legal Aid.](https://vtlawhelp.org/victims-of-crime) You can save your progress in this program by creating a free account. Choose “sign up” in the menu at the top of the VTCourtForms pages, or “register” at the bottom.
   
 fields:
   - Type of action: earlier_RFA[i].action_type
     datatype: radio
     choices: 
-      - Relief from abuse order (Vermont)
+      - Relief from abuse order (VT)
       - Protective order
+  - note: |
+      Reminder: In Vermont, an order for protection is called a Relief from Abuse (RFA) order. They are handled by the family courts. In other states protective orders have other names.
   - Who filed it?: earlier_RFA[i].who_filed
     datatype: object_radio
     choices:
@@ -1123,7 +1125,7 @@ question: |
 subquestion: |  
   ${ review_screen_instructions }
   
-  Please note: For security reasons, this interview does **not** collect your Social Security number(s). You will need to fill in those numbers on your own later on the Statement of Confidential Information form that you will get at the end of this interview.
+  Please note: For confidentiality reasons, this interview does **not** collect your Social Security number(s). You will need to fill in those numbers on your own later on the Statement of Confidential Information form that you will get at the end of this interview.
   
 review:
 
