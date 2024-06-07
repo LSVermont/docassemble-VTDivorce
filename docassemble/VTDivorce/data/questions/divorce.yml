@@ -1,5 +1,5 @@
 #For this interview, the person filling out the form (user) is always considered to be the plaintiff.
-#The statement of confidential info form (SSNs) and health record form are included in this package because they will never be stand-alone interviews.
+#The statement of confidential info form (SSNs) and health record form are included in this package because they will never be stand-alone interviews. Note that for security reasons we are not actually collecting the Social Security numbers in this interview. People will fill those in on their own.
 #We will be "including" other stand-alone interviews.
 #On May 2 2024 we removed VTCertificateOfService from this interview until we're ready to add all service forms to this interview -- we commented out things
 ---
@@ -273,6 +273,7 @@ subquestion: |
   * Summons and Complaint for a Divorce / Separation / Dissolution - form 400-00836
   * Notice of Appearance for Self-Represented Party - form 400-00831
   * Family Court Information Form - form 800
+  * Statement of Confidential Information - form 400-00849
   * Department of Health Record of Divorce or Dissolution
   
   <i class="fas fa-clock fa-2x"></i> It may take you over 45 minutes to complete this interview.
@@ -1121,6 +1122,8 @@ question: |
   Review your answers
 subquestion: |  
   ${ review_screen_instructions }
+  
+  Please note: For security reasons, this interview does **not** collect your Social Security number(s). You will need to fill in those numbers on your own later on the Statement of Confidential Information form that you will get at the end of this interview.
   
 review:
 
