@@ -599,11 +599,13 @@ fields:
     maxlength: 10
   - End date (or today's date): locations[i].end_date 
     maxlength: 10
+  - note: |
+      Remember: It's OK to estimate the dates. Example: Dec. 2020 to Dec. 2022
   - Names of all people who lived with your child/children (including you) during that time. Separate the names with a comma.: locations[i].housemates
     input type: area
     maxlength: 135
   - note: |
-      If the current address of one of the people listed is different from the address listed, include the current address for that person in parenthesis next to their name. Example: Jane Test (1 Main Street, Sampletown, VT 05000).
+      If the address of one of the people listed has changed, include their current address next to their name in parenthesis. Example: Jane Test (1 Main Street, Sampletown, VT 05000).
 ---
 generic object: ALPeopleList
 id: any other locations
