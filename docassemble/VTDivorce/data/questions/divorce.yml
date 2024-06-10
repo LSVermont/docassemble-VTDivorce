@@ -268,7 +268,7 @@ subquestion: |
   
   <i class="fas fa-file-text fa-2x"></i> This guided interview will produce an initial package of forms needed to ask the court for a divorce, legal separation, or civil union dissolution.
   
-  This interview produces the following forms to give to the court:
+  This interview produces the following 5 forms to give to the court:
   
   * Summons and Complaint for a Divorce / Separation / Dissolution - form 400-00836
   * Notice of Appearance for Self-Represented Party - form 400-00831
@@ -785,7 +785,7 @@ fields:
   - Zip or postal code: users[0].mailing_address.zip
     show if: users1_mailing_address_different
   - note: |
-      If you are afraid for your safety, you can file a motion to ask the court to keep your address confidential from your spouse. Ask an advocate for help at [Vermont Network](https://www.vtnetwork.org/get-help/) or [Legal Services Vermont and Vermont Legal Aid.](https://vtlawhelp.org/victims-of-crime) Or ask the court clerk for the forms.
+      **Safety note**: If you are afraid for your safety, you can file a motion to ask the court to keep your address confidential from your spouse. Ask an advocate for help at [Vermont Network](https://www.vtnetwork.org/get-help/) or [Legal Services Vermont and Vermont Legal Aid.](https://vtlawhelp.org/victims-of-crime) Or ask the court clerk for the forms.
 ---
 id: Gather users contact information
 question: |
@@ -1101,7 +1101,9 @@ subquestion: |
 
   ${ action_button_html(url_action('review_divorce'), label='Edit your answers', color='info') }
   
-  Remember to come back to this window to continue and sign your forms.
+  **Remember to come back to this window to continue and sign your forms.**
+  
+  On these initial forms, only **your** signature is needed -- not your spouse's signature.
 continue button field: divorce_preview_question    
 ---
 id: signature date
