@@ -268,7 +268,7 @@ subquestion: |
   
   <i class="fas fa-file-text fa-2x"></i> This guided interview will produce an initial package of forms needed to ask the court for a divorce, legal separation, or civil union dissolution.
   
-  This interview produces the following forms to give to the court:
+  This interview produces the following 5 forms to give to the court:
   
   * Summons and Complaint for a Divorce / Separation / Dissolution - form 400-00836
   * Notice of Appearance for Self-Represented Party - form 400-00831
@@ -599,11 +599,13 @@ fields:
     maxlength: 10
   - End date (or today's date): locations[i].end_date 
     maxlength: 10
+  - note: |
+      Remember: It's OK to estimate the dates. Example: Dec. 2020 to Dec. 2022
   - Names of all people who lived with your child/children (including you) during that time. Separate the names with a comma.: locations[i].housemates
     input type: area
     maxlength: 135
   - note: |
-      If the current address of one of the people listed is different from the address listed, include the current address for that person in parenthesis next to their name. Example: Jane Test (1 Main Street, Sampletown, VT 05000).
+      If the address of one of the people listed has changed, include their current address next to their name in parenthesis. Example: Jane Test (1 Main Street, Sampletown, VT 05000).
 ---
 generic object: ALPeopleList
 id: any other locations
@@ -783,7 +785,7 @@ fields:
   - Zip or postal code: users[0].mailing_address.zip
     show if: users1_mailing_address_different
   - note: |
-      If you are afraid for your safety, you can file a motion to ask the court to keep your address confidential from your spouse. Ask an advocate for help at [Vermont Network](https://www.vtnetwork.org/get-help/) or [Legal Services Vermont and Vermont Legal Aid.](https://vtlawhelp.org/victims-of-crime) Or ask the court clerk for the forms.
+      **Safety note**: If you are afraid for your safety, you can file a motion to ask the court to keep your address confidential from your spouse. Ask an advocate for help at [Vermont Network](https://www.vtnetwork.org/get-help/) or [Legal Services Vermont and Vermont Legal Aid.](https://vtlawhelp.org/victims-of-crime) Or ask the court clerk for the forms.
 ---
 id: Gather users contact information
 question: |
@@ -995,6 +997,11 @@ fields:
     datatype: yesno
   - I want to go back to my former full name: plaintiff_former_name
     show if: name_change
+  - note: |
+      **Agreements / "stipulations"**: Sometimes, spouses cannot agree on property, debt, support, and child issues before filing for divorce or civil union dissolution. Other times, they may have discussed all of these things and filled out the court’s stipulation (agreement) forms. Learn more about these forms, and the benefits of having these written agreements, on our [Divorce Roadmap on VTLawHelp.org.](https://vtlawhelp.org/roadmap/divorce/step-3)
+      
+      In the next question, the court wants to know if you and your spouse are including these agreement forms as you ask for a divorce or dissolution.
+
   - I have a written agreement (stipulation) signed by me and ${ other_parties }. I will include it when I file these forms. I ask the court to issue an order that includes the provisions in our written agreement. : written_agreement_attached
     datatype: yesno
       
@@ -1007,7 +1014,7 @@ fields:
       
       2. Agreement on Parental Rights & Responsibilities, Parent Child Contact and Provisions Relating to Children, and
       
-      3. Child Support Order.
+      3. Child Support Order. (You would fill out just the first page of this form.)
       
       See our [Divorce Roadmap on VTLawHelp.org](https://vtlawhelp.org/roadmap/divorce/step-3) for agreement forms you can use.
       
@@ -1094,7 +1101,9 @@ subquestion: |
 
   ${ action_button_html(url_action('review_divorce'), label='Edit your answers', color='info') }
   
-  Remember to come back to this window to continue and sign your forms.
+  **Remember to come back to this window to continue and sign your forms.**
+  
+  On these initial forms, only **your** signature is needed -- not your spouse's signature.
 continue button field: divorce_preview_question    
 ---
 id: signature date
