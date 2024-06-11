@@ -320,7 +320,7 @@ fields:
       * the county you live in, or
       * the county the other person lives in (the "defendant"), or
       * if you have children with the other person, it should be in the county in which the children spend the most time, or
-      * if you had a civil union, it can be the county where your civil union took place. 
+      * if you had a civil union and you no longer live in Vermont, it can be the county where your civil union took place. 
     
       
       Not sure what county? [Check this list of cities and towns to find the county.](https://en.m.wikipedia.org/wiki/List_of_municipalities_in_Vermont#Cities)
@@ -331,11 +331,11 @@ id: jurisdiction kickout
 question: |
   Stop
 subquestion: |
-  <i class="fas fa-hand-paper fa-3x" aria-hidden="true"></i> **Stop.** In this situation, these are **not** the right forms to fill out. **Do not use this interview.**
+  <i class="fas fa-hand-paper fa-3x" aria-hidden="true"></i> **Stop.**
   
   Contact a lawyer or legal aid organization in the state where you live.
   
-  You can only start a divorce in Vermont if one or both of you has lived in Vermont for at least the past six months.
+  You can only start a divorce in Vermont if one or both of you has lived in Vermont for at least the past six months. (You can start the paperwork ahead of time, if you wish.)
   
   If you had a civil union and neither of you live in Vermont, a Vermont family court will only take your civil union dissolution case if **all these four things are true**:
   
@@ -972,7 +972,7 @@ fields:
   - On what grounds (for what reason)?: grounds
     input type: radio
     choices: 
-      - We have or will have lived separate and apart for more than 6 months in a row. It is not reasonably probable that we can resume our relationship. (Note - Also known as a "no-fault" divorce. This is the most common reason.): six_month_separation
+      - We have or will have lived separate and apart for more than 6 months in a row. It is not reasonably probable that we can resume our relationship. (Note - Also known as "no-fault." This is the most common reason.): six_month_separation
       - Other grounds (a different reason): other_ground
   - Date of separation: separation_date
     datatype: date
@@ -998,7 +998,7 @@ fields:
   - I want to go back to my former full name: plaintiff_former_name
     show if: name_change
   - note: |
-      **Agreements / "stipulations"**: Sometimes, spouses cannot agree on property, debt, support, and child issues before filing for divorce or civil union dissolution. Other times, they may have discussed all of these things and filled out the court’s stipulation (agreement) forms. Learn more about these forms, and the benefits of having these written agreements, on our [Divorce Roadmap on VTLawHelp.org.](https://vtlawhelp.org/roadmap/divorce/step-3)
+      **Agreements / "stipulations"**: Sometimes, spouses don't agree on property, debt, support, and child issues before filing for divorce or civil union dissolution. Other times, they may have discussed all of these things and filled out the court’s stipulation (agreement) forms. Learn more about these forms, and the benefits of having these written agreements, on our [Divorce Roadmap on VTLawHelp.org.](https://vtlawhelp.org/roadmap/divorce/step-3)
       
       In the next question, the court wants to know if you and your spouse are including these agreement forms as you ask for a divorce or dissolution.
 
