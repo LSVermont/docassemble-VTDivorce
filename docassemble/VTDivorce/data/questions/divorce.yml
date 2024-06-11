@@ -320,7 +320,7 @@ fields:
       * the county you live in, or
       * the county the other person lives in (the "defendant"), or
       * if you have children with the other person, it should be in the county in which the children spend the most time, or
-      * if you had a civil union, it can be the county where your civil union took place. 
+      * if you had a civil union and you no longer live in Vermont, it can be the county where your civil union took place. 
     
       
       Not sure what county? [Check this list of cities and towns to find the county.](https://en.m.wikipedia.org/wiki/List_of_municipalities_in_Vermont#Cities)
@@ -998,7 +998,7 @@ fields:
   - I want to go back to my former full name: plaintiff_former_name
     show if: name_change
   - note: |
-      **Agreements / "stipulations"**: Sometimes, spouses cannot agree on property, debt, support, and child issues before filing for divorce or civil union dissolution. Other times, they may have discussed all of these things and filled out the court’s stipulation (agreement) forms. Learn more about these forms, and the benefits of having these written agreements, on our [Divorce Roadmap on VTLawHelp.org.](https://vtlawhelp.org/roadmap/divorce/step-3)
+      **Agreements / "stipulations"**: Sometimes, spouses don't agree on property, debt, support, and child issues before filing for divorce or civil union dissolution. Other times, they may have discussed all of these things and filled out the court’s stipulation (agreement) forms. Learn more about these forms, and the benefits of having these written agreements, on our [Divorce Roadmap on VTLawHelp.org.](https://vtlawhelp.org/roadmap/divorce/step-3)
       
       In the next question, the court wants to know if you and your spouse are including these agreement forms as you ask for a divorce or dissolution.
 
