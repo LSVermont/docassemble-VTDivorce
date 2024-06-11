@@ -331,11 +331,11 @@ id: jurisdiction kickout
 question: |
   Stop
 subquestion: |
-  <i class="fas fa-hand-paper fa-3x" aria-hidden="true"></i> **Stop.** In this situation, these are **not** the right forms to fill out. **Do not use this interview.**
+  <i class="fas fa-hand-paper fa-3x" aria-hidden="true"></i> **Stop.**
   
   Contact a lawyer or legal aid organization in the state where you live.
   
-  You can only start a divorce in Vermont if one or both of you has lived in Vermont for at least the past six months.
+  You can only start a divorce in Vermont if one or both of you has lived in Vermont for at least the past six months. (You can start the paperwork ahead of time, if you wish.)
   
   If you had a civil union and neither of you live in Vermont, a Vermont family court will only take your civil union dissolution case if **all these four things are true**:
   
@@ -972,7 +972,7 @@ fields:
   - On what grounds (for what reason)?: grounds
     input type: radio
     choices: 
-      - We have or will have lived separate and apart for more than 6 months in a row. It is not reasonably probable that we can resume our relationship. (Note - Also known as a "no-fault" divorce. This is the most common reason.): six_month_separation
+      - We have or will have lived separate and apart for more than 6 months in a row. It is not reasonably probable that we can resume our relationship. (Note - Also known as "no-fault." This is the most common reason.): six_month_separation
       - Other grounds (a different reason): other_ground
   - Date of separation: separation_date
     datatype: date
