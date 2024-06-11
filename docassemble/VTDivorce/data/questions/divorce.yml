@@ -1094,7 +1094,7 @@ subquestion: |
   
   Tap the button below to see a preview of your documents in a new tab.
   
-  ${ action_button_html(al_court_bundle.as_pdf(key='preview').url_for(), label="View the PDF", color="primary") }
+  ${ action_button_html(al_court_bundle.as_pdf(key='preview').url_for(), label="View the PDF", color="secondary") }
 
   Tap the "Edit your answers" button
   to edit your answers.
