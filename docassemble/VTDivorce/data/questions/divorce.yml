@@ -164,18 +164,24 @@ code: |
   nav.set_section("screening")
   plaintiff_VT
   defendant_VT
+  
   if not plaintiff_VT and not defendant_VT:
   
-    if not marriage_or_civil_union_VT:
-      jurisdiction_kickout
-    if not both_cant_divorce_current_state:
-      jurisdiction_kickout
-    if not have_property_agreement:
-      jurisdiction_kickout
-    if school_age_kids:
-      jurisdiction_kickout
-  
-  initial_screening_continue 
+    if not civil_union_VT:
+      jurisdiction_kickout_divorce
+      initial_screening_divorce_continue
+      
+    if civil_union_VT:
+      if not both_cant_divorce_current_state:
+        jurisdiction_kickout
+      if not have_property_agreement:
+        jurisdiction_kickout
+      if school_age_kids:
+        jurisdiction_kickout
+      initial_screening_continue
+      
+  else:
+    initial_screening_continue 
   
   nav.set_section("about")
     
@@ -327,15 +333,30 @@ fields:
   - County: trial_court_index
     code: all_courts._load_courts()['address_county'].items()
 ---
-id: jurisdiction kickout
+id: jurisdiction kickout for divorce
+question: |
+  Stop
+subquestion: |
+  <i class="fas fa-hand-paper fa-3x" aria-hidden="true"></i>
+    
+  You can only start a divorce case in Vermont if one or both of you has lived in Vermont for at least the past six months. (You could work on the forms ahead of time if you wish. Save your progress by making a VTCourtForms account and then return to make changes.)
+    
+  See the [Divorce Roadmap on the VTLawHelp.org website](https://vtlawhelp.org/roadmap/divorce/step-1) to learn more about divorce, separation and civil union dissolution in Vermont.
+  
+  [**Go to the VTLawHelp.org website.**](https://vtlawhelp.org/roadmap/divorce/step-1)
+  
+continue button field: jurisdiction_kickout_divorce
+buttons:
+  - DELETE your answers: restart
+  - CONTINUE to interview: continue
+---
+id: jurisdiction kickout for civil union
 question: |
   Stop
 subquestion: |
   <i class="fas fa-hand-paper fa-3x" aria-hidden="true"></i>
   
   You may want to contact a lawyer or legal aid organization in the state where you live.
-  
-  You can only start a divorce case in Vermont if one or both of you has lived in Vermont for at least the past six months. (You could start the paperwork ahead of time if you wish.)
   
   If you had a civil union and neither of you live in Vermont, a Vermont family court will only take your civil union dissolution case if **all these four things are true**:
   
@@ -447,13 +468,13 @@ validation code: |
   if defendant_VT and date_defendant_moved_to_VT >= today().minus(months=6):
     validation_error("To get a divorce in Vermont, this date needs to be 6 months ago or more.", field="date_defendant_moved_to_VT")
 ---
-id: marriage_or_civil_union_VT
+id: civil_union_VT
 question: |
   See if this interview is right for your situation
 subquestion: |
   Did you and your spouse get a civil union in Vermont?
 fields:
-  - no label: marriage_or_civil_union_VT
+  - no label: civil_union_VT
     datatype: yesnoradio
 ---
 id: both_cant_divorce_current_state
@@ -484,6 +505,20 @@ fields:
   - no label: have_property_agreement
     datatype: yesnoradio
     
+---
+id: initial_screening_divorce_continue
+question: |
+  Continue
+subquestion: |
+  
+  Keep in mind, you can edit your answers after you preview the finished forms. You can also do that anytime by choosing Edit My Answers in the Menu at the top-right of the page.
+  
+  You can also go to the Menu and quickly Exit and Delete Your Answers if you need to. And, you may choose to make a free account so you can store your answers online and come back to them later.
+  
+  Let's get started.
+continue button field: initial_screening_divorce_continue
+buttons:
+  - Start the interview: continue
 ---
 id: initial_screening_continue
 question: |
