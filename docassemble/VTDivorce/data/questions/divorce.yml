@@ -13,14 +13,14 @@ include:
   - docassemble.VTNoticeOfAppearance:VTNoticeOfAppearance_to_include.yml
   - customized_screens.yml
 ---
-#This code added temporarily so people can test it on vtcourtforms and see the screen id numbers
-default screen parts:
-  pre: |
-    % if not url_args.get("hide_hud", "").lower() in ["1", "on", "true", "yes"]:
-    `id: ${ user_info().question_id }`[BR]
-    `Variable: ${ user_info().variable }`[BR]
-    `Version: ${ user_info().package.replace("docassemble.", "") + " " if not user_info().package.startswith("docassemble.playground") else "" }${ package_version_number }; ${ al_version }`
-    % endif
+##This code added temporarily so people can test it on vtcourtforms and see the screen id numbers
+#default screen parts:
+#  pre: |
+#    % if not url_args.get("hide_hud", "").lower() in ["1", "on", "true", "yes"]:
+#    `id: ${ user_info().question_id }`[BR]
+#    `Variable: ${ user_info().variable }`[BR]
+#    `Version: ${ user_info().package.replace("docassemble.", "") + " " if not user_info().package.startswith("docassemble.playground") else "" }${ package_version_number }; ${ al_version }`
+#    % endif
 ---
 #modules:
   #- docassemble.demo.accordion
@@ -451,7 +451,7 @@ fields:
     show if: plaintiff_VT
 validation code: |
   if plaintiff_VT and date_plaintiff_moved_to_VT >= today().minus(months=6):
-    validation_error("To get a divorce in Vermont, this date needs to be 6 months ago or more.", field="date_plaintiff_moved_to_VT")    
+    validation_error("To file for a divorce in Vermont, this date needs to be 6 months ago or more.", field="date_plaintiff_moved_to_VT")    
 ---
 id: defendant VT 6 months
 question: |
@@ -466,7 +466,7 @@ fields:
     show if: defendant_VT
 validation code: |
   if defendant_VT and date_defendant_moved_to_VT >= today().minus(months=6):
-    validation_error("To get a divorce in Vermont, this date needs to be 6 months ago or more.", field="date_defendant_moved_to_VT")
+    validation_error("To file for a divorce in Vermont, this date needs to be 6 months ago or more.", field="date_defendant_moved_to_VT")
 ---
 id: civil_union_VT
 question: |
