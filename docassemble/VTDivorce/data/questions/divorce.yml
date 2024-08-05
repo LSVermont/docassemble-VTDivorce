@@ -402,13 +402,21 @@ fields:
     show if: 
       variable: license_type
       is: marriage
+  - Marriage was in the U.S.?: marriage_US
+    datatype: yesnoradio
+    default: True
+    show if: 
+      variable: license_type
+      is: marriage
   - Marriage state: marriage_state
     code: |
       states_list()
     default: VT
-    show if: 
-      variable: license_type
-      is: marriage
+    js show if: |
+      val("license_type") == 'marriage' && val("marriage_US") == true
+  - Marriage country: marriage_country
+    js show if: |
+      val("license_type") == 'marriage' && val("marriage_US") == false
   - Marriage date: marriage_date
     datatype: date
     show if: 
@@ -418,13 +426,21 @@ fields:
     show if: 
       variable: license_type
       is: civil_union
+  - Civil union was in the U.S.?: civil_union_US
+    datatype: yesnoradio
+    default: True
+    show if: 
+      variable: license_type
+      is: civil_union
   - Civil Union state: civil_union_state
     code: |
       states_list()
     default: VT
-    show if: 
-      variable: license_type
-      is: civil_union
+    js show if: |
+      val("license_type") == 'civil_union' && val("civil_union_US") == true
+  - Civil union country: civil_union_country
+    js show if: |
+      val("license_type") == 'civil_union' && val("civil_union_US") == false
   - Civil Union date: civil_union_date
     datatype: date
     show if: 
@@ -1344,12 +1360,12 @@ review:
       % if license_type == "marriage":
       You were married in:
       
-      - **${ marriage_city }, ${ marriage_state },** on **${ marriage_date }**
+      - **${ marriage_city }, ${ showifdef("marriage_state") }${ showifdef("marriage_country") },** on **${ marriage_date }**
       % endif
       % if license_type == "civil_union":
       You had a civil union in:
       
-      - **${ civil_union_city }, ${ civil_union_state },** on **${ civil_union_date }**
+      - **${ civil_union_city }, ${ showifdef("civil_union_state") }${ showifdef("civil_union_country") },** on **${ civil_union_date }**
       % endif
   - Edit: des
     button: |
@@ -2029,12 +2045,12 @@ attachment:
       - "defendant_VT": ${ defendant_VT }
       - "date_defendant_moved_to_VT": ${ format_date(date_defendant_moved_to_VT, format='M/d/yyyy') }
       - "marriage": ${ license_type == "marriage" }
-      - "marriage_state": ${ marriage_state }
+      - "marriage_state": ${ showifdef("marriage_state") }${ showifdef("marriage_country") }
       - "marriage_city": ${ marriage_city }
       - "marriage_date": ${ format_date(marriage_date, format='M/d/yyyy') }
       - "civil_union": ${ license_type == "civil_union" }
       - "civil_union_city": ${ civil_union_city }
-      - "civil_union_state": ${ civil_union_state }
+      - "civil_union_state": ${ showifdef("civil_union_country") } ${ showifdef("civil_union_state") }
       - "civil_union_date": ${ format_date(civil_union_date, format='M/d/yyyy') }
       - "grant_for": True 
       - "divorce1": ${ grant_for == "divorce" }
@@ -2166,12 +2182,12 @@ attachment:
       - "defendant_VT": ${ defendant_VT }
       - "date_defendant_moved_to_VT": ${ format_date(date_defendant_moved_to_VT, format='M/d/yyyy') }
       - "marriage": ${ license_type == "marriage" }
-      - "marriage_state": ${ marriage_state }
+      - "marriage_state": ${ showifdef("marriage_state") }${ showifdef("marriage_country") }
       - "marriage_city": ${ marriage_city }
       - "marriage_date": ${ format_date(marriage_date, format='M/d/yyyy') }
       - "civil_union": ${ license_type == "civil_union" }
       - "civil_union_city": ${ civil_union_city }
-      - "civil_union_state": ${ civil_union_state }
+      - "civil_union_state": ${ showifdef("civil_union_country") } ${ showifdef("civil_union_state") }
       - "civil_union_date": ${ format_date(civil_union_date, format='M/d/yyyy') }
       - "grant_for": True 
       - "divorce1": ${ grant_for == "divorce" }
@@ -2358,7 +2374,7 @@ attachment:
       - "other_parties1_birth_year": ${ format_date(other_parties[0].birthdate, format='yyyy') }
       - "other_parties1_address_state": ${ other_parties[0].address.state }
       - "other_parties1_address_city": ${ other_parties[0].address.city }
-      - "civil_union_state": ${ civil_union_state }
+      - "civil_union_state": ${ showifdef("civil_union_country") } ${ showifdef("civil_union_state") }
       - "civil_union_city": ${ civil_union_city }
       - "civil_union_date_month": ${ format_date(civil_union_date, format='M') }
       - "civil_union_date_day": ${ format_date(civil_union_date, format='dd') }
@@ -2418,7 +2434,7 @@ attachment:
       - "other_parties1_birth_year": ${ format_date(other_parties[0].birthdate, format='yyyy') }
       - "other_parties1_address_state": ${ other_parties[0].address.state }
       - "other_parties1_address_city": ${ other_parties[0].address.city }
-      - "marriage_state": ${ marriage_state }
+      - "marriage_state": ${ showifdef("marriage_state") }${ showifdef("marriage_country") }
       - "marriage_city": ${ marriage_city }
       - "marriage_date_month": ${ format_date(marriage_date, format='M') }
       - "marriage_date_day": ${ format_date(marriage_date, format='dd') }
