@@ -130,7 +130,7 @@ code: |
   license_type
 
   OCS_filing_form
-  #users.gather()
+  
   # fields for health record
   if license_type == "civil_union":
     users[0].sex
@@ -138,6 +138,7 @@ code: |
     users[0].gender
     users_role
     
+  users.gather()  
   users[0].birthdate
   users[0].address.address
   if license_type == "civil_union" and not users[0].address.state == "VT":
@@ -1197,10 +1198,8 @@ review:
   - Edit: users.revisit
     button: |
       About you (edit your name, birthdate, gender and former name)
-
-      % for item in users:
-        - **${ item }**
-      % endfor
+      
+      - **${ users[0].name }**
   - Edit: users_role
     button: |
       % if license_type == "marriage":
