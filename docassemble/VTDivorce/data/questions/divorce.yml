@@ -103,6 +103,12 @@ code: |
   #users1_role sets the role for the Notice of Appearance form
   users1_role = "role_plaintiff"
   user_ask_role = "plaintiff"
+  
+  
+  other_parties[0].address.address
+  
+  
+  
   nav.set_section("screening")
   plaintiff_VT
   defendant_VT
@@ -157,7 +163,7 @@ code: |
     other_parties[0].gender
     other_parties_role
   other_parties[0].birthdate
-  other_parties[0].address.address
+  #other_parties[0].address.address
   other_parties1_gets_child_support
   other_parties[0].email
   other_parties_has_attorney
@@ -937,6 +943,9 @@ sets:
 question: |
   What is ${ other_parties[0] }'s address?
 fields:
+  - They live outside the United States: other_parties_non_US
+    datatype: yesno
+    required: False
   - Their address: other_parties[0].address
     datatype: object_radio
     choices:
@@ -961,12 +970,17 @@ fields:
   - ${ users[0].address.unit_label}: other_parties[0].address.unit
     required: False
   - ${ users[0].address.city_label}: other_parties[0].address.city
+  - Enter the province/state and country here: other_parties_non_US_state_country
+    maxlength: 16
+    show if: other_parties_non_US
   - ${ users[0].address.state_label}: other_parties[0].address.state
     code: |
       states_list(country_code=AL_DEFAULT_COUNTRY)
     default: ${ AL_DEFAULT_STATE }
-  - ${ users[0].address.zip_label}: other_parties[0].address.zip    
+    hide if: other_parties_non_US
   - ${ users[0].address.county_label}: other_parties[0].address.county
+    hide if: other_parties_non_US
+  - ${ users[0].address.zip_label}: other_parties[0].address.zip    
   - note: |
       Not sure what county? [Check this list of cities and towns to find the county.](https://en.m.wikipedia.org/wiki/List_of_municipalities_in_Vermont#Cities)
   - Does ${ other_parties } have a mailing address that is different from their street address?: other_parties1_mailing_address_different
@@ -2010,7 +2024,12 @@ attachment:
       - "other_parties1_name1": ${ other_parties[0].name }
       - "other_parties1_birthdate": ${ format_date(other_parties[0].birthdate, format='M/d/yyyy') }
       - "other_parties1_address_line_one": ${ other_parties[0].address.line_one() }
-      - "other_parties1_address_line_two": ${ other_parties[0].address.line_two() }
+      - "other_parties1_address_line_two": |
+          % if other_parties_non_US:
+          ${ other_parties[0].address.city }, ${ other_parties_non_US_state_country } ${ other_parties[0].address.zip }
+          % else:
+          ${ other_parties[0].address.line_two() }
+          % endif
       - "other_parties1__mailing_address_line_one": |
           % if other_parties1_mailing_address_different:
           ${ other_parties[0].mailing_address.line_one() }
