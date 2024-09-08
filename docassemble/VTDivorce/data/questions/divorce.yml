@@ -943,9 +943,9 @@ sets:
 question: |
   What is ${ other_parties[0] }'s address?
 fields:
-  - They live outside the United States: other_parties_non_US
+  - They live in the United States: other_parties_in_US
     datatype: yesno
-    required: False
+    default: True
   - Their address: other_parties[0].address
     datatype: object_radio
     choices:
@@ -972,14 +972,14 @@ fields:
   - ${ users[0].address.city_label}: other_parties[0].address.city
   - Enter the province/state and country here: other_parties_non_US_state_country
     maxlength: 16
-    show if: other_parties_non_US
+    hide if: other_parties_in_US
   - ${ users[0].address.state_label}: other_parties[0].address.state
     code: |
       states_list(country_code=AL_DEFAULT_COUNTRY)
     default: ${ AL_DEFAULT_STATE }
-    hide if: other_parties_non_US
+    show if: other_parties_in_US
   - ${ users[0].address.county_label}: other_parties[0].address.county
-    hide if: other_parties_non_US
+    show if: other_parties_in_US
   - ${ users[0].address.zip_label}: other_parties[0].address.zip    
   - note: |
       Not sure what county? [Check this list of cities and towns to find the county.](https://en.m.wikipedia.org/wiki/List_of_municipalities_in_Vermont#Cities)
@@ -2025,10 +2025,10 @@ attachment:
       - "other_parties1_birthdate": ${ format_date(other_parties[0].birthdate, format='M/d/yyyy') }
       - "other_parties1_address_line_one": ${ other_parties[0].address.line_one() }
       - "other_parties1_address_line_two": |
-          % if other_parties_non_US:
-          ${ other_parties[0].address.city }, ${ other_parties_non_US_state_country } ${ other_parties[0].address.zip }
-          % else:
+          % if other_parties_in_US:
           ${ other_parties[0].address.line_two() }
+          % else:
+          ${ other_parties[0].address.city }, ${ other_parties_non_US_state_country } ${ other_parties[0].address.zip }
           % endif
       - "other_parties1__mailing_address_line_one": |
           % if other_parties1_mailing_address_different:
@@ -2061,7 +2061,12 @@ attachment:
       - "plaintiff_VT": ${ plaintiff_VT }
       - "date_plaintiff_moved_to_VT": ${ format_date(date_plaintiff_moved_to_VT, format='M/d/yyyy') }
       - "other_parties1_address_county": ${ other_parties[0].address.county }
-      - "other_parties1_address_state": ${ other_parties[0].address.state }
+      - "other_parties1_address_state": |
+          % if other_parties_in_US:
+          ${ other_parties[0].address.state }
+          % else:
+          ${ other_parties_non_US_state_country }
+          % endif
       - "defendant_VT": ${ defendant_VT }
       - "date_defendant_moved_to_VT": ${ format_date(date_defendant_moved_to_VT, format='M/d/yyyy') }
       - "marriage": ${ license_type == "marriage" }
@@ -2166,7 +2171,12 @@ attachment:
       - "other_parties1_name1": ${ other_parties[0].name }
       - "other_parties1_birthdate": ${ format_date(other_parties[0].birthdate, format='M/d/yyyy') }
       - "other_parties1_address_line_one": ${ other_parties[0].address.line_one() }
-      - "other_parties1_address_line_two": ${ other_parties[0].address.line_two() }
+      - "other_parties1_address_line_two": |
+          % if other_parties_in_US:
+          ${ other_parties[0].address.line_two() }
+          % else:
+          ${ other_parties[0].address.city }, ${ other_parties_non_US_state_country } ${ other_parties[0].address.zip }
+          % endif      
       - "other_parties1__mailing_address_line_one": |
           % if other_parties1_mailing_address_different:
           ${ other_parties[0].mailing_address.line_one() }
@@ -2198,7 +2208,12 @@ attachment:
       - "plaintiff_VT": ${ plaintiff_VT }
       - "date_plaintiff_moved_to_VT": ${ format_date(date_plaintiff_moved_to_VT, format='M/d/yyyy') }
       - "other_parties1_address_county": ${ other_parties[0].address.county }
-      - "other_parties1_address_state": ${ other_parties[0].address.state }
+      - "other_parties1_address_state": |
+          % if other_parties_in_US:
+          ${ other_parties[0].address.state }
+          % else:
+          ${ other_parties_non_US_state_country }
+          % endif
       - "defendant_VT": ${ defendant_VT }
       - "date_defendant_moved_to_VT": ${ format_date(date_defendant_moved_to_VT, format='M/d/yyyy') }
       - "marriage": ${ license_type == "marriage" }
