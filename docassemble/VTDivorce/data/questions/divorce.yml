@@ -2407,7 +2407,12 @@ attachment:
       - "other_parties1_birth_month": ${ format_date(other_parties[0].birthdate, format='M') }
       - "other_parties1_birth_day": ${ format_date(other_parties[0].birthdate, format='dd') }
       - "other_parties1_birth_year": ${ format_date(other_parties[0].birthdate, format='yyyy') }
-      - "other_parties1_address_state": ${ other_parties[0].address.state }
+      - "other_parties1_address_state": |
+          % if other_parties_in_US:
+          ${ other_parties[0].address.state }
+          % else:
+          ${ other_parties_non_US_state_country }
+          % endif
       - "other_parties1_address_city": ${ other_parties[0].address.city }
       - "civil_union_state": ${ showifdef("civil_union_country") } ${ showifdef("civil_union_state") }
       - "civil_union_city": ${ civil_union_city }
@@ -2467,7 +2472,12 @@ attachment:
       - "other_parties1_birth_month": ${ format_date(other_parties[0].birthdate, format='M') }
       - "other_parties1_birth_day": ${ format_date(other_parties[0].birthdate, format='dd') }
       - "other_parties1_birth_year": ${ format_date(other_parties[0].birthdate, format='yyyy') }
-      - "other_parties1_address_state": ${ other_parties[0].address.state }
+      - "other_parties1_address_state": |
+          % if other_parties_in_US:
+          ${ other_parties[0].address.state }
+          % else:
+          ${ other_parties_non_US_state_country }
+          % endif
       - "other_parties1_address_city": ${ other_parties[0].address.city }
       - "marriage_state": ${ showifdef("marriage_state") }${ showifdef("marriage_country") }
       - "marriage_city": ${ marriage_city }
