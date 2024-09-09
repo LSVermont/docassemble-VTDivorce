@@ -1315,12 +1315,21 @@ review:
   - Edit: other_parties[0].address.address
     button: |      
       Their address:
-      
-      - **${ other_parties[0].address.on_one_line() }**
+      % if other_parties_in_US:
+      **${ other_parties[0].address.on_one_line() }**
+      % else:
+      **${ other_parties[0].address.line_one() }, ${ other_parties[0].address.city }, ${ other_parties_non_US_state_country } ${ other_parties[0].address.zip }**
+      % endif         
       
       % if other_parties1_mailing_address_different:
-      - Mailing address: **${ other_parties[0].mailing_address.on_one_line() }**
+      - Mailing address:
+      % if other_parties_in_US:
+      ${ other_parties[0].mailing_address.on_one_line() }
+      % else:
+      ${ other_parties[0].mailing_address.line_one() }, ${ other_parties[0].mailing_address.city }, ${ other_parties_non_US_state_country } ${ other_parties[0].mailing_address.zip }
       % endif
+      % endif      
+
   - Edit: other_parties[0].email
     button: |      
       Their contact info:
@@ -2036,7 +2045,11 @@ attachment:
           % endif
       - "other_parties1__mailing_address_line_two": |
           % if other_parties1_mailing_address_different:
+          % if other_parties_in_US:
           ${ other_parties[0].mailing_address.line_two() }
+          % else:
+          ${ other_parties[0].mailing_address.city }, ${ other_parties_non_US_state_country } ${ other_parties[0].mailing_address.zip }
+          % endif
           % endif
       - "other_parties1_email": ${ other_parties[0].email }
       - "other_parties1_evening_phone_number": ${ other_parties[0].evening_phone_number }
@@ -2183,7 +2196,11 @@ attachment:
           % endif
       - "other_parties1__mailing_address_line_two": |
           % if other_parties1_mailing_address_different:
+          % if other_parties_in_US:
           ${ other_parties[0].mailing_address.line_two() }
+          % else:
+          ${ other_parties[0].mailing_address.city }, ${ other_parties_non_US_state_country } ${ other_parties[0].mailing_address.zip }
+          % endif
           % endif
       - "other_parties1_email": ${ other_parties[0].email }
       - "other_parties1_evening_phone_number": ${ other_parties[0].evening_phone_number }
