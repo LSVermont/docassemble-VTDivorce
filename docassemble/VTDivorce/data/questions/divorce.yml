@@ -966,7 +966,7 @@ fields:
     required: False
   - ${ users[0].address.city_label}: other_parties[0].address.city
   - Enter the province/state and country here: other_parties_non_US_state_country
-    maxlength: 16
+    maxlength: 14
     hide if: other_parties_in_US
   - ${ users[0].address.state_label}: other_parties[0].address.state
     code: |
@@ -995,7 +995,7 @@ fields:
     js show if: |
       val("other_parties1_mailing_address_different") && val("other_parties_in_US")
   - Enter the province/state and country here: other_parties_non_US_state_country
-    maxlength: 16
+    maxlength: 14
     js show if: |
       val("other_parties1_mailing_address_different") && val("other_parties_in_US") == false
   - Zip or postal code: other_parties[0].mailing_address.zip
