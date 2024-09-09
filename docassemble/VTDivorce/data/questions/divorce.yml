@@ -104,11 +104,6 @@ code: |
   users1_role = "role_plaintiff"
   user_ask_role = "plaintiff"
   
-  
-  other_parties[0].address.address
-  
-  
-  
   nav.set_section("screening")
   plaintiff_VT
   defendant_VT
@@ -163,7 +158,7 @@ code: |
     other_parties[0].gender
     other_parties_role
   other_parties[0].birthdate
-  #other_parties[0].address.address
+  other_parties[0].address.address
   other_parties1_gets_child_support
   other_parties[0].email
   other_parties_has_attorney
@@ -997,7 +992,12 @@ fields:
     code: |
       states_list()
     default: VT
-    show if: other_parties1_mailing_address_different
+    js show if: |
+      val("other_parties1_mailing_address_different") && val("other_parties_in_US")
+  - Enter the province/state and country here: other_parties_non_US_state_country
+    maxlength: 16
+    js show if: |
+      val("other_parties1_mailing_address_different") && val("other_parties_in_US") == false
   - Zip or postal code: other_parties[0].mailing_address.zip
     show if: other_parties1_mailing_address_different
 ---
