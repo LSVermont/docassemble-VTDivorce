@@ -1,11 +1,5 @@
 
 
-#if have kids, ask separate 813A and B questions. Financial Information ☐ I am ☐ I am not filing with this Complaint a completed Financial Affidavit (form 400-00813A). ☐ I am ☐ I am not filing with this Complaint a completed Financial Affidavit – Property and Assets (form 400-00813B).If I am not filing these forms now, I understand I will be required to file them with the court at a future date, and must also provide a copy to the other party.
-
-#on kids PDF, update kids addresses fields on PDF and overflow trigger
-
-
-
 #For this interview, the person filling out the form (user) is always considered to be the plaintiff.
 #The statement of confidential info form (SSNs) and health record form are included in this package because they will never be stand-alone interviews. Note that for security reasons we are not actually collecting the Social Security numbers in this interview. People will fill those in on their own.
 #We will be "including" other stand-alone interviews.
@@ -1019,7 +1013,7 @@ question: |
 subquestion: |
   Both you and your spouse need to complete two financial affidavit forms (forms 400-00813A and 813B) -- either now or later. On one form you will list all your income and expenses. On the other you will list all of the property, assets and debts that you and ${ other_parties[0] } own together or separately that are known to you.
   
-  You can fill out these forms on your own and file it with the initial divorce documents from this interview. Or you can file them at a later date. ([See the paper version of the 813A form](https://www.vermontjudiciary.org/media/926)) and the [813B form.](https://www.vermontjudiciary.org/media/926) It takes quite a bit of time to fill them out.
+  You can fill out these forms on your own and file them with the initial divorce documents from this interview. Or you can file them at a later date. ([See the paper version of the 813A form](https://www.vermontjudiciary.org/media/886)) and the [813B form.](https://www.vermontjudiciary.org/media/926) It takes quite a bit of time to fill them out.
   
   This interview does **not** help you fill out these forms, but the court wants to know when you plan to fill them out and file them.
 
@@ -1697,19 +1691,19 @@ review:
     button: |
       Form 813A: 
       % if when_filing_financial_form_813A == "now":
-      **I am going to file forms 400-00813A **with** these initial divorce documents**
+      **I am going to file form 400-00813A **with** these initial divorce documents**
       % endif
       % if when_filing_financial_form_813A == "later":
-      **I am going to file forms 400-00813A later**
+      **I am going to file form 400-00813A later**
       % endif
   - Edit: when_filing_financial_form_813B
     button: |
       Form 813B: 
       % if when_filing_financial_form_813B == "now":
-      **I am going to file forms 400-00813A **with** these initial divorce documents**
+      **I am going to file form 400-00813B **with** these initial divorce documents**
       % endif
       % if when_filing_financial_form_813B == "later":
-      **I am going to file forms 400-00813A later**
+      **I am going to file form 400-00813B later**
       % endif
   - Edit: 
     - trial_court_index
@@ -1953,7 +1947,7 @@ code: |
   divorce_with_kids_attachment.overflow_fields['earlier_RFA'].label = "Other RFA actions"
   divorce_with_kids_attachment.overflow_fields['children'].overflow_trigger = 5
   divorce_with_kids_attachment.overflow_fields['children'].label = "Other children"
-  divorce_with_kids_attachment.overflow_fields['locations'].overflow_trigger = 1
+  divorce_with_kids_attachment.overflow_fields['locations'].overflow_trigger = 3
   divorce_with_kids_attachment.overflow_fields['locations'].label = "More information about the children's housing locations and housemates"
   divorce_with_kids_attachment.overflow_fields['locations'].headers = [
     {'address': "Address"},
@@ -2297,42 +2291,23 @@ attachment:
       - "child_birthdate5": ${ children[4].birthdate }
      
       - "child_address1": ${ locations[0].address.on_one_line() }
-
       - "child_date1": ${ locations[0].start_date } to ${ locations[0].end_date }
       - "child_housemate1": ${ locations[0].housemates }
-      - "child_address2": |
-          ${ locations[1].address.address } 
-          % if defined("locations[1].address.unit"):
-          Unit ${ locations[1].address.unit } 
-          % endif
-          ${ locations[1].address.city }, ${ locations[1].address.state } 
+      - "child_address2": ${ locations[0].address.on_one_line() }
       - "child_date2": ${ locations[1].start_date } to ${ locations[1].end_date }
       - "child_housemate2": ${ locations[1].housemates }
-      - "child_address3": |          
-          ${ locations[2].address.address } 
-          % if defined("locations[2].address.unit"):
-          Unit ${ locations[2].address.unit } 
-          % endif
-          ${ locations[2].address.city }, ${ locations[2].address.state } 
+      - "child_address3": ${ locations[2].address.on_one_line() }
       - "child_date3": ${ locations[2].start_date } to ${ locations[2].end_date }
       - "child_housemate3": ${ locations[2].housemates }
-      - "child_address4": |          
-          ${ locations[3].address.address } 
-          % if defined("locations[3].address.unit"):
-          Unit ${ locations[3].address.unit } 
-          % endif
-          ${ locations[3].address.city }, ${ locations[3].address.state } 
+      - "child_address4": ${ locations[3].address.on_one_line() }
       - "child_date4": ${ locations[3].start_date } to ${ locations[3].end_date }
       - "child_housemate4": ${ locations[3].housemates }
-      - "child_address5": |          
-          ${ locations[4].address.address } 
-          % if defined("locations[4].address.unit"):
-          Unit ${ locations[4].address.unit } 
-          % endif
-          ${ locations[4].address.city }, ${ locations[4].address.state } 
+      - "child_address5": ${ locations[4].address.on_one_line() }
       - "child_date5": ${ locations[4].start_date } to ${ locations[4].end_date }
       - "child_housemate5": ${ locations[4].housemates }
-   
+      - "child_address6": ${ locations[5].address.on_one_line() }
+      - "child_date6": ${ locations[5].start_date } to ${ locations[5].end_date }
+      - "child_housemate6": ${ locations[5].housemates }   
       - "participated_custody_child": ${ participations }
       - "information_child": ${ information }
       - "knowledge_custody_child": ${ knowledge }
