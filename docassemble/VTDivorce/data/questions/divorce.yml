@@ -1,3 +1,11 @@
+
+
+#if have kids, ask separate 813A and B questions. Financial Information ☐ I am ☐ I am not filing with this Complaint a completed Financial Affidavit (form 400-00813A). ☐ I am ☐ I am not filing with this Complaint a completed Financial Affidavit – Property and Assets (form 400-00813B).If I am not filing these forms now, I understand I will be required to file them with the court at a future date, and must also provide a copy to the other party.
+
+#on kids PDF, update kids addresses fields on PDF and overflow trigger
+
+
+
 #For this interview, the person filling out the form (user) is always considered to be the plaintiff.
 #The statement of confidential info form (SSNs) and health record form are included in this package because they will never be stand-alone interviews. Note that for security reasons we are not actually collecting the Social Security numbers in this interview. People will fill those in on their own.
 #We will be "including" other stand-alone interviews.
@@ -180,8 +188,12 @@ code: |
   nav.set_section("what_want")
   grant_for
   set_progress(48)
-  
-  when_filing_financial_form
+
+  if have_school_age_children:
+    when_filing_financial_form_813A
+    when_filing_financial_form_813B
+  else:
+    when_filing_financial_forms
   nav.set_section("past_actions")
   if earlier_actions.there_are_any: 
     earlier_actions.gather()
@@ -1003,16 +1015,21 @@ fields:
 ---
 id: when filing financial form
 question: |
-  Are you also filing financial form 400-00813B now?
+  Are you also filing your financial forms now?
 subquestion: |
-  Both you and your spouse need to complete a Financial Affidavit Property and Assets form (form 400-00813B) -- either now or later. On that form you will list all of the property, assets and debts that you and ${ other_parties[0] } own together or separately that are known to you.
+  Both you and your spouse need to complete two financial affidavit forms (forms 400-00813A and 813B) -- either now or later. On one form you will list all your income and expenses. On the other you will list all of the property, assets and debts that you and ${ other_parties[0] } own together or separately that are known to you.
   
-  You can fill it out on your own and file it with the initial divorce documents from this interview. Or you can file it at a later date. ([See the paper version of the form.](https://www.vermontjudiciary.org/media/926)) It takes quite a bit of time to fill it out.
+  You can fill out these forms on your own and file it with the initial divorce documents from this interview. Or you can file them at a later date. ([See the paper version of the 813A form](https://www.vermontjudiciary.org/media/926)) and the [813B form.](https://www.vermontjudiciary.org/media/926) It takes quite a bit of time to fill them out.
   
-  This interview does **not** help you fill this form out, but the court wants to know when you plan to fill it out and file it with them.
+  This interview does **not** help you fill out these forms, but the court wants to know when you plan to fill them out and file them.
 
 fields:
-  - no label: when_filing_financial_form
+  - Form 813A: when_filing_financial_form_813A
+    input type: radio
+    choices: 
+      - I am going to file form 400-00813A **with** these initial divorce documents: now
+      - I am going to file form 400-00813A later: later
+  - Form 813B: when_filing_financial_form_813B
     input type: radio
     choices: 
       - I am going to file form 400-00813B **with** these initial divorce documents: now
@@ -1667,14 +1684,32 @@ review:
       **${ trial_court_division_other_filing2 }**
   - note: |
       ###Filing this case
-  - Edit: when_filing_financial_form
+  - Edit: when_filing_financial_forms
+    button: |
+      Financial forms: 
+      % if when_filing_financial_forms == "now":
+      **I am going to file forms 400-00813A and 400-00813B **with** these initial divorce documents**
+      % endif
+      % if when_filing_financial_forms == "later":
+      **I am going to file forms 400-00813A and 400-00813B later**
+      % endif
+  - Edit: when_filing_financial_form_813A
+    button: |
+      Form 813A: 
+      % if when_filing_financial_form_813A == "now":
+      **I am going to file forms 400-00813A **with** these initial divorce documents**
+      % endif
+      % if when_filing_financial_form_813A == "later":
+      **I am going to file forms 400-00813A later**
+      % endif
+  - Edit: when_filing_financial_form_813B
     button: |
       Form 813B: 
-      % if when_filing_financial_form == "now":
-      **I am going to file form 400-00813B **with** these initial divorce documents**
+      % if when_filing_financial_form_813B == "now":
+      **I am going to file forms 400-00813A **with** these initial divorce documents**
       % endif
-      % if when_filing_financial_form == "later":
-      **I am going to file form 400-00813B later**
+      % if when_filing_financial_form_813B == "later":
+      **I am going to file forms 400-00813A later**
       % endif
   - Edit: 
     - trial_court_index
@@ -2098,8 +2133,8 @@ attachment:
       - "separation_date": ${ format_date(separation_date, format='M/d/yyyy') }
       - "other_ground": ${ grounds == "other_ground" }
       - "other_ground_explanation": ${ other_ground_explanation }
-      - "filing_financial_form": ${ when_filing_financial_form == "now" }
-      - "not_filing_financial_form": ${ when_filing_financial_form == "later" }
+      - "filing_financial_forms": ${ when_filing_financial_forms == "now" }
+      - "not_filing_financial_forms": ${ when_filing_financial_forms == "later" }
       - "plaintiff_des_assistance": ${ des['plaintiff_des_assistance'] }
       - "defendant_des_assistance": ${ des['defendant_des_assistance'] }
       - "earlier_actions_no": ${ not earlier_actions.there_are_any }
@@ -2320,8 +2355,10 @@ attachment:
       - "contact_for_myself": ${ contact_for["contact_for_myself"] }
       - "contact_for_defendant": ${ contact_for["contact_for_defendant"] }
       - "child_medical_support": ${ child_medical_support }
-      - "filing_financial_form": ${ when_filing_financial_form == "now" }
-      - "not_filing_financial_form": ${ when_filing_financial_form == "later" }
+      - "filing_financial_form_813A": ${ when_filing_financial_form_813A == "now" }
+      - "not_filing_financial_form_813A": ${ when_filing_financial_form_813A == "later" }
+      - "filing_financial_form_813B": ${ when_filing_financial_form_813B == "now" }
+      - "not_filing_financial_form_813B": ${ when_filing_financial_form_813B == "later" }
       - "plaintiff_des_assistance": ${ des['plaintiff_des_assistance'] }
       - "defendant_des_assistance": ${ des['defendant_des_assistance'] }
       - "earlier_actions_no": ${ not earlier_actions.there_are_any }
