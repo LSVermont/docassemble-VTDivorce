@@ -31,22 +31,13 @@ include:
 code: |   
   feedback_form = "docassemble.VTFeedback:VTfeedback.yml"
 ---
-# Adding Edit my answers to dropdown menu
----
-variable name: al_menu_items_custom_items
-data from code:
-  - url: |
-      url_action('review_divorce')
-    label: |
-       "Edit my answers"
----
 metadata:
   title: >-
     Divorce / separation / dissolution
   short title: >-
     Divorce
   description: |-
-    This interview helps someone in Vermont ask the court for a divorce, separation, or civil union dissolution. Based on paper versions of divorce complaint forms 400-00836Children (05/2024) and 400-00836NoChildren (05/2024), Statement of Confidential Information form 400-00849 (07/2013), and health department forms VDH-VR-DISS-2/2007 and VDH-VR-DIV-9/2009.
+    This tool helps someone in Vermont ask the court for a divorce, separation, or civil union dissolution. Based on paper versions of divorce complaint forms 400-00836Children (05/2024) and 400-00836NoChildren (05/2024), Statement of Confidential Information form 400-00849 (07/2013), and health department forms VDH-VR-DISS-2/2007 and VDH-VR-DIV-9/2009.
   tags:
     - "FA-00-00-00-00"
   authors:
@@ -81,16 +72,71 @@ objects:
   - earlier_RFA: DAList.using(object_type=Thing, ask_number=True, complete_attribute='complete')
   - child_custody: DADict.using(object_type=DAObject, auto_gather=False, gathered=True,complete_attribute="complete")
 ---
+############Code below to allow Edit my answers to be clicked in Menu or in side nav#########
+---
+reconsider: True
+code: |
+  al_menu_items_tmp = [
+    {"url": url_ask(['al_start_over_confirmation','al_start_over']),
+    "label": "Start over"
+    },
+    {
+      "url": url_ask(['al_exit_logout_confirmation', 'al_exit_logout']),
+      "label": "Exit and delete my answers"
+    },
+  ]
+  if al_enable_incomplete_downloads:
+    al_menu_items_tmp.append({
+        "url": url_action('al_error_action_download_screen'), 
+        "label": "Download current progress"
+    })
+  
+  # Answer set feature is behind a server-wide configuration option
+  if get_config('assembly line',{}).get('enable answer sets'):
+    al_menu_items_tmp.extend([
+    {"url": url_ask(["al_sessions_snapshot_label", {"recompute": ["al_sessions_save_session_snapshot"]}, "al_sessions_save_status"]),
+    "label": "Save answer set"
+    },
+    action_menu_item("Load answer set", "al_load_saved_session"),
+  ]
+  )
+  
+  if get_config('assembly line',{}).get('enable answer set imports'):
+    al_menu_items_tmp.append(
+      {"url": url_ask(["al_sessions_json_file", {"recompute": ["al_sessions_import_json"]}, "al_sessions_load_status"]),
+      "label": "Import answer set"
+      }
+    )
+  al_menu_items_tmp.append(
+    {
+      "url": url_action('edit_answers_screen'),
+      "label": "Edit my answers"
+      
+    }
+  )
+    
+  al_menu_items = al_menu_items_tmp
+  del al_menu_items_tmp
+---
+event: edit_answers_screen
+id: edit answers screen
+question: |
+  Edit your answers
+subquestion: |
+  ${ action_button_html(url_action('review_divorce'), label='<i class="fa-solid fa-pencil"></i> Edit your answers', color='info') }
+  
+  Remember to come back to this screen to continue.
+continue button field: divorce_preview_question
+---
 sections:
   - intro: Introduction
-  - screening: Is this interview right for you
+  - screening: Is this tool right for you
   - about: About you
   - defendant: About the other party
   - kids: About children
   - what_want: What you want in the order
   - past_actions: Other court actions
-  #- serving_other_side: Serving the other party
-  - review_answers: Edit your answers
+  - review_divorce: <i class="fa-solid fa-pencil"></i> <u>Edit your answers</u>
   - sign: Signature
   - get_docs: Get your documents
 ---
@@ -243,7 +289,7 @@ code: |
   #other_people_receiving_service.gather()
   ###########
   
-  nav.set_section("review_answers")
+  nav.set_section("review_divorce")
   trial_court.address.county
   divorce_preview_question
   
@@ -281,9 +327,9 @@ subquestion: |
 
   <p>${ intro_vtcourtforms_3_steps }</p>
   
-  <i class="fas fa-file-text fa-2x"></i> This guided interview will produce an initial package of forms needed to ask the court for a divorce, legal separation, or civil union dissolution.
+  <i class="fas fa-file-text fa-2x"></i> This tool will produce an initial package of forms needed to ask the court for a divorce, legal separation, or civil union dissolution.
   
-  This interview produces the following 5 forms to give to the court:
+  This tool produces the following 5 forms to give to the court:
   
   * Summons and Complaint for a Divorce / Separation / Dissolution - form 400-00836
   * Notice of Appearance for Self-Represented Party - form 400-00831
@@ -291,7 +337,7 @@ subquestion: |
   * Statement of Confidential Information - form 400-00849
   * Department of Health Record of Divorce or Dissolution
   
-  <i class="fas fa-clock fa-2x"></i> It may take you over 45 minutes to complete this interview.
+  <i class="fas fa-clock fa-2x"></i> It may take you over 45 minutes to complete this.
   
   <i class="fas fa-circle-info fa-2x"></i> It is free to use this program. This site is not a lawyer.
   
@@ -357,7 +403,7 @@ subquestion: |
 continue button field: jurisdiction_kickout_divorce
 buttons:
   - DELETE your answers: restart
-  - CONTINUE to interview: continue
+  - CONTINUE: continue
 ---
 id: jurisdiction kickout for civil union
 question: |
@@ -372,7 +418,7 @@ subquestion: |
   1. You got the civil union in Vermont
   2. You and your spouse currently live in states where you can't dissolve your civil union
   3. You don't have minor children (under 18), and
-  4. You and your spouse have a written agreement (a "stipulation") about how to deal with your property and debts. You and your spouse must file a signed agreement about how to deal with your property and debts (Final Stipulation Property, Debt and Spousal Support). If you go ahead with this interview, you must file the stipulation form at the same time as you file the forms produced by this interview. The court will not grant the dissolution without an agreement. Visit [VTLawHelp to download the Final Stipulation form.](https://vtlawhelp.org/roadmap/divorce/step-3) It is not part of this interview at this time.
+  4. You and your spouse have a written agreement (a "stipulation") about how to deal with your property and debts. You and your spouse must file a signed agreement about how to deal with your property and debts (Final Stipulation Property, Debt and Spousal Support). If you go ahead with this tool, you must file the stipulation form at the same time as you file the forms produced by this tool. The court will not grant the dissolution without an agreement. Visit [VTLawHelp to download the Final Stipulation form.](https://vtlawhelp.org/roadmap/divorce/step-3) It is not part of this tool at this time.
   
   See the [Divorce Roadmap on the VTLawHelp.org website](https://vtlawhelp.org/roadmap/divorce/step-1) to learn more about divorce, separation and civil union dissolution in Vermont.
   
@@ -394,7 +440,7 @@ subquestion: |
   3. You don't have minor children (under 18), and
   4. You and your spouse must file a signed agreement about how to deal with your property and debts (Final Stipulation Property, Debt and Spousal Support). In this situation, the court will **not** grant the dissolution without an agreement.
   
-  Visit [VTLawHelp if you need to download the Final Stipulation form.](https://vtlawhelp.org/roadmap/divorce/step-3) It is not part of this interview at this time.
+  Visit [VTLawHelp if you need to download the Final Stipulation form.](https://vtlawhelp.org/roadmap/divorce/step-3) It is not part of this tool at this time.
   
 continue button field: remind_non_VTers_about_needing_stipulation
 ---
@@ -463,7 +509,7 @@ validation code: |
 ---
 id: plaintiff VT 6 months
 question: |
-  See if this interview is right for your situation
+  See if this tool is right for your situation
 subquestion: |
   Have you lived in Vermont since ${ today().minus(months=6) }?
 fields:
@@ -480,7 +526,7 @@ validation code: |
 ---
 id: defendant VT 6 months
 question: |
-  See if this interview is right for your situation
+  See if this tool is right for your situation
 subquestion: |
   Has your spouse lived in Vermont since ${ today().minus(months=6) }?
 fields:
@@ -495,7 +541,7 @@ validation code: |
 ---
 id: civil_union_VT
 question: |
-  See if this interview is right for your situation
+  See if this tool is right for your situation
 subquestion: |
   Did you and your spouse get a civil union in Vermont?
 fields:
@@ -504,7 +550,7 @@ fields:
 ---
 id: both_cant_divorce_current_state
 question: |
-  See if this interview is right for your situation
+  See if this tool is right for your situation
 subquestion: |
   Do you and your spouse currently live in states where you can't dissolve your civil union?
 fields:
@@ -523,7 +569,7 @@ fields:
 ---
 id: property agreement
 question: |
-  See if this interview is right for your situation
+  See if this tool is right for your situation
 subquestion: |
   Do you and your spouse have an agreement (a "stipulation") about how to deal with your property and debts?
 fields:
@@ -543,13 +589,13 @@ subquestion: |
   Let's get started.
 continue button field: initial_screening_divorce_continue
 buttons:
-  - Start the interview: continue
+  - Start: continue
 ---
 id: initial_screening_continue
 question: |
   Continue
 subquestion: |
-  <i class="fas fa-check fa-3x" style="color: #429a3c;" aria-hidden="true"></i>  Yes, you can use this interview to fill out these forms. 
+  <i class="fas fa-check fa-3x" style="color: #429a3c;" aria-hidden="true"></i>  Yes, you can use this tool to fill out these forms. 
   
   Keep in mind, you can edit your answers after you preview the finished forms. You can also do that anytime by choosing Edit My Answers in the Menu at the top-right of the page.
   
@@ -558,7 +604,7 @@ subquestion: |
   Let's get started.
 continue button field: initial_screening_continue
 buttons:
-  - Start the interview: continue
+  - Start: continue
 ---
 id: have school age children
 question: |
@@ -1012,9 +1058,9 @@ question: |
 subquestion: |
   Both you and your spouse need to complete two financial affidavit forms (forms 400-00813A and 813B) -- either now or later. On one form you will list all your income and expenses. On the other you will list all of the property, assets and debts that you and ${ other_parties[0] } own together or separately that are known to you.
   
-  You can fill out these forms on your own and file them with the initial divorce documents from this interview. Or you can file them at a later date. ([See the paper version of the 813A form](https://www.vermontjudiciary.org/media/886)) and the [813B form.](https://www.vermontjudiciary.org/media/926) It takes quite a bit of time to fill them out.
+  You can fill out these forms on your own and file them with the initial divorce documents from this tool. Or you can file them at a later date. ([See the paper version of the 813A form](https://www.vermontjudiciary.org/media/886)) and the [813B form.](https://www.vermontjudiciary.org/media/926) It takes quite a bit of time to fill them out.
   
-  This interview does **not** help you fill out these forms, but the court wants to know when you plan to fill them out and file them.
+  This tool does **not** help you fill out these forms, but the court wants to know when you plan to fill them out and file them.
 fields:
   - no label: when_filing_financial_forms_813
     input type: radio
@@ -1028,9 +1074,9 @@ question: |
 subquestion: |
   Both you and your spouse need to complete two financial affidavit forms (forms 400-00813A and 813B) -- either now or later. On one form you will list all your income and expenses. On the other you will list all of the property, assets and debts that you and ${ other_parties[0] } own together or separately that are known to you.
   
-  You can fill out these forms on your own and file them with the initial divorce documents from this interview. Or you can file them at a later date. ([See the paper version of the 813A form](https://www.vermontjudiciary.org/media/886)) and the [813B form.](https://www.vermontjudiciary.org/media/926) It takes quite a bit of time to fill them out.
+  You can fill out these forms on your own and file them with the initial divorce documents from this tool. Or you can file them at a later date. ([See the paper version of the 813A form](https://www.vermontjudiciary.org/media/886)) and the [813B form.](https://www.vermontjudiciary.org/media/926) It takes quite a bit of time to fill them out.
   
-  This interview does **not** help you fill out these forms, but the court wants to know when you plan to fill them out and file them.
+  This tool does **not** help you fill out these forms, but the court wants to know when you plan to fill them out and file them.
 fields:
   - Form 813A: when_filing_financial_form_813A
     input type: radio
@@ -1193,7 +1239,7 @@ subquestion: |
   Tap the "Edit your answers" button
   to edit your answers.
 
-  ${ action_button_html(url_action('review_divorce'), label='Edit your answers', color='info') }
+  ${ action_button_html(url_action('review_divorce'), label='<i class="fa-solid fa-pencil"></i> Edit your answers', color='info') }
   
   **Remember to come back to this window to continue and sign your forms.**
   
@@ -1228,7 +1274,7 @@ question: |
 subquestion: |  
   ${ review_screen_instructions }
   
-  Please note: For confidentiality reasons, this interview does **not** collect your Social Security number(s). You will need to fill in those numbers on your own later on the Statement of Confidential Information form that you will get at the end of this interview.
+  Please note: For confidentiality reasons, this tool does **not** collect your Social Security number(s). You will need to fill in those numbers on your own later on the Statement of Confidential Information form that you will get at the end of this tool.
   
 review:
 
@@ -1908,7 +1954,7 @@ question: |
 subquestion: |
   ${ download_screen_instructions }
 
-  ${ action_button_html(url_action('review_divorce'), label='Edit your answers', color='info') }
+  ${ action_button_html(url_action('review_divorce'), label='<i class="fa-solid fa-pencil"></i> Edit your answers', color='info') }
   
   
   ${ al_user_bundle.download_list_html() }
