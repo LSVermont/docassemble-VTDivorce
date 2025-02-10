@@ -1956,12 +1956,15 @@ subquestion: |
 
   ${ action_button_html(url_action('review_divorce'), label='<i class="fa-solid fa-pencil"></i> Edit your answers', color='info') }
   
+  <hr>
+  
+  <h4 style="margin-bottom: 18px;">Documents to download</h4>
   
   ${ al_user_bundle.download_list_html() }
   
-
   ${ al_user_bundle.send_button_html(show_editable_checkbox=False) }
 
+  <hr>  
   
   ${ download_screen_bottom_instructions }
   
