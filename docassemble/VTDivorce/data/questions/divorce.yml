@@ -187,7 +187,7 @@ code: |
     when_filing_financial_form_813A
     when_filing_financial_form_813B
   else:
-    when_filing_financial_forms
+    when_filing_financial_forms_813
   nav.set_section("past_actions")
   if earlier_actions.there_are_any: 
     earlier_actions.gather()
@@ -617,7 +617,7 @@ question: |
 subquestion: |
   On the next screen, start with the most recent address. You'll be able to add other addresses as needed.
   
-  Tip: It's OK to estimate the dates. Example: Dec. 2020 to Dec. 2022
+  Tip: It's OK to estimate the dates. Example: Dec. 2022 to Dec. 2024
   
   If children have lived at different addresses from each other, enter the addresses for each child.
 continue button field: where_children_lived
@@ -1018,16 +1018,24 @@ subquestion: |
   This interview does **not** help you fill out these forms, but the court wants to know when you plan to fill them out and file them.
 
 fields:
+  - no label: when_filing_financial_forms_813
+    input type: radio
+    choices: 
+      - I am going to file financial forms 400-00813A and 400-00814B **with** these initial divorce documents: now
+      - I am going to file financial forms 400-00813A and 400-00814B later: later
+    hide if: have_school_age_children
   - Form 813A: when_filing_financial_form_813A
     input type: radio
     choices: 
       - I am going to file form 400-00813A **with** these initial divorce documents: now
       - I am going to file form 400-00813A later: later
+    show if: have_school_age_children
   - Form 813B: when_filing_financial_form_813B
     input type: radio
     choices: 
       - I am going to file form 400-00813B **with** these initial divorce documents: now
       - I am going to file form 400-00813B later: later
+    show if: have_school_age_children
 ---
 id: what asking court for and grounds
 question: |
@@ -1678,18 +1686,18 @@ review:
       **${ trial_court_division_other_filing2 }**
   - note: |
       ###Filing this case
-  - Edit: when_filing_financial_forms
+  - Edit: when_filing_financial_forms_813
     button: |
       Financial forms: 
-      % if when_filing_financial_forms == "now":
+      % if when_filing_financial_forms_813 == "now":
       **I am going to file forms 400-00813A and 400-00813B **with** these initial divorce documents**
       % endif
-      % if when_filing_financial_forms == "later":
+      % if when_filing_financial_forms_813 == "later":
       **I am going to file forms 400-00813A and 400-00813B later**
       % endif
   - Edit: when_filing_financial_form_813A
     button: |
-      Form 813A: 
+      Financial form 813A: 
       % if when_filing_financial_form_813A == "now":
       **I am going to file form 400-00813A **with** these initial divorce documents**
       % endif
@@ -1698,7 +1706,7 @@ review:
       % endif
   - Edit: when_filing_financial_form_813B
     button: |
-      Form 813B: 
+      Financial form 813B: 
       % if when_filing_financial_form_813B == "now":
       **I am going to file form 400-00813B **with** these initial divorce documents**
       % endif
@@ -2127,8 +2135,8 @@ attachment:
       - "separation_date": ${ format_date(separation_date, format='M/d/yyyy') }
       - "other_ground": ${ grounds == "other_ground" }
       - "other_ground_explanation": ${ other_ground_explanation }
-      - "filing_financial_forms": ${ when_filing_financial_forms == "now" }
-      - "not_filing_financial_forms": ${ when_filing_financial_forms == "later" }
+      - "filing_financial_forms": ${ when_filing_financial_forms_813 == "now" }
+      - "not_filing_financial_forms": ${ when_filing_financial_forms_813 == "later" }
       - "plaintiff_des_assistance": ${ des['plaintiff_des_assistance'] }
       - "defendant_des_assistance": ${ des['defendant_des_assistance'] }
       - "earlier_actions_no": ${ not earlier_actions.there_are_any }
