@@ -1,6 +1,6 @@
 import os
 import sys
-from setuptools import setup, find_packages
+from setuptools import setup, find_namespace_packages
 from fnmatch import fnmatchcase
 from distutils.util import convert_path
 
@@ -44,7 +44,7 @@ def find_package_data(where='.', package='', exclude=standard_exclude, exclude_d
     return out
 
 setup(name='docassemble.VTDivorce',
-      version='1.3.2',
+      version='1.4',
       description=('Fill out initial forms to get a divorce, separation or civil union dissolution in Vermont'),
       long_description='# docassemble.VTDivorce\r\n\r\nDivorce\r\n\r\n## Authors\r\n\r\n- K. Surette, Legal Services Vermont\r\n- Q. Steenhuis, M. Bonardi and S. Constantinou, Lemma Legal\r\n\r\n\r\n',
       long_description_content_type='text/markdown',
@@ -52,9 +52,8 @@ setup(name='docassemble.VTDivorce',
       author_email='ksurette@legalservicesvt.org',
       license='The MIT License',
       url='legalservicesvt.org',
-      packages=find_packages(),
-      namespace_packages=['docassemble'],
-      install_requires=['docassemble.ALToolbox>=0.11.1', 'docassemble.AssemblyLine>=3.1.0', 'docassemble.VTSharedYMLFile', 'docassemble.demo>=1.4.112'],
+      packages=find_namespace_packages(),
+      install_requires=['docassemble.ALToolbox>=0.11.1', 'docassemble.AssemblyLine>=3.2.0', 'docassemble.VTFamilyCourtInfoSheet', 'docassemble.VTNoticeOfAppearance', 'docassemble.VTSharedYMLFile', 'docassemble.demo>=1.6.2'],
       zip_safe=False,
       package_data=find_package_data(where='docassemble/VTDivorce/', package='docassemble.VTDivorce'),
      )
