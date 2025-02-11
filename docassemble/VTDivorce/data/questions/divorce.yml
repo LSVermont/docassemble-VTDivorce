@@ -2550,8 +2550,8 @@ attachment:
       - "users1_birth_month": ${ format_date(users[0].birthdate, format='M') }
       - "users1_birth_day": ${ format_date(users[0].birthdate, format='dd') }
       - "users1_birth_year": ${ format_date(users[0].birthdate, format='yyyy') }
-      - "users1_address_state": ${ users[0].address.state }
-      - "users1_address_city": ${ users[0].address.city }
+      - "users1_address_state_health_div": ${ users[0].address.state }
+      - "users1_address_city_health_div": ${ users[0].address.city }
       - "other_parties1_name": ${ other_parties[0].name }
       - "other_parties1_sex": ${ other_parties[0].sex }
       - "users1_attorneys_address": |
