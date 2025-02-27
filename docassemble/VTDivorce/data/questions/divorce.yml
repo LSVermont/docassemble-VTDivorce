@@ -1059,7 +1059,7 @@ question: |
 subquestion: |
   Both you and your spouse need to complete two financial affidavit forms (forms 400-00813A and 813B) -- either now or later. On one form you will list all your income and expenses. On the other you will list all of the property, assets and debts that you and ${ other_parties[0] } own together or separately that are known to you.
   
-  You can fill out these forms on your own and file them with the initial divorce documents from this tool. Or you can file them at a later date. ([See the paper version of the 813A form](https://www.vermontjudiciary.org/media/886)) and the [813B form.](https://www.vermontjudiciary.org/media/926) It takes quite a bit of time to fill them out.
+  You can fill out these forms on your own and file them with the initial divorce documents from this tool. Or you can file them at a later date. ([See the paper version of the 813A form](https://www.vermontjudiciary.org/media/886) and the [813B form.](https://www.vermontjudiciary.org/media/926)) It takes quite a bit of time to fill them out.
   
   This tool does **not** help you fill out these forms, but the court wants to know when you plan to fill them out and file them.
 fields:
@@ -1075,7 +1075,7 @@ question: |
 subquestion: |
   Both you and your spouse need to complete two financial affidavit forms (forms 400-00813A and 813B) -- either now or later. On one form you will list all your income and expenses. On the other you will list all of the property, assets and debts that you and ${ other_parties[0] } own together or separately that are known to you.
   
-  You can fill out these forms on your own and file them with the initial divorce documents from this tool. Or you can file them at a later date. ([See the paper version of the 813A form](https://www.vermontjudiciary.org/media/886)) and the [813B form.](https://www.vermontjudiciary.org/media/926) It takes quite a bit of time to fill them out.
+  You can fill out these forms on your own and file them with the initial divorce documents from this tool. Or you can file them at a later date. ([See the paper version of the 813A form](https://www.vermontjudiciary.org/media/886) and the [813B form.](https://www.vermontjudiciary.org/media/926)) It takes quite a bit of time to fill them out.
   
   This tool does **not** help you fill out these forms, but the court wants to know when you plan to fill them out and file them.
 fields:
@@ -1744,28 +1744,28 @@ review:
     button: |
       Financial forms: 
       % if when_filing_financial_forms_813 == "now":
-      I am going to file forms 400-00813A and 400-00813B **with** these initial divorce documents
+      You are going to file forms 400-00813A and 400-00813B **with** these initial divorce documents
       % endif
       % if when_filing_financial_forms_813 == "later":
-      I am going to file forms 400-00813A and 400-00813B **later**
+      You are going to file forms 400-00813A and 400-00813B **later**
       % endif
   - Edit: when_filing_financial_form_813A
     button: |
       Financial form 813A: 
       % if when_filing_financial_form_813A == "now":
-      I am going to file form 400-00813A **with** these initial divorce documents
+      You are going to file form 400-00813A **with** these initial divorce documents
       % endif
       % if when_filing_financial_form_813A == "later":
-      I am going to file form 400-00813A **later**
+      You are going to file form 400-00813A **later**
       % endif
   - Edit: when_filing_financial_form_813B
     button: |
       Financial form 813B: 
       % if when_filing_financial_form_813B == "now":
-      I am going to file form 400-00813B **with** these initial divorce documents
+      You are going to file form 400-00813B **with** these initial divorce documents
       % endif
       % if when_filing_financial_form_813B == "later":
-      I am going to file form 400-00813B **later**
+      You are going to file form 400-00813B **later**
       % endif
   - Edit: 
     - trial_court_index

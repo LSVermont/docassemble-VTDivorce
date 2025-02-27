@@ -44,7 +44,7 @@ def find_package_data(where='.', package='', exclude=standard_exclude, exclude_d
     return out
 
 setup(name='docassemble.VTDivorce',
-      version='1.4',
+      version='1.5',
       description=('Fill out initial forms to get a divorce, separation or civil union dissolution in Vermont'),
       long_description='# docassemble.VTDivorce\r\n\r\nDivorce\r\n\r\n## Authors\r\n\r\n- K. Surette, Legal Services Vermont\r\n- Q. Steenhuis, M. Bonardi and S. Constantinou, Lemma Legal\r\n\r\n\r\n',
       long_description_content_type='text/markdown',
