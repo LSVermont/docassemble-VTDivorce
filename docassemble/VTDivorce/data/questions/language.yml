@@ -1,0 +1,168 @@
+---
+
+############################################
+
+# Language support
+
+## ############################################
+
+code: |
+  enable_al_language = True
+---
+code: |
+  al_interview_languages = ["en", "es", "fr", "ar", "ne"]
+---
+code: |
+  metadata_title = "VT Divorce Interview"
+---
+depends on: al_user_language
+language: es
+sections:
+  - intro: Introducción
+  - screening: Ver si esta herramienta es adecuada para usted
+  - about: Acerca de usted
+  - defendant: Acerca de la otra parte
+  - kids: Acerca de los hijos
+  - what_want: Lo que desea en la orden
+  - past_actions: Otras acciones judiciales
+  - review_divorce: <i class="fa-solid fa-pencil"></i> <u>Editar mis respuestas</u>
+  - sign: Firma
+  - get_docs: Obtener sus documentos
+auto open: True
+---
+depends on: al_user_language
+language: fr
+sections:
+  - intro: Introduction
+  - screening: Vérifier si cet outil vous convient
+  - about: À propos de vous
+  - defendant: À propos de l'autre partie
+  - kids: À propos des enfants
+  - what_want: Ce que vous demandez dans l'ordonnance
+  - past_actions: Autres actions en justice
+  - review_divorce: <i class="fa-solid fa-pencil"></i> <u>Modifier mes réponses</u>
+  - sign: Signature
+  - get_docs: Obtenir vos documents
+auto open: True
+---
+depends on: al_user_language
+language: ar
+sections:
+  - intro: مقدمة
+  - screening: تحقق مما إذا كانت هذه الأداة مناسبة لك
+  - about: عنك
+  - defendant: عن الطرف الآخر
+  - kids: عن الأطفال
+  - what_want: ما الذي تريده في الأمر
+  - past_actions: إجراءات محكمة أخرى
+  - review_divorce: <i class="fa-solid fa-pencil"></i> <u>تعديل إجاباتي</u>
+  - sign: التوقيع
+  - get_docs: احصل على مستنداتك
+auto open: True
+---
+depends on: al_user_language
+language: ne
+sections:
+  - intro: परिचय
+  - screening: यो उपकरण तपाईंका लागि उपयुक्त छ कि छैन जाँच गर्नुहोस्
+  - about: तपाईंको बारेमा
+  - defendant: अर्को पक्षको बारेमा
+  - kids: बच्चाहरूको बारेमा
+  - what_want: आदेशमा तपाईंले चाहनुभएको कुरा
+  - past_actions: अन्य अदालतका कार्यहरू
+  - review_divorce: <i class="fa-solid fa-pencil"></i> <u>मेरो उत्तरहरू सम्पादन गर्नुहोस्</u>
+  - sign: हस्ताक्षर गर्नुहोस्
+  - get_docs: तपाईंका कागजातहरू प्राप्त गर्नुहोस्
+auto open: True
+---
+#### Spanish Divorce Next Steps Documents
+---
+objects:
+  - divorce_Post_interview_instructions_es: ALDocument.using(title="PRÓXIMOS PASOS - Instrucciones para presentar estos formularios ante el tribunal", filename="divorce_next_steps_es.docx", has_addendum=False)
+  - divorce_no_kids_next_steps_es: ALDocument.using(title="Próximos pasos para el divorcio (sin hijos)", filename="divorce_no_kids_next_steps_es.docx", has_addendum=False)
+---
+#### French Divorce Next Steps Documents
+---
+objects:
+  - divorce_Post_interview_instructions_fr: ALDocument.using(title="PROCHAINES ÉTAPES - Instructions pour déposer ces formulaires auprès du tribunal", filename="divorce_next_steps_fr.docx", has_addendum=False)
+  - divorce_no_kids_next_steps_fr: ALDocument.using(title="Étapes suivantes pour le divorce (sans enfants)", filename="divorce_no_kids_next_steps_fr.docx", has_addendum=False)
+---
+#### Arabic Divorce Next Steps Documents
+---
+objects:
+  - divorce_Post_interview_instructions_ar: ALDocument.using(title="الخطوات التالية - تعليمات تقديم هذه النماذج إلى المحكمة", filename="divorce_next_steps_ar.docx", has_addendum=False)
+  - divorce_no_kids_next_steps_ar: ALDocument.using(title="الخطوات التالية لقضية الطلاق (بدون أطفال)", filename="divorce_no_kids_next_steps_ar.docx", has_addendum=False)
+---
+#### Nepali Divorce Next Steps Documents
+---
+objects:
+  - divorce_Post_interview_instructions_ne: ALDocument.using(title="अर्को चरणहरू - अदालतमा यी फारमहरू दायर गर्ने निर्देशनहरू", filename="divorce_next_steps_ne.docx", has_addendum=False)
+  - divorce_no_kids_next_steps_ne: ALDocument.using(title="तलाकका लागि आगामी चरणहरू (बालबच्चा नभएमा)", filename="divorce_no_kids_next_steps_ne.docx", has_addendum=False)
+---
+#### Spanish Divorce Next Steps Attachments
+---
+code: |
+  divorce_Post_interview_instructions_es.enabled = (al_user_language == "es") and divorce_Post_interview_instructions.enabled
+---
+attachments:
+  - name: Próximos pasos para el divorcio
+    filename: divorce_next_steps_es
+    variable name: divorce_Post_interview_instructions_es[i]
+    skip undefined: True
+    docx template file: divorce_next_steps_es.docx
+  - name: Próximos pasos para el divorcio (sin hijos)
+    filename: divorce_no_kids_next_steps_es
+    variable name: divorce_no_kids_next_steps_es[i]
+    skip undefined: True
+    docx template file: divorce_no_kids_next_steps_es.docx
+---
+#### French Divorce Next Steps Attachments
+---
+code: |
+  divorce_Post_interview_instructions_fr.enabled = (al_user_language == "fr") and divorce_Post_interview_instructions.enabled
+---
+attachments:
+  - name: Étapes suivantes pour le divorce
+    filename: divorce_next_steps_fr
+    variable name: divorce_Post_interview_instructions_fr[i]
+    skip undefined: True
+    docx template file: divorce_next_steps_fr.docx
+  - name: Étapes suivantes pour le divorce (sans enfants)
+    filename: divorce_no_kids_next_steps_fr
+    variable name: divorce_no_kids_next_steps_fr[i]
+    skip undefined: True
+    docx template file: divorce_no_kids_next_steps_fr.docx
+---
+#### Arabic Divorce Next Steps Attachments
+---
+code: |
+  divorce_Post_interview_instructions_ar.enabled = (al_user_language == "ar") and divorce_Post_interview_instructions.enabled
+---
+attachments:
+  - name: الخطوات التالية لقضية الطلاق
+    filename: divorce_next_steps_ar
+    variable name: divorce_Post_interview_instructions_ar[i]
+    skip undefined: True
+    docx template file: divorce_next_steps_ar.docx
+  - name: الخطوات التالية لقضية الطلاق (بدون أطفال)
+    filename: divorce_no_kids_next_steps_ar
+    variable name: divorce_no_kids_next_steps_ar[i]
+    skip undefined: True
+    docx template file: divorce_no_kids_next_steps_ar.docx
+---
+#### Nepali Divorce Next Steps Attachments
+---
+code: |
+  divorce_Post_interview_instructions_ne.enabled = (al_user_language == "ne") and divorce_Post_interview_instructions.enabled
+---
+attachments:
+  - name: तलाकका लागि आगामी चरणहरू
+    filename: divorce_next_steps_ne
+    variable name: divorce_Post_interview_instructions_ne[i]
+    skip undefined: True
+    docx template file: divorce_next_steps_ne.docx
+  - name: तलाकका लागि आगामी चरणहरू (बालबच्चा नभएमा)
+    filename: divorce_no_kids_next_steps_ne
+    variable name: divorce_no_kids_next_steps_ne[i]
+    skip undefined: True
+    docx template file: divorce_no_kids_next_steps_ne.docx

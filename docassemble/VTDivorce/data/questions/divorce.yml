@@ -1,9 +1,13 @@
-
-
 #For this interview, the person filling out the form (user) is always considered to be the plaintiff.
 #The statement of confidential info form (SSNs) and health record form are included in this package because they will never be stand-alone interviews. Note that for security reasons we are not actually collecting the Social Security numbers in this interview. People will fill those in on their own.
 #We will be "including" other stand-alone interviews.
 #On May 2 2024 we removed VTCertificateOfService from this interview until we're ready to add all service forms to this interview -- we commented out things
+---
+translations:
+  - divorce_ar.xlsx
+  - divorce_es.xlsx
+  - divorce_fr.xlsx
+  - divorce_ne.xlsx
 ---
 include:
   - docassemble.AssemblyLine:assembly_line.yml
@@ -14,6 +18,7 @@ include:
   - docassemble.VTFamilyCourtInfoSheet:family_court_info_sheet_to_include.yml
   - docassemble.VTNoticeOfAppearance:VTNoticeOfAppearance_to_include.yml
   - customized_screens.yml
+  - language.yml
 ---
 ##This code added temporarily so people can test it on vtcourtforms and see the screen id numbers
 #default screen parts:
@@ -2026,6 +2031,10 @@ code: |
 objects:
   - al_user_bundle: ALDocumentBundle.using(elements=[
           divorce_Post_interview_instructions,
+          divorce_Post_interview_instructions_es,
+          divorce_Post_interview_instructions_fr,
+          divorce_Post_interview_instructions_ar,
+          divorce_Post_interview_instructions_ne,
           divorce_with_kids_attachment,
           divorce_no_kids_attachment,
           a_notice_of_appearance_self_rep_attachment,

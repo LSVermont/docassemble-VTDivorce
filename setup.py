@@ -44,7 +44,7 @@ def find_package_data(where='.', package='', exclude=standard_exclude, exclude_d
     return out
 
 setup(name='docassemble.VTDivorce',
-      version='1.5',
+      version='1.6',
       description=('Fill out initial forms to get a divorce, separation or civil union dissolution in Vermont'),
       long_description='# docassemble.VTDivorce\r\n\r\nDivorce\r\n\r\n## Authors\r\n\r\n- K. Surette, Legal Services Vermont\r\n- Q. Steenhuis, M. Bonardi and S. Constantinou, Lemma Legal\r\n\r\n\r\n',
       long_description_content_type='text/markdown',
@@ -53,7 +53,7 @@ setup(name='docassemble.VTDivorce',
       license='The MIT License',
       url='legalservicesvt.org',
       packages=find_namespace_packages(),
-      install_requires=['docassemble.ALToolbox>=0.11.1', 'docassemble.AssemblyLine>=3.2.0', 'docassemble.VTFamilyCourtInfoSheet', 'docassemble.VTNoticeOfAppearance', 'docassemble.VTSharedYMLFile', 'docassemble.demo>=1.6.2'],
+      install_requires=['docassemble.ALToolbox @ git+https://github.com/suffolklitlab/docassemble-ALToolbox.git@main', 'docassemble.AssemblyLine @ git+https://github.com/suffolklitlab/docassemble-AssemblyLine.git@main', 'docassemble.VTFamilyCourtInfoSheet @ git+https://github.com/LSVermont/docassemble-VTFamilyCourtInfoSheet.git@main', 'docassemble.VTNoticeOfAppearance @ git+https://github.com/LSVermont/docassemble-VTNoticeOfAppearance.git@main', 'docassemble.VTSharedYMLFile @ git+https://github.com/LSVermont/docassemble-VTSharedYMLFile.git@main', 'docassemble.demo>=1.7.7'],
       zip_safe=False,
       package_data=find_package_data(where='docassemble/VTDivorce/', package='docassemble.VTDivorce'),
      )
