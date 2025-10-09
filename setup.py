@@ -50,11 +50,10 @@ setup(name='docassemble.VTDivorce',
       long_description_content_type='text/markdown',
       author='K. Surette',
       author_email='ksurette@legalservicesvt.org',
-      license='The MIT License',
+      license='MIT',
       url='legalservicesvt.org',
       packages=find_namespace_packages(),
-      install_requires=['docassemble.ALToolbox @ git+https://github.com/suffolklitlab/docassemble-ALToolbox.git@main', 'docassemble.AssemblyLine @ git+https://github.com/suffolklitlab/docassemble-AssemblyLine.git@main', 'docassemble.VTFamilyCourtInfoSheet @ git+https://github.com/LSVermont/docassemble-VTFamilyCourtInfoSheet.git@main', 'docassemble.VTNoticeOfAppearance @ git+https://github.com/LSVermont/docassemble-VTNoticeOfAppearance.git@main', 'docassemble.VTSharedYMLFile @ git+https://github.com/LSVermont/docassemble-VTSharedYMLFile.git@main', 'docassemble.demo>=1.7.7'],
+      install_requires=['docassemble.ALToolbox @ git+https://github.com/SuffolkLITLab/docassemble-ALToolbox.git@main', 'docassemble.AssemblyLine @ git+https://github.com/SuffolkLITLab/docassemble-AssemblyLine.git@main', 'docassemble.VTFamilyCourtInfoSheet @ git+https://github.com/LSVermont/docassemble-VTFamilyCourtInfoSheet.git@main', 'docassemble.VTNoticeOfAppearance @ git+https://github.com/LSVermont/docassemble-VTNoticeOfAppearance.git@main', 'docassemble.VTSharedYMLFile @ git+https://github.com/LSVermont/docassemble-VTSharedYMLFile.git@main', 'docassemble.demo>=1.8.17'],
       zip_safe=False,
       package_data=find_package_data(where='docassemble/VTDivorce/', package='docassemble.VTDivorce'),
      )
-
