@@ -249,6 +249,7 @@ fields:
 ---
 ########### Overrides for VTNoticeOfAppearance ##############
 ---
+need: must_provide_email_validation
 id: email communications
 question: |
   Email communications
@@ -264,7 +265,11 @@ fields:
     show if: email_consent
 validation code: |
   if (showifdef('email_consent')) and not (showifdef('users[0].email')):
-    validation_error(word("You need to provide an email."), field="users[0].email")
+    validation_error(must_provide_email_validation, field="users[0].email")
+---
+variable name: must_provide_email_validation
+data: |
+  You need to provide an email.
 ---
 #####################Other#####################
 id: docket number
