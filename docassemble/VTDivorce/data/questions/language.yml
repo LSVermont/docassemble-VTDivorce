@@ -108,8 +108,20 @@ attachments:
   - name: Próximos pasos para el divorcio
     filename: divorce_next_steps_es
     variable name: divorce_Post_interview_instructions_es[i]
-    skip undefined: True
     docx template file: divorce_next_steps_es.docx
+    skip undefined: True
+    fields:
+        - "address_county": ${ trial_court.address.county }
+        - "division": ${ trial_court.division }
+        - "name": ${ trial_court }
+        - "address_address": ${ trial_court.address.address }
+        - "address_unit": ${ trial_court.address.unit }
+        - "address_city": ${ trial_court.address.city }
+        - "address_state": ${ trial_court.address.state }
+        - "address_zip": ${ trial_court.address.zip }
+        - "arbitrary_attribute": ${ trial_court.arbitrary_attribute }
+        - "phone": ${ trial_court.phone }
+        - "email": ${ trial_court.email }
   - name: Próximos pasos para el divorcio (sin hijos)
     filename: divorce_no_kids_next_steps_es
     variable name: divorce_no_kids_next_steps_es[i]
@@ -125,8 +137,20 @@ attachments:
   - name: Étapes suivantes pour le divorce
     filename: divorce_next_steps_fr
     variable name: divorce_Post_interview_instructions_fr[i]
-    skip undefined: True
     docx template file: divorce_next_steps_fr.docx
+    skip undefined: True
+    fields:
+        - "address_county": ${ trial_court.address.county }
+        - "division": ${ trial_court.division }
+        - "name": ${ trial_court }
+        - "address_address": ${ trial_court.address.address }
+        - "address_unit": ${ trial_court.address.unit }
+        - "address_city": ${ trial_court.address.city }
+        - "address_state": ${ trial_court.address.state }
+        - "address_zip": ${ trial_court.address.zip }
+        - "arbitrary_attribute": ${ trial_court.arbitrary_attribute }
+        - "phone": ${ trial_court.phone }
+        - "email": ${ trial_court.email }
   - name: Étapes suivantes pour le divorce (sans enfants)
     filename: divorce_no_kids_next_steps_fr
     variable name: divorce_no_kids_next_steps_fr[i]
@@ -142,8 +166,20 @@ attachments:
   - name: الخطوات التالية لقضية الطلاق
     filename: divorce_next_steps_ar
     variable name: divorce_Post_interview_instructions_ar[i]
-    skip undefined: True
     docx template file: divorce_next_steps_ar.docx
+    skip undefined: True
+    fields:
+        - "address_county": ${ trial_court.address.county }
+        - "division": ${ trial_court.division }
+        - "name": ${ trial_court }
+        - "address_address": ${ trial_court.address.address }
+        - "address_unit": ${ trial_court.address.unit }
+        - "address_city": ${ trial_court.address.city }
+        - "address_state": ${ trial_court.address.state }
+        - "address_zip": ${ trial_court.address.zip }
+        - "arbitrary_attribute": ${ trial_court.arbitrary_attribute }
+        - "phone": ${ trial_court.phone }
+        - "email": ${ trial_court.email }
   - name: الخطوات التالية لقضية الطلاق (بدون أطفال)
     filename: divorce_no_kids_next_steps_ar
     variable name: divorce_no_kids_next_steps_ar[i]
@@ -159,8 +195,20 @@ attachments:
   - name: तलाकका लागि आगामी चरणहरू
     filename: divorce_next_steps_ne
     variable name: divorce_Post_interview_instructions_ne[i]
-    skip undefined: True
     docx template file: divorce_next_steps_ne.docx
+    skip undefined: True
+    fields:
+        - "address_county": ${ trial_court.address.county }
+        - "division": ${ trial_court.division }
+        - "name": ${ trial_court }
+        - "address_address": ${ trial_court.address.address }
+        - "address_unit": ${ trial_court.address.unit }
+        - "address_city": ${ trial_court.address.city }
+        - "address_state": ${ trial_court.address.state }
+        - "address_zip": ${ trial_court.address.zip }
+        - "arbitrary_attribute": ${ trial_court.arbitrary_attribute }
+        - "phone": ${ trial_court.phone }
+        - "email": ${ trial_court.email }
   - name: तलाकका लागि आगामी चरणहरू (बालबच्चा नभएमा)
     filename: divorce_no_kids_next_steps_ne
     variable name: divorce_no_kids_next_steps_ne[i]
