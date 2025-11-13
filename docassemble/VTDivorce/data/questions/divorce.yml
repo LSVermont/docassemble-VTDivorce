@@ -65,13 +65,13 @@ code: |
 code: |
   if al_user_language == "en":
     interview_short_title = "Ask the court for a divorce, legal separation or civil union dissolution"
-  elif al_user_language == "es":
+  if al_user_language == "es":
     interview_short_title = "Solicita al tribunal el divorcio, la separación legal o la disolución de la unión civil"
-  elif al_user_language == "fr":
+  if al_user_language == "fr":
     interview_short_title = "Demander au tribunal la dissolution du divorce, de la séparation légale ou de l'union civile"
-  elif al_user_language == "ar":
+  if al_user_language == "ar":
     interview_short_title = "اطلب من المحكمة الطلاق أو الانفصال القانوني أو حل الاتحاد المدني"
-  elif al_user_language == "ne":
+  if al_user_language == "ne":
     interview_short_title = "सम्बन्ध विच्छेद, कानुनी रूपमा अलग्गिनु वा नागरिक संघ विघटनको लागि अदालतलाई अनुरोध गर्नुहोस्"
 ---
 code: |
@@ -839,9 +839,9 @@ fields:
     datatype: radio
     choices: 
       - Divorce: divorce
-      - Legal separation: legal_separation
-      - Dissolution: dissolution
-      - Annulment: annulment
+      - Legal separation: Legal separation
+      - Dissolution: Dissolution
+      - Annulment: Annulment
   - Who filed it?: earlier_actions[i].who_filed
     datatype: object_radio
     choices:
@@ -867,8 +867,8 @@ fields:
   - Type of action: earlier_RFA[i].action_type
     datatype: radio
     choices: 
-      - Relief from abuse order (VT): relief_from_abuse_order
-      - Protective order: protective_order
+      - Relief from abuse order (VT): Relief from abuse order (VT)
+      - Protective order: Protective order
   - note: |
       Reminder: In Vermont, an order for protection is called a Relief from Abuse (RFA) order. They are handled by the family courts. In other states protective orders have other names.
   - Who filed it?: earlier_RFA[i].who_filed
