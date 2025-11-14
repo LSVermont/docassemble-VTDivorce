@@ -63,16 +63,7 @@ code: |
     package_updated_on = None  
 ---
 code: |
-  if al_user_language == "en":
-    interview_short_title = "Ask the court for a divorce, legal separation or civil union dissolution"
-  if al_user_language == "es":
-    interview_short_title = "Solicita al tribunal el divorcio, la separación legal o la disolución de la unión civil"
-  if al_user_language == "fr":
-    interview_short_title = "Demander au tribunal la dissolution du divorce, de la séparation légale ou de l'union civile"
-  if al_user_language == "ar":
-    interview_short_title = "اطلب من المحكمة الطلاق أو الانفصال القانوني أو حل الاتحاد المدني"
-  if al_user_language == "ne":
-    interview_short_title = "सम्बन्ध विच्छेद, कानुनी रूपमा अलग्गिनु वा नागरिक संघ विघटनको लागि अदालतलाई अनुरोध गर्नुहोस्"
+  interview_short_title = "Ask the court for a divorce, legal separation or civil union dissolution"
 ---
 code: |
   al_form_type = "starts_case" 

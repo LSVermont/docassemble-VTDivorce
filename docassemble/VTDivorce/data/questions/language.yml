@@ -31,6 +31,11 @@ sections:
 auto open: True
 ---
 depends on: al_user_language
+language: es
+code: |
+  interview_short_title = "Solicita al tribunal el divorcio, la separación legal o la disolución de la unión civil"
+---
+depends on: al_user_language
 language: fr
 sections:
   - intro: Introduction
@@ -44,6 +49,11 @@ sections:
   - sign: Signature
   - get_docs: Obtenir vos documents
 auto open: True
+---
+depends on: al_user_language
+language: fr
+code: |
+  interview_short_title = "Demander au tribunal la dissolution du divorce, de la séparation légale ou de l'union civile"
 ---
 depends on: al_user_language
 language: ar
@@ -61,6 +71,11 @@ sections:
 auto open: True
 ---
 depends on: al_user_language
+language: ar
+code: |
+  interview_short_title = "اطلب من المحكمة الطلاق أو الانفصال القانوني أو حل الاتحاد المدني"
+---
+depends on: al_user_language
 language: ne
 sections:
   - intro: परिचय
@@ -74,6 +89,11 @@ sections:
   - sign: हस्ताक्षर गर्नुहोस्
   - get_docs: तपाईंका कागजातहरू प्राप्त गर्नुहोस्
 auto open: True
+---
+depends on: al_user_language
+language: ne
+code: |
+  interview_short_title = "सम्बन्ध विच्छेद, कानुनी रूपमा अलग्गिनु वा नागरिक संघ विघटनको लागि अदालतलाई अनुरोध गर्नुहोस्"
 ---
 #### Spanish Divorce Next Steps Documents
 ---
