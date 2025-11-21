@@ -1,3 +1,4 @@
+#We added translations into 4 languages in November 2025
 #For this interview, the person filling out the form (user) is always considered to be the plaintiff.
 #The statement of confidential info form (SSNs) and health record form are included in this package because they will never be stand-alone interviews. Note that for security reasons we are not actually collecting the Social Security numbers in this interview. People will fill those in on their own.
 #We will be "including" other stand-alone interviews.
@@ -28,9 +29,6 @@ include:
 #    `Variable: ${ user_info().variable }`[BR]
 #    `Version: ${ user_info().package.replace("docassemble.", "") + " " if not user_info().package.startswith("docassemble.playground") else "" }${ package_version_number }; ${ al_version }`
 #    % endif
----
-#modules:
-  #- docassemble.demo.accordion
 ---
 # customized feedback form
 code: |   
@@ -2238,7 +2236,7 @@ attachment:
       - "earlier_actions_type2": ${ earlier_actions[1].action_type }
       - "earlier_actions_year_filed2": ${ earlier_actions[1].year_filed }
       - "earlier_actions_where_filed3": ${ earlier_actions[2].where_filed }
-      - "earlier_actions_filer3": ${ earlier_actions_filer[2].who_filed }
+      - "earlier_actions_filer3": ${ earlier_actions[2].who_filed }
       - "earlier_actions_type3": ${ earlier_actions[2].action_type }
       - "earlier_actions_year_filed3": ${ earlier_actions[2].year_filed }
       - "earlier_RFA_no": ${ not earlier_RFA.there_are_any }
@@ -2443,7 +2441,7 @@ attachment:
       - "earlier_actions_type2": ${ earlier_actions[1].action_type }
       - "earlier_actions_year_filed2": ${ earlier_actions[1].year_filed }
       - "earlier_actions_where_filed3": ${ earlier_actions[2].where_filed }
-      - "earlier_actions_filer3": ${ earlier_actions_filer[2].who_filed }
+      - "earlier_actions_filer3": ${ earlier_actions[2].who_filed }
       - "earlier_actions_type3": ${ earlier_actions[2].action_type }
       - "earlier_actions_year_filed3": ${ earlier_actions[2].year_filed }
       - "earlier_RFA_no": ${ not earlier_RFA.there_are_any }

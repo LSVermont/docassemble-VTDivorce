@@ -14,11 +14,10 @@ authors = [
 ]
 dependencies = [
     "docassemble.ALToolbox @ git+https://github.com/SuffolkLITLab/docassemble-ALToolbox.git@main",
-    "docassemble.AssemblyLine @ git+https://github.com/suffolklitlab/docassemble-AssemblyLine.git@main",
+    "docassemble.AssemblyLine @ git+https://github.com/SuffolkLITLab/docassemble-AssemblyLine.git@main",
     "docassemble.VTFamilyCourtInfoSheet @ git+https://github.com/LSVermont/docassemble-VTFamilyCourtInfoSheet.git@main",
     "docassemble.VTNoticeOfAppearance @ git+https://github.com/LSVermont/docassemble-VTNoticeOfAppearance.git@main",
     "docassemble.VTSharedYMLFile @ git+https://github.com/LSVermont/docassemble-VTSharedYMLFile.git@main",
-    "docassemble.demo>=1.8.17",
 ]
 
 [project.urls]
