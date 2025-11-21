@@ -1,9 +1,14 @@
-
-
+#We added translations into 4 languages in November 2025
 #For this interview, the person filling out the form (user) is always considered to be the plaintiff.
 #The statement of confidential info form (SSNs) and health record form are included in this package because they will never be stand-alone interviews. Note that for security reasons we are not actually collecting the Social Security numbers in this interview. People will fill those in on their own.
 #We will be "including" other stand-alone interviews.
 #On May 2 2024 we removed VTCertificateOfService from this interview until we're ready to add all service forms to this interview -- we commented out things
+---
+translations:
+  - divorce_ar.xlsx
+  - divorce_es.xlsx
+  - divorce_fr.xlsx
+  - divorce_ne.xlsx
 ---
 include:
   - docassemble.AssemblyLine:assembly_line.yml
@@ -14,6 +19,7 @@ include:
   - docassemble.VTFamilyCourtInfoSheet:family_court_info_sheet_to_include.yml
   - docassemble.VTNoticeOfAppearance:VTNoticeOfAppearance_to_include.yml
   - customized_screens.yml
+  - language.yml
 ---
 ##This code added temporarily so people can test it on vtcourtforms and see the screen id numbers
 #default screen parts:
@@ -23,9 +29,6 @@ include:
 #    `Variable: ${ user_info().variable }`[BR]
 #    `Version: ${ user_info().package.replace("docassemble.", "") + " " if not user_info().package.startswith("docassemble.playground") else "" }${ package_version_number }; ${ al_version }`
 #    % endif
----
-#modules:
-  #- docassemble.demo.accordion
 ---
 # customized feedback form
 code: |   
@@ -325,6 +328,7 @@ decoration: form-lineal
 question: |
   **${interview_short_title} in Vermont**
 subquestion: |  
+  ${ get_language_list(lang_codes=al_interview_languages, current=al_user_language) }
 
   <p>${ intro_vtcourtforms_3_steps }</p>
   
@@ -445,6 +449,7 @@ subquestion: |
   
 continue button field: remind_non_VTers_about_needing_stipulation
 ---
+need: date_must_be_in_past_validation
 id: marriage or civil union
 question: |
   Are you asking to end a marriage or end a civil union?
@@ -504,10 +509,19 @@ fields:
       is: civil_union
 validation code: |
   if license_type == "marriage" and marriage_date >= today():
-    validation_error("This date must be in the past")
+    validation_error(date_must_be_in_past_validation)
   if license_type == "civil_union" and civil_union_date >= today():
-    validation_error("This date must be in the past")
+    validation_error(date_must_be_in_past_validation)
 ---
+variable name: date_must_be_in_past_validation
+data: |
+  This date must be in the past
+---
+variable name: six_month_validation
+data: |
+  To file for a divorce in Vermont, this date needs to be 6 months ago or more.
+---
+need: six_month_validation
 id: plaintiff VT 6 months
 question: |
   See if this tool is right for your situation
@@ -523,8 +537,9 @@ fields:
     show if: plaintiff_VT
 validation code: |
   if plaintiff_VT and date_plaintiff_moved_to_VT >= today().minus(months=6):
-    validation_error("To file for a divorce in Vermont, this date needs to be 6 months ago or more.", field="date_plaintiff_moved_to_VT")    
+    validation_error(six_month_validation, field="date_plaintiff_moved_to_VT")
 ---
+need: six_month_validation
 id: defendant VT 6 months
 question: |
   See if this tool is right for your situation
@@ -538,7 +553,7 @@ fields:
     show if: defendant_VT
 validation code: |
   if defendant_VT and date_defendant_moved_to_VT >= today().minus(months=6):
-    validation_error("To file for a divorce in Vermont, this date needs to be 6 months ago or more.", field="date_defendant_moved_to_VT")
+    validation_error(six_month_validation, field="date_defendant_moved_to_VT")
 ---
 id: civil_union_VT
 question: |
@@ -642,6 +657,7 @@ fields:
   - code: |
       children[0].name_fields()
 ---
+need: minor_child_validation
 id: minor children dob
 question: |
   What is ${children[i].name}'s date of birth?
@@ -650,8 +666,11 @@ fields:
     datatype: BirthDate
 validation code: |
   if children[i].age_in_years() >= 19:
-    validation_error("Check the birthdate you entered. This child is too old to be a 'minor.'", field="children[i].birthdate")    
-
+    validation_error(minor_child_validation, field="children[i].birthdate")    
+---
+variable name: minor_child_validation
+data: |
+  Check the birthdate you entered. This child is too old to be a 'minor.'
 ---
 code: |
   locations[i].housemates
@@ -808,10 +827,10 @@ fields:
   - Type of action: earlier_actions[i].action_type
     datatype: radio
     choices: 
-      - Divorce
-      - Legal separation
-      - Dissolution
-      - Annulment
+      - Divorce: divorce
+      - Legal separation: Legal separation
+      - Dissolution: Dissolution
+      - Annulment: Annulment
   - Who filed it?: earlier_actions[i].who_filed
     datatype: object_radio
     choices:
@@ -837,8 +856,8 @@ fields:
   - Type of action: earlier_RFA[i].action_type
     datatype: radio
     choices: 
-      - Relief from abuse order (VT)
-      - Protective order
+      - Relief from abuse order (VT): Relief from abuse order (VT)
+      - Protective order: Protective order
   - note: |
       Reminder: In Vermont, an order for protection is called a Relief from Abuse (RFA) order. They are handled by the family courts. In other states protective orders have other names.
   - Who filed it?: earlier_RFA[i].who_filed
@@ -894,6 +913,7 @@ fields:
   - note: |
       **Safety note**: If you are afraid for your safety, you can file a motion to ask the court to keep your address confidential from your spouse. Ask an advocate for help at [Vermont Network](https://www.vtnetwork.org/get-help/) or [Legal Services Vermont and Vermont Legal Aid.](https://vtlawhelp.org/victims-of-crime) Or ask the court clerk for the forms.
 ---
+need: must_provide_contact_validation
 id: Gather users contact information
 question: |
   What is your contact information?
@@ -913,7 +933,11 @@ validation code: |
   if (not showifdef('users[0].daytime_phone_number') and \
       (not showifdef('users[0].email')) and \
       (not showifdef('users[0].evening_phone_number'))):
-    validation_error(word("You need to provide at least one contact method."))
+    validation_error(must_provide_contact_validation)
+---
+variable name: must_provide_contact_validation
+data: |
+  You need to provide at least one contact method.
 ---
 id: Users resided in VT length
 question: |
@@ -962,6 +986,7 @@ fields:
     datatype: al_international_phone
     show if: other_parties_has_attorney
 ---
+need: must_provide_contact_validation
 id: Gather other parties contact information
 question: |
   What is ${ other_parties[0] }'s contact information?
@@ -981,7 +1006,7 @@ validation code: |
   if (not showifdef('other_parties[0].daytime_phone_number') and \
       (not showifdef('other_parties[0].email')) and \
       (not showifdef('other_parties[0].evening_phone_number'))):
-    validation_error(word("You need to provide at least one contact method."))
+    validation_error(must_provide_contact_validation)
 ---
 id: Gather other parties street or mailing address
 sets:
@@ -2026,6 +2051,10 @@ code: |
 objects:
   - al_user_bundle: ALDocumentBundle.using(elements=[
           divorce_Post_interview_instructions,
+          divorce_Post_interview_instructions_es,
+          divorce_Post_interview_instructions_fr,
+          divorce_Post_interview_instructions_ar,
+          divorce_Post_interview_instructions_ne,
           divorce_with_kids_attachment,
           divorce_no_kids_attachment,
           a_notice_of_appearance_self_rep_attachment,
@@ -2207,7 +2236,7 @@ attachment:
       - "earlier_actions_type2": ${ earlier_actions[1].action_type }
       - "earlier_actions_year_filed2": ${ earlier_actions[1].year_filed }
       - "earlier_actions_where_filed3": ${ earlier_actions[2].where_filed }
-      - "earlier_actions_filer3": ${ earlier_actions_filer[2].who_filed }
+      - "earlier_actions_filer3": ${ earlier_actions[2].who_filed }
       - "earlier_actions_type3": ${ earlier_actions[2].action_type }
       - "earlier_actions_year_filed3": ${ earlier_actions[2].year_filed }
       - "earlier_RFA_no": ${ not earlier_RFA.there_are_any }
@@ -2412,7 +2441,7 @@ attachment:
       - "earlier_actions_type2": ${ earlier_actions[1].action_type }
       - "earlier_actions_year_filed2": ${ earlier_actions[1].year_filed }
       - "earlier_actions_where_filed3": ${ earlier_actions[2].where_filed }
-      - "earlier_actions_filer3": ${ earlier_actions_filer[2].who_filed }
+      - "earlier_actions_filer3": ${ earlier_actions[2].who_filed }
       - "earlier_actions_type3": ${ earlier_actions[2].action_type }
       - "earlier_actions_year_filed3": ${ earlier_actions[2].year_filed }
       - "earlier_RFA_no": ${ not earlier_RFA.there_are_any }

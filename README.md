@@ -5,6 +5,6 @@ Divorce
 ## Authors
 
 - K. Surette, Legal Services Vermont
-- Q. Steenhuis, M. Bonardi and S. Constantinou, Lemma Legal
+- K. McGuire, Q. Steenhuis, M. Bonardi and S. Constantinou, Lemma Legal
 
 
