@@ -43,6 +43,7 @@ metadata:
     This tool helps someone in Vermont ask the court for a divorce, separation, or civil union dissolution. Based on paper versions of divorce complaint forms 400-00836Children (11/2024) and 400-00836NoChildren (01/2025), Statement of Confidential Information form 400-00849 (07/2013), and health department forms VDH-VR-DISS-2/2007 and VDH-VR-DIV-9/2009.
   tags:
     - "FA-00-00-00-00"
+    - "FA-06-00-00-00"
   authors:
     - K. Surette, VTCourtForms and Legal Services Vermont
     - Q. Steenhuis, M. Bonardi and S. Constantinou, Lemma Legal
@@ -314,6 +315,7 @@ code: |
           "have_written_agreement": showifdef("written_agreement_attached"),
           "reached_interview_end": True,
           "number_of_forms": len(al_user_bundle.enabled_documents()),
+          "language_used_in_tool": showifdef("al_user_language"),
       },
   )
   
