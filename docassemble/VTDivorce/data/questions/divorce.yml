@@ -858,7 +858,7 @@ fields:
   - Type of action: earlier_RFA[i].action_type
     datatype: radio
     choices: 
-      - Relief from abuse order (VT): Relief from abuse order (VT)
+      - Relief from Abuse order: Relief from Abuse order
       - Protective order: Protective order
   - note: |
       Reminder: In Vermont, an order for protection is called a Relief from Abuse (RFA) order. They are handled by the family courts. In other states protective orders have other names.
