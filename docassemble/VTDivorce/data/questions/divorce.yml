@@ -2155,6 +2155,12 @@ attachment:
           % if defined("user_has_attorney") and user_has_attorney:
           ${ users1_attorneys_phone_number }
           % endif
+      - "plaintiff_is_minor": |
+          % if users[0].age_in_years() < 18:
+          ${ True }
+          % else:
+          ${ False }
+          % endif
       - "other_parties1_name1": ${ other_parties[0].name }
       - "other_parties1_birthdate": ${ format_date(other_parties[0].birthdate, format='M/d/yyyy') }
       - "other_parties1_address_line_one": ${ other_parties[0].address.line_one() }
@@ -2182,6 +2188,12 @@ attachment:
       - "other_parties1_attorneys_name": ${ other_parties1_attorneys_name }
       - "other_parties1_attorneys_phone_number": ${ other_parties1_attorneys_phone_number }
       - "other_parties1_name2": ${ other_parties[0].name }
+      - "defendant_is_minor": |
+          % if other_parties[0].age_in_years() < 18:
+          ${ True }
+          % else:
+          ${ False }
+          % endif
       - "users1_name2": ${ users[0].name }
       - "users1_name3": ${ users[0].name }
       - "divorce": ${ grant_for == "divorce" }
@@ -2617,4 +2629,3 @@ attachment:
           % if defined("user_has_attorney") and not user_has_attorney:
           ${ True }
           % endif
-
