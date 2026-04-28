@@ -2208,8 +2208,8 @@ attachment:
       - "users1_signature": ${ users[0].signature_if_final(i) }
       - "users1_address_county": ${ users[0].address.county }
       - "users1_address_state": ${ users[0].address.state }
-      - "plaintiff_VT": ${ plaintiff_VT }
-      - "date_plaintiff_moved_to_VT": ${ format_date(date_plaintiff_moved_to_VT, format='M/d/yyyy') }
+      - "plaintiff_vt": ${ plaintiff_VT }
+      - "date_plaintiff_moved_to_vt": ${ format_date(date_plaintiff_moved_to_VT, format='M/d/yyyy') }
       - "other_parties1_address_county": ${ other_parties[0].address.county }
       - "other_parties1_address_state": |
           % if other_parties_in_US:
@@ -2217,8 +2217,8 @@ attachment:
           % else:
           ${ other_parties_non_US_state_country }
           % endif
-      - "defendant_VT": ${ defendant_VT }
-      - "date_defendant_moved_to_VT": ${ format_date(date_defendant_moved_to_VT, format='M/d/yyyy') }
+      - "defendant_vt": ${ defendant_VT }
+      - "date_defendant_moved_to_vt": ${ format_date(date_defendant_moved_to_VT, format='M/d/yyyy') }
       - "marriage": ${ license_type == "marriage" }
       - "marriage_state": ${ showifdef("marriage_state") }${ showifdef("marriage_country") }
       - "marriage_city": ${ marriage_city }
@@ -2359,8 +2359,8 @@ attachment:
       - "users1_signature": ${ users[0].signature_if_final(i) }
       - "users1_address_county": ${ users[0].address.county }
       - "users1_address_state": ${ users[0].address.state }
-      - "plaintiff_VT": ${ plaintiff_VT }
-      - "date_plaintiff_moved_to_VT": ${ format_date(date_plaintiff_moved_to_VT, format='M/d/yyyy') }
+      - "plaintiff_vt": ${ plaintiff_VT }
+      - "date_plaintiff_moved_to_vt": ${ format_date(date_plaintiff_moved_to_VT, format='M/d/yyyy') }
       - "other_parties1_address_county": ${ other_parties[0].address.county }
       - "other_parties1_address_state": |
           % if other_parties_in_US:
@@ -2368,8 +2368,8 @@ attachment:
           % else:
           ${ other_parties_non_US_state_country }
           % endif
-      - "defendant_VT": ${ defendant_VT }
-      - "date_defendant_moved_to_VT": ${ format_date(date_defendant_moved_to_VT, format='M/d/yyyy') }
+      - "defendant_vt": ${ defendant_VT }
+      - "date_defendant_moved_to_vt": ${ format_date(date_defendant_moved_to_VT, format='M/d/yyyy') }
       - "marriage": ${ license_type == "marriage" }
       - "marriage_state": ${ showifdef("marriage_state") }${ showifdef("marriage_country") }
       - "marriage_city": ${ marriage_city }
