@@ -40,7 +40,7 @@ metadata:
   short title: >-
     Divorce
   description: |-
-    This tool helps someone in Vermont ask the court for a divorce, separation, or civil union dissolution. Based on paper versions of divorce complaint forms 400-00836Children (11/2024) and 400-00836NoChildren (01/2025), Statement of Confidential Information form 400-00849 (07/2013), and health department forms VDH-VR-DISS-2/2007 and VDH-VR-DIV-9/2009.
+    This tool helps someone in Vermont ask the court for a divorce, separation, or civil union dissolution. Based on paper versions of divorce complaint forms 400-00836Children (4/2026) and 400-00836NoChildren (4/2026), Statement of Confidential Information form 400-00849 (07/2013), and health department forms VDH-VR-DISS-2/2007 and VDH-VR-DIV-9/2009.
   tags:
     - "FA-00-00-00-00"
     - "FA-06-00-00-00"
@@ -147,6 +147,7 @@ progressive: False
 ---
 
 #################### Interview order - divorce #####################
+---
 comment: |
   Controls order and branching logic for questions specific to this form
 id: interview_order_divorce
@@ -264,6 +265,7 @@ code: |
   interview_order_divorce = True
 ---
 ###################### Main order ######################
+---
 ---
 mandatory: True
 code: |
@@ -1213,6 +1215,7 @@ fields:
     - Shared jointly: legal_shared_jointly
     - Given only to myself: legal_myself
     - Given only to ${ other_parties[0] }: legal_defendant
+    - To be determined: tbd                                     
     input type: radio
     css class: indent-me
     show if: legal_rights_responsibilities
@@ -1226,6 +1229,7 @@ fields:
     - Shared jointly: physical_shared_jointly
     - Given only to myself: physical_myself
     - Given only to ${ other_parties[0] }: physical_defendant
+    - To be determined: tbd                                    
     input type: radio
     css class: indent-me
     show if: physical_rights_responsibilities
@@ -1656,6 +1660,9 @@ review:
         % if lrr_choice == "legal_defendant":
         - **Given solely to ${ other_parties[0] }**
         % endif
+        % if prr_choice == "tbd":
+        - **To be determined**
+        % endif
       % else:
       Legal parental rights and responsibilities:
       
@@ -1675,6 +1682,9 @@ review:
         % endif
         % if prr_choice == "physical_defendant":
         - **Given solely to ${ other_parties[0] }**
+        % endif
+        % if prr_choice == "tbd":
+        - **To be determined**
         % endif
       % else:
       Physical parental rights and responsibilities:
@@ -2318,6 +2328,12 @@ attachment:
           % if defined("user_has_attorney") and user_has_attorney:
           ${ users1_attorneys_phone_number }
           % endif
+      - "plaintiff_is_minor": |
+          % if users[0].age_in_years() < 18:
+          ${ True }
+          % else:
+          ${ False }
+          % endif
       - "other_parties1_name1": ${ other_parties[0].name }
       - "other_parties1_birthdate": ${ format_date(other_parties[0].birthdate, format='M/d/yyyy') }
       - "other_parties1_address_line_one": ${ other_parties[0].address.line_one() }
@@ -2344,6 +2360,12 @@ attachment:
       - "other_parties1_daytime_phone_number": ${ other_parties[0].daytime_phone_number }
       - "other_parties1_attorneys_name": ${ other_parties1_attorneys_name }
       - "other_parties1_attorneys_phone_number": ${ other_parties1_attorneys_phone_number }
+      - "defendant_is_minor": |
+          % if other_parties[0].age_in_years() < 18:
+          ${ True }
+          % else:
+          ${ False }
+          % endif
       - "other_parties1_name2": ${ other_parties[0].name }
       - "users1_name2": ${ users[0].name }
       - "users1_name3": ${ users[0].name }
@@ -2427,6 +2449,7 @@ attachment:
           % endif
       - "legal_myself": ${ lrr_choice == "legal_myself" }
       - "legal_defendant": ${ lrr_choice == "legal_defendant" }
+      - "legal_prr_tbd": ${ lrr_choice == "tbd" }
       - "physical_shared_jointly": ${ prr_choice == "physical_shared_jointly" }
       - "physical_given_solely": |
           % if prr_choice == "physical_defendant" or prr_choice == "physical_myself":
@@ -2434,6 +2457,7 @@ attachment:
           % endif
       - "physical_myself": ${ prr_choice == "physical_myself" }
       - "physical_defendant": ${ prr_choice == "physical_defendant" }
+      - "physical_prr_tbd": ${ prr_choice == "tbd" }
       - "contact_for": True
       - "contact_for_myself": ${ contact_for["contact_for_myself"] }
       - "contact_for_defendant": ${ contact_for["contact_for_defendant"] }
