@@ -960,7 +960,7 @@ fields:
     datatype: checkboxes 
     choices:
     - I get Economic Services assistance: plaintiff_des_assistance
-    - ${ other_parties } gets Economic Services assistance: defendant_des_assistance
+    - "${other_parties} gets Economic Services assistance": defendant_des_assistance
     none of the above: |
         We don't get Economic Services assistance, or I'm not sure
 ---
@@ -971,8 +971,8 @@ fields:
   - "Choose at least one": military
     datatype: checkboxes
     choices:
-    - I serve in the military: plaintiff_military_service
-    - ${ other_parties } serves in the military: other_parties1_military
+    - "I serve in the military": plaintiff_military_service
+    - "${other_parties} serves in the military": other_parties1_military
     none of the above: |
       We do not serve in the military, or I'm not sure
 ---
@@ -2462,10 +2462,10 @@ attachment:
       - "contact_for_myself": ${ contact_for["contact_for_myself"] }
       - "contact_for_defendant": ${ contact_for["contact_for_defendant"] }
       - "child_medical_support": ${ child_medical_support }
-      - "filing_financial_form_813A": ${ when_filing_financial_form_813A == "now" }
-      - "not_filing_financial_form_813A": ${ when_filing_financial_form_813A == "later" }
-      - "filing_financial_form_813B": ${ when_filing_financial_form_813B == "now" }
-      - "not_filing_financial_form_813B": ${ when_filing_financial_form_813B == "later" }
+      - "filing_financial_form_813a": ${ when_filing_financial_form_813A == "now" }
+      - "not_filing_financial_form_813a": ${ when_filing_financial_form_813A == "later" }
+      - "filing_financial_form_813b": ${ when_filing_financial_form_813B == "now" }
+      - "not_filing_financial_form_813b": ${ when_filing_financial_form_813B == "later" }
       - "plaintiff_des_assistance": ${ des['plaintiff_des_assistance'] }
       - "defendant_des_assistance": ${ des['defendant_des_assistance'] }
       - "earlier_actions_no": ${ not earlier_actions.there_are_any }
