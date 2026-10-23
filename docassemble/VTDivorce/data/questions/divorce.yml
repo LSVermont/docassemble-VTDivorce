@@ -301,7 +301,8 @@ code: |
   divorce_preview_question
   
   nav.set_section("sign")
-  signature_date
+  #signature_date
+  printed_signature
   set_progress(95)
   al_form_requires_digital_signature = False
   basic_questions_signature_flow
@@ -2294,6 +2295,7 @@ attachment:
       # It's a signature: test which file version this is; leave empty unless it's the final version)
       - "signature_date1": ${ format_date(signature_date, format='M/d/yyyy') }
       - "users1_signature": ${ users[0].signature_if_final(i) }
+      - "printed_signature": ${ printed_signature }
 ---
 attachment:
   name: divorce with kids
@@ -2513,6 +2515,7 @@ attachment:
       # It's a signature: test which file version this is; leave empty unless it's the final version)
       - "signature_date1": ${ signature_date }
       - "users1_signature": ${ users[0].signature_if_final(i) }
+      - "printed_signature": ${ printed_signature }
 ---  
 attachment:
   name: Confidential info form
