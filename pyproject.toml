@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "docassemble.VTDivorce"
-version = "1.8"
+version = "1.9"
 description = "Fill out initial forms to get a divorce, separation or civil union dissolution in Vermont"
 readme = "README.md"
 authors = [
