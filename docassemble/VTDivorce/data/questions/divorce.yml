@@ -1278,15 +1278,15 @@ subquestion: |
   On these initial forms, only **your** signature is needed -- not your spouse's signature.
 continue button field: divorce_preview_question    
 ---
-id: signature date
-question: |
-  Signature date
-fields:
-  - "Date of your signature for these forms": signature_date
-    datatype: date
-    required: False
-    default: |
-      ${ today() }
+#id: signature date
+#question: |
+#  Signature date
+#fields:
+#  - "Date of your signature for these forms": signature_date
+#    datatype: date
+#    required: False
+#    default: |
+#      ${ today() }
 ---
 code: |
   signature_fields = ['users[0].signature']
@@ -2216,7 +2216,6 @@ attachment:
           % else:
           ${ trial_court.address.county } Family Division, ${ trial_court.address.on_one_line() }
           % endif
-      - "users1_signature": ${ users[0].signature_if_final(i) }
       - "users1_address_county": ${ users[0].address.county }
       - "users1_address_state": ${ users[0].address.state }
       - "plaintiff_vt": ${ plaintiff_VT }
@@ -2294,6 +2293,7 @@ attachment:
       - "written_agreement_attached": ${ written_agreement_attached }
       # It's a signature: test which file version this is; leave empty unless it's the final version)
       - "signature_date1": ${ format_date(signature_date, format='M/d/yyyy') }
+      - "users1_signature": ${ users[0].signature_if_final(i) }
 ---
 attachment:
   name: divorce with kids
@@ -2379,7 +2379,6 @@ attachment:
           % else:
           ${ trial_court.address.county } Family Division, ${ trial_court.address.on_one_line() }
           % endif
-      - "users1_signature": ${ users[0].signature_if_final(i) }
       - "users1_address_county": ${ users[0].address.county }
       - "users1_address_state": ${ users[0].address.state }
       - "plaintiff_vt": ${ plaintiff_VT }
@@ -2513,6 +2512,7 @@ attachment:
       - "written_agreement_attached": ${ written_agreement_attached }
       # It's a signature: test which file version this is; leave empty unless it's the final version)
       - "signature_date1": ${ signature_date }
+      - "users1_signature": ${ users[0].signature_if_final(i) }
 ---  
 attachment:
   name: Confidential info form
