@@ -699,7 +699,7 @@ sets:
   - locations[i].address.city
   - locations[i].address.state
 question: |
-  Where have they lived?
+  Where have the children lived?
 fields:      
   - Address: locations[i].address
     datatype: object_radio
@@ -743,7 +743,7 @@ id: any other locations
 question: |
   Do you have any other locations to tell us about?
 subquestion: |
-  The court needs to know where they lived over the last 5 years. Do you have another address to list?
+  The court needs to know where the children lived over the last 5 years. Do you have another address to list?
 fields:
   - no label: locations.there_is_another
     datatype: yesnoradio
@@ -2179,21 +2179,21 @@ attachment:
       - "other_parties1_birthdate": ${ format_date(other_parties[0].birthdate, format='M/d/yyyy') }
       - "other_parties1_address_line_one": ${ other_parties[0].address.line_one() }
       - "other_parties1_address_line_two": |
-          % if other_parties_in_US:
-          ${ other_parties[0].address.line_two() }
-          % else:
+          % if defined("other_parties_in_US") and not other_parties_in_US:
           ${ other_parties[0].address.city }, ${ other_parties_non_US_state_country } ${ other_parties[0].address.zip }
+          % else:
+          ${ other_parties[0].address.line_two() }
           % endif
-      - "other_parties1__mailing_address_line_one": |
+      - "other_parties1_mailing_address_line_one": |
           % if other_parties1_mailing_address_different:
           ${ other_parties[0].mailing_address.line_one() }
           % endif
-      - "other_parties1__mailing_address_line_two": |
+      - "other_parties1_mailing_address_line_two": |
           % if other_parties1_mailing_address_different:
-          % if other_parties_in_US:
-          ${ other_parties[0].mailing_address.line_two() }
-          % else:
+          % if defined("other_parties_in_US") and not other_parties_in_US:
           ${ other_parties[0].mailing_address.city }, ${ other_parties_non_US_state_country } ${ other_parties[0].mailing_address.zip }
+          % else:
+          ${ other_parties[0].mailing_address.line_two() }          
           % endif
           % endif
       - "other_parties1_email": ${ other_parties[0].email }
@@ -2343,21 +2343,23 @@ attachment:
       - "other_parties1_birthdate": ${ format_date(other_parties[0].birthdate, format='M/d/yyyy') }
       - "other_parties1_address_line_one": ${ other_parties[0].address.line_one() }
       - "other_parties1_address_line_two": |
-          % if other_parties_in_US:
-          ${ other_parties[0].address.line_two() }
-          % else:
+
+      - "other_parties1_address_line_two": |
+          % if defined("other_parties_in_US") and not other_parties_in_US:
           ${ other_parties[0].address.city }, ${ other_parties_non_US_state_country } ${ other_parties[0].address.zip }
-          % endif      
-      - "other_parties1__mailing_address_line_one": |
+          % else:
+          ${ other_parties[0].address.line_two() }
+          % endif
+      - "other_parties1_mailing_address_line_one": |
           % if other_parties1_mailing_address_different:
           ${ other_parties[0].mailing_address.line_one() }
           % endif
-      - "other_parties1__mailing_address_line_two": |
+      - "other_parties1_mailing_address_line_two": |
           % if other_parties1_mailing_address_different:
-          % if other_parties_in_US:
-          ${ other_parties[0].mailing_address.line_two() }
-          % else:
+          % if defined("other_parties_in_US") and not other_parties_in_US:
           ${ other_parties[0].mailing_address.city }, ${ other_parties_non_US_state_country } ${ other_parties[0].mailing_address.zip }
+          % else:
+          ${ other_parties[0].mailing_address.line_two() }          
           % endif
           % endif
       - "other_parties1_email": ${ other_parties[0].email }
