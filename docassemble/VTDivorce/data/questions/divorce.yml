@@ -13,6 +13,7 @@ translations:
 include:
   - docassemble.AssemblyLine:assembly_line.yml
   - docassemble.ALToolbox:phone-number-validation.yml
+  - docassemble.VTFeeWaiver:VT_fee_waiver_to_include.yml
   - docassemble.VTSharedYMLFile:VTSharedYMLFile.yml
   - Health_record.yml
   #- docassemble.VTCertificateOfService:VTCertificateOfService_to_include.yml
@@ -261,7 +262,12 @@ code: |
   #trial_court
   set_progress(70)
   no_longer_living_together_date
-    
+
+
+  if wants_to_fill_out_fee_waiver_now:
+    interview_order_VT_fee_waiver
+    fee_waiver_done
+  
   interview_order_divorce = True
 ---
 ###################### Main order ######################
@@ -1260,6 +1266,63 @@ fields:
     
       **Keep in mind**: If you and your spouse can’t agree about something -- including custody and parent-child contact -- the court will decide for you as part of the court process.
 ---
+
+###################### FEE WAIVER ######################
+---
+id: want to fill out fee waiver
+question: |
+  Do you want to fill out a fee waiver form?
+
+subquestion: |
+  When you start this court case, you normally pay court fees. If you get public assistance or have a low income, you can ask the court to waive the fees.
+
+  ${ start_accordion('<h2 class="h5">Who can get their fees waived?</h2>') }
+  The Vermont Judiciary says the court can waive your filing fee and service costs if:
+  
+  <ul><li>you get any kind of public assistance, or</li>
+  <li>your gross income is at or below <a href="https://www.vtlawhelp.org/150-federal-poverty-level-fpl">150% of the federal poverty guidelines,</a> or</li>
+  <li>the court finds you can't pay the fee without expending resources needed to support you and your dependents.</li></ul>
+
+  ${ next_accordion('<h2 class="h5">Information you will need</h2>') }
+  <ul><li>the name and address of any employer you might have</li>
+  <li>any public assistance that you get (like 3SquaresVT food help, ReachUp help for families, SSI, etc.) and the amount, and</li>
+  <li>information about the court case for which you want a fee waiver. (You can find this information on other court papers you have about this case. If you are starting a court action — like filing for divorce — you won't have a case number or docket number yet.)</li></ul>
+  
+  <p>If you get public assistance, that's all you need. <strong>If you don't get public assistance</strong>, you will also need to know:</p>
+  
+  <ul><li>your income — If you work or get unemployment, have those paystubs on hand. If you get child support, have that information on hand. If you are self-employed, have your IRS Schedule C on hand or have your income and business expenses from the last 12 months.
+  <li>your expenses (like rent, utilities, insurance payments, child care, etc.) — looking back over the last 12 months
+  <li>the amount of money you have in the bank and on hand
+  <li>the approximate value of your vehicle/car, real estate/home, and any other major things you might own, and
+  <li>if filling out form on behalf of a minor or incompetent adult, you need that person’s information.</ul>
+  ${ next_accordion('<h2 class="h5">Where to learn more</h2>') }
+  <p>Visit the Vermont Judiciary website to learn more about <a href="https://www.vermontjudiciary.org/fees">filing and service fees</a> and <a href="https://www.vermontjudiciary.org/fees"https://www.vermontjudiciary.org/self-help/application-waive-filing-fees-and-service-costs>asking to file court papers for free in Vermont.</a></p>
+
+  <p>Ask for general help with court forms or the court process by contacting the <a href="https://www.vermontjudiciary.org/self-help/ARC">Vermont Judiciary Access and Resource Center.</a> Their services are free and they serve the whole state. They do NOT give legal advice.</p>
+
+  ${ end_accordion() }
+
+    **Do you want to answer questions about your income and expenses so you can fill out a fee waiver form now?**
+fields:
+  - no label: wants_to_fill_out_fee_waiver_now
+    datatype: yesnoradio
+---
+id: fee_waiver_done
+question: |
+  Done with fee waiver questions
+subquestion: |
+  We have finished the questions for the fee waiver. Tap Next to go to the next screen.
+continue button field: fee_waiver_done   
+---
+---
+code: |
+  if wants_to_fill_out_fee_waiver_now:
+    VT_fee_waiver_attachment.enabled = True
+  else:
+    VT_fee_waiver_attachment.enabled = False
+---
+
+---
 id: preview divorce
 question: |
   Preview your forms before you sign them
@@ -1816,6 +1879,216 @@ review:
       Filing in the family court of: **${ trial_court.address.county } County**
       % endif
 
+####################### Fee waiver review  #######################
+      
+  - note: |
+      ###Fee waiver
+      
+  - Edit:
+      - wants_to_fill_out_fee_waiver_now
+      - recompute:
+        - interview_order_divorce
+    button: |
+      **You want to fill out a fee waiver form now**: ${ word(yesno(wants_to_fill_out_fee_waiver_now)) }  
+      
+  - Edit: household_size
+    show if: wants_to_fill_out_fee_waiver_now
+    button: |
+      **Number of people in your household**:
+      ${ household_size }
+            
+  - Edit: 
+      - public_benefits.revisit
+    show if: wants_to_fill_out_fee_waiver_now
+    button: |
+      **Public assistance**
+      
+      % if public_benefits.number_gathered() > 0:
+      % for benefit in public_benefits:
+      % if benefit.source == "other":
+      * ${ benefit.display_name }
+      % else:
+      * ${ benefit.source }
+      % endif
+      % endfor
+      
+      % else:
+      - None
+      % endif
+  - Edit: 
+      - employed
+      - follow up:
+        - review_jobs
+    show if: wants_to_fill_out_fee_waiver_now
+    button: |
+      **Employed**
+      
+      - ${ word(yesno(employed)) }
+
+  - Edit: 
+      - review_jobs
+    show if: wants_to_fill_out_fee_waiver_now
+    button: |
+      **Jobs**
+
+      % if jobs.number_gathered() == 0:
+      - None
+      % else:
+      Edit all details about your 
+      % if jobs.number_gathered() == 1:
+      job. Or add or delete a job.:
+      
+      % endif
+      % if jobs.number_gathered() > 1:
+      jobs. Or add or delete a job.:
+      
+      % endif
+      % for item in jobs:
+      - ${ item.source }
+      % endfor
+      % endif
+
+  - Edit: 
+      - jobs[0].source
+      - jobs[0].is_self_employed
+
+    show if: wants_to_fill_out_fee_waiver_now
+    button: |
+      % if jobs[0].is_self_employed:
+      - Edit employer name and address: Self employed
+      % else:
+      - Edit employer name and address: ${ jobs[0].employer.name.first }
+      % endif
+      
+  - Edit: 
+      - jobs[1].source
+      - jobs[1].is_self_employed
+
+    show if: wants_to_fill_out_fee_waiver_now
+    button: |
+      % if jobs[1].is_self_employed:
+      - Edit employer name and address: Self employed
+      % else:
+      - Edit employer name and address: ${ jobs[1].employer.name.first }
+      % endif
+
+  - Edit: 
+      - jobs[2].source
+      - jobs[2].is_self_employed 
+
+    show if: wants_to_fill_out_fee_waiver_now
+    button: |
+      % if jobs[2].is_self_employed:
+      - Edit employer name and address: Self employed
+      % else:
+      - Edit employer name and address: ${ jobs[2].employer.name.first }
+      % endif
+
+  - Edit: 
+      - jobs[3].source
+      - jobs[3].is_self_employed
+
+    show if: wants_to_fill_out_fee_waiver_now
+    button: |
+      % if jobs[3].is_self_employed:
+      - Edit employer name and address: Self employed
+      % else:
+      - Edit employer name and address: ${ jobs[3].employer.name.first }
+      % endif
+      
+  - Edit: 
+      - other_incomes.revisit
+    show if: wants_to_fill_out_fee_waiver_now
+    button: |
+      **Other incomes**
+
+      % for income in other_incomes.complete_elements():
+      * ${ income.display_name.lower() }
+      % endfor
+
+      % if other_incomes.number_gathered() == 0:
+      - None
+      % endif
+          
+      
+  - Edit: expenses.revisit
+    show if: wants_to_fill_out_fee_waiver_now
+    button: |
+      **Expenses**:
+
+      % if expenses.number_gathered() == 0:
+      - None
+      % endif
+      % for item in expenses:
+      - ${ item.display_name.lower() }
+      % endfor
+
+  - Edit: vehicles.revisit
+    show if: wants_to_fill_out_fee_waiver_now
+    button: |
+      **Vehicles**
+      
+      % for item in vehicles:
+      * ${ item.make } ${ item.model } ${ item.year }          
+      % endfor
+      % if vehicles.number_gathered() == 0:
+      - None
+      % endif
+  - Edit: 
+      - real_estate.revisit
+    show if: wants_to_fill_out_fee_waiver_now
+    button: |
+      **Real estate**
+
+      % for item in real_estate.complete_elements():
+      % if item.source == "primary residence":
+      * primary residence
+      % else:
+      * ${ item.display_name.lower() }
+      % endif
+      % endfor
+      % if real_estate.number_gathered() == 0:
+      - None
+      % endif
+
+  - Edit: bank_assets.revisit
+    show if: wants_to_fill_out_fee_waiver_now
+    button: |
+      **Bank accounts and cash**
+      
+      % for item in bank_assets:
+      - ${ item.display_name.lower() }
+      % endfor
+      % if bank_assets.number_gathered() == 0:
+      - None
+      % endif   
+      
+  - Edit: other_assets.revisit
+    show if: wants_to_fill_out_fee_waiver_now
+    button: |
+      **Other assets**
+
+      % for item in other_assets.complete_elements():
+        - ${ item.display_name.lower() }
+      % endfor
+
+      % if other_assets.number_gathered() == 0:
+      - None
+      % endif      
+      
+  - Edit: other_reasons_why_cannot_afford
+    show if: wants_to_fill_out_fee_waiver_now
+    button: |
+      **Other reason(s) you cannot afford the fees (optional question)**:
+      
+      % if defined("other_reasons_why_cannot_afford"):
+      % if other_reasons_why_cannot_afford == "":
+      - None
+      % else:
+      ${ other_reasons_why_cannot_afford }
+      % endif
+      % endif  
+      
   - note: |
       **Select Resume, below, when you are done. It will take a moment to generate your form(s) again.**
 ---
@@ -2019,11 +2292,12 @@ progress: 100
 # ALDocument objects specify the metadata for each template
 objects:
   - divorce_Post_interview_instructions: ALDocument.using(title="NEXT STEPS - Instructions for filing these forms with the court", filename="divorce_next_steps.docx", enabled=True, has_addendum=False)
-  - divorce_no_kids_attachment: ALDocument.using(title="Complaint for divorce, separation, dissolution (no kids)", filename="divorce_no_kids", has_addendum=True, )
-  - divorce_with_kids_attachment: ALDocument.using(title="Complaint for divorce, separation, dissolution (with kids)", filename="divorce_with_kids", has_addendum=True)
-  - Health_record_divorce_annulment_attachment: ALDocument.using(title="Health department form", filename="Health_record_divorce_annulment", has_addendum=False, )
-  - Health_record_civil_union_attachment: ALDocument.using(title="Health department form", filename="Health_record_civil_union", has_addendum=False, )
-  - confidential_info_form_attachment: ALDocument.using(title="Statement of confidential information form", filename="confidential_info_form", enabled=True, has_addendum=False, )
+  - divorce_no_kids_attachment: ALDocument.using(title="Complaint for divorce, separation, dissolution (no kids)", filename="initial_filing_dissolution_divorce_no_kids", has_addendum=True, )
+  - divorce_with_kids_attachment: ALDocument.using(title="Complaint for divorce, separation, dissolution (with kids)", filename="initial_filing_dissolution_divorce_with_kids", has_addendum=True)
+  - Health_record_divorce_annulment_attachment: ALDocument.using(title="Health department form", filename="VT_department_health_record", has_addendum=False, )
+  - Health_record_civil_union_attachment: ALDocument.using(title="Health department form", filename="VT_department_health_record_cu", has_addendum=False, )
+  - confidential_info_form_attachment: ALDocument.using(title="Statement of confidential information form", filename="statement_confidential_info", enabled=True, has_addendum=False, )
+  - VT_fee_waiver_attachment: ALDocument.using(title="Application to waive filing fees", filename="VT_application_waive_filing_fees_600-00228.pdf", has_addendum=True, default_overflow_message=AL_DEFAULT_OVERFLOW_MESSAGE)
 ---
 attachment:
   variable name: divorce_no_kids_attachment.addendum
@@ -2078,6 +2352,7 @@ objects:
           confidential_info_form_attachment,
           Health_record_civil_union_attachment,
           Health_record_divorce_annulment_attachment,
+          VT_fee_waiver_attachment,
         ], filename="divorce_forms", title="Download all forms", enabled=True)
   
   - al_court_bundle: ALDocumentBundle.using(elements=[
@@ -2088,6 +2363,7 @@ objects:
           confidential_info_form_attachment,
           Health_record_civil_union_attachment,
           Health_record_divorce_annulment_attachment,
+          VT_fee_waiver_attachment,
         ],  filename="divorce_forms", title="All forms to deliver to court", enabled=True)
 ---
 # Removed this from al user bundle and al court bundle -- VTCertificateOfService_attachment, -- until we're ready to add all service forms to this interview
