@@ -53,7 +53,7 @@ setup(name='docassemble.VTDivorce',
       license='',
       url='legalservicesvt.org',
       packages=find_namespace_packages(),
-      install_requires=['docassemble.AssemblyLine @ git+https://github.com/SuffolkLITLab/docassemble-AssemblyLine.git@main', 'docassemble.VTFamilyCourtInfoSheet @ git+https://github.com/LSVermont/docassemble-VTFamilyCourtInfoSheet.git@main', 'docassemble.VTFeedback @ git+https://github.com/VTskier/docassemble-VTFeedback.git@main', 'docassemble.VTNoticeOfAppearance @ git+https://github.com/LSVermont/docassemble-VTNoticeOfAppearance.git@AddLineForGuardianPOAinfo'],
+      install_requires=['docassemble.AssemblyLine @ git+https://github.com/SuffolkLITLab/docassemble-AssemblyLine.git@main', 'docassemble.VTFamilyCourtInfoSheet @ git+https://github.com/LSVermont/docassemble-VTFamilyCourtInfoSheet.git@main', 'docassemble.VTFeedback @ git+https://github.com/VTskier/docassemble-VTFeedback.git@main', 'docassemble.VTNoticeOfAppearance @ git+https://github.com/LSVermont/docassemble-VTNoticeOfAppearance.git@main'],
       zip_safe=False,
       package_data=find_package_data(where='docassemble/VTDivorce/', package='docassemble.VTDivorce'),
      )
