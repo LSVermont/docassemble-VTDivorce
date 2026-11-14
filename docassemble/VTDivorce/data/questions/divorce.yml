@@ -1,7 +1,7 @@
 #We added translations into 4 languages in November 2025
 #For this interview, the person filling out the form (user) is always considered to be the plaintiff.
 #The statement of confidential info form (SSNs) and health record form are included in this package because they will never be stand-alone interviews. Note that for security reasons we are not actually collecting the Social Security numbers in this interview. People will fill those in on their own.
-#We will be "including" other stand-alone interviews.
+#We are "including" other stand-alone interviews.
 #On May 2 2024 we removed VTCertificateOfService from this interview until we're ready to add all service forms to this interview -- we commented out things
 ---
 translations:
@@ -1337,7 +1337,7 @@ review:
       
       - **${ users[0].address.on_one_line() }**
       
-      % if users1_mailing_address_different:
+      % if showifdef("users1_mailing_address_different"):
       - Mailing address: **${ users[0].mailing_address.on_one_line() }**
       % endif
   - Edit: users[0].email
@@ -1420,18 +1420,20 @@ review:
   - Edit: other_parties[0].address.address
     button: |      
       Their address:
-      % if other_parties_in_US:
-      **${ other_parties[0].address.on_one_line() }**
-      % else:
-      **${ other_parties[0].address.line_one() }, ${ other_parties[0].address.city }, ${ other_parties_non_US_state_country } ${ other_parties[0].address.zip }**
-      % endif         
       
-      % if other_parties1_mailing_address_different:
-      - Mailing address:
-      % if other_parties_in_US:
-      ${ other_parties[0].mailing_address.on_one_line() }
+      % if defined("other_parties_in_US") and not other_parties_in_US:
+      - **${ other_parties[0].address.line_one() }, ${ other_parties[0].address.city }, ${ other_parties_non_US_state_country } ${ other_parties[0].address.zip }**
       % else:
-      ${ other_parties[0].mailing_address.line_one() }, ${ other_parties[0].mailing_address.city }, ${ other_parties_non_US_state_country } ${ other_parties[0].mailing_address.zip }
+      - **${ other_parties[0].address.on_one_line() }**
+      % endif
+      
+      % if showifdef("other_parties1_mailing_address_different"):
+      Mailing address:
+      
+      % if defined("other_parties_in_US") and not other_parties_in_US:
+      - ${ other_parties[0].mailing_address.line_one() }, ${ other_parties[0].mailing_address.city }, ${ other_parties_non_US_state_country } ${ other_parties[0].mailing_address.zip }
+      % else:
+      - ${ other_parties[0].mailing_address.on_one_line() }
       % endif
       % endif      
 

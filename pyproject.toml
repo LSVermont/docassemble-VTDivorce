@@ -6,18 +6,17 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "docassemble.VTDivorce"
-version = "1.9"
+version = "1.10"
 description = "Fill out initial forms to get a divorce, separation or civil union dissolution in Vermont"
 readme = "README.md"
 authors = [
     { name = "K. Surette", email = "ksurette@legalservicesvt.org" },
 ]
 dependencies = [
-    "docassemble.ALToolbox @ git+https://github.com/SuffolkLITLab/docassemble-ALToolbox.git@main",
     "docassemble.AssemblyLine @ git+https://github.com/SuffolkLITLab/docassemble-AssemblyLine.git@main",
     "docassemble.VTFamilyCourtInfoSheet @ git+https://github.com/LSVermont/docassemble-VTFamilyCourtInfoSheet.git@main",
-    "docassemble.VTNoticeOfAppearance @ git+https://github.com/LSVermont/docassemble-VTNoticeOfAppearance.git@main",
-    "docassemble.VTSharedYMLFile @ git+https://github.com/LSVermont/docassemble-VTSharedYMLFile.git@main",
+    "docassemble.VTFeedback @ git+https://github.com/VTskier/docassemble-VTFeedback.git@main",
+    "docassemble.VTNoticeOfAppearance @ git+https://github.com/LSVermont/docassemble-VTNoticeOfAppearance.git@AddLineForGuardianPOAinfo",
 ]
 
 [project.urls]
